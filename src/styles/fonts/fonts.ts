@@ -1,4 +1,4 @@
-import { IBM_Plex_Mono, Geist, Fira_Code } from 'next/font/google'
+import { IBM_Plex_Mono, Geist, Fira_Code, Reddit_Mono } from 'next/font/google'
 
 export const monoFont = IBM_Plex_Mono({
     subsets: ['latin'],
@@ -20,3 +20,4 @@ export const codeFont = Fira_Code({
     variable: '--font-code',
     display: 'swap',
 })
+

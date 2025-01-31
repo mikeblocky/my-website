@@ -134,7 +134,7 @@ export function HeroSection() {
                         className="object-cover"
                         fill
                         src="/image-cover.png" 
-                        alt="A drawing of Shima and Mitsumi, which I drew in January 2025."
+                        alt="A drawing of Shima and Mitsumi, which I drew in January 2025"
                         priority
                         sizes="(max-width: 640px) 100vw, (max-width: 1024px) 90vw, 80vw"
                     />
