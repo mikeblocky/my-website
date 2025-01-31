@@ -63,7 +63,7 @@ export function HeroSection() {
                             transition={{ delay: 0.5 }}
                         >
                             <Text>
-                               I'm Mike - just a nickname of mine. I'm Vietnamese who really focus on arts, literature and some parts of computer science. I love reading stories, manga, watching films that resonate with my ideas, the vibe that I want to have :)
+                               I'm Mike - just a nickname of mine. I'm a Vietnamese who really focus on arts, literature and some parts of computer science. I love reading stories, manga, watching films that resonate with my ideas, the vibe that I want to have :)
                             </Text>
                             <Ruler color='colorless' marginTop='sm' marginBottom='none'/>
                         </motion.div>
