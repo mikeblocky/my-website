@@ -42,7 +42,7 @@ export function HeroSection() {
                         className="relative"
                     >
                         <TextHeading as="h1" className="font-bold text-2xl sm:text-3xl md:text-4xl lg:text-5xl">
-                            sumit.ml
+                            mikeblocky.com
                         </TextHeading>
                     </motion.div>
 
@@ -52,7 +52,7 @@ export function HeroSection() {
                         transition={{ delay: 0.4 }}
                     >
                         <Text >
-                            Hi! I am Sumit.
+                            Hi everyone! I'm Mike in Mikeblocky!
                         </Text>
 
                         <Ruler color='colorless' marginTop='lg' marginBottom='none'/>
@@ -63,7 +63,7 @@ export function HeroSection() {
                             transition={{ delay: 0.5 }}
                         >
                             <Text>
-                                I'm a swe based in Tokyo. I love coffee, machine learning, math, and among others. Glad to have you here! Feel free to look around :)
+                               I'm Mike - just a nickname of mine. I'm Vietnamese who really focus on arts, literature and some parts of computer science. I love reading stories, manga, watching films that resonate with my ideas, the vibe that I want to have :)
                             </Text>
                             <Ruler color='colorless' marginTop='sm' marginBottom='none'/>
                         </motion.div>
@@ -74,13 +74,13 @@ export function HeroSection() {
                             transition={{ delay: 0.6 }}
                         >
                                 <Text>
-                                    This is my graph of thoughts, notes, and ideas.
+                                    This is the place where I can really give thoughts freely without being distracted, a place where I can upload my artworks personally as an archive place.
                                 </Text>
 
                                 <Ruler color='colorless' marginTop='lg' marginBottom='none'/>
 
                                 <Text>
-                                    I ramble about things on my{' '}
+                                    I will frequently upload all the stuffs about analysis and personal thoughts in {' '}
                                     <Link href="/blog" className="text-purple-500 font-bold hover:underline">
                                         blog
                                     </Link>
@@ -90,21 +90,21 @@ export function HeroSection() {
                                 <Ruler color='colorless' marginTop='lg' marginBottom='none'/>
 
                                 <Text>
-                                    Here are some reads I recommend from this site if you're interested:
+                                    You can read some of them if you want to! Here's some of my recommedation (I haven't uploaded anything yet so there isn't anything to recommend):
                                 </Text>
 
                                 <Ruler color='colorless' marginTop='md' marginBottom='none'/>
 
                                 <List spacing='tight'>
                                     <ListItem>
-                                        <Link href="/about" className="underline hover:text-purple-500">My novice journey, a monologue</Link>
+                                        <Link href="/about" className="underline hover:text-purple-500">About me</Link>
                                     </ListItem>
                                     <ListItem>
-                                        <Link href="/blog/my-2025-resolution" className="underline hover:text-purple-500">My 2025 Resolution: Beyond the Roadmaps, Beyond the Timelines</Link>
+                                        <Link href="/blog/my-2025-resolution" className="underline hover:text-purple-500">My personal line of thoughts about Chapter 67</Link>
                                     </ListItem>
                                     <ListItem>
                                         <Link href="/blog/getting-started-with-machine-learning" className="underline hover:text-purple-500">
-                                            Getting Started with Machine Learning
+                                           January, a month of new beginnings
                                         </Link>
                                     </ListItem>
                                 </List>
@@ -112,7 +112,7 @@ export function HeroSection() {
                                 <Ruler color='colorless' marginTop='lg' marginBottom='none'/>
 
                                 <Text>
-                                    I also document my learnings through learning reflections every week. You can take a look at those{' '}
+                                    I will also try to document my learnings through learning reflections every week. You can take a look at those{' '}
                                     <Link href="/learning/weekly-reflections" className="text-purple-500 font-bold hover:underline">
                                         here
                                     </Link>
@@ -133,8 +133,8 @@ export function HeroSection() {
                     <Image
                         className="object-cover"
                         fill
-                        src="/gion-town.png" 
-                        alt="A photo of Gion Town, Kyoto I took on March 2024."
+                        src="/image-cover.png" 
+                        alt="A drawing of Shima and Mitsumi, which I drew in January 2025."
                         priority
                         sizes="(max-width: 640px) 100vw, (max-width: 1024px) 90vw, 80vw"
                     />

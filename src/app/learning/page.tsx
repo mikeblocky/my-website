@@ -38,7 +38,7 @@ export default function Learning() {
                         <Link href="/learning/weekly-reflections/">Weekly Reflections</Link> 
                     </Text>
                     <Text className="underline font-bold hover:text-purple-500">
-                        <Link href="/learning/learning-utensils/">Learning Utensils</Link>
+                        <Link href="/learning/learning-utensils/">Personal Utensils</Link>
                     </Text>
                 </StackVertical>
             </div>

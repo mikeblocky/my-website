@@ -24,7 +24,7 @@ export function BlogHeader() {
                     Blog
                 </TextHeading>
                 <Text variant="muted" size="sm">
-                    Thoughts on programming, machine learning, and technology
+                    Thoughts on about characters, stories, films, the reason behind my artworks and more.
                 </Text>
             </div>
         </StackVertical>

@@ -6,7 +6,7 @@ import { Analytics } from "@vercel/analytics/react"
 import { monoFont, sansFont, codeFont } from '@/styles/fonts/fonts'
 
 export const metadata: Metadata = {
-  title: 'sumit.ml',
+  title: 'mikeblocky.com',
   description: 'a site where I document my ML learning journey & share my thoughts',
 }
 

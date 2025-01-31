@@ -24,7 +24,7 @@ export function NotesHeader() {
                     Notes
                 </TextHeading>
                 <Text variant="muted" size="sm">
-                    A collection of notes that I have collected from my learning journey. Mostly Math and ML-related.
+                    A collection of notes that I have collected from my learning journey. Mostly Math and ML-related. (I will reupdate this to my personal one soon)
                 </Text>
             </div>
         </StackVertical>

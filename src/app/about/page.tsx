@@ -24,35 +24,48 @@ export default function About() {
 
                 <div>
                 <TextHeading as="h1" weight="bold">
-                    My Novice Journey: A Monologue
+                    From me, an incompleted message
                 </TextHeading>
-					<Text variant="muted" size="xs" className="mb-8">January 14, 2025</Text>
+					<Text variant="muted" size="xs" className="mb-8">January 31, 2025</Text>
                 <StackVertical gap="md">
-                    <Text>
-                            Hi, thanks for checking in! I like going on random tangents when I write, so I'm not sure if this is the best way to write about myself. But hey, I'm glad you're here.
+                <Text>
+                        Hi, it's a pleasure to have you here. I'm an introvert, so I rarely share my thoughts online, even though my mind is always filled with reflections on the things I care about. But maybe it's time to step out a little, to put my thoughts and experiences into words. I hope you find something meaningful here.
                     </Text>
 
                     <Text>
-                        I have an interesting name. During my middle and high school years, I knew the existences of only 2 people with the same name as me. I thought it was not a very common name in my country, but turns out a name isn't limited to a country. And for those wondering, no I am not from India. Although I understand why you'd think so. It's all good.
+                        There have been days when I wondered about my place in this world, and by extension, my presence on the internet. At first, I loved it—it was a space where I could truly be myself, where I could share what I loved. But over time, that feeling faded. I started believing I wasn’t good enough. Fear of judgment crept in, and soon, everything I wanted to say ended up buried in drafts, hidden away from the world. Yet, deep inside, a part of me still longs to share. I want to connect, but the fear of being overlooked or misunderstood holds me back.
                     </Text>
+                    
                     <Text>
-                    I studied in Japan as a business undergraduate for 4 years and received a degree in it, but I was truly never interested in anything related to business. Well, it's a long story about why I ended up at the university I ended up in and pursued the kind of degree I pursued despite having next to no interest in any of that, but life does really work in fascinating ways. I must say that it hasn't turned out too bad for myself.
+                        So, I decided to loosen up a little, to give myself space to be free, and that’s why I created this website—a place where I can just be me.
                     </Text>
+                    
                     <Text>
-                        To be very brief, I was always into math and was always fascinated by the engineering behind a lot of things I would see in real life. Bridges have always been one of the most splendid pieces of architecture to me; these towering figures effortlessly handle countless vehicles weighing tons, and humans somehow learned how to do that? It's incredible. I tell this to my friends every time we go on some trips here in Japan (god bless this country is full of these) and they try to stay amused for my sake, but I can see it that their thoughts lie elsewhere. Maybe I'm just a nerd. But I think bridges are cool. So are rockets. Humans built all that.
-                        
+                        As for the name, it wasn’t one I chose alone. My best friend and I came up with it together. I’ve always been more drawn to the social and psychological side of things, while they lean towards science and engineering. We’re different, yet somehow, we became best friends. The first name they picked for me was “Milky,” inspired by a drink I used to get at school and convenience stores. Eventually, I modified it to “Mike,” and later “Mikeblocky” when making a Roblox account.
                     </Text>
+                    
                     <Text>
-                        So yeah, I got introduced to the concept of Machine Learning by virtue of a professor at my university when I was a 3rd year student, completely frustrated with myself because I hated my major and had no option to pursue anything related to STEM. This man changed my life.
+                        Right now, I’m studying Computer Science. I chose it because I loved computers and used to excel in the subject. But after a few months, I found myself struggling to keep up. The pace, the workload—it all became overwhelming. It made me anxious, stressed, and unsure if this path was right for me. I’m at a crossroads, and by February, I need to decide whether to continue or change my major. It’s a tough decision, but I think it’s worth considering. I love it, but I also hate it. And there are still so many other things I want to do, but I don’t know if I can.
                     </Text>
+                    
                     <Text>
-                        Of course, I was not as driven when it came to getting indulged in AI-related learning as I am now, but I gradually began building an interest in the so-called AI-related field. Things ended up happening when I was a 4th-year student, and I ended up getting a new-grad role in SWE here in Japan. I had 0 experience in software, yet somehow I managed to break into tech. I know I am not revealing some important bits here about what went down, but I believe there was a good mixture of luck as well as just the tenacity of making something happen no matter what to break into tech (not necessarily AI since I knew it was a leap too big to take, although I did not take it out of the equation).
+                        I tend to overthink—a habit that isn’t just part of my nature, but something shaped by my past. Growing up, I had a difficult relationship with my parents, full of conflicts and misunderstandings. My father was strict, and when I failed to meet his expectations, the consequences were harsh. Those experiences left scars, shaping the way I think and act today. But in a strange way, I appreciate my overthinking—it allows me to explore different perspectives, to see stories and characters in a deeper light.
                     </Text>
+                    
                     <Text>
-                        I like to think of my progression in terms of a horizontal axis of real numbers between -10 to 10, where I believe -10 was me starting a degree that I clearly was not interested in after failing to be accepted into the program I wanted, -5 was when I found this professor who opened a new door towards the field of AI for me, -3 was when I first got a technical internship purely out of me selling my determination to learn, and finally 0 — the complete resetting of my negative career scale — when I first received a full-time tech role (my current one). In other words, my detours have finally converged, and my journey has finally started.
+                        One of the most significant influences in my life has been *Skip and Loafer*. For some, it’s just a coming-of-age story, but for me, it’s something more. It reflects so many aspects of my own life—being an exceptional student, attending a prestigious high school and university, taking on leadership roles, and feeling the weight of expectations. I resonate deeply with Shima, and I often wonder if I’ll ever be able to grow and move forward like he does. I hope I can. I really do.
                     </Text>
+                    
                     <Text>
-                        I will not say that I was glad I took this detour, but I am glad that I got to experience it. I am glad that I got lucky. Or maybe I wasn't. Maybe this was always going to be how it was. In any case, it's an exciting time to be alive.
+                        Volume 8 of *Skip and Loafer* means the most to me. It hit so close to home that I couldn’t read it all at once—I had to take my time, stretching it out over a month. It made me cry for an entire day. Maybe one day, I’ll share why this volume affected me so much. But for now, just know that it holds a special place in my heart.
+                    </Text>
+                    
+                    <Text>
+                        My love for *Skip and Loafer* has even changed the way I create art. My work isn’t flashy or vibrant like other artists'. Instead, I aim for something warm, simple, and comforting—something that captures human connection and fleeting memories. My art reflects the moments I once lost, the emotions I’ve felt, and the small, everyday beauty that resonates with me. It aligns with the story’s themes, with the direction Takamatsu-sensei takes, and I’ve grown to love this approach. It pushes me beyond the safe boundaries I used to keep in my art.
+                    </Text>
+                    
+                    <Text>
+                        I won’t say I’m glad I took this detour in life, but I am grateful for the experiences I’ve had. Maybe this was always meant to happen. Or maybe I just got lucky. Either way, I’m here, figuring things out, thinking about my place in this world and where I belong.
                     </Text>
                 </StackVertical>
             </div>

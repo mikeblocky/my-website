@@ -44,20 +44,20 @@ export function CurrentWork() {
     const items = [
         {
             icon: <Brain className="w-4 h-4" />,
-            text: "Studying traditional ML"
+            text: "Studying psychology and biotechnology as alternatives to computer science"
         },
         {
             icon: <Divide className="w-4 h-4" />,
-            text: "Learning math for ML"
+            text: "Learning how to improve writing skills and express idea better"
         },
         {
             icon: <Code className="w-4 h-4" />,
-            text: "Mastering the language of Python"
+            text: "Improve the website from the base that I have from sumit.ml"
         },
 
         {
             icon: <Rotate3D className="w-4 h-4" />,
-            text: "Learning to get comfy with PyTorch till 5D",
+            text: "Try to do some animation and rotoscoping",
         }
         // {
         //     icon: <BookOpen className="w-4 h-4" />,
