@@ -7,7 +7,7 @@ import { monoFont, sansFont, codeFont } from '@/styles/fonts/fonts'
 
 export const metadata: Metadata = {
   title: 'mikeblocky.com',
-  description: 'a site where I document my ML learning journey & share my thoughts',
+  description: 'a site where i share my thoughts and archive my artworks',
 }
 
 export default function RootLayout({
