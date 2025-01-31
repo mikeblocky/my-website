@@ -2,6 +2,14 @@ import { BlogPost } from "../_types/blog"
 
 export const blogPosts: BlogPost[] = [
     {
+        id: 3,
+        title: "Misaki Takamatsu's January 13th Space - translation",
+        description: "A translation of the space that Takamatsu-sensei did on January 13th.",
+        date: "January 31, 2025",
+        readingTime: "15 min read",
+        slug: "takamatsu-space-translation"
+    },
+    {
         id: 2,
         title: "Discord archive - About Shima, Mitsumi, Nao; the seashell, sand, and the sea",
         description: "A thought that I madw when a person asked me to analyze them.",

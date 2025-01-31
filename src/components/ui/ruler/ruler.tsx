@@ -72,7 +72,13 @@ export default function Ruler({
                 className
             )}
             role="separator"
-            aria-orientation={orientation}
+            aria-orientation={
+                orientation === 'horizontal'
+                    ? 'horizontal'
+                    : orientation === 'vertical'
+                    ? 'vertical'
+                    : undefined // or simply remove the attribute in this case
+            }
         />
     )
 } 
