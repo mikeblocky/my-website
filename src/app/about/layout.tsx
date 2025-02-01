@@ -1,16 +1,16 @@
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
-    title: 'My Novice Journey\'s Monologue | sumit.ml',
+    title: 'From me, an incompleted message | mikeblocky.com',
     description: 'I don\'t really know what I\'m doing',
     openGraph: {
-        title: 'My Novice Journey\'s Monologue | sumit.ml',
+        title: 'From me, an incompleted message | mikeblocky.com',
         description: 'I don\'t really know what I\'m doing',
         type: 'website',
     },
     twitter: {
         card: 'summary_large_image',
-        title: 'My Novice Journey: A Monologue',
+        title: 'From me, an incompleted message',
         description: 'I don\'t really know what I\'m doing',
     }
 }

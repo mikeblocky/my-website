@@ -1,10 +1,10 @@
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
-    title: 'My 2025 Resolution: Beyond the Roadmaps | sumit.ml',
+    title: 'My 2025 Resolution: Beyond the Roadmaps | mikeblocky.com',
     description: 'Beyond the Roadmaps, Beyond the Timelines - A reflection on learning efficiency',
     openGraph: {
-        title: 'My 2025 Resolution: Beyond the Roadmaps | sumit.ml',
+        title: 'My 2025 Resolution: Beyond the Roadmaps | mikeblocky.com',
         description: 'Beyond the Roadmaps, Beyond the Timelines - A reflection on learning efficiency',
         type: 'article',
         publishedTime: '2025-01-14T00:00:00.000Z',

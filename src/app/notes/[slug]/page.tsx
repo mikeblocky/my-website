@@ -14,9 +14,9 @@ export async function generateMetadata({ params }: { params: Params }) {
     const { slug } = await params
   
     return {
-      title: `${notes.find(post => post.slug === slug)?.title} | sumit.ml`,
+      title: `${notes.find(post => post.slug === slug)?.title} | mikeblocky.com`,
       openGraph: {
-        title: `${notes.find(post => post.slug === slug)?.title} | sumit.ml`,
+        title: `${notes.find(post => post.slug === slug)?.title} | mikeblocky.com`,
         description: `${notes.find(post => post.slug === slug)?.description}`,
         images: [
           {
@@ -29,7 +29,7 @@ export async function generateMetadata({ params }: { params: Params }) {
       },
       twitter: {
         card: "summary_large_image",
-        title: `${notes.find(post => post.slug === slug)?.title} | sumit.ml`,
+        title: `${notes.find(post => post.slug === slug)?.title} | mikeblocky.com`,
         description: `${notes.find(post => post.slug === slug)?.description}`,
         images: [
           {

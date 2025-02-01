@@ -1,11 +1,11 @@
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
-    title: 'Learning | sumit.ml',
-    description: 'My journey of learning ML and Math, documented week by week',
+    title: 'Learning | mikeblocky.com',
+    description: 'My journey of learning about things, documented week by week',
     openGraph: {
-        title: 'Learning | sumit.ml',
-        description: 'My journey of learning ML and Math, documented week by week',
+        title: 'Learning | mikeblocky.com',
+        description: 'My journey of learning about things, documented week by week',
         type: 'website',
         images: [
             {
@@ -17,8 +17,8 @@ export const metadata: Metadata = {
     },
     twitter: {
         card: 'summary_large_image',
-        title: 'Learning | sumit.ml',
-        description: 'My journey of learning ML and Math, documented week by week',
+        title: 'Learning | mikeblocky.com',
+        description: 'My journey of learning about things, documented week by week',
         images: ['/learning/twitter-image.png'],
     }
 }

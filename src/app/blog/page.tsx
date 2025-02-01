@@ -7,7 +7,7 @@ import { SectionFooter } from "@/components/layout/footer/SectionFooter"
 import { Metadata } from "next"
 
 export const metadata: Metadata = {
-    title: 'Blog | sumit.ml',
+    title: 'Blog | mikeblocky.com',
     description: 'thoughts on machine learning, math, technology, and my journey',
 }
 

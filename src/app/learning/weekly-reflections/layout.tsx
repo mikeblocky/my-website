@@ -1,16 +1,16 @@
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
-    title: 'Weekly Reflections | sumit.ml',
+    title: 'Weekly Reflections | mikeblocky.com',
     description: 'Weekly documentation of my learning progress, reflections, and insights',
     openGraph: {
-        title: 'Weekly Reflections | sumit.ml',
+        title: 'Weekly Reflections | mikeblocky.com',
         description: 'Weekly documentation of my learning progress, reflections, and insights',
         type: 'website',
     },
     twitter: {
         card: 'summary_large_image',
-        title: 'Weekly Reflections | sumit.ml',
+        title: 'Weekly Reflections | mikeblocky.com',
         description: 'Weekly documentation of my learning progress, reflections, and insights',
     }
 }
