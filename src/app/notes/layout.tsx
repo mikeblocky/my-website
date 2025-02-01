@@ -1,16 +1,16 @@
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
-    title: 'My Notes | sumit.ml',
+    title: 'My Notes | mikeblocky.com',
     description: 'A collection of references and notes from my learning journey',
     openGraph: {
-        title: 'My Notes | sumit.ml',
+        title: 'My Notes | mikeblocky.com',
         description: 'A collection of references and notes from my learning journey',
         type: 'website',
     },
     twitter: {
         card: 'summary_large_image',
-        title: 'My Notes | sumit.ml',
+        title: 'My Notes | mikeblocky.com',
         description: 'A collection of references and notes from my learning journey',
     }
 }

@@ -7,7 +7,7 @@ import { ThemeToggle } from "@/components/ui/theme/theme-toggle"
 export function BlogHeader() {
     return (
         <StackVertical gap="md">
-            <title>Blog | sumit.ml</title>
+            <title>Blog | mikeblocky.com</title>
 
             <div className="flex items-center justify-between">
                 <DynamicBreadcrumb 

@@ -7,7 +7,7 @@ import { ThemeToggle } from "@/components/ui/theme/theme-toggle"
 export function NotesHeader() {
     return (
         <StackVertical gap="md">
-            <title>Notes | sumit.ml</title>
+            <title>Notes | mikeblocky.com</title>
 
             <div className="flex items-center justify-between">
                 <DynamicBreadcrumb 
