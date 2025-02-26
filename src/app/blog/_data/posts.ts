@@ -4,7 +4,7 @@ export const blogPosts: BlogPost[] = [
     {
         id: 5,
         title: "Autograph session of Takamatsu-sensei in Taiwan - translation",
-        description: "About the autograph session that she participated in two days: February 9th - February 10th.",
+        description: "About the autograph session that she she was invited in two days: February 9th - February 10th.",
         date: "February 26, 2025",
         readingTime: "20 min read",
         slug: "takamatsu-interview-taiwan-tour"
