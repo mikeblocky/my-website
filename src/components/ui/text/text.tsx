@@ -4,7 +4,7 @@ import { monoFont } from '@/styles/fonts/fonts'
 interface TextProps {
     children: React.ReactNode;
     className?: string;
-    size?: 'xs' | 'sm' | 'base' | 'lg' | 'xl' | '2xl';
+    size?: 'xs' | 'sm' | 'md' | 'base' | 'lg' | 'xl' | '2xl';
     weight?: 'normal' | 'medium' | 'semibold' | 'bold';
     variant?: 'default' | 'purple' | 'blue' | 'green' | 'red' | 'orange' | 'muted' | 'caption';
     align?: 'left' | 'center' | 'right' | 'justify';
@@ -30,12 +30,13 @@ const defaultStyles = {
 }
 
 const textSizes = {
-    xs: 'text-sm sm:text-base md:text-base',   // 14px -> 16px -> 16px (Originally 10px -> 12px -> 12px)
-    sm: 'text-base sm:text-lg md:text-lg',      // 16px -> 18px -> 18px (Originally 12px -> 14px -> 14px)
-    base: 'text-lg sm:text-xl md:text-xl',      // 18px -> 20px -> 20px (Originally 14px -> 16px -> 16px)
-    lg: 'text-xl sm:text-2xl md:text-2xl',     // 20px -> 24px -> 24px (Originally 16px -> 18px -> 18px)
-    xl: 'text-2xl sm:text-3xl md:text-3xl',    // 24px -> 30px -> 30px (Originally 18px -> 20px -> 20px)
-    '2xl': 'text-3xl sm:text-4xl md:text-4xl'  // 30px -> 36px -> 36px (Originally 20px -> 24px -> 24px)
+    xs: 'text-[10px] sm:text-xs md:text-xs',           // 10px -> 12px -> 12px
+    sm: 'text-xs sm:text-sm md:text-sm',               // 12px -> 14px -> 14px
+    md: 'text-[13px] sm:text-[15px] md:text-[15px]',   // 13px -> 15px -> 15px
+    base: 'text-sm sm:text-base md:text-base',         // 14px -> 16px -> 16px
+    lg: 'text-base sm:text-lg md:text-lg',             // 16px -> 18px -> 18px
+    xl: 'text-lg sm:text-xl md:text-xl',               // 18px -> 20px -> 20px
+    '2xl': 'text-xl sm:text-2xl md:text-2xl',          // 20px -> 24px -> 24px
 }
 
 const fontWeights = {
