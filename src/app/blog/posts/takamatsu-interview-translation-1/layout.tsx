@@ -5,7 +5,7 @@ export const metadata: Metadata = {
     description: 'A translation of the space that Takamatsu-sensei did on an interview, which released on January 2025.',
     openGraph: {
         title: 'Misaki Takamatsu speaks about her long-term serialization journey in Skip and Loafer (Translation)| mikeblocky.com',
-        description: 'A translation of the space that Takamatsu-sensei did on an interview, which released on January 2025h.',
+        description: 'A translation of the space that Takamatsu-sensei did on an interview, which released on January 2025.',
         type: 'article',
         publishedTime: '2025-01-31T00:00:00.000Z',
     },
