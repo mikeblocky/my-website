@@ -1,10 +1,3 @@
-<<<<<<< HEAD
-export const weeks = [
-
-	{ 
-		title: 'Week 1, 2025 (February 3rd - February 9th)',
-		href: '/learning/weekly-reflections/week-1'
-=======
 interface Week {
 	title: string;
 	href: string;
@@ -51,7 +44,6 @@ const weeks: Week[] = [
 		title: 'Week 1, 2025 (Jan 1 - Jan 5)',
 		href: '/learning/weekly-reflections/week-1',
 		date: new Date('2025-01-05')
->>>>>>> 71e6d19f6c6fa5821c4bec071cad90d5f6b9fa74
 	}
 ]
 
