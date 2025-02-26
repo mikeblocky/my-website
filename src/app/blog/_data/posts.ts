@@ -2,6 +2,14 @@ import { BlogPost } from "../_types/blog"
 
 export const blogPosts: BlogPost[] = [
     {
+        id: 6,
+        title: "Thoughts of Shima - the sand and the crab",
+        description: "Just my thoughts about Shima and the way those elements relate to him.",
+        date: "February 26, 2025",
+        readingTime: "20 min read",
+        slug: "sand-crab-thoughts"
+    },
+    {
         id: 5,
         title: "Autograph session of Takamatsu-sensei in Taiwan - translation",
         description: "About the autograph session which she was invited in two days: February 9th - February 10th.",
