@@ -20,15 +20,15 @@ export default function TakamatsuInterviewSpace1() {
               items={[
                 { href: '/', label: 'Home', emoji: '👾' },
                 { href: '/blog', label: 'Blog' },
-                { label: 'Misaki Takamatsu speaks about her long-term serialization journey in Skip and Loafer (Translation)' }
+                { label: 'Autograph session of Takamatsu-sensei in Taiwan - translation' }
               ]}
             />
             <ThemeToggle />
           </div>
 
           <article>
-            <TextHeading as="h1">Misaki Takamatsu speaks about her long-term serialization journey in Skip and Loafer (Translation)</TextHeading>
-            <Text variant="muted" size="xs" className="mb-8">January 31, 2025 | 30 min read</Text>
+            <TextHeading as="h1">Autograph session of Takamatsu-sensei in Taiwan - translation</TextHeading>
+            <Text variant="muted" size="xs" className="mb-8">February 26, 2025 | 20 min read</Text>
 
             <div className="prose dark:prose-invert max-w-none">
               <Content components={mdxComponents} />
