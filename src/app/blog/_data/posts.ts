@@ -2,6 +2,22 @@ import { BlogPost } from "../_types/blog"
 
 export const blogPosts: BlogPost[] = [
     {
+        id: 9,
+        title: "「煙たい話：第一章」についての私の考え",
+        description: "煙あるところに火あり。",
+        date: "May 14, 2025",
+        readingTime: "20 min read",
+        slug: "kemutai-hanashi-1-jp"
+    },
+    {
+        id: 8,
+        title: "My thoughts about Kemutai Hanashi - Chapter 1",
+        description: "Where there is smoke, there is fire.",
+        date: "May 14, 2025",
+        readingTime: "20 min read",
+        slug: "kemutai-hanashi-1-en"
+    },
+    {
         id: 7,
         title: "My thoughts about Chapter 68",
         description: "To grow up is to become a child again.",
