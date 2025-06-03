@@ -2,6 +2,14 @@ import { BlogPost } from "../_types/blog"
 
 export const blogPosts: BlogPost[] = [
     {
+        id: 10,
+        title: "Some lines of thoughts I have for Chapter 71",
+        description: "Parents and children, a connection that is complex in its own way.",
+        date: "June 3, 2025",
+        readingTime: "20 min read",
+        slug: "my-thoughts-about-chapter-71"
+    },
+    {
         id: 9,
         title: "「煙たい話：第一章」についての私の考え",
         description: "煙あるところに火あり。",
