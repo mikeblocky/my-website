@@ -2,6 +2,14 @@ import { BlogPost } from "../_types/blog"
 
 export const blogPosts: BlogPost[] = [
     {
+        id: 11,
+        title: "Yuki Kodama's 25th anniversary as a manga artist: Special project 1 - Interview with Takamatsu Misaki",
+        description: "An interview between authors during the anniversary of Yuki Kodama-sensei.",
+        date: "June 13, 2025",
+        readingTime: "20 min read",
+        slug: "flowers-interview"
+    },
+    {
         id: 10,
         title: "Some lines of thoughts I have for Chapter 71",
         description: "Parents and children, a connection that is complex in its own way.",
