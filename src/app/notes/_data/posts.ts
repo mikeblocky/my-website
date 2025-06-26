@@ -6,6 +6,7 @@ export const notes: NotesTypes[] = [
         title: "Math References",
         description: "Formulas from my math learning journey for quick reference.",
         lastUpdated: "January 14, 2025",
+        slug: "math",
         href: "https://sumitdotml.notion.site/math"
     },
     {
@@ -13,6 +14,7 @@ export const notes: NotesTypes[] = [
         title: "PyTorch References",
         description: "PyTorch code snippets that I've used & learned from for quick reference.",
         lastUpdated: "January 20, 2025",
+        slug: "pytorch",
         href: "/notes/pytorch"
     },
     {
@@ -20,6 +22,7 @@ export const notes: NotesTypes[] = [
         title: "Books",
         description: "Notes and summaries from the books I'm reading to learn ML and Math.",
         lastUpdated: "January 14, 2025",
+        slug: "books",
         href: "/notes/books"
     }
 ] 
