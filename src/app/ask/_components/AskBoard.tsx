@@ -1,6 +1,6 @@
 'use client'
 
-import { FormEvent, useEffect, useMemo, useState } from 'react'
+import { FormEvent, useEffect, useState, useTransition } from 'react'
 import { initialQuestions } from '../_data/questions'
 import { AskQuestion } from '../_types/ask'
 import { StackVertical } from '@/components/layout/layout-stack/layout-stack'
@@ -9,7 +9,6 @@ import Text from '@/components/ui/text/text'
 import { Button } from '@/components/ui/primitives/button'
 import { cn } from '@/lib/utils/utils'
 
-const STORAGE_KEY = 'ask.anonymous.questions'
 const seededQuestions = [...initialQuestions].sort(
   (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
 )
@@ -28,76 +27,80 @@ type FormState = {
 
 export function AskBoard() {
   const [formState, setFormState] = useState<FormState>({ author: '', body: '' })
-  const [submittedQuestions, setSubmittedQuestions] = useState<AskQuestion[]>([])
+  const [questions, setQuestions] = useState<AskQuestion[]>(seededQuestions)
+  const [errorMessage, setErrorMessage] = useState<string | null>(null)
+  const [isLoading, setIsLoading] = useState(true)
+  const [isPending, startTransition] = useTransition()
 
   useEffect(() => {
-    if (typeof window === 'undefined') return
-    try {
-      const stored = window.localStorage.getItem(STORAGE_KEY)
-      if (stored) {
-        const parsed = JSON.parse(stored) as AskQuestion[]
-        const ordered = parsed
-          .slice()
-          .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
-        setSubmittedQuestions(ordered)
+    let cancelled = false
+
+    async function loadQuestions() {
+      try {
+        const response = await fetch('/api/ask', { cache: 'no-store' })
+        if (!response.ok) {
+          throw new Error(`Failed with status ${response.status}`)
+        }
+
+        const payload = (await response.json()) as { questions?: AskQuestion[] }
+        if (!cancelled && Array.isArray(payload.questions)) {
+          setQuestions(payload.questions)
+        }
+      } catch (error) {
+        console.error('Unable to load questions', error)
+        if (!cancelled) {
+          setErrorMessage('Unable to load the archive right now. Showing starter questions instead.')
+          setQuestions(seededQuestions)
+        }
+      } finally {
+        if (!cancelled) {
+          setIsLoading(false)
+        }
       }
-    } catch (error) {
-      console.error('Unable to load stored questions', error)
+    }
+
+    loadQuestions()
+
+    return () => {
+      cancelled = true
     }
   }, [])
 
-  useEffect(() => {
-    if (typeof window === 'undefined') return
-    if (submittedQuestions.length === 0) {
-      window.localStorage.removeItem(STORAGE_KEY)
-      return
-    }
-
-    const persist = () => {
-      try {
-        window.localStorage.setItem(STORAGE_KEY, JSON.stringify(submittedQuestions))
-      } catch (error) {
-        console.error('Unable to persist questions', error)
-      }
-    }
-
-    const { requestIdleCallback, cancelIdleCallback } = window as typeof window & {
-      requestIdleCallback?: (callback: IdleRequestCallback) => number
-      cancelIdleCallback?: (handle: number) => void
-    }
-
-    if (typeof requestIdleCallback === 'function') {
-      const handle = requestIdleCallback(persist)
-      return () => {
-        cancelIdleCallback?.(handle)
-      }
-    }
-
-    const timeout = window.setTimeout(persist, 0)
-    return () => window.clearTimeout(timeout)
-  }, [submittedQuestions])
-
-  const questions = useMemo(() => {
-    if (submittedQuestions.length === 0) {
-      return seededQuestions
-    }
-    return [...submittedQuestions, ...seededQuestions]
-  }, [submittedQuestions])
-
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
     const trimmedBody = formState.body.trim()
     if (!trimmedBody) return
 
-    const newQuestion: AskQuestion = {
-      id: `user-${Date.now()}`,
-      author: formState.author.trim() || 'anonymous',
-      body: trimmedBody,
-      createdAt: new Date().toISOString()
+    const payload = {
+      author: formState.author,
+      body: trimmedBody
     }
 
-    setSubmittedQuestions((previous) => [newQuestion, ...previous])
-    setFormState({ author: '', body: '' })
+    startTransition(async () => {
+      try {
+        setErrorMessage(null)
+        const response = await fetch('/api/ask', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(payload)
+        })
+
+        if (!response.ok) {
+          const errorPayload = (await response.json().catch(() => null)) as { error?: string } | null
+          const message = errorPayload?.error ?? 'Something went wrong while sending your question.'
+          throw new Error(message)
+        }
+
+        const { question } = (await response.json()) as { question: AskQuestion }
+        setQuestions((previous) => [question, ...previous])
+        setFormState({ author: '', body: '' })
+      } catch (error) {
+        const fallback = error instanceof Error ? error.message : 'Unable to send your question.'
+        setErrorMessage(fallback)
+      }
+    })
   }
 
   return (
@@ -151,11 +154,16 @@ export function AskBoard() {
               <Text variant="muted" size="xs">
                 Your submission is anonymous. I may respond on the blog or update this page.
               </Text>
-              <Button type="submit" disabled={!formState.body.trim()}>
+              <Button type="submit" disabled={!formState.body.trim() || isPending}>
                 Send question
               </Button>
             </div>
           </form>
+          {errorMessage && (
+            <div className="rounded-lg border border-orange-300/40 bg-orange-50/80 px-3 py-2 text-sm text-orange-800 dark:border-orange-500/50 dark:bg-orange-900/20 dark:text-orange-100">
+              {errorMessage}
+            </div>
+          )}
         </StackVertical>
       </section>
 
@@ -170,21 +178,27 @@ export function AskBoard() {
         </div>
 
         <StackVertical gap="md" className="divide-y divide-purple-100/60 dark:divide-purple-500/20">
-          {questions.map((question) => (
-            <article key={question.id} className="pt-4 first:pt-0">
-              <StackVertical gap="xs">
-                <Text size="sm" className="text-purple-600 dark:text-purple-200">
-                  {question.author}
-                </Text>
-                <Text size="sm" variant="default">
-                  {question.body}
-                </Text>
-                <Text variant="muted" size="xs">
-                  {formatDate(question.createdAt)}
-                </Text>
-              </StackVertical>
-            </article>
-          ))}
+          {isLoading ? (
+            <Text variant="muted" size="sm">
+              Loading recent questions...
+            </Text>
+          ) : (
+            questions.map((question: AskQuestion) => (
+              <article key={question.id} className="pt-4 first:pt-0">
+                <StackVertical gap="xs">
+                  <Text size="sm" className="text-purple-600 dark:text-purple-200">
+                    {question.author}
+                  </Text>
+                  <Text size="sm" variant="default">
+                    {question.body}
+                  </Text>
+                  <Text variant="muted" size="xs">
+                    {formatDate(question.createdAt)}
+                  </Text>
+                </StackVertical>
+              </article>
+            ))
+          )}
         </StackVertical>
       </section>
     </StackVertical>
