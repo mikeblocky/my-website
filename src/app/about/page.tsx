@@ -23,55 +23,84 @@ export default function About() {
                 </div>
 
                 <div>
-                <TextHeading as="h1" weight="bold">
-                    From me, an incompleted message
-                </TextHeading>
-					<Text variant="muted" size="xs" className="mb-8">January 31, 2025</Text>
-                <StackVertical gap="md">
-                <Text>
-                        Hi, it's a pleasure to have you here. I'm an introvert, so I rarely share my thoughts online, even though my mind is always filled with reflections on the things I care about. But maybe it's time to step out a little, to put my thoughts and experiences into words. I hope you find something meaningful here.
-                    </Text>
+                    <TextHeading as="h1" weight="bold">
+                        From me, an incomplete message
+                    </TextHeading>
+                    <Text variant="muted" size="xs" className="mb-8">November 2025</Text>
 
-                    <Text>
-                        There have been days when I wondered about my place in this world, and by extension, my presence on the internet. At first, I loved it—it was a space where I could truly be myself, where I could share what I loved. But over time, that feeling faded. I started believing I wasn’t good enough. Fear of judgment crept in, and soon, everything I wanted to say ended up buried in drafts, hidden away from the world. Yet, deep inside, a part of me still longs to share. I want to connect, but the fear of being overlooked or misunderstood holds me back.
-                    </Text>
-                    
-                    <Text>
-                        So, I decided to loosen up a little, to give myself space to be free, and that’s why I created this website—a place where I can just be me.
-                    </Text>
-                    
-                    <Text>
-                        As for the name, it wasn’t one I chose alone. My best friend and I came up with it together. I’ve always been more drawn to the social and psychological side of things, while they lean towards science and engineering. We’re different, yet somehow, we became best friends. The first name they picked for me was “Milky,” inspired by a drink I used to get at school and convenience stores. Eventually, I modified it to “Mike,” and later “Mikeblocky” when making a Roblox account.
-                    </Text>
-                    
-                    <Text>
-                        Right now, I’m studying Computer Science. I chose it because I loved computers and used to excel in the subject. But after a few months, I found myself struggling to keep up. The pace, the workload—it all became overwhelming. It made me anxious, stressed, and unsure if this path was right for me. I’m at a crossroads, and by February, I need to decide whether to continue or change my major. It’s a tough decision, but I think it’s worth considering. I love it, but I also hate it. And there are still so many other things I want to do, but I don’t know if I can.
-                    </Text>
-                    
-                    <Text>
-                        I tend to overthink—a habit that isn’t just part of my nature, but something shaped by my past. Growing up, I had a difficult relationship with my parents, full of conflicts and misunderstandings. My father was strict, and when I failed to meet his expectations, the consequences were harsh. Those experiences left scars, shaping the way I think and act today. But in a strange way, I appreciate my overthinking—it allows me to explore different perspectives, to see stories and characters in a deeper light.
-                    </Text>
-                    
-                    <Text>
-                        One of the most significant influences in my life has been *Skip and Loafer*. For some, it’s just a coming-of-age story, but for me, it’s something more. It reflects so many aspects of my own life—being an exceptional student, attending a prestigious high school and university, taking on leadership roles, and feeling the weight of expectations. I resonate deeply with Shima, and I often wonder if I’ll ever be able to grow and move forward like he does. I hope I can. I really do.
-                    </Text>
-                    
-                    <Text>
-                        Volume 8 of *Skip and Loafer* means the most to me. It hit so close to home that I couldn’t read it all at once—I had to take my time, stretching it out over a month. It made me cry for an entire day. Maybe one day, I’ll share why this volume affected me so much. But for now, just know that it holds a special place in my heart.
-                    </Text>
-                    
-                    <Text>
-                        My love for *Skip and Loafer* has even changed the way I create art. My work isn’t flashy or vibrant like other artists'. Instead, I aim for something warm, simple, and comforting—something that captures human connection and fleeting memories. My art reflects the moments I once lost, the emotions I’ve felt, and the small, everyday beauty that resonates with me. It aligns with the story’s themes, with the direction Takamatsu-sensei takes, and I’ve grown to love this approach. It pushes me beyond the safe boundaries I used to keep in my art.
-                    </Text>
-                    
-                    <Text>
-                        I won’t say I’m glad I took this detour in life, but I am grateful for the experiences I’ve had. Maybe this was always meant to happen. Or maybe I just got lucky. Either way, I’m here, figuring things out, thinking about my place in this world and where I belong.
-                    </Text>
-                </StackVertical>
-            </div>
+                    <StackVertical gap="md">
+                        <Text>
+                            Hi, it’s nice to have you here. I’m not the kind of person who shares much online.
+                            I overthink every post, every word — even this one. But lately I’ve been learning
+                            that silence can turn heavy if you never let anything out. So, this space is where
+                            I’ll try to speak, even if the words come slowly. Maybe you’ll find something here
+                            that stays with you for a while.
+                        </Text>
+
+                        <Text>
+                            There were times I wondered what my place in the world was — both offline and online.
+                            When I was younger, I loved the internet. It felt like a small window where I could
+                            be my truest self. But somewhere along the way, the joy faded. I started doubting
+                            everything I made. Fear took over, and my thoughts ended up buried in notes and drafts
+                            no one would ever see. Still, even under all that fear, a quiet part of me wanted to
+                            reach out again. So, I built this website as a small act of freedom — a quiet corner
+                            to just exist as myself.
+                        </Text>
+
+                        <Text>
+                            As for my name — “Mike” wasn’t really mine alone. My best friend came up with the first
+                            version, “Milky,” named after a drink I used to buy at school and convenience stores.
+                            Later it became “Mike,” and eventually “Mikeblocky,” back when I made a Roblox account.
+                            It stuck. Somehow, that silly name grew with me through all my changes.
+                        </Text>
+
+                        <Text>
+                            I studied Computer Science for a while. I used to love the logic, the structure — the way
+                            code could make something real. But over time, I realized it wasn’t everything I wanted.
+                            It made me anxious, burnt out, and unsure of where I fit in. So now, I’m leaning toward
+                            something closer to my heart — Japanese language and literature. I want to explore stories,
+                            people, and the culture that has quietly shaped who I am today.
+                        </Text>
+
+                        <Text>
+                            I’ve always been someone who thinks too much. Maybe that’s from my upbringing, where mistakes
+                            weren’t taken lightly. My father was strict, and I learned to measure myself by how well I performed.
+                            It left marks that never fully faded. But I’ve learned to turn that overthinking into something else —
+                            reflection, empathy, a way to understand characters and emotions more deeply.
+                        </Text>
+
+                        <Text>
+                            And then there’s <em>Skip and Loafer</em>. It’s not just a story to me — it’s a mirror. I see pieces
+                            of myself in Shima, in the quiet moments between characters, in the awkwardness of trying to grow
+                            while feeling stuck. Volume 8 especially… that one broke me open. It took me a month to finish because
+                            every few pages felt like looking into my own past. I cried the day I finished it. Even now, I still
+                            can’t read it without feeling something ache inside me.
+                        </Text>
+
+                        <Text>
+                            Another story that shaped me is <em>Kemutai Hanashi</em>. It’s a quiet, deeply human series about
+                            regret, longing, and the small, fragile connections that keep people moving forward. I first read it
+                            years ago, and it changed me in ways I didn’t expect. It doesn’t shout or explain itself — it simply
+                            exists, softly and truthfully. Every reread reminds me that stories don’t need to be loud to reach
+                            someone’s heart. Its warmth continues to influence the way I see art, people, and life itself.
+                        </Text>
+
+                        <Text>
+                            That love for stories like <em>Skip and Loafer</em> and <em>Kemutai Hanashi</em> shaped my art too.
+                            I stopped chasing flashiness or perfection. Instead, I draw for warmth — that quiet, human kind of beauty.
+                            My works are like small windows into moments that almost disappear if you blink. I draw the kinds of feelings
+                            that don’t ask to be seen, but still hope someone notices.
+                        </Text>
+
+                        <Text>
+                            I don’t know where this path leads yet — maybe teaching, maybe storytelling, maybe something else entirely.
+                            But I’m here. I’m still figuring things out. And maybe that’s enough for now.
+                        </Text>
+                    </StackVertical>
+                </div>
             </StackVertical>
+
             <SectionFooter color="purple" />
         </BaseContainer>
     )
 }
-

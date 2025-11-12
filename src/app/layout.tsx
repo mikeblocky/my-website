@@ -4,6 +4,7 @@ import { ThemeProvider } from '@/components/ui/theme/theme-provider'
 import { cn } from '@/lib/utils/utils'
 import { Analytics } from "@vercel/analytics/react"
 import { monoFont, sansFont, codeFont } from '@/styles/fonts/fonts'
+import { PageTransition } from '@/components/layout/page-transition/PageTransition'
 
 export const metadata: Metadata = {
   title: 'mikeblocky.com',
@@ -34,7 +35,9 @@ export default function RootLayout({
           <div className="flex flex-col min-h-screen relative">
             <div className="flex-1 flex flex-col">
               <main className="container mx-auto mt-4 px-4 flex-1">
-                {children}
+                <PageTransition>
+                  {children}
+                </PageTransition>
                 <Analytics />
               </main>
             </div>

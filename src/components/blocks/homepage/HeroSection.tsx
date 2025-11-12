@@ -22,14 +22,8 @@ export function HeroSection() {
             <div className="relative">
                 <StackVertical gap="xs">
                     <motion.div
-                        animate={{ 
-                            y: [0, -10, 0],
-                        }}
-                        transition={{ 
-                            duration: 3,
-                            repeat: Infinity,
-                            ease: "easeInOut"
-                        }}
+                        animate={{ y: [0, -10, 0] }}
+                        transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
                         className={cn("text-2xl sm:text-3xl md:text-4xl", monoFont.className)}
                     >
                         👾
@@ -51,8 +45,9 @@ export function HeroSection() {
                         animate={{ opacity: 1 }}
                         transition={{ delay: 0.4 }}
                     >
-                        <Text >
-                            Hi everyone! I'm Mike in Mikeblocky!
+                        <Text>
+                            Hi, I’m Mike — a Vietnamese artist and student who lives somewhere between quiet drawings and long thoughts. 
+                            This little site is my calm corner on the internet: slow, personal, and a bit stubborn about honesty.
                         </Text>
 
                         <Ruler color='colorless' marginTop='lg' marginBottom='none'/>
@@ -63,7 +58,9 @@ export function HeroSection() {
                             transition={{ delay: 0.5 }}
                         >
                             <Text>
-                               I'm Mike - just a nickname of mine. I'm a Vietnamese who really focus on arts, literature and some parts of computer science. I love reading stories, manga, watching films that resonate with my ideas, the vibe that I want to have :)
+                                I care about art, literature, and the way stories move people. I used to be deep in Computer Science — I still like how code
+                                makes ideas real — but I’ve been leaning toward Japanese language and literature because that’s where my curiosity keeps
+                                returning. I want to read closely, to teach, to translate, to understand people better through the worlds they create.
                             </Text>
                             <Ruler color='colorless' marginTop='sm' marginBottom='none'/>
                         </motion.div>
@@ -73,51 +70,59 @@ export function HeroSection() {
                             animate={{ opacity: 1 }}
                             transition={{ delay: 0.6 }}
                         >
-                                <Text>
-                                    This is the place where I can really give thoughts freely without being distracted, a place where I can upload my artworks personally as an archive place.
-                                </Text>
+                            <Text>
+                                My artwork isn’t flashy. It’s warm, simple, and a little fragile on purpose — small scenes, human distance, 
+                                the kind of feelings that don’t ask to be seen. I’m shaped by stories like <em>Skip and Loafer</em> and 
+                                <em> Kemutai Hanashi</em>. <em>Skip and Loafer</em> (especially Volume 8) 
+                                taught me that quiet growth can still shake you. <em>Kemutai Hanashi</em> showed me how regret and tenderness 
+                                can sit together without explanation. Both changed the way I draw and how I look at people.
+                            </Text>
 
-                                <Ruler color='colorless' marginTop='lg' marginBottom='none'/>
+                            <Ruler color='colorless' marginTop='lg' marginBottom='none'/>
 
-                                <Text>
-                                    I will frequently upload all the stuffs about analysis and personal thoughts in {' '}
-                                    <Link href="/blog" className="text-purple-500 font-bold hover:underline">
-                                        blog
+                            <Text>
+                                This site is an archive and a diary. I post illustrations, process notes, and longer reflections in the{' '}
+                                <Link href="/blog" className="text-purple-500 font-bold hover:underline">
+                                    blog
+                                </Link>
+                                . I’m also collecting weekly learning notes — little check-ins on language, reading, and whatever I’m exploring — 
+                                which you can find{' '}
+                                <Link href="/learning/weekly-reflections" className="text-purple-500 font-bold hover:underline">
+                                    here
+                                </Link>
+                                .
+                            </Text>
+
+                            <Ruler color='colorless' marginTop='lg' marginBottom='none'/>
+
+                            <Text>
+                                if you’re new: read anything, take your time, and don’t worry if it feels quiet. that’s the point. 
+                                I’m still figuring out where I belong, but I’m here — drawing, reading, learning — and I’d be happy if some of it stays with you.
+                            </Text>
+
+                            <Ruler color='colorless' marginTop='md' marginBottom='none'/>
+
+                            <List spacing='tight'>
+                                <ListItem>
+                                    <Link href="/about" className="underline hover:text-purple-500">About me</Link>
+                                </ListItem>
+                                <ListItem>
+                                    <Link href="/blog/sand-crab-thoughts" className="underline hover:text-purple-500">
+                                        My thoughts about Shima and the crab, to the sand.
                                     </Link>
-                                    ; you can check it out if you're interested.
-                                </Text>
-
-                                <Ruler color='colorless' marginTop='lg' marginBottom='none'/>
-
-                                <Text>
-                                    You can read some of them if you want to! Here's some of my recommedation (I haven't uploaded anything yet so there isn't anything to recommend):
-                                </Text>
-
-                                <Ruler color='colorless' marginTop='md' marginBottom='none'/>
-
-                                <List spacing='tight'>
-                                    <ListItem>
-                                        <Link href="/about" className="underline hover:text-purple-500">About me</Link>
-                                    </ListItem>
-                                    <ListItem>
-                                        <Link href="/blog/my-2025-resolution" className="underline hover:text-purple-500">My personal line of thoughts about Chapter 67</Link>
-                                    </ListItem>
-                                    <ListItem>
-                                        <Link href="/blog/getting-started-with-machine-learning" className="underline hover:text-purple-500">
-                                           January, a month of new beginnings
-                                        </Link>
-                                    </ListItem>
-                                </List>
-
-                                <Ruler color='colorless' marginTop='lg' marginBottom='none'/>
-
-                                <Text>
-                                    I will also try to document my learnings through learning reflections every week. You can take a look at those{' '}
-                                    <Link href="/learning/weekly-reflections" className="text-purple-500 font-bold hover:underline">
-                                        here
+                                </ListItem>
+                                <ListItem>
+                                    <Link href="/blog/kemutai-hanashi-1-en" className="underline hover:text-purple-500">
+                                        My thoughts of first chapter of Kemutai Hanashi (English)
                                     </Link>
-                                    .
-                                </Text>
+                                </ListItem>
+                            </List>
+
+                            <Ruler color='colorless' marginTop='lg' marginBottom='none'/>
+
+                            <Text>
+                                I’ll keep updating as I go — more drawings, more reading logs, more language notes. Thanks for being here.
+                            </Text>
                         </motion.div>
                     </motion.div>
                 </StackVertical>
@@ -133,8 +138,8 @@ export function HeroSection() {
                     <Image
                         className="object-cover"
                         fill
-                        src="/image-cover.png" 
-                        alt="A drawing of Shima and Mitsumi, which I drew in January 2025"
+                        src="/image-cover.png"
+                        alt="A drawing of Shima and Mitsumi I made in January 2025 — quiet sky, soft colors, small distance."
                         priority
                         sizes="(max-width: 640px) 100vw, (max-width: 1024px) 90vw, 80vw"
                     />
@@ -142,4 +147,4 @@ export function HeroSection() {
             </motion.div>
         </motion.div>
     )
-} 
+}

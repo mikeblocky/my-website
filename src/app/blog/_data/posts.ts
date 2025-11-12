@@ -2,7 +2,7 @@ import { BlogPost } from "../_types/blog"
 
 export const blogPosts: BlogPost[] = [
     {
-        id: 11,
+        id: 12,
         title: "Yuki Kodama's 25th anniversary as a manga artist: Special project 1 - Interview with Takamatsu Misaki",
         description: "An interview between authors during the anniversary of Yuki Kodama-sensei.",
         date: "June 13, 2025",
@@ -10,12 +10,20 @@ export const blogPosts: BlogPost[] = [
         slug: "flowers-interview"
     },
     {
-        id: 10,
+        id: 11,
         title: "Some lines of thoughts I have for Chapter 71",
         description: "Parents and children, a connection that is complex in its own way.",
         date: "June 3, 2025",
         readingTime: "20 min read",
         slug: "my-thoughts-about-chapter-71"
+    },
+       {
+        id: 10,
+        title: "Happy birthday Mukai",
+        description: "happy birthday mukai.",
+        date: "May 19, 2025",
+        readingTime: "10 min read",
+        slug: "happy-birthday-mukai"
     },
     {
         id: 9,

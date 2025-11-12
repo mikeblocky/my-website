@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { Code, Brain, Divide, Rotate3D } from 'lucide-react'
+import { BookOpen, Palette, PenTool, Sparkles } from 'lucide-react'
 import { StackVertical } from '@/components/layout/layout-stack/layout-stack'
 import Text from '@/components/ui/text/text'
 import TextHeading from '@/components/ui/text-heading/text-heading'
@@ -43,29 +43,21 @@ function WorkItem({ icon, text, delay, hyperlink, hyperlinkText, endText }: Work
 export function CurrentWork() {
     const items = [
         {
-            icon: <Brain className="w-4 h-4" />,
-            text: "Studying psychology and biotechnology as alternatives to computer science"
+            icon: <BookOpen className="w-4 h-4" />,
+            text: "Studying Japanese language and literature, preparing for JLPT and exploring cultural nuances through readings."
         },
         {
-            icon: <Divide className="w-4 h-4" />,
-            text: "Learning how to improve writing skills and express idea better"
+            icon: <Palette className="w-4 h-4" />,
+            text: "Working on new illustration projects that focus on warmth, memory, and quiet human connection."
         },
         {
-            icon: <Code className="w-4 h-4" />,
-            text: "Improve the website from the base that I have from sumit.ml"
+            icon: <PenTool className="w-4 h-4" />,
+            text: "Writing reflections and small essays about art, identity, and stories like Skip and Loafer and Kemutai Hanashi."
         },
-
         {
-            icon: <Rotate3D className="w-4 h-4" />,
-            text: "Try to do some animation and rotoscoping",
+            icon: <Sparkles className="w-4 h-4" />,
+            text: "Designing small creative tools and improving my site to feel more like a personal journal than a portfolio."
         }
-        // {
-        //     icon: <BookOpen className="w-4 h-4" />,
-        //     text: "Reading ",
-        //     hyperlink: "/notes/books",
-        //     hyperlinkText: "ML Books",
-        //     endText: ""
-        // }
     ]
 
     return (
@@ -75,7 +67,7 @@ export function CurrentWork() {
             transition={{ delay: 1, duration: 0.5 }}
         >
             <StackVertical gap="none">
-                <TextHeading as="h2">Current Ongoings</TextHeading>
+                <TextHeading as="h2">Current ongoings</TextHeading>
                 <StackVertical gap="md">
                     {items.map((item, index) => (
                         <WorkItem 
@@ -83,13 +75,10 @@ export function CurrentWork() {
                             icon={item.icon}
                             text={item.text}
                             delay={1.2 + index * 0.1}
-                            // hyperlink={item.hyperlink}
-                            // hyperlinkText={item.hyperlinkText}
-                            // endText={item.endText}
                         />
                     ))}
                 </StackVertical>
             </StackVertical>
         </motion.div>
     )
-} 
+}

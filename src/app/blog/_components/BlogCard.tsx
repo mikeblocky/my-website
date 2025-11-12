@@ -1,3 +1,4 @@
+import { ReactNode } from "react"
 import Link from "next/link"
 import { cn } from "@/lib/utils/utils"
 import { StackVertical, StackHorizontal } from "@/components/layout/layout-stack/layout-stack"
@@ -5,7 +6,16 @@ import Text from "@/components/ui/text/text"
 import TextHeading from "@/components/ui/text-heading/text-heading"
 import { BlogPost } from "../_types/blog"
 
-export function BlogCard({ post, isLast }: { post: BlogPost; isLast?: boolean }) {
+type BlogCardProps = {
+    post: BlogPost
+    isLast?: boolean
+    searchTerm?: string
+}
+
+export function BlogCard({ post, isLast, searchTerm }: BlogCardProps) {
+    const highlightedTitle = highlightText(post.title, searchTerm)
+    const highlightedDescription = highlightText(post.description, searchTerm)
+
     return (
         <div className="group">
             <Link 
@@ -25,14 +35,14 @@ export function BlogCard({ post, isLast }: { post: BlogPost; isLast?: boolean })
                                 "group-hover:text-purple-500 transition-colors duration-300"
                             )}
                         >
-                            {post.title}
+                            {highlightedTitle}
                         </TextHeading>
                         <Text 
                             variant="muted"
                             size="sm"
                             className="line-clamp-2"
                         >
-                            {post.description}
+                            {highlightedDescription}
                         </Text>
                         <StackHorizontal className="text-muted-foreground" gap="xs">
                             <Text variant="muted" size="xs">
@@ -52,3 +62,29 @@ export function BlogCard({ post, isLast }: { post: BlogPost; isLast?: boolean })
         </div>
     )
 } 
+
+function highlightText(text: string, term?: string): ReactNode {
+    if (!term) return text
+
+    const cleanTerm = term.trim()
+    if (!cleanTerm) return text
+
+    const escapedTerm = cleanTerm.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")
+    const regex = new RegExp(`(${escapedTerm})`, "gi")
+    const parts = text.split(regex)
+
+    return parts.map((part, index) => {
+        if (index % 2 === 1) {
+            return (
+                <span
+                    key={`highlight-${index}`}
+                    className="rounded-sm bg-purple-300/60 px-1 font-semibold text-purple-900 dark:bg-purple-500/50 dark:text-purple-50"
+                >
+                    {part}
+                </span>
+            )
+        }
+
+        return <span key={`text-${index}`}>{part}</span>
+    })
+}

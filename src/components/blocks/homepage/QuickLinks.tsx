@@ -43,7 +43,7 @@ export function QuickLinks() {
         {
             href: '/blog',
             title: 'Blog',
-            description: 'Thoughts on ML, programming, and technology'
+            description: 'Thoughts on everything.'
         },
     ]
 
