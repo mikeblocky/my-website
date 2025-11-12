@@ -54,7 +54,7 @@ export function SocialLinks() {
             label: "twitter"
         },
         {
-            href: "mailto:me@mikeblocky.com",
+            href: "mailto:mibeblocky@gmail.com",
             icon: <Mail className="w-4 h-4" />,
             label: "email"
         }

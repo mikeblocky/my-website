@@ -10,6 +10,8 @@ interface SectionFooterProps {
     showHomePage?: boolean;
     showSocialLinks?: boolean;
     showCopyright?: boolean;
+    spacing?: 'default' | 'compact' | 'none';
+    className?: string;
 }
 
 export function SectionFooter({ 
@@ -17,18 +19,20 @@ export function SectionFooter({
     showToTop = true,
     showHomePage = true,
     showSocialLinks = true,
-    showCopyright = true
+    showCopyright = true,
+    spacing = 'default',
+    className
 }: SectionFooterProps) {
     const navigationLinks = (
         <>
             {showToTop && (
                 <>
-                    <FooterLink href="#top" color={color}>To the Top</FooterLink>
+                    <FooterLink href="#top" color={color}>To the top</FooterLink>
                     {showHomePage && <FooterDivider color={color} />}
                 </>
             )}
             {showHomePage && (
-                <FooterLink href="/" color={color}>Home Page</FooterLink>
+                <FooterLink href="/" color={color}>Homepage</FooterLink>
             )}
         </>
     )
@@ -37,10 +41,11 @@ export function SectionFooter({
         <BaseFooter 
             color={color}
             navigationLinks={navigationLinks}
-            className="mt-6"
+            className={className ?? "mt-6"}
             showToTop={showToTop}
             showSocialLinks={showSocialLinks}
             showCopyright={showCopyright}
+            spacing={spacing}
         />
     )
 }

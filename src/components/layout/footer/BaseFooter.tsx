@@ -6,6 +6,8 @@ import { Github, Twitter, Mail } from 'lucide-react'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 
+type FooterSpacing = 'default' | 'compact' | 'none'
+
 interface BaseFooterProps {
     color?: string;
     navigationLinks?: React.ReactNode;
@@ -14,6 +16,7 @@ interface BaseFooterProps {
     showSectionName?: boolean;
     showSocialLinks?: boolean;
     showCopyright?: boolean;
+    spacing?: FooterSpacing;
 }
 
 export function BaseFooter({ 
@@ -23,7 +26,8 @@ export function BaseFooter({
     showToTop = true,
     showSectionName = true,
     showSocialLinks = true,
-    showCopyright = true
+    showCopyright = true,
+    spacing = 'default'
 }: BaseFooterProps) {
     const socialLinks = [
         { href: "mailto:me@mikeblocky.com", icon: <Mail className="w-3 h-3 sm:w-4 sm:h-4" /> },
@@ -31,8 +35,11 @@ export function BaseFooter({
         { href: "https://x.com/mikeblocky", icon: <Twitter className="w-3 h-3 sm:w-4 sm:h-4" /> }
     ]
 
+    const paddingTopClass = spacing === 'compact' ? 'pt-6' : spacing === 'none' ? 'pt-0' : 'pt-12'
+    const bottomSpacerClass = spacing === 'compact' ? 'h-4' : spacing === 'none' ? 'h-0' : 'h-8'
+
     return (
-        <footer className={cn("relative mt-auto pt-12", className)}>
+        <footer className={cn("relative mt-auto", paddingTopClass, className)}>
             {/* Gradient Line */}
             <div className="relative w-full mb-8">
                 <div className={cn(
@@ -119,7 +126,7 @@ export function BaseFooter({
             </div>
 
             {/* Bottom padding */}
-            <div className="h-8" />
+            <div className={bottomSpacerClass} />
         </footer>
     )
 } 

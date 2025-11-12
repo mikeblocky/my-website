@@ -6,6 +6,8 @@ import { Metadata } from "next"
 import { AskBoard } from "./_components/AskBoard"
 import { Navbar } from "@/components/ui/navbar/Navbar"
 import { ThemeToggle } from "@/components/ui/theme/theme-toggle"
+import { SectionFooter } from "@/components/layout/footer/SectionFooter"
+import { IndividualPageFooter } from "@/components/layout/footer/IndividualPageFooter"
 
 export const metadata: Metadata = {
   title: "Ask | mikeblocky.com",
@@ -31,6 +33,12 @@ export default function AskPage() {
 
         <AskBoard />
       </StackVertical>
+
+      
+      <IndividualPageFooter
+        showParentPage={false}
+        spacing="compact"
+      />
     </BaseContainer>
   )
 }

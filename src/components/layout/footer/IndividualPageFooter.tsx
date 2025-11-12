@@ -13,6 +13,8 @@ interface IndividualPageFooterProps {
     showHomePage?: boolean;
     showSocialLinks?: boolean;
     showCopyright?: boolean;
+    spacing?: 'default' | 'compact' | 'none';
+    className?: string;
 }
 
 export function IndividualPageFooter({ 
@@ -22,7 +24,9 @@ export function IndividualPageFooter({
     showParentPage = true,
     showHomePage = true,
     showSocialLinks = true,
-    showCopyright = true
+    showCopyright = true,
+    spacing = 'default',
+    className
 }: IndividualPageFooterProps) {
     const pathname = usePathname()
     
@@ -56,18 +60,18 @@ export function IndividualPageFooter({
         <div className="flex flex-wrap items-center justify-center gap-1">
             {showToTop && (
                 <>
-                    <FooterLink href="#top">To the Top</FooterLink>
+                    <FooterLink href="#top">To the top</FooterLink>
                     {(showParentPage || showHomePage) && <FooterDivider />}
                 </>
             )}
             {showParentPage && (
                 <>
-                    <FooterLink href={parentPath}>{parentName} Page</FooterLink>
+                    <FooterLink href={parentPath}>{parentName} page</FooterLink>
                     {showHomePage && <FooterDivider />}
                 </>
             )}
             {showHomePage && (
-                <FooterLink href="/">Home Page</FooterLink>
+                <FooterLink href="/">Homepage</FooterLink>
             )}
         </div>
     )
@@ -75,11 +79,12 @@ export function IndividualPageFooter({
     return (
         <BaseFooter 
             navigationLinks={navigationLinks}
-            className="mt-6"
+            className={className ?? "mt-6"}
             showToTop={showToTop}
             showSectionName={showParentPage}
             showSocialLinks={showSocialLinks}
             showCopyright={showCopyright}
+            spacing={spacing}
         />
     )
 }
