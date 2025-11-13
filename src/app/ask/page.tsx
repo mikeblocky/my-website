@@ -9,9 +9,30 @@ import { ThemeToggle } from "@/components/ui/theme/theme-toggle"
 import { SectionFooter } from "@/components/layout/footer/SectionFooter"
 import { IndividualPageFooter } from "@/components/layout/footer/IndividualPageFooter"
 
+const shareImage = '/ask/twitter-image.png'
+const shareAlt = 'Hand-drawn illustration of two friends sharing questions for the Ask page.'
+
 export const metadata: Metadata = {
   title: "Asking | mikeblocky.com",
-  description: "Send an anonymous question and browse the community archive."
+  description: "Send an anonymous question and browse the community archive.",
+  openGraph: {
+    images: [
+      {
+        url: shareImage,
+        width: 1200,
+        height: 630,
+        alt: shareAlt,
+      },
+    ],
+  },
+  twitter: {
+    images: [
+      {
+        url: shareImage,
+        alt: shareAlt,
+      },
+    ],
+  },
 }
 
 export default function AskPage() {
