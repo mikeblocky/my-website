@@ -3,7 +3,7 @@ import { BlogPost } from "../_types/blog"
 export const blogPosts: BlogPost[] = [
     {
         id: 12,
-        title: "Takamatu-sensei's January 13th space - translation",
+        title: "Takamatsu-sensei's January 13th space - translation",
         description: "An updated translation of the space that Takamatsu-sensei did on January 13th.",
         date: "November 13th, 2025",
         readingTime: "45 min read",
