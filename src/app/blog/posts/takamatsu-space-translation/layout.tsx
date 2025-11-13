@@ -1,18 +1,18 @@
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
-    title: 'Misaki Takamatsu January 13th Space - translation | mikeblocky.com',
-    description: 'A translation of the space that Takamatsu-sensei did on January 13th.',
+    title: 'Takamatsu-sensei\'s January 13th space - translation | mikeblocky.com',
+    description: 'An updated translation of the space that Takamatsu-sensei did on January 13th.',
     openGraph: {
-        title: 'Misaki Takamatsu January 13th Space - translation | mikeblocky.com',
-        description: 'A translation of the space that Takamatsu-sensei did on January 13th.',
+        title: 'Takamatsu-sensei\'s January 13th space - translation | mikeblocky.com',
+        description: 'An updated translation of the space that Takamatsu-sensei did on January 13th.',
         type: 'article',
         publishedTime: '2025-01-31T00:00:00.000Z',
     },
     twitter: {
         card: 'summary_large_image',
-        title: 'Misaki Takamatsu January 13th Space - translation',
-        description: 'A translation of the space that Takamatsu-sensei did on January 13th.',
+        title: 'Takamatsu-sensei\'s January 13th space - translation',
+        description: 'An updated translation of the space that Takamatsu-sensei did on January 13th.',
     }
 }
 

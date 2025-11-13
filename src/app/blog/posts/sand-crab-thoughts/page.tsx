@@ -28,7 +28,7 @@ export default function MySelfReflectionFor2025() {
 
           <article>
             <TextHeading as="h1">Thoughts of Shima - the sand and the crab</TextHeading>
-            <Text variant="muted" size="xs" className="mb-8">February 26, 2025 | 15 min read</Text>
+            <Text variant="muted" size="xs" className="mb-8">February 26th, 2025 | 15 min read</Text>
 
             <div className="prose dark:prose-invert max-w-none">
               <Content components={mdxComponents} />

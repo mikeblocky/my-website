@@ -28,7 +28,7 @@ export default function MySelfReflectionFor2025() {
 
           <article>
             <TextHeading as="h1">Discord archive - About Shima, Mitsumi, Nao; the seashell, sand, and the sea</TextHeading>
-            <Text variant="muted" size="xs" className="mb-8">January 31, 2025 | 15 min read</Text>
+            <Text variant="muted" size="xs" className="mb-8">January 31st, 2025 | 15 min read</Text>
 
             <div className="prose dark:prose-invert max-w-none">
               <Content components={mdxComponents} />

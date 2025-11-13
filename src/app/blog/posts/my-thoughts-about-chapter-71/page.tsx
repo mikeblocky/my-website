@@ -28,7 +28,7 @@ export default function TakamatsuInterviewSpace1() {
 
           <article>
             <TextHeading as="h1">Some lines of thoughts I have for Chapter 71</TextHeading>
-            <Text variant="muted" size="xs" className="mb-8">June 3, 2025 | 20 min read</Text>
+            <Text variant="muted" size="xs" className="mb-8">June 3rd, 2025 | 20 min read</Text>
 
             <div className="prose dark:prose-invert max-w-none">
               <Content components={mdxComponents} />

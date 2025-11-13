@@ -28,7 +28,7 @@ export default function TakamatsuInterviewSpace1() {
 
           <article>
             <TextHeading as="h1">Misaki Takamatsu speaks about her long-term serialization journey in Skip and Loafer (Translation)</TextHeading>
-            <Text variant="muted" size="xs" className="mb-8">January 31, 2025 | 30 min read</Text>
+            <Text variant="muted" size="xs" className="mb-8">January 31st, 2025 | 30 min read</Text>
 
             <div className="prose dark:prose-invert max-w-none">
               <Content components={mdxComponents} />

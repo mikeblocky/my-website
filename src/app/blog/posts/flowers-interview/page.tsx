@@ -28,7 +28,7 @@ export default function TakamatsuInterviewSpace1() {
 
           <article>
             <TextHeading as="h1">Yuki Kodama's 25th anniversary as a manga artist: Special project 1 - Interview with Takamatsu Misaki</TextHeading>
-            <Text variant="muted" size="xs" className="mb-8">June 13, 2025 | 20 min read</Text>
+            <Text variant="muted" size="xs" className="mb-8">June 13th, 2025 | 20 min read</Text>
 
             <div className="prose dark:prose-invert max-w-none">
               <Content components={mdxComponents} />

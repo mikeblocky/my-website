@@ -28,7 +28,7 @@ export default function Episode1Commentary() {
 
           <article>
             <TextHeading as="h1">Episode 1's commentary - translation</TextHeading>
-            <Text variant="muted" size="xs" className="mb-8">January 31, 2025 | 10 min read</Text>
+            <Text variant="muted" size="xs" className="mb-8">January 31st, 2025 | 10 min read</Text>
 
             <div className="prose dark:prose-invert max-w-none">
               <Content components={mdxComponents} />

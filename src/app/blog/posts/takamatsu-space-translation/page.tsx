@@ -20,15 +20,15 @@ export default function TakamatsuJan13thSpace() {
               items={[
                 { href: '/', label: 'Home', emoji: '👾' },
                 { href: '/blog', label: 'Blog' },
-                { label: 'Misaki Takamatsu January 13th Space - translation' }
+                { label: 'Takamatsu-sensei\'s January 13th space - translation | mikeblocky.com' }
               ]}
             />
             <ThemeToggle />
           </div>
 
           <article>
-            <TextHeading as="h1">Misaki Takamatsu's January 13th Space - translation</TextHeading>
-            <Text variant="muted" size="xs" className="mb-8">January 31, 2025 | 45 min read</Text>
+            <TextHeading as="h1">Takamatsu-sensei's January 13th space - translation</TextHeading>
+            <Text variant="muted" size="xs" className="mb-8">November 13th, 2025 | 45 min read</Text>
 
             <div className="prose dark:prose-invert max-w-none">
               <Content components={mdxComponents} />
