@@ -1,6 +1,8 @@
 import { notFound } from 'next/navigation'
 import { blogPosts } from '../_data/posts'
 
+const SITE_URL = 'https://www.mikeblocky.com'
+
 type Params = Promise<{ slug: string }>
 
 // Generate static params for all blog posts
@@ -12,33 +14,40 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: { params: Params }) {
     const { slug } = await params
+    const post = blogPosts.find((entry) => entry.slug === slug)
+
+    if (!post) {
+        return {
+            title: 'Post not found | mikeblocky.com'
+        }
+    }
+
+    const title = `${post.title} | mikeblocky.com`
+    const description = post.description
+    const openGraphImageUrl = new URL(`/blog/posts/${slug}/opengraph-image.png`, SITE_URL).toString()
+    const twitterImageUrl = new URL(`/blog/posts/${slug}/twitter-image.png`, SITE_URL).toString()
+    const altText = description || post.title
   
     return {
-      title: `${blogPosts.find(post => post.slug === slug)?.title} | mikeblocky.com`,
+      title,
+      description,
       openGraph: {
-        title: `${blogPosts.find(post => post.slug === slug)?.title} | mikeblocky.com`,
-        description: `${blogPosts.find(post => post.slug === slug)?.description}`,
+        title,
+        description,
         images: [
           {
-            url: `/blog/posts/${slug}/opengraph-image.png`,
+            url: openGraphImageUrl,
             width: 1200,
             height: 630,
-            alt: `${blogPosts.find(post => post.slug === slug)?.description}`,
+            alt: altText
           },
         ],
       },
       twitter: {
         card: "summary_large_image",
-        title: `${blogPosts.find(post => post.slug === slug)?.title} | mikeblocky.com`,
-        description: `${blogPosts.find(post => post.slug === slug)?.description}`,
-        images: [
-          {
-            url: `/blog/posts/${slug}/twitter-image.png`,
-            width: 1200,
-            height: 630,
-            alt: `${blogPosts.find(post => post.slug === slug)?.description}`,
-          },
-        ],
+        title,
+        description,
+        images: [twitterImageUrl],
       },
     };
   }

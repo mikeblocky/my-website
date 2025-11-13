@@ -6,9 +6,20 @@ import { Analytics } from "@vercel/analytics/react"
 import { monoFont, sansFont, codeFont } from '@/styles/fonts/fonts'
 import { PageTransition } from '@/components/layout/page-transition/PageTransition'
 
+const SITE_URL = 'https://www.mikeblocky.com'
+
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
   title: 'mikeblocky.com',
   description: 'a site where i share my thoughts and archive my artworks',
+  openGraph: {
+    siteName: 'mikeblocky.com',
+    url: SITE_URL,
+    type: 'website'
+  },
+  twitter: {
+    card: 'summary_large_image'
+  }
 }
 
 export default function RootLayout({
