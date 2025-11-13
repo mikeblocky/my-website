@@ -3,6 +3,14 @@ import { BlogPost } from "../_types/blog"
 export const blogPosts: BlogPost[] = [
     {
         id: 12,
+        title: "Takamatu-sensei's January 13th space - translation",
+        description: "An updated translation of the space that Takamatsu-sensei did on January 13th.",
+        date: "November 13th, 2025",
+        readingTime: "45 min read",
+        slug: "takamatsu-space-translation"
+    },
+    {
+        id: 11,
         title: "Yuki Kodama's 25th anniversary as a manga artist: Special project 1 - Interview with Takamatsu Misaki",
         description: "An interview between authors during the anniversary of Yuki Kodama-sensei.",
         date: "June 13, 2025",
@@ -10,7 +18,7 @@ export const blogPosts: BlogPost[] = [
         slug: "flowers-interview"
     },
     {
-        id: 11,
+        id: 10,
         title: "Some lines of thoughts I have for Chapter 71",
         description: "Parents and children, a connection that is complex in its own way.",
         date: "June 3, 2025",
@@ -18,7 +26,7 @@ export const blogPosts: BlogPost[] = [
         slug: "my-thoughts-about-chapter-71"
     },
        {
-        id: 10,
+        id: 9,
         title: "Happy birthday Mukai",
         description: "happy birthday mukai.",
         date: "May 19, 2025",
@@ -26,7 +34,7 @@ export const blogPosts: BlogPost[] = [
         slug: "happy-birthday-mukai"
     },
     {
-        id: 9,
+        id: 8,
         title: "「煙たい話：第一章」についての私の考え",
         description: "煙あるところに火あり。",
         date: "May 14, 2025",
@@ -34,7 +42,7 @@ export const blogPosts: BlogPost[] = [
         slug: "kemutai-hanashi-1-jp"
     },
     {
-        id: 8,
+        id: 7,
         title: "My thoughts about Kemutai Hanashi - Chapter 1",
         description: "Where there is smoke, there is fire.",
         date: "May 14, 2025",
@@ -42,7 +50,7 @@ export const blogPosts: BlogPost[] = [
         slug: "kemutai-hanashi-1-en"
     },
     {
-        id: 7,
+        id: 6,
         title: "My thoughts about Chapter 68",
         description: "To grow up is to become a child again.",
         date: "February 26, 2025",
@@ -50,7 +58,7 @@ export const blogPosts: BlogPost[] = [
         slug: "my-thoughts-about-chapter-68"
     },
     {
-        id: 6,
+        id: 5,
         title: "Thoughts of Shima - the sand and the crab",
         description: "Just my thoughts about Shima and the way those elements relate to him.",
         date: "February 26, 2025",
@@ -58,7 +66,7 @@ export const blogPosts: BlogPost[] = [
         slug: "sand-crab-thoughts"
     },
     {
-        id: 5,
+        id: 4,
         title: "Autograph session of Takamatsu-sensei in Taiwan - translation",
         description: "About the autograph session which she was invited in two days: February 9th - February 10th.",
         date: "February 26, 2025",
@@ -66,21 +74,14 @@ export const blogPosts: BlogPost[] = [
         slug: "takamatsu-autograph-taiwan"
     },
     {
-        id: 4,
+        id: 3,
         title: "Misaki Takamatsu speaks about her long-term serialization journey in Skip and Loafer (Translation)",
         description: "A translation of the space that Takamatsu-sensei did on an interview, which released on January 2025.",
         date: "January 31, 2025",
         readingTime: "30 min read",
         slug: "takamatsu-interview-translation-1"
     },
-    {
-        id: 3,
-        title: "Misaki Takamatsu's January 13th Space - translation",
-        description: "A translation of the space that Takamatsu-sensei did on January 13th.",
-        date: "January 31, 2025",
-        readingTime: "45 min read",
-        slug: "takamatsu-space-translation"
-    },
+  
     {
         id: 2,
         title: "Discord archive - About Shima, Mitsumi, Nao; the seashell, sand, and the sea",
