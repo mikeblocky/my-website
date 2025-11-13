@@ -117,7 +117,7 @@ export function AskBoard() {
               Ask something anonymously
             </TextHeading>
             <Text variant="muted" size="sm">
-              Drop a question, thought, or prompt. I will keep it in this archive so others can read along.
+              Drop a question, thought, or anything! I will keep it in this archive so others can read along.
             </Text>
           </header>
 

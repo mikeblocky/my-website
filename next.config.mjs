@@ -15,5 +15,42 @@ const nextConfig = {
  
 const withMDX = createMDX({
 })
- 
-export default withMDX(nextConfig)
+
+const config = withMDX(nextConfig)
+
+// Move deprecated experimental.turbo options into config.turbopack.
+if (config.experimental?.turbo) {
+  const { turbo, ...restExperimental } = config.experimental
+  const existingTurbopack = config.turbopack ?? {}
+
+  const mergedTurbopack = {
+    ...existingTurbopack,
+    ...turbo,
+    ...(existingTurbopack.rules || turbo.rules
+      ? {
+          rules: {
+            ...existingTurbopack.rules,
+            ...turbo.rules,
+          },
+        }
+      : {}),
+    ...(existingTurbopack.resolveAlias || turbo.resolveAlias
+      ? {
+          resolveAlias: {
+            ...existingTurbopack.resolveAlias,
+            ...turbo.resolveAlias,
+          },
+        }
+      : {}),
+  }
+
+  config.turbopack = mergedTurbopack
+
+  if (Object.keys(restExperimental).length > 0) {
+    config.experimental = restExperimental
+  } else {
+    delete config.experimental
+  }
+}
+
+export default config

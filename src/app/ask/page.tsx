@@ -10,7 +10,7 @@ import { SectionFooter } from "@/components/layout/footer/SectionFooter"
 import { IndividualPageFooter } from "@/components/layout/footer/IndividualPageFooter"
 
 export const metadata: Metadata = {
-  title: "Ask | mikeblocky.com",
+  title: "Asking | mikeblocky.com",
   description: "Send an anonymous question and browse the community archive."
 }
 
@@ -24,10 +24,10 @@ export default function AskPage() {
       <StackVertical gap="lg">
         <header className="space-y-2">
           <TextHeading as="h1" weight="bold">
-            Anonymous ask box
+            Anonymous asking!
           </TextHeading>
           <Text variant="muted" size="sm">
-            Ask anything about art, stories, learning, or life. I will keep every submission here so others can read through the anonymous archive.
+            Ask anything about me! I will keep every submission here so others can read through the anonymous archive!
           </Text>
         </header>
 
