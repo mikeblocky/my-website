@@ -7,7 +7,6 @@ import { StackVertical } from '@/components/layout/layout-stack/layout-stack'
 import TextHeading from '@/components/ui/text-heading/text-heading'
 import Text from '@/components/ui/text/text'
 import { Button } from '@/components/ui/primitives/button'
-import { cn } from '@/lib/utils/utils'
 
 const seededQuestions = [...initialQuestions].sort(
   (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
@@ -105,67 +104,47 @@ export function AskBoard() {
 
   return (
     <StackVertical gap="lg">
-      <section
-        className={cn(
-          'rounded-2xl border border-purple-500/20 bg-[#f2f5ff] p-6 shadow-sm',
-          'dark:border-purple-400/20 dark:bg-[#2a1f3f]'
-        )}
-      >
-        <StackVertical gap="md">
-          <header className="space-y-1">
-            <TextHeading as="h2" weight="semibold">
-              Ask something anonymously
-            </TextHeading>
-            <Text variant="muted" size="sm">
-              Drop a question, thought, or anything! I will keep it in this archive so others can read along.
-            </Text>
-          </header>
+      <form className="space-y-4" onSubmit={handleSubmit}>
+        <div className="grid gap-3">
+          <label className="flex flex-col gap-2">
+            <span className="text-base font-semibold text-foreground">
+              Alias (optional)
+            </span>
+            <input
+              type="text"
+              value={formState.author}
+              onChange={(event) => setFormState((state) => ({ ...state, author: event.target.value }))}
+              placeholder="How should I call you?"
+              className="w-full rounded-lg border border-purple-200/50 bg-white/70 px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-purple-400 focus:outline-none focus:ring-2 focus:ring-purple-200 dark:border-purple-500/30 dark:bg-slate-950/40 dark:text-slate-100 dark:focus:border-purple-400 dark:focus:ring-purple-500/30"
+            />
+          </label>
 
-          <form className="space-y-4" onSubmit={handleSubmit}>
-            <div className="grid gap-3">
-              <label className="flex flex-col gap-2">
-                <span className="text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground">
-                  Alias (optional)
-                </span>
-                <input
-                  type="text"
-                  value={formState.author}
-                  onChange={(event) => setFormState((state) => ({ ...state, author: event.target.value }))}
-                  placeholder="How should I call you?"
-                  className="w-full rounded-lg border border-purple-200/50 bg-white/70 px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-purple-400 focus:outline-none focus:ring-2 focus:ring-purple-200 dark:border-purple-500/30 dark:bg-slate-950/40 dark:text-slate-100 dark:focus:border-purple-400 dark:focus:ring-purple-500/30"
-                />
-              </label>
+          <label className="flex flex-col gap-2">
+            <span className="text-base font-semibold text-foreground">
+              Your question
+            </span>
+            <textarea
+              value={formState.body}
+              onChange={(event) => setFormState((state) => ({ ...state, body: event.target.value }))}
+              placeholder="Ask me anything..."
+              rows={5}
+              className="w-full rounded-lg border border-purple-200/50 bg-white/70 px-3 py-3 text-sm text-slate-900 shadow-sm focus:border-purple-400 focus:outline-none focus:ring-2 focus:ring-purple-200 dark:border-purple-500/30 dark:bg-slate-950/40 dark:text-slate-100 dark:focus:border-purple-400 dark:focus:ring-purple-500/30"
+            />
+          </label>
+        </div>
 
-              <label className="flex flex-col gap-2">
-                <span className="text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground">
-                  Your question
-                </span>
-                <textarea
-                  value={formState.body}
-                  onChange={(event) => setFormState((state) => ({ ...state, body: event.target.value }))}
-                  placeholder="Ask me anything..."
-                  rows={5}
-                  className="w-full rounded-lg border border-purple-200/50 bg-white/70 px-3 py-3 text-sm text-slate-900 shadow-sm focus:border-purple-400 focus:outline-none focus:ring-2 focus:ring-purple-200 dark:border-purple-500/30 dark:bg-slate-950/40 dark:text-slate-100 dark:focus:border-purple-400 dark:focus:ring-purple-500/30"
-                />
-              </label>
-            </div>
+        <div className="flex justify-end">
+          <Button type="submit" disabled={!formState.body.trim() || isPending}>
+            Send question
+          </Button>
+        </div>
+      </form>
 
-            <div className="flex items-center justify-between gap-4">
-              <Text variant="muted" size="xs">
-                Your submission is anonymous. I may respond on the blog or update this page.
-              </Text>
-              <Button type="submit" disabled={!formState.body.trim() || isPending}>
-                Send question
-              </Button>
-            </div>
-          </form>
-          {errorMessage && (
-            <div className="rounded-lg border border-orange-300/40 bg-orange-50/80 px-3 py-2 text-sm text-orange-800 dark:border-orange-500/50 dark:bg-orange-900/20 dark:text-orange-100">
-              {errorMessage}
-            </div>
-          )}
-        </StackVertical>
-      </section>
+      {errorMessage && (
+        <div className="rounded-lg border border-orange-300/40 bg-orange-50/80 px-3 py-2 text-sm text-orange-800 dark:border-orange-500/50 dark:bg-orange-900/20 dark:text-orange-100">
+          {errorMessage}
+        </div>
+      )}
 
       <section className="space-y-4">
         <div className="flex items-baseline justify-between">

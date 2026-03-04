@@ -11,6 +11,25 @@ import { monoFont } from '@/styles/fonts/fonts'
 import CodeBlock from '@/components/blocks/code-block/code-block'
 import Math from '@/components/ui/math/math'
 
+type FuriganaProps = {
+    kanji: string
+    reading: string
+    className?: string
+}
+
+function Furigana({ kanji, reading, className }: FuriganaProps) {
+    return (
+        <ruby className={cn('align-baseline', className)}>
+            {kanji}
+            <rp>(</rp>
+            <rt className="text-[0.6em] leading-none text-muted-foreground dark:text-muted-foreground">
+                {reading}
+            </rt>
+            <rp>)</rp>
+        </ruby>
+    )
+}
+
 // Helper function to process text and wrap math expressions
 const processMathInText = (text: string): (string | React.ReactElement)[] => {
   const parts: (string | React.ReactElement)[] = []
@@ -68,6 +87,7 @@ const processMathInText = (text: string): (string | React.ReactElement)[] => {
 }
 
 export const mdxComponents: MDXComponents = {
+    Furigana,
     // Headings
     h1: ({ children }) => (
         <TextHeading as="h1" weight="bold" className="mt-8 mb-4">
@@ -194,4 +214,16 @@ export const mdxComponents: MDXComponents = {
             {children}
         </a>
     ),
+
+    ruby: ({ children, className }) => (
+        <ruby className={cn('align-baseline', className)}>
+            {children}
+        </ruby>
+    ),
+    rt: ({ children, className }) => (
+        <rt className={cn('text-[0.6em] leading-none text-muted-foreground dark:text-muted-foreground', className)}>
+            {children}
+        </rt>
+    ),
+    rp: ({ children }) => <rp>{children}</rp>,
 } 

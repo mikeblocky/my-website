@@ -1,4 +1,5 @@
 import { Metadata } from 'next'
+import { notFound } from 'next/navigation'
 
 export const metadata: Metadata = {
     title: 'My Notes | mikeblocky.com',
@@ -20,5 +21,5 @@ export default function Layout({
 }: {
     children: React.ReactNode
 }) {
-    return children
+    notFound()
 } 

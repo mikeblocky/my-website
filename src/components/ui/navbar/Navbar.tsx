@@ -36,8 +36,7 @@ export function Navbar() {
     const links = [
         { href: '/about', label: 'About' },
         { href: '/blog', label: 'Blog' },
-        { href: '/learning', label: 'Learning' },
-        { href: '/notes', label: 'Notes' },
+        { href: '/artworks', label: 'Artworks' },
         { href: '/ask', label: 'Ask' }
     ]
 

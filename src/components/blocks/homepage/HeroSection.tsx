@@ -85,11 +85,6 @@ export function HeroSection() {
                                 <Link href="/blog" className="text-purple-500 font-bold hover:underline">
                                     blog
                                 </Link>
-                                . I’m also collecting weekly learning notes — little check-ins on language, reading, and whatever I’m exploring — 
-                                which you can find{' '}
-                                <Link href="/learning/weekly-reflections" className="text-purple-500 font-bold hover:underline">
-                                    here
-                                </Link>
                                 .
                             </Text>
 
