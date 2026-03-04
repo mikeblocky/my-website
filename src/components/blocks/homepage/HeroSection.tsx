@@ -10,6 +10,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import Ruler from '@/components/ui/ruler/ruler'
 import { List, ListItem } from '@/components/ui/list/list'
+import imageCover from '../../../../public/image-cover.png'
 
 export function HeroSection() {
     return (
@@ -46,8 +47,8 @@ export function HeroSection() {
                         transition={{ delay: 0.4 }}
                     >
                         <Text>
-                            Hi, I’m Mike — a Vietnamese artist and student who lives somewhere between quiet drawings and long thoughts. 
-                            This little site is my calm corner on the internet: slow, personal, and a bit stubborn about honesty.
+                            Hi, I’m Mike. I am a Vietnamese artist and student living somewhere between quiet drawings and long thoughts. 
+                            This site is my own little corner of the internet. It is a slow, personal space where I try my best to be honest.
                         </Text>
 
                         <Ruler color='colorless' marginTop='lg' marginBottom='none'/>
@@ -58,9 +59,10 @@ export function HeroSection() {
                             transition={{ delay: 0.5 }}
                         >
                             <Text>
-                                I care about art, literature, and the way stories move people. I used to be deep in Computer Science — I still like how code
-                                makes ideas real — but I’ve been leaning toward Japanese language and literature because that’s where my curiosity keeps
-                                returning. I want to read closely, to teach, to translate, to understand people better through the worlds they create.
+                                I have always been moved by art, literature, and the way stories connect us. While I spent a lot of time 
+                                studying Computer Science and still appreciate how code can bring an idea to life, my curiosity 
+                                usually leads me back to Japanese language and literature. I want to read closely, to teach, and to 
+                                understand people better through the worlds they build.
                             </Text>
                             <Ruler color='colorless' marginTop='sm' marginBottom='none'/>
                         </motion.div>
@@ -71,17 +73,18 @@ export function HeroSection() {
                             transition={{ delay: 0.6 }}
                         >
                             <Text>
-                                My artwork isn’t flashy. It’s warm, simple, and a little fragile on purpose — small scenes, human distance, 
-                                the kind of feelings that don’t ask to be seen. I’m shaped by stories like <em>Skip and Loafer</em> and 
-                                <em> Kemutai Hanashi</em>. <em>Skip and Loafer</em> (especially Volume 8) 
-                                taught me that quiet growth can still shake you. <em>Kemutai Hanashi</em> showed me how regret and tenderness 
-                                can sit together without explanation. Both changed the way I draw and how I look at people.
+                                My artwork is simple and intentionally soft. I like drawing small scenes and the kind of quiet 
+                                feelings that don’t usually ask for attention. I am deeply shaped by stories like <em>Skip and Loafer</em> and 
+                                <em> Kemutai Hanashi</em>. <em>Skip and Loafer</em> taught me that personal growth doesn't have to 
+                                be loud to be meaningful, while <em>Kemutai Hanashi</em> showed me how regret and tenderness can exist 
+                                together. Both have changed the way I draw and how I look at the people around me.
                             </Text>
 
                             <Ruler color='colorless' marginTop='lg' marginBottom='none'/>
 
                             <Text>
-                                This site is an archive and a diary. I post illustrations, process notes, and longer reflections in the{' '}
+                                I use this site as both an archive and a diary. I share my illustrations, process notes, and 
+                                longer reflections over on the{' '}
                                 <Link href="/blog" className="text-purple-500 font-bold hover:underline">
                                     blog
                                 </Link>
@@ -91,8 +94,9 @@ export function HeroSection() {
                             <Ruler color='colorless' marginTop='lg' marginBottom='none'/>
 
                             <Text>
-                                if you’re new: read anything, take your time, and don’t worry if it feels quiet. that’s the point. 
-                                I’m still figuring out where I belong, but I’m here — drawing, reading, learning — and I’d be happy if some of it stays with you.
+                                If you are new here, please feel free to look around and take your time. I hope you don't mind the 
+                                silence; I built it that way on purpose. I am still figuring out where I belong, but I am happy 
+                                to be here drawing and learning. I would be glad if some of it stays with you.
                             </Text>
 
                             <Ruler color='colorless' marginTop='md' marginBottom='none'/>
@@ -103,12 +107,12 @@ export function HeroSection() {
                                 </ListItem>
                                 <ListItem>
                                     <Link href="/blog/sand-crab-thoughts" className="underline hover:text-purple-500">
-                                        My thoughts about Shima and the crab, to the sand.
+                                        Thoughts on Shima and the crab
                                     </Link>
                                 </ListItem>
                                 <ListItem>
                                     <Link href="/blog/kemutai-hanashi-1-en" className="underline hover:text-purple-500">
-                                        My thoughts of first chapter of Kemutai Hanashi (English)
+                                        Reflections on Kemutai Hanashi: Chapter 1
                                     </Link>
                                 </ListItem>
                             </List>
@@ -116,7 +120,7 @@ export function HeroSection() {
                             <Ruler color='colorless' marginTop='lg' marginBottom='none'/>
 
                             <Text>
-                                I’ll keep updating as I go — more drawings, more reading logs, more language notes. Thanks for being here.
+                                I’ll keep updating this space as I go with more drawings and reading logs. Thank you for stopping by.
                             </Text>
                         </motion.div>
                     </motion.div>
@@ -133,8 +137,8 @@ export function HeroSection() {
                     <Image
                         className="object-cover"
                         fill
-                        src="/image-cover.png"
-                        alt="A drawing of Shima and Mitsumi I made in January 2025 — quiet sky, soft colors, small distance."
+                        src={imageCover}
+                        alt="A drawing of Shima and Mitsumi from January 2025, featuring a quiet sky and soft colors."
                         priority
                         sizes="(max-width: 640px) 100vw, (max-width: 1024px) 90vw, 80vw"
                     />
