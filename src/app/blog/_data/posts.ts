@@ -1,6 +1,14 @@
 import { BlogPost } from "../_types/blog"
 
 export const blogPosts: BlogPost[] = [
+    {
+        id: 13,
+        title: "My thoughts about Kemutai Hanashi - Chapter 2 and 3: Relationships and labels",
+        description: "When things cannot be made into words easily.",
+        date: "March 9th, 2026",
+        readingTime: "10 min read",
+        slug: "kemutai-hanashi-2-3-en"
+    },
       {
         id: 12,
         title: "「煙たい話：第一章」についての私の考え",
