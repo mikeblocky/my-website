@@ -20,7 +20,7 @@ export default function Episode1Commentary() {
               items={[
                 { href: '/', label: 'Home', emoji: '👾' },
                 { href: '/blog', label: 'Blog' },
-                { label: 'Episode 1 commentary - translation' }
+                { label: 'My directions' }
               ]}
             />
             <ThemeToggle />
