@@ -2,6 +2,14 @@ import { BlogPost } from "../_types/blog"
 
 export const blogPosts: BlogPost[] = [
     {
+        id: 14,
+        title: "My directions",
+        description: "There is something I want to say.",
+        date: "April 10th, 2026",
+        readingTime: "5 min read",
+        slug: "my-directions"
+    },
+    {
         id: 13,
         title: "My thoughts about Kemutai Hanashi - Chapter 2 and 3: Relationships and labels",
         description: "When things cannot be made into words easily.",
