@@ -5,4 +5,5 @@ export interface BlogPost {
     date: string;
     readingTime: string;
     slug: string;
-} 
+    imageFormat?: 'png' | 'jpg';
+}

@@ -5,6 +5,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { ChevronLeft, ChevronRight, X } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
+import { cn } from '@/lib/utils/utils'
 
 interface Artwork {
 	src: string
@@ -18,9 +19,29 @@ interface ArtworkSection {
 
 interface ArtworksGalleryProps {
 	sections: ArtworkSection[]
+	className?: string
+	sectionClassName?: string
+	sectionTitleClassName?: string
+	gridClassName?: string
+	cardClassName?: string
+	imageClassName?: string
+	lightboxBackdropClassName?: string
+	imageAlt?: string
+	enlargedImageAlt?: string
 }
 
-export function ArtworksGallery({ sections }: ArtworksGalleryProps) {
+export function ArtworksGallery({
+	sections,
+	className,
+	sectionClassName,
+	sectionTitleClassName,
+	gridClassName,
+	cardClassName,
+	imageClassName,
+	lightboxBackdropClassName,
+	imageAlt = 'Artwork',
+	enlargedImageAlt = 'Artwork enlarged'
+}: ArtworksGalleryProps) {
 	const [selectedIndex, setSelectedIndex] = useState<number | null>(null)
 	const [mounted, setMounted] = useState(false)
 	const [direction, setDirection] = useState<1 | -1>(1)
@@ -97,13 +118,16 @@ export function ArtworksGallery({ sections }: ArtworksGalleryProps) {
 	}
 
 	return (
-		<div className="flex flex-col gap-12">
+		<div className={cn('flex flex-col gap-12', className)}>
 			{sections.map((section) => (
-				<div key={section.title} className="flex flex-col gap-6">
-					<h2 className="text-xl font-semibold tracking-tight text-foreground/80 border-b border-border/50 pb-2">
+				<div key={section.title} className={cn('flex flex-col gap-6', sectionClassName)}>
+					<h2 className={cn(
+						'border-b border-border/50 pb-2 text-xl font-semibold tracking-tight text-foreground/80',
+						sectionTitleClassName
+					)}>
 						{section.title}
 					</h2>
-					<div className="columns-1 sm:columns-2 lg:columns-3 gap-4 space-y-4">
+					<div className={cn('columns-1 gap-4 space-y-4 sm:columns-2 lg:columns-3', gridClassName)}>
 						{section.items.map((item) => {
 							const currentIndex = absoluteIndex++
 							return (
@@ -114,16 +138,22 @@ export function ArtworksGallery({ sections }: ArtworksGalleryProps) {
 										setDirection(1)
 										setSelectedIndex(currentIndex)
 									}}
-									className="group overflow-hidden rounded-xl border border-border/50 bg-background focus:outline-none focus:ring-2 focus:ring-purple-500/40 break-inside-avoid mb-4 block w-full"
+									className={cn(
+										'group mb-4 block w-full break-inside-avoid overflow-hidden rounded-xl border border-border/50 bg-background focus:outline-none focus:ring-2 focus:ring-purple-500/40',
+										cardClassName
+									)}
 								>
 									<Image
 										src={item.src}
-										alt="Artwork"
+										alt={imageAlt}
 										width={1600}
 										height={2000}
 										priority={currentIndex === 0}
 										sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-										className="w-full h-auto object-contain transition-transform duration-300 group-hover:scale-[1.01]"
+										className={cn(
+											'h-auto w-full object-contain transition-transform duration-300 group-hover:scale-[1.01]',
+											imageClassName
+										)}
 									/>
 								</button>
 							)
@@ -140,7 +170,10 @@ export function ArtworksGallery({ sections }: ArtworksGalleryProps) {
 							animate={{ opacity: 1 }}
 							exit={{ opacity: 0 }}
 							transition={{ duration: 0.2, ease: 'easeOut' }}
-							className="fixed inset-0 z-[99999] flex items-center justify-center bg-black/85"
+							className={cn(
+								'fixed inset-0 z-[99999] flex items-center justify-center bg-black/85',
+								lightboxBackdropClassName
+							)}
 							onClick={closeLightbox}
 						>
 							<button
@@ -199,7 +232,7 @@ export function ArtworksGallery({ sections }: ArtworksGalleryProps) {
 									>
 										<Image
 											src={allArtworks[selectedIndex]}
-											alt="Artwork enlarged"
+											alt={enlargedImageAlt}
 											width={2400}
 											height={2400}
 											sizes="100vw"

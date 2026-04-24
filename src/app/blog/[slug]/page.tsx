@@ -24,8 +24,9 @@ export async function generateMetadata({ params }: { params: Params }) {
 
     const title = `${post.title} | mikeblocky.com`
     const description = post.description
-    const openGraphImageUrl = new URL(`/blog/posts/${slug}/opengraph-image.png`, SITE_URL).toString()
-    const twitterImageUrl = new URL(`/blog/posts/${slug}/twitter-image.png`, SITE_URL).toString()
+    const extension = post.imageFormat || 'png'
+    const openGraphImageUrl = new URL(`/blog/posts/${slug}/opengraph-image.${extension}`, SITE_URL).toString()
+    const twitterImageUrl = new URL(`/blog/posts/${slug}/twitter-image.${extension}`, SITE_URL).toString()
     const altText = description || post.title
   
     return {

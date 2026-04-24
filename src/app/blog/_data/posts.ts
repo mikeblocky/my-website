@@ -15,7 +15,8 @@ export const blogPosts: BlogPost[] = [
         description: "When things cannot be made into words easily.",
         date: "March 9th, 2026",
         readingTime: "10 min read",
-        slug: "kemutai-hanashi-2-3-en"
+        slug: "kemutai-hanashi-2-3-en",
+        imageFormat: 'jpg'
     },
       {
         id: 12,
@@ -31,7 +32,8 @@ export const blogPosts: BlogPost[] = [
         description: "Where there is smoke, there is fire.",
         date: "November 15th, 2025",
         readingTime: "20 min read",
-        slug: "kemutai-hanashi-1-en"
+        slug: "kemutai-hanashi-1-en",
+        imageFormat: 'jpg'
     },
     {
         id: 10,
@@ -47,7 +49,8 @@ export const blogPosts: BlogPost[] = [
         description: "An interview between authors during the anniversary of Yuki Kodama-sensei.",
         date: "June 13th, 2025",
         readingTime: "20 min read",
-        slug: "flowers-interview"
+        slug: "flowers-interview",
+        imageFormat: 'jpg'
     },
     {
         id: 8,
@@ -63,7 +66,8 @@ export const blogPosts: BlogPost[] = [
         description: "happy birthday mukai.",
         date: "May 19th, 2025",
         readingTime: "10 min read",
-        slug: "happy-birthday-mukai"
+        slug: "happy-birthday-mukai",
+        imageFormat: 'jpg'
     },
     {
         id: 6,
