@@ -4,7 +4,7 @@ import TextHeading from "@/components/ui/text-heading/text-heading"
 import Text from "@/components/ui/text/text"
 import { Metadata } from "next"
 import { AskBoard } from "./_components/AskBoard"
-import { Navbar } from "@/components/ui/navbar/Navbar"
+import { DynamicBreadcrumb } from "@/components/ui/primitives/breadcrumb"
 import { ThemeToggle } from "@/components/ui/theme/theme-toggle"
 import { SectionFooter } from "@/components/layout/footer/SectionFooter"
 import { IndividualPageFooter } from "@/components/layout/footer/IndividualPageFooter"
@@ -39,7 +39,12 @@ export default function AskPage() {
   return (
     <BaseContainer size="md" paddingX="md" paddingY="lg">
       <div className="mb-8 flex items-center justify-between">
-        <Navbar />
+        <DynamicBreadcrumb 
+            items={[
+                { href: '/', label: 'Home', emoji: '👾' },
+                { label: 'Asking' }
+            ]}
+        />
         <ThemeToggle />
       </div>
       <StackVertical gap="lg">
