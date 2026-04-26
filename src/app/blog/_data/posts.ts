@@ -7,7 +7,7 @@ export const blogPosts: BlogPost[] = [
         description: "The answer is not found in words but in the endurance of a feeling that has no choice but to exist.",
         date: "April 26th, 2026",
         readingTime: "15 min read",
-        slug: "kemutai-hanashi-31-fic-en",
+        slug: "kemutai-hanashi-fic-1",
         themes: ["Kemutai Hanashi", "Fanfiction"]
     },
     {
