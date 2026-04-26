@@ -42,6 +42,7 @@ export default function ArtworksPage() {
 					</Text>
 				</div>
 
+				{/* Temporarily hidden 
 				<div className="overflow-hidden rounded-[2rem] border border-sky-200/60 bg-[linear-gradient(135deg,rgba(14,116,144,0.96),rgba(15,23,42,0.94)_55%,rgba(245,158,11,0.68))] px-6 py-6 text-white shadow-[0_24px_80px_-40px_rgba(8,47,73,0.95)]">
 					<div className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
 						<div className="max-w-2xl">
@@ -68,6 +69,7 @@ export default function ArtworksPage() {
 						</Button>
 					</div>
 				</div>
+				*/}
 
 				<ArtworksGallery sections={sections} />
 			</StackVertical>

@@ -3,4 +3,6 @@ export type AskQuestion = {
   author?: string
   body: string
   createdAt: string
+  reply?: string
+  repliedAt?: string
 }

@@ -7,7 +7,8 @@ export const blogPosts: BlogPost[] = [
         description: "There is something I want to say.",
         date: "April 10th, 2026",
         readingTime: "5 min read",
-        slug: "my-directions"
+        slug: "my-directions",
+        theme: "Personal"
     },
     {
         id: 13,
@@ -16,6 +17,7 @@ export const blogPosts: BlogPost[] = [
         date: "March 9th, 2026",
         readingTime: "10 min read",
         slug: "kemutai-hanashi-2-3-en",
+        theme: "Kemutai Hanashi",
         imageFormat: 'jpg'
     },
       {
@@ -24,7 +26,8 @@ export const blogPosts: BlogPost[] = [
         description: "煙あるところに火あり。",
         date: "November 15th, 2025",
         readingTime: "20 min read",
-        slug: "kemutai-hanashi-1-jp"
+        slug: "kemutai-hanashi-1-jp",
+        theme: "Kemutai Hanashi"
     },
     {
         id: 11,
@@ -33,6 +36,7 @@ export const blogPosts: BlogPost[] = [
         date: "November 15th, 2025",
         readingTime: "20 min read",
         slug: "kemutai-hanashi-1-en",
+        theme: "Kemutai Hanashi",
         imageFormat: 'jpg'
     },
     {
@@ -41,7 +45,8 @@ export const blogPosts: BlogPost[] = [
         description: "An updated translation of the space that Takamatsu-sensei did on January 13th.",
         date: "November 13th, 2025",
         readingTime: "45 min read",
-        slug: "takamatsu-space-translation"
+        slug: "takamatsu-space-translation",
+        theme: "Translation"
     },
     {
         id: 9,
@@ -50,6 +55,7 @@ export const blogPosts: BlogPost[] = [
         date: "June 13th, 2025",
         readingTime: "20 min read",
         slug: "flowers-interview",
+        theme: "Translation",
         imageFormat: 'jpg'
     },
     {
@@ -58,7 +64,8 @@ export const blogPosts: BlogPost[] = [
         description: "Parents and children, a connection that is complex in its own way.",
         date: "June 3rd, 2025",
         readingTime: "20 min read",
-        slug: "my-thoughts-about-chapter-71"
+        slug: "my-thoughts-about-chapter-71",
+        theme: "Skip and Loafer"
     },
        {
         id: 7,
@@ -67,6 +74,7 @@ export const blogPosts: BlogPost[] = [
         date: "May 19th, 2025",
         readingTime: "10 min read",
         slug: "happy-birthday-mukai",
+        theme: "Fanfiction",
         imageFormat: 'jpg'
     },
     {
@@ -75,7 +83,8 @@ export const blogPosts: BlogPost[] = [
         description: "To grow up is to become a child again.",
         date: "February 26th, 2025",
         readingTime: "20 min read",
-        slug: "my-thoughts-about-chapter-68"
+        slug: "my-thoughts-about-chapter-68",
+        theme: "Skip and Loafer"
     },
     {
         id: 5,
@@ -83,7 +92,8 @@ export const blogPosts: BlogPost[] = [
         description: "Just my thoughts about Shima and the way those elements relate to him.",
         date: "February 26th, 2025",
         readingTime: "20 min read",
-        slug: "sand-crab-thoughts"
+        slug: "sand-crab-thoughts",
+        theme: "Skip and Loafer"
     },
     {
         id: 4,
@@ -91,7 +101,8 @@ export const blogPosts: BlogPost[] = [
         description: "About the autograph session which she was invited in two days: February 9th - February 10th.",
         date: "February 26th, 2025",
         readingTime: "20 min read",
-        slug: "takamatsu-autograph-taiwan"
+        slug: "takamatsu-autograph-taiwan",
+        theme: "Translation"
     },
     {
         id: 3,
@@ -99,7 +110,8 @@ export const blogPosts: BlogPost[] = [
         description: "A translation of the space that Takamatsu-sensei did on an interview, which released on January 2025.",
         date: "January 31st, 2025",
         readingTime: "30 min read",
-        slug: "takamatsu-interview-translation-1"
+        slug: "takamatsu-interview-translation-1",
+        theme: "Translation"
     },
   
     {
@@ -108,7 +120,8 @@ export const blogPosts: BlogPost[] = [
         description: "A thought that I made when a person asked me to analyze them.",
         date: "January 31st, 2025",
         readingTime: "15 min read",
-        slug: "shima-mitsumi-nao-thoughts"
+        slug: "shima-mitsumi-nao-thoughts",
+        theme: "Skip and Loafer"
     },
     {
         id: 1,
@@ -116,6 +129,7 @@ export const blogPosts: BlogPost[] = [
         description: "A translation of episode 1 commentary, which released on November 2024.",
         date: "January 31st, 2025",
         readingTime: "10 min read",
-        slug: "episode-1-commentary"
+        slug: "episode-1-commentary",
+        theme: "Translation"
     },
 ] 

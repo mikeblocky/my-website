@@ -34,3 +34,28 @@ export async function POST(request: NextRequest) {
 
   return NextResponse.json({ question }, { status: 201 })
 }
+
+export async function PUT(request: NextRequest) {
+  const data = await request.json().catch(() => null)
+  if (!data || typeof data.id !== 'string' || typeof data.reply !== 'string') {
+    return NextResponse.json({ error: 'Invalid payload' }, { status: 400 })
+  }
+
+  // To secure it a bit, we check a query param or secret.
+  // The user says "so I can answer immediately in there too", we can use a simple password header or just leave it for their local use.
+  // Since it's their personal website and they might deploy it, maybe we should add a very simple check.
+  // Let's just implement the logic.
+  const { id, reply, passcode } = data
+  
+  if (process.env.ADMIN_PASSCODE && passcode !== process.env.ADMIN_PASSCODE) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  }
+
+  const updatedQuestion = await import('@/lib/kv/ask').then(m => m.replyToQuestion(id, reply))
+  
+  if (!updatedQuestion) {
+    return NextResponse.json({ error: 'Question not found' }, { status: 404 })
+  }
+
+  return NextResponse.json({ question: updatedQuestion }, { status: 200 })
+}

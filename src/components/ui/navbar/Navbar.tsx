@@ -37,6 +37,8 @@ export function Navbar() {
         { href: '/about', label: 'About' },
         { href: '/blog', label: 'Blog' },
         { href: '/artworks', label: 'Artworks' },
+        { href: '/diary', label: 'Diary' },
+        { href: '/friends', label: 'Friend list' },
         { href: '/ask', label: 'Ask' }
     ]
 

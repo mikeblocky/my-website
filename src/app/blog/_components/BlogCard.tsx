@@ -1,6 +1,7 @@
 import { ReactNode } from "react"
 import Link from "next/link"
 import { cn } from "@/lib/utils/utils"
+import { sansFont, monoFont } from "@/styles/fonts/fonts"
 import { StackVertical, StackHorizontal } from "@/components/layout/layout-stack/layout-stack"
 import Text from "@/components/ui/text/text"
 import TextHeading from "@/components/ui/text-heading/text-heading"
@@ -27,33 +28,41 @@ export function BlogCard({ post, isLast, searchTerm }: BlogCardProps) {
                 )}
             >
                 <article>
-                    <StackVertical gap="xs">
+                    <div className="flex flex-col">
                         <TextHeading 
                             as="h4" 
                             weight="medium" 
                             className={cn(
-                                "group-hover:text-purple-500 transition-colors duration-300"
+                                "group-hover:text-purple-500 transition-colors duration-300 mb-2 mt-0"
                             )}
                         >
                             {highlightedTitle}
                         </TextHeading>
-                        <Text 
-                            variant="muted"
-                            size="sm"
-                            className="line-clamp-2"
+                        <p 
+                            className={cn(
+                                sansFont.className,
+                                "text-base text-muted-foreground line-clamp-2 mb-3"
+                            )}
                         >
                             {highlightedDescription}
-                        </Text>
-                        <StackHorizontal className="text-muted-foreground" gap="xs">
-                            <Text variant="muted" size="xs">
-                                {post.date}
-                            </Text>
-                            <Text variant="muted" size="xs">•</Text>
-                            <Text variant="muted" size="xs">
-                                {post.readingTime}
-                            </Text>
-                        </StackHorizontal>
-                    </StackVertical>
+                        </p>
+                        <div className={cn(
+                            monoFont.className,
+                            "flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-muted-foreground"
+                        )}>
+                            <span>{post.date}</span>
+                            <span>•</span>
+                            <span>{post.readingTime}</span>
+                            {post.theme && (
+                                <>
+                                    <span>•</span>
+                                    <span className="text-purple-600 dark:text-purple-400 font-medium">
+                                        {post.theme}
+                                    </span>
+                                </>
+                            )}
+                        </div>
+                    </div>
                 </article>
             </Link>
             {!isLast && (

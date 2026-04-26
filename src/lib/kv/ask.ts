@@ -41,3 +41,27 @@ export async function fetchQuestions(limit = 100): Promise<AskQuestion[]> {
     })
     .filter(Boolean) as AskQuestion[]
 }
+
+export async function replyToQuestion(id: string, replyBody: string): Promise<AskQuestion | null> {
+  const redis = await getRedisClient()
+  const questions = await fetchQuestions()
+  
+  const target = questions.find(q => q.id === id)
+  if (!target) return null
+  
+  const oldMember = JSON.stringify(target)
+  
+  const updatedQuestion: AskQuestion = {
+    ...target,
+    reply: replyBody.trim(),
+    repliedAt: new Date().toISOString()
+  }
+  
+  const newMember = JSON.stringify(updatedQuestion)
+  const score = new Date(target.createdAt).getTime()
+  
+  await redis.zRem(askQuestionsKey, oldMember)
+  await redis.zAdd(askQuestionsKey, [{ score, value: newMember }])
+  
+  return updatedQuestion
+}

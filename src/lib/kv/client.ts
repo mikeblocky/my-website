@@ -15,6 +15,7 @@ type KvClient = {
 		stop: number,
 		options?: { REV?: boolean }
 	) => Promise<string[]>
+	zRem: (key: string, member: string) => Promise<number>
 }
 
 declare global {
@@ -96,6 +97,15 @@ function getMemoryClient(): KvClient {
 			}
 
 			return values.slice(normalizedStart, normalizedStop + 1)
+		},
+		async zRem(key, member) {
+			const set = getSet(key)
+			const index = set.findIndex((entry) => entry.value === member)
+			if (index >= 0) {
+				set.splice(index, 1)
+				return 1
+			}
+			return 0
 		}
 	}
 }

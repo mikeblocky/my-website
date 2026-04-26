@@ -1,37 +1,63 @@
 'use client'
 
-import { useDeferredValue, useMemo, useState } from "react"
+import { useDeferredValue, useMemo, useState, useEffect } from "react"
 import { AnimatePresence, motion } from "framer-motion"
 import { BlogCard } from "./BlogCard"
 import { StackVertical } from "@/components/layout/layout-stack/layout-stack"
 import Text from "@/components/ui/text/text"
 import type { BlogPost } from "../_types/blog"
+import { ChevronLeft, ChevronRight } from "lucide-react"
 
 interface BlogSearchPanelProps {
     posts: BlogPost[]
 }
 
+const THEMES = ['All', 'Skip and Loafer', 'Kemutai Hanashi', 'Fanfiction', 'Translation', 'Personal']
+const POSTS_PER_PAGE = 5
+
 export function BlogSearchPanel({ posts }: BlogSearchPanelProps) {
     const [query, setQuery] = useState("")
     const deferredQuery = useDeferredValue(query)
+    const [selectedTheme, setSelectedTheme] = useState('All')
+    const [currentPage, setCurrentPage] = useState(1)
+
+    // Reset to page 1 when filters change
+    useEffect(() => {
+        setCurrentPage(1)
+    }, [deferredQuery, selectedTheme])
 
     const filteredPosts = useMemo(() => {
-        const nextQuery = deferredQuery.trim().toLowerCase()
-        if (!nextQuery) {
-            return posts
+        let result = posts
+
+        // Theme filter
+        if (selectedTheme !== 'All') {
+            result = result.filter(post => post.theme === selectedTheme)
         }
 
-        return posts.filter((post) => {
-            const haystack = `${post.title} ${post.description ?? ""}`.toLowerCase()
-            return haystack.includes(nextQuery)
-        })
-    }, [posts, deferredQuery])
+        // Keyword filter
+        const nextQuery = deferredQuery.trim().toLowerCase()
+        if (nextQuery) {
+            result = result.filter((post) => {
+                const haystack = `${post.title} ${post.description ?? ""} ${post.theme ?? ""}`.toLowerCase()
+                return haystack.includes(nextQuery)
+            })
+        }
+
+        return result
+    }, [posts, deferredQuery, selectedTheme])
+
+    const totalPages = Math.ceil(filteredPosts.length / POSTS_PER_PAGE)
+    const paginatedPosts = filteredPosts.slice(
+        (currentPage - 1) * POSTS_PER_PAGE,
+        currentPage * POSTS_PER_PAGE
+    )
 
     const trimmedQuery = deferredQuery.trim()
     const isSearching = Boolean(trimmedQuery)
 
     return (
         <StackVertical gap="md">
+            {/* Search Input */}
             <div className="w-full">
                 <motion.div
                     className="relative w-full overflow-hidden rounded-xl border border-purple-500/30 bg-[#f2f5ff] transition-colors dark:border-purple-500/40 dark:bg-[#2a1f3f]"
@@ -56,17 +82,36 @@ export function BlogSearchPanel({ posts }: BlogSearchPanelProps) {
                         transition={{ duration: 0.4 }}
                     />
                 </motion.div>
-                <span className="mt-2 inline-block text-xs font-medium text-muted-foreground">
-                    {isSearching
-                        ? `Showing ${filteredPosts.length} result${filteredPosts.length === 1 ? "" : "s"} for "${trimmedQuery}".`
+                
+                {/* Theme Filter Tabs */}
+                <div className="mt-4 flex flex-wrap gap-2">
+                    {THEMES.map(theme => (
+                        <button
+                            key={theme}
+                            onClick={() => setSelectedTheme(theme)}
+                            className={`px-3 py-1.5 text-xs font-medium rounded-full transition-all duration-200 border ${
+                                selectedTheme === theme
+                                    ? 'bg-purple-500 text-white border-purple-500 shadow-md shadow-purple-500/20'
+                                    : 'bg-transparent text-slate-600 border-slate-300 hover:border-purple-300 hover:text-purple-600 dark:text-slate-400 dark:border-slate-700 dark:hover:border-purple-500/50 dark:hover:text-purple-300'
+                            }`}
+                        >
+                            {theme}
+                        </button>
+                    ))}
+                </div>
+
+                <span className="mt-4 inline-block text-xs font-medium text-muted-foreground">
+                    {isSearching || selectedTheme !== 'All'
+                        ? `Showing ${filteredPosts.length} result${filteredPosts.length === 1 ? "" : "s"} for your filters.`
                         : `Showing all ${posts.length} posts.`}
                 </span>
             </div>
 
+            {/* Posts List */}
             <StackVertical gap="none">
                 <AnimatePresence mode="popLayout" initial={false}>
-                    {filteredPosts.length > 0 ? (
-                        filteredPosts.map((post, index) => (
+                    {paginatedPosts.length > 0 ? (
+                        paginatedPosts.map((post, index) => (
                             <motion.div
                                 key={post.slug}
                                 initial={{ opacity: 0, y: 12 }}
@@ -76,7 +121,7 @@ export function BlogSearchPanel({ posts }: BlogSearchPanelProps) {
                             >
                                 <BlogCard
                                     post={post}
-                                    isLast={index === filteredPosts.length - 1}
+                                    isLast={index === paginatedPosts.length - 1}
                                     searchTerm={trimmedQuery}
                                 />
                             </motion.div>
@@ -90,11 +135,50 @@ export function BlogSearchPanel({ posts }: BlogSearchPanelProps) {
                             transition={{ duration: 0.2 }}
                             className="rounded-lg border border-purple-300/30 bg-purple-50/50 p-6 text-center dark:border-purple-500/30 dark:bg-purple-900/20"
                         >
-                            <TextHeadingMessage term={trimmedQuery} />
+                            <TextHeadingMessage term={trimmedQuery || selectedTheme} />
                         </motion.div>
                     )}
                 </AnimatePresence>
             </StackVertical>
+
+            {/* Pagination Controls */}
+            {totalPages > 1 && (
+                <div className="mt-8 flex items-center justify-center gap-4">
+                    <button
+                        onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                        disabled={currentPage === 1}
+                        className="p-2 rounded-lg text-slate-500 hover:bg-slate-100 disabled:opacity-50 disabled:hover:bg-transparent dark:text-slate-400 dark:hover:bg-slate-800 transition-colors"
+                        aria-label="Previous page"
+                    >
+                        <ChevronLeft className="w-5 h-5" />
+                    </button>
+                    
+                    <div className="flex gap-2">
+                        {Array.from({ length: totalPages }).map((_, i) => (
+                            <button
+                                key={i}
+                                onClick={() => setCurrentPage(i + 1)}
+                                className={`w-8 h-8 rounded-lg text-sm font-medium transition-colors ${
+                                    currentPage === i + 1
+                                        ? 'bg-purple-500 text-white'
+                                        : 'text-slate-600 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800'
+                                }`}
+                            >
+                                {i + 1}
+                            </button>
+                        ))}
+                    </div>
+
+                    <button
+                        onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                        disabled={currentPage === totalPages}
+                        className="p-2 rounded-lg text-slate-500 hover:bg-slate-100 disabled:opacity-50 disabled:hover:bg-transparent dark:text-slate-400 dark:hover:bg-slate-800 transition-colors"
+                        aria-label="Next page"
+                    >
+                        <ChevronRight className="w-5 h-5" />
+                    </button>
+                </div>
+            )}
         </StackVertical>
     )
 }
@@ -104,7 +188,7 @@ function TextHeadingMessage({ term }: { term: string }) {
         <Text variant="muted" size="sm">
             No stories match "
             <span className="text-purple-700 dark:text-purple-200">{term}</span>
-            " just yet - try a different keyword.
+            " just yet - try a different keyword or theme.
         </Text>
     )
 }
