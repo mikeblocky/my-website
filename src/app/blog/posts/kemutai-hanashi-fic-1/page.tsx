@@ -1,5 +1,3 @@
-'use client'
-
 import Content from './content.mdx'
 import { mdxComponents } from '@/lib/mdx/mdx-components'
 import BaseContainer from '@/components/layout/container/base-container'
@@ -9,6 +7,12 @@ import { ThemeToggle } from '@/components/ui/theme/theme-toggle'
 import { IndividualPageFooter } from '@/components/layout/footer/IndividualPageFooter'
 import TextHeading from '@/components/ui/text-heading/text-heading'
 import Text from '@/components/ui/text/text'
+import { Metadata } from 'next'
+
+export const metadata: Metadata = {
+    title: 'I have my words, and time is ticking | mikeblocky.com',
+    description: 'The answer is not found in words but in the endurance of a feeling that has no choice but to exist.',
+}
 
 export default function KemutaiHanashiFic() {
   return (
