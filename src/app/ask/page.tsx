@@ -13,7 +13,7 @@ const shareImage = '/ask/twitter-image.png'
 const shareAlt = 'Hand-drawn illustration of two friends sharing questions for the Ask page.'
 
 export const metadata: Metadata = {
-  title: "Asking | mikeblocky.com",
+  title: "Ask | mikeblocky.com",
   description: "Send an anonymous question and browse the community archive.",
   openGraph: {
     images: [
@@ -42,7 +42,7 @@ export default function AskPage() {
         <DynamicBreadcrumb 
             items={[
                 { href: '/', label: 'Home', emoji: '👾' },
-                { label: 'Asking' }
+                { label: 'Ask' }
             ]}
         />
         <ThemeToggle />

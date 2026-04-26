@@ -7,9 +7,10 @@ import { StackVertical } from '@/components/layout/layout-stack/layout-stack'
 import TextHeading from '@/components/ui/text-heading/text-heading'
 import Text from '@/components/ui/text/text'
 import { Button } from '@/components/ui/primitives/button'
-import { ChevronLeft, ChevronRight, MessageSquareReply } from 'lucide-react'
+import { ChevronLeft, ChevronRight, MessageSquareReply, Camera } from 'lucide-react'
 import { sansFont, monoFont } from '@/styles/fonts/fonts'
 import { cn } from '@/lib/utils/utils'
+import { AnimatePresence, motion } from 'framer-motion'
 
 const seededQuestions = [...initialQuestions].sort(
   (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
@@ -44,6 +45,16 @@ export function AskBoard() {
   const [replyBody, setReplyBody] = useState('')
   const [passcode, setPasscode] = useState('')
 
+  // Toast Notification State
+  const [notification, setNotification] = useState<string | null>(null)
+
+  function showNotification(msg: string) {
+    setNotification(msg)
+    setTimeout(() => {
+      setNotification((current) => current === msg ? null : current)
+    }, 4000)
+  }
+
   useEffect(() => {
     let cancelled = false
 
@@ -61,7 +72,7 @@ export function AskBoard() {
       } catch (error) {
         console.error('Unable to load questions', error)
         if (!cancelled) {
-          setErrorMessage('Unable to load the archive right now. Showing starter questions instead.')
+          showNotification('Unable to load archive. Showing starter questions.')
           setQuestions(seededQuestions)
         }
       } finally {
@@ -100,15 +111,14 @@ export function AskBoard() {
         })
 
         if (!response.ok) {
-          const errorPayload = (await response.json().catch(() => null)) as { error?: string } | null
-          const message = errorPayload?.error ?? 'Something went wrong while sending your question.'
-          throw new Error(message)
+          throw new Error('Something went wrong while sending your question.')
         }
 
         const { question } = (await response.json()) as { question: AskQuestion }
         setQuestions((previous) => [question, ...previous])
         setFormState({ author: '', body: '' })
         setCurrentPage(1)
+        showNotification('Question sent successfully!')
       } catch (error) {
         const fallback = error instanceof Error ? error.message : 'Unable to send your question.'
         setErrorMessage(fallback)
@@ -138,8 +148,9 @@ export function AskBoard() {
         setQuestions(prev => prev.map(q => q.id === id ? question : q))
         setReplyingTo(null)
         setReplyBody('')
+        showNotification('Answer posted successfully!')
       } catch (error) {
-        setErrorMessage('Could not post reply.')
+        showNotification('Could not post reply.')
       }
     })
   }
@@ -149,6 +160,54 @@ export function AskBoard() {
     const start = (currentPage - 1) * ITEMS_PER_PAGE
     return questions.slice(start, start + ITEMS_PER_PAGE)
   }, [questions, currentPage])
+
+  async function takeScreenshot(id: string) {
+    const element = document.getElementById(`question-${id}`);
+    if (!element) return;
+    
+    // Hide the action buttons temporarily for the screenshot
+    const actionsDiv = element.querySelector('.question-actions') as HTMLElement;
+    if (actionsDiv) actionsDiv.style.visibility = 'hidden';
+    
+    try {
+      const { toPng } = await import('html-to-image');
+      const isDark = document.documentElement.classList.contains('dark');
+      
+      const dataUrl = await toPng(element, { 
+        backgroundColor: isDark ? '#1a1525' : '#ffffff',
+        style: {
+          borderRadius: '16px',
+          border: isDark ? '1px solid #3b2d5a' : '1px solid #e2e8f0',
+          boxShadow: 'none',
+          padding: '24px',
+          margin: '0',
+          display: 'block',
+          color: isDark ? '#f1f5f9' : '#0f172a'
+        }
+      });
+      
+      const res = await fetch(dataUrl);
+      const blob = await res.blob();
+      
+      try {
+        await navigator.clipboard.write([
+          new ClipboardItem({ 'image/png': blob })
+        ]);
+        showNotification('Copied');
+      } catch (err) {
+        const a = document.createElement('a');
+        a.href = dataUrl;
+        a.download = `ask-${id}.png`;
+        a.click();
+        showNotification('Downloaded');
+      }
+    } catch (e) {
+      console.error('Screenshot failed', e);
+      showNotification('Failed');
+    } finally {
+      if (actionsDiv) actionsDiv.style.visibility = '';
+    }
+  }
 
   return (
     <StackVertical gap="lg">
@@ -163,7 +222,7 @@ export function AskBoard() {
               value={formState.author}
               onChange={(event) => setFormState((state) => ({ ...state, author: event.target.value }))}
               placeholder="How should I call you?"
-              className="w-full rounded-lg border border-purple-200/50 bg-white/70 px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-purple-400 focus:outline-none focus:ring-2 focus:ring-purple-200 dark:border-purple-500/30 dark:bg-slate-950/40 dark:text-slate-100 dark:focus:border-purple-400 dark:focus:ring-purple-500/30"
+              className="w-full rounded-lg border border-purple-200 bg-white px-3 py-2 text-sm text-slate-900 focus:border-purple-400 focus:outline-none focus:ring-2 focus:ring-purple-200 dark:border-purple-500/50 dark:bg-slate-900 dark:text-slate-100 dark:focus:border-purple-400 dark:focus:ring-purple-500/30"
             />
           </label>
 
@@ -176,7 +235,7 @@ export function AskBoard() {
               onChange={(event) => setFormState((state) => ({ ...state, body: event.target.value }))}
               placeholder="Ask me anything..."
               rows={4}
-              className="w-full rounded-lg border border-purple-200/50 bg-white/70 px-3 py-3 text-sm text-slate-900 shadow-sm focus:border-purple-400 focus:outline-none focus:ring-2 focus:ring-purple-200 dark:border-purple-500/30 dark:bg-slate-950/40 dark:text-slate-100 dark:focus:border-purple-400 dark:focus:ring-purple-500/30"
+              className="w-full rounded-lg border border-purple-200 bg-white px-3 py-3 text-sm text-slate-900 focus:border-purple-400 focus:outline-none focus:ring-2 focus:ring-purple-200 dark:border-purple-500/50 dark:bg-slate-900 dark:text-slate-100 dark:focus:border-purple-400 dark:focus:ring-purple-500/30"
             />
           </label>
         </div>
@@ -189,13 +248,13 @@ export function AskBoard() {
       </form>
 
       {errorMessage && (
-        <div className="rounded-lg border border-orange-300/40 bg-orange-50/80 px-3 py-2 text-sm text-orange-800 dark:border-orange-500/50 dark:bg-orange-900/20 dark:text-orange-100">
+        <div className="rounded-lg border border-orange-300 bg-orange-50 px-3 py-2 text-sm text-orange-800 dark:border-orange-500/50 dark:bg-orange-900/20 dark:text-orange-100">
           {errorMessage}
         </div>
       )}
 
       <section className="space-y-6">
-        <div className="flex items-baseline justify-between border-b border-purple-200/50 dark:border-purple-500/30 pb-3">
+        <div className="flex items-baseline justify-between border-b border-purple-200 dark:border-purple-500/50 pb-3">
           <TextHeading as="h3" weight="semibold" className="text-lg">
             Questions
           </TextHeading>
@@ -213,11 +272,15 @@ export function AskBoard() {
             </div>
           ) : (
             paginatedQuestions.map((question: AskQuestion) => (
-              <article key={question.id} className="rounded-2xl border border-purple-200/60 bg-white/60 p-6 shadow-sm dark:border-purple-500/20 dark:bg-[#2a1f3f]/40 relative group transition-all">
+              <article 
+                id={`question-${question.id}`} 
+                key={question.id} 
+                className="rounded-2xl border border-purple-200 bg-white p-6 dark:border-purple-500/40 dark:bg-[#1a1525] relative group transition-all"
+              >
                 <StackVertical gap="sm">
                   <div className="flex justify-between items-start mb-1">
                     <h4 className="text-sm font-semibold text-purple-700 dark:text-purple-300 flex items-center gap-2">
-                      <span className={cn(monoFont.className, "bg-purple-100 dark:bg-purple-900/50 px-2.5 py-1 rounded-full")}>{question.author} asked</span>
+                      <span className={cn(monoFont.className, "bg-purple-50 dark:bg-purple-900/40 px-2.5 py-1 rounded-full")}>{question.author} asked</span>
                     </h4>
                     <span className={cn(monoFont.className, "text-xs text-muted-foreground mt-1.5")}>
                       {formatDate(question.createdAt)}
@@ -228,23 +291,31 @@ export function AskBoard() {
                     "{question.body}"
                   </p>
 
-                  {question.reply ? (
-                    <div className="mt-3 rounded-xl bg-purple-50/80 p-5 border border-purple-100 dark:bg-purple-900/20 dark:border-purple-500/20">
+                  {question.reply && (
+                    <div className="mt-3 rounded-xl bg-purple-50/50 p-5 border border-purple-100 dark:bg-purple-900/20 dark:border-purple-500/30">
                       <div className="flex items-center gap-2 mb-2">
-                        <div className="w-6 h-6 rounded-full bg-purple-500 flex items-center justify-center text-white text-xs font-bold shadow-sm">M</div>
-                        <span className="text-sm font-bold text-purple-900 dark:text-purple-200">Mike</span>
+                        <span className="text-sm font-bold text-purple-900 dark:text-purple-200">Answer</span>
                         {question.repliedAt && (
                           <span className={cn(monoFont.className, "text-xs text-purple-400 dark:text-purple-500 ml-auto")}>
                             {formatDate(question.repliedAt)}
                           </span>
                         )}
                       </div>
-                      <p className={cn(sansFont.className, "text-base text-slate-700 dark:text-slate-300 leading-relaxed ml-8")}>
+                      <p className={cn(sansFont.className, "text-base text-slate-700 dark:text-slate-300 leading-relaxed")}>
                         {question.reply}
                       </p>
                     </div>
-                  ) : (
-                    <div className="mt-1 flex justify-end opacity-0 group-hover:opacity-100 transition-opacity">
+                  )}
+
+                  <div className="question-actions mt-1 flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <button
+                      onClick={() => takeScreenshot(question.id)}
+                      className="flex items-center gap-1.5 text-xs font-medium text-slate-500 hover:text-purple-600 dark:text-slate-400 dark:hover:text-purple-300 bg-slate-50 dark:bg-slate-800/50 px-3 py-1.5 rounded-full"
+                    >
+                      <Camera size={14} />
+                      Snap
+                    </button>
+                    {!question.reply && (
                       <button
                         onClick={() => {
                           setReplyingTo(replyingTo === question.id ? null : question.id)
@@ -255,11 +326,11 @@ export function AskBoard() {
                         <MessageSquareReply size={14} />
                         Reply
                       </button>
-                    </div>
-                  )}
+                    )}
+                  </div>
 
                   {replyingTo === question.id && !question.reply && (
-                    <div className="mt-3 pt-3 border-t border-purple-100 dark:border-purple-500/20">
+                    <div className="mt-3 pt-3 border-t border-purple-100 dark:border-purple-500/30">
                       <textarea
                         value={replyBody}
                         onChange={(e) => setReplyBody(e.target.value)}
@@ -269,7 +340,7 @@ export function AskBoard() {
                         }}
                         placeholder="Write your answer..."
                         rows={1}
-                        className={cn(sansFont.className, "w-full rounded-xl border border-purple-200 bg-white px-4 py-3 text-sm text-slate-900 shadow-inner focus:outline-none focus:ring-2 focus:ring-purple-300 dark:border-purple-500/30 dark:bg-slate-900 dark:text-slate-100 resize-none overflow-hidden min-h-[44px]")}
+                        className={cn(sansFont.className, "w-full rounded-xl border border-purple-200 bg-white px-4 py-3 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-purple-300 dark:border-purple-500/50 dark:bg-slate-900 dark:text-slate-100 resize-none overflow-hidden min-h-[44px]")}
                       />
                       <div className="mt-2 flex justify-between items-center gap-2">
                         <input 
@@ -277,7 +348,7 @@ export function AskBoard() {
                           value={passcode}
                           onChange={e => setPasscode(e.target.value)}
                           placeholder="Passcode"
-                          className="w-24 rounded-full border border-purple-200 bg-white px-3 py-1.5 text-xs text-slate-900 dark:border-purple-500/30 dark:bg-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-purple-300"
+                          className="w-24 rounded-full border border-purple-200 bg-white px-3 py-1.5 text-xs text-slate-900 dark:border-purple-500/50 dark:bg-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-purple-300"
                         />
                         <div className="flex gap-2">
                           <Button variant="ghost" size="sm" onClick={() => setReplyingTo(null)} className="text-xs h-8">
@@ -298,7 +369,7 @@ export function AskBoard() {
 
         {/* Pagination Controls */}
         {!isLoading && totalPages > 1 && (
-          <div className="mt-8 flex items-center justify-center gap-4 border-t border-purple-200/50 dark:border-purple-500/30 pt-6">
+          <div className="mt-8 flex items-center justify-center gap-4 border-t border-purple-200 dark:border-purple-500/50 pt-6">
             <button
               onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
               disabled={currentPage === 1}
@@ -335,6 +406,28 @@ export function AskBoard() {
           </div>
         )}
       </section>
+
+      <AnimatePresence>
+        {notification && (
+          <motion.div
+            initial={{ opacity: 0, y: 50, scale: 0.95, x: '-50%' }}
+            animate={{ opacity: 1, y: 0, scale: 1, x: '-50%' }}
+            exit={{ opacity: 0, y: 20, scale: 0.95, x: '-50%' }}
+            className="fixed bottom-6 left-1/2 -translate-x-1/2 md:left-auto md:right-6 md:translate-x-0 z-50 flex items-center gap-2 rounded-xl border border-purple-200 bg-white/95 backdrop-blur-sm pl-4 pr-1.5 py-1.5 shadow-sm dark:border-purple-500/30 dark:bg-[#1a1525] w-[calc(100%-2rem)] md:w-auto max-w-sm"
+          >
+            <div className="h-2 w-2 rounded-full bg-purple-600 dark:bg-purple-400 shrink-0" />
+            <span className={cn(monoFont.className, "text-sm text-slate-800 dark:text-slate-200 truncate")}>
+              {notification}
+            </span>
+            <button
+              onClick={() => setNotification(null)}
+              className={cn(monoFont.className, "ml-auto rounded-lg border border-purple-100 bg-purple-50/50 px-2 py-0.5 text-xs text-purple-600 hover:bg-purple-100 dark:border-purple-800 dark:bg-purple-900/30 dark:text-purple-300 dark:hover:bg-purple-900/50")}
+            >
+              close
+            </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </StackVertical>
   )
 }
