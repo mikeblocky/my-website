@@ -2,13 +2,22 @@ import { BlogPost } from "../_types/blog"
 
 export const blogPosts: BlogPost[] = [
     {
+        id: 15,
+        title: "I have my words, and time is ticking",
+        description: "The answer is not found in words but in the endurance of a feeling that has no choice but to exist.",
+        date: "April 26th, 2026",
+        readingTime: "15 min read",
+        slug: "kemutai-hanashi-31-fic-en",
+        themes: ["Kemutai Hanashi", "Fanfiction"]
+    },
+    {
         id: 14,
         title: "My directions",
         description: "There is something I want to say.",
         date: "April 10th, 2026",
         readingTime: "5 min read",
         slug: "my-directions",
-        theme: "Personal"
+        themes: ["Personal"]
     },
     {
         id: 13,
@@ -17,7 +26,7 @@ export const blogPosts: BlogPost[] = [
         date: "March 9th, 2026",
         readingTime: "10 min read",
         slug: "kemutai-hanashi-2-3-en",
-        theme: "Kemutai Hanashi",
+        themes: ["Kemutai Hanashi"],
         imageFormat: 'jpg'
     },
       {
@@ -27,7 +36,7 @@ export const blogPosts: BlogPost[] = [
         date: "November 15th, 2025",
         readingTime: "20 min read",
         slug: "kemutai-hanashi-1-jp",
-        theme: "Kemutai Hanashi"
+        themes: ["Kemutai Hanashi"]
     },
     {
         id: 11,
@@ -36,7 +45,7 @@ export const blogPosts: BlogPost[] = [
         date: "November 15th, 2025",
         readingTime: "20 min read",
         slug: "kemutai-hanashi-1-en",
-        theme: "Kemutai Hanashi",
+        themes: ["Kemutai Hanashi"],
         imageFormat: 'jpg'
     },
     {
@@ -46,7 +55,7 @@ export const blogPosts: BlogPost[] = [
         date: "November 13th, 2025",
         readingTime: "45 min read",
         slug: "takamatsu-space-translation",
-        theme: "Translation"
+        themes: ["Skip and Loafer", "Translation"]
     },
     {
         id: 9,
@@ -55,7 +64,7 @@ export const blogPosts: BlogPost[] = [
         date: "June 13th, 2025",
         readingTime: "20 min read",
         slug: "flowers-interview",
-        theme: "Translation",
+        themes: ["Skip and Loafer", "Translation"],
         imageFormat: 'jpg'
     },
     {
@@ -65,7 +74,7 @@ export const blogPosts: BlogPost[] = [
         date: "June 3rd, 2025",
         readingTime: "20 min read",
         slug: "my-thoughts-about-chapter-71",
-        theme: "Skip and Loafer"
+        themes: ["Skip and Loafer"]
     },
        {
         id: 7,
@@ -74,7 +83,7 @@ export const blogPosts: BlogPost[] = [
         date: "May 19th, 2025",
         readingTime: "10 min read",
         slug: "happy-birthday-mukai",
-        theme: "Fanfiction",
+        themes: ["Skip and Loafer", "Fanfiction"],
         imageFormat: 'jpg'
     },
     {
@@ -84,7 +93,7 @@ export const blogPosts: BlogPost[] = [
         date: "February 26th, 2025",
         readingTime: "20 min read",
         slug: "my-thoughts-about-chapter-68",
-        theme: "Skip and Loafer"
+        themes: ["Skip and Loafer"]
     },
     {
         id: 5,
@@ -93,7 +102,7 @@ export const blogPosts: BlogPost[] = [
         date: "February 26th, 2025",
         readingTime: "20 min read",
         slug: "sand-crab-thoughts",
-        theme: "Skip and Loafer"
+        themes: ["Skip and Loafer"]
     },
     {
         id: 4,
@@ -102,7 +111,7 @@ export const blogPosts: BlogPost[] = [
         date: "February 26th, 2025",
         readingTime: "20 min read",
         slug: "takamatsu-autograph-taiwan",
-        theme: "Translation"
+        themes: ["Skip and Loafer", "Translation"]
     },
     {
         id: 3,
@@ -111,7 +120,7 @@ export const blogPosts: BlogPost[] = [
         date: "January 31st, 2025",
         readingTime: "30 min read",
         slug: "takamatsu-interview-translation-1",
-        theme: "Translation"
+        themes: ["Skip and Loafer", "Translation"]
     },
   
     {
@@ -121,7 +130,7 @@ export const blogPosts: BlogPost[] = [
         date: "January 31st, 2025",
         readingTime: "15 min read",
         slug: "shima-mitsumi-nao-thoughts",
-        theme: "Skip and Loafer"
+        themes: ["Skip and Loafer"]
     },
     {
         id: 1,
@@ -130,6 +139,6 @@ export const blogPosts: BlogPost[] = [
         date: "January 31st, 2025",
         readingTime: "10 min read",
         slug: "episode-1-commentary",
-        theme: "Translation"
+        themes: ["Skip and Loafer", "Translation"]
     },
 ] 

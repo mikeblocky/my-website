@@ -53,14 +53,14 @@ export function BlogCard({ post, isLast, searchTerm }: BlogCardProps) {
                             <span>{post.date}</span>
                             <span>•</span>
                             <span>{post.readingTime}</span>
-                            {post.theme && (
-                                <>
+                            {post.themes && post.themes.map((theme) => (
+                                <div key={theme} className="flex items-center gap-2">
                                     <span>•</span>
                                     <span className="text-purple-600 dark:text-purple-400 font-medium">
-                                        {post.theme}
+                                        {theme}
                                     </span>
-                                </>
-                            )}
+                                </div>
+                            ))}
                         </div>
                     </div>
                 </article>

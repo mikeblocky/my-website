@@ -31,14 +31,15 @@ export function BlogSearchPanel({ posts }: BlogSearchPanelProps) {
 
         // Theme filter
         if (selectedTheme !== 'All') {
-            result = result.filter(post => post.theme === selectedTheme)
+            result = result.filter(post => post.themes?.includes(selectedTheme))
         }
 
         // Keyword filter
         const nextQuery = deferredQuery.trim().toLowerCase()
         if (nextQuery) {
             result = result.filter((post) => {
-                const haystack = `${post.title} ${post.description ?? ""} ${post.theme ?? ""}`.toLowerCase()
+                const themeString = post.themes?.join(" ") ?? ""
+                const haystack = `${post.title} ${post.description ?? ""} ${themeString}`.toLowerCase()
                 return haystack.includes(nextQuery)
             })
         }

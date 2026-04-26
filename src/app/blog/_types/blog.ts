@@ -5,6 +5,6 @@ export interface BlogPost {
     date: string;
     readingTime: string;
     slug: string;
-    theme?: 'Skip and Loafer' | 'Kemutai Hanashi' | 'Fanfiction' | 'Translation' | 'Personal';
+    themes?: string[];
     imageFormat?: 'png' | 'jpg';
 }
