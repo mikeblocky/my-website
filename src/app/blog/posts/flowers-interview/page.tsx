@@ -18,7 +18,7 @@ export default function TakamatsuInterviewSpace1() {
           <div className="flex items-center justify-between">
             <DynamicBreadcrumb 
               items={[
-                { href: '/', label: 'Home', emoji: '👾' },
+                { href: '/', label: 'Home', emoji: '🐶' },
                 { href: '/blog', label: 'Blog' },
                 { label: 'Yuki Kodama\'s 25th anniversary as a manga artist: Special project 1 - Interview with Takamatsu Misaki' }
               ]}
@@ -28,7 +28,7 @@ export default function TakamatsuInterviewSpace1() {
 
           <article>
             <TextHeading as="h1">Yuki Kodama's 25th anniversary as a manga artist: Special project 1 - Interview with Takamatsu Misaki</TextHeading>
-            <Text variant="muted" size="xs" className="mb-8">June 13th, 2025 | 20 min read</Text>
+            <div className="flex items-center gap-2 flex-wrap mb-8"><Text variant="muted" size="xs">June 13th, 2025 | 20 min read</Text><span className="text-muted-foreground/30">•</span><span className="text-[14px] text-purple-600 dark:text-purple-400 font-medium">Translation</span></div>
 
             <div className="prose dark:prose-invert max-w-none">
               <Content components={mdxComponents} />
@@ -41,3 +41,4 @@ export default function TakamatsuInterviewSpace1() {
     </>
   )
 }
+

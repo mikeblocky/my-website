@@ -15,7 +15,7 @@ export default function Week1() {
                 <div className="flex items-center justify-between">
                     <DynamicBreadcrumb 
                         items={[
-                            { href: '/', label: 'Home', emoji: '👾' },
+                            { href: '/', label: 'Home', emoji: '🐶' },
                             { href: '/learning', label: 'Learning' },
                             { href: '/learning/weekly-reflections', label: 'Weekly Reflections' },
                             { label: 'Week 1' }
@@ -33,3 +33,4 @@ export default function Week1() {
         </BaseContainer>
     )
 } 
+

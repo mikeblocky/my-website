@@ -26,7 +26,7 @@ export default function ArtworksPage() {
 				<div className="flex items-center justify-between">
 					<DynamicBreadcrumb
 						items={[
-							{ href: '/', label: 'Home', emoji: '👾' },
+							{ href: '/', label: 'Home', emoji: '🐶' },
 							{ label: 'Artworks' }
 						]}
 					/>
@@ -78,3 +78,4 @@ export default function ArtworksPage() {
 		</BaseContainer>
 	)
 }
+

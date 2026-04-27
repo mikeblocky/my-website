@@ -19,7 +19,7 @@ export default function LLMFromScratchRaschka() {
           <div className="flex items-center justify-between">
             <DynamicBreadcrumb 
                 items={[
-                    { href: '/', label: 'Home', emoji: '👾' },
+                    { href: '/', label: 'Home', emoji: '🐶' },
                     { href: '/notes', label: 'Notes' },
                     { href: '/notes/books', label: 'Books' },
                     { label: 'LLM From Scratch' }
@@ -62,3 +62,4 @@ export default function LLMFromScratchRaschka() {
         </>
     )
 }
+

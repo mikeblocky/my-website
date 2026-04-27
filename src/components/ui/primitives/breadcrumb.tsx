@@ -140,14 +140,14 @@ export function DynamicBreadcrumb({ items, className }: BreadcrumbProps) {
                         <React.Fragment key={item.href || item.label}>
                             <BreadcrumbItem>
                                 {index === items.length - 1 ? (
-                                    <BreadcrumbPage className="line-clamp-1">
+                                    <BreadcrumbPage className="line-clamp-1 text-base">
                                         {item.label}
                                     </BreadcrumbPage>
                                 ) : (
                                     <BreadcrumbLink asChild>
-                                        <Link href={item.href || '#'} className="flex items-center whitespace-nowrap text-sm">
-                                            {item.emoji && item.emoji}
-                                            {item.emoji ? ' ' : ''}{item.label}
+                                        <Link href={item.href || '#'} className="flex items-center whitespace-nowrap text-base gap-2">
+                                            {item.emoji && <img src="/icon.svg" alt="" className="inline-block w-5 h-5 shrink-0" />}
+                                            {item.label}
                                         </Link>
                                     </BreadcrumbLink>
                                 )}
@@ -169,14 +169,14 @@ export function DynamicBreadcrumb({ items, className }: BreadcrumbProps) {
                                 {item.href ? (
                                     <Link 
                                         href={item.href} 
-                                        className="flex items-center gap-1 text-[11px] text-muted-foreground/80 hover:text-foreground transition-colors"
+                                        className="flex items-center gap-2 text-[13px] text-muted-foreground/80 hover:text-foreground transition-colors"
                                     >
-                                        {item.emoji && <span className="text-sm">{item.emoji}</span>}
+                                        {item.emoji && <img src="/icon.svg" alt="" className="inline-block w-4 h-4 shrink-0" />}
                                         <span>{item.label}</span>
                                     </Link>
                                 ) : (
-                                    <span className="flex items-center gap-1 text-[11px] text-foreground">
-                                        {item.emoji && <span className="text-sm">{item.emoji}</span>}
+                                    <span className="flex items-center gap-2 text-[13px] text-foreground">
+                                        {item.emoji && <img src="/icon.svg" alt="" className="inline-block w-4 h-4 shrink-0" />}
                                         <span>{item.label}</span>
                                     </span>
                                 )}

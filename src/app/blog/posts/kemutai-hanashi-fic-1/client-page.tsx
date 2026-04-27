@@ -18,7 +18,7 @@ export default function KemutaiHanashiFicContent() {
           <div className="flex items-center justify-between">
             <DynamicBreadcrumb 
               items={[
-                { href: '/', label: 'Home', emoji: '👾' },
+                { href: '/', label: 'Home', emoji: '🐶' },
                 { href: '/blog', label: 'Blog' },
                 { label: 'I have my words, and time is ticking' }
               ]}
@@ -31,8 +31,9 @@ export default function KemutaiHanashiFicContent() {
                 <TextHeading as="h1" className="mb-2">I have my words, and time is ticking</TextHeading>
                 <div className="flex items-center gap-2 flex-wrap">
                     <Text variant="muted" size="xs">April 26th, 2026 | 15 min read</Text>
-                    <span className="text-[10px] bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400 px-2 py-0.5 rounded-full font-bold uppercase tracking-wider">Kemutai Hanashi</span>
-                    <span className="text-[10px] bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400 px-2 py-0.5 rounded-full font-bold uppercase tracking-wider">Fanfiction</span>
+                    <span className="text-[14px] text-purple-600 dark:text-purple-400 font-medium">Kemutai Hanashi</span>
+                    <span className="text-muted-foreground/30">•</span>
+                    <span className="text-[14px] text-purple-600 dark:text-purple-400 font-medium">Fanfiction</span>
                 </div>
             </div>
 
@@ -47,3 +48,4 @@ export default function KemutaiHanashiFicContent() {
     </>
   )
 }
+

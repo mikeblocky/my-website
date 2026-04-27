@@ -17,7 +17,7 @@ export default function MathReferences() {
                     <div className="flex items-center justify-between">
                         <DynamicBreadcrumb
                         items={[
-                            { href: '/', label: 'Home', emoji: '👾' },
+                            { href: '/', label: 'Home', emoji: '🐶' },
                             { href: '/notes', label: 'Notes' },
                             { label: 'Math' }
                         ]}
@@ -44,3 +44,4 @@ export default function MathReferences() {
         </>
     )
 }
+

@@ -29,14 +29,23 @@ const defaultStyles = {
     truncate: false
 }
 
+const defaultSizes = {
+    h1: 'text-2xl sm:text-3xl md:text-3xl lg:text-4xl',
+    h2: 'text-xl sm:text-2xl md:text-2xl lg:text-3xl',
+    h3: 'text-lg sm:text-xl md:text-xl lg:text-2xl',
+    h4: 'text-base sm:text-lg md:text-lg lg:text-xl',
+    h5: 'text-sm sm:text-base md:text-base lg:text-lg',
+    h6: 'text-xs sm:text-sm md:text-sm lg:text-base'
+}
+
 const textSizes = {
-    xs: 'text-[14px] sm:text-base md:text-base',           // 14px -> 16px -> 16px (Increased from 12px -> 14px -> 14px)
-    sm: 'text-base sm:text-lg md:text-lg',               // 16px -> 18px -> 18px (Increased from 14px -> 16px -> 16px)
-    md: 'text-[18px] sm:text-xl md:text-xl',   // 18px -> 20px -> 20px (Increased from 15px -> 18px -> 18px)
-    base: 'text-lg sm:text-2xl md:text-2xl',         // 20px -> 24px -> 24px (Increased from 16px -> 20px -> 20px)
-    lg: 'text-xl sm:text-3xl md:text-3xl',             // 24px -> 30px -> 30px (Increased from 18px -> 24px -> 24px)
-    xl: 'text-2xl sm:text-4xl md:text-4xl',               // 30px -> 36px -> 36px (Increased from 20px -> 30px -> 30px)
-    '2xl': 'text-3xl sm:text-5xl md:text-5xl',          // 36px -> 48px -> 48px (Increased from 24px -> 36px -> 36px)
+    xs: 'text-[14px] sm:text-[15px]',
+    sm: 'text-[15px] sm:text-[16px] md:text-[17px]',
+    md: 'text-[16px] sm:text-[17px] md:text-[18px]',
+    base: 'text-[18px] sm:text-[20px]',
+    lg: 'text-[20px] sm:text-[22px]',
+    xl: 'text-[22px] sm:text-[26px]',
+    '2xl': 'text-[26px] sm:text-[33px]',
 }
 
 const fontWeights = {

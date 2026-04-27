@@ -12,7 +12,7 @@ export function BlogHeader() {
             <div className="flex items-center justify-between">
                 <DynamicBreadcrumb 
                     items={[
-                        { href: '/', label: 'Home', emoji: '👾' },
+                        { href: '/', label: 'Home', emoji: '🐶' },
                         { label: 'Blog' }
                     ]}
                 />
@@ -30,3 +30,4 @@ export function BlogHeader() {
         </StackVertical>
     )
 } 
+

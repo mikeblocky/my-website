@@ -17,7 +17,7 @@ export default function DiaryUtensils() {
                 <div className="flex items-center justify-between">
                     <DynamicBreadcrumb 
                         items={[
-                            { href: '/', label: 'Home', emoji: '👾' },
+                            { href: '/', label: 'Home', emoji: '🐶' },
                             { href: '/diary', label: 'Diary' },
                             { label: 'Personal utensils' }
                         ]}
@@ -50,4 +50,5 @@ export default function DiaryUtensils() {
         </BaseContainer>
     )
 }
+
 

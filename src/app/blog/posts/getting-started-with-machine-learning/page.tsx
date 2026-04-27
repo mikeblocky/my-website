@@ -23,7 +23,7 @@ export default function GettingStartedWithMLPost() {
           <div className="flex items-center justify-between">
             <DynamicBreadcrumb 
                 items={[
-                    { href: '/', label: 'Home', emoji: '👾' },
+                    { href: '/', label: 'Home', emoji: '🐶' },
                     { href: '/blog', label: 'Blog' },
                     { label: 'Getting Started with ML' }
                 ]} 
@@ -35,7 +35,7 @@ export default function GettingStartedWithMLPost() {
           <article id={SECTION_IDS.ARTICLE_CONTENT}>
 
             <TextHeading as="h1">Getting Started with Machine Learning</TextHeading>
-            <Text variant="muted" size="xs" className="mb-8">December 25, 2024 | 10 min read</Text>
+            <div className="flex items-center gap-2 flex-wrap mb-8"><Text variant="muted" size="xs">December 25, 2024 | 10 min read</Text><span className="text-muted-foreground/30">•</span><span className="text-[14px] text-purple-600 dark:text-purple-400 font-medium">Computer Science</span></div>
 
               <section>
                 <StackVertical gap="md">
@@ -271,3 +271,4 @@ export default function GettingStartedWithMLPost() {
     </>
   )
 }
+

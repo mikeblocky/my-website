@@ -17,7 +17,7 @@ export default function DailyNote() {
                 <div className="flex items-center justify-between">
                     <DynamicBreadcrumb 
                         items={[
-                            { href: '/', label: 'Home', emoji: '👾' },
+                            { href: '/', label: 'Home', emoji: '🐶' },
                             { href: '/diary', label: 'Diary' },
                             { href: '/diary/daily-notes', label: 'Daily notes' },
                             { label: 'April 26, 2026' }
@@ -39,3 +39,4 @@ export default function DailyNote() {
         </BaseContainer>
     )
 }
+

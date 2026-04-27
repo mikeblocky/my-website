@@ -16,7 +16,7 @@ export default function Books() {
                 <div className="flex items-center justify-between">
                     <DynamicBreadcrumb 
                         items={[
-                            { href: '/', label: 'Home', emoji: '👾' },
+                            { href: '/', label: 'Home', emoji: '🐶' },
                             { href: '/notes', label: 'Notes' },
                             { label: 'Books' }
                         ]}
@@ -49,4 +49,5 @@ export default function Books() {
         </BaseContainer>
     )
 }
+
 

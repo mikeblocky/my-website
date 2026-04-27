@@ -348,7 +348,7 @@ export function KemutaiHanashiClient({ items }: Props) {
 				<div className="relative z-10 mx-auto w-full max-w-6xl px-5 pt-6 sm:px-8">
 					<div className="flex items-center justify-between">
 						<DynamicBreadcrumb items={[
-							{ href: '/', label: 'Home', emoji: '👾' },
+							{ href: '/', label: 'Home', emoji: '🐶' },
 							{ href: '/artworks', label: 'Artworks' },
 							{ label: 'Kemutai Hanashi' }
 						]} />
@@ -468,3 +468,4 @@ export function KemutaiHanashiClient({ items }: Props) {
 		</div>
 	)
 }
+

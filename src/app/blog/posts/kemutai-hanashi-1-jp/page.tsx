@@ -18,7 +18,7 @@ export default function KemutaiHanashi1() {
           <div className="flex items-center justify-between">
             <DynamicBreadcrumb 
               items={[
-                { href: '/', label: 'Home', emoji: '👾' },
+                { href: '/', label: 'Home', emoji: '🐶' },
                 { href: '/blog', label: 'Blog' },
                 { label: '「煙たい話：第一章」についての私の考え' }
               ]}
@@ -28,7 +28,7 @@ export default function KemutaiHanashi1() {
 
           <article>
             <TextHeading as="h1">「煙たい話：第一章」についての私の考え</TextHeading>
-            <Text variant="muted" size="xs" className="mb-8">May 14th, 2025 | 20 min read</Text>
+            <div className="flex items-center gap-2 flex-wrap mb-8"><Text variant="muted" size="xs">May 14th, 2025 | 20 min read</Text><span className="text-muted-foreground/30">•</span><span className="text-[14px] text-purple-600 dark:text-purple-400 font-medium">煙たい話</span></div>
 
             <div className="prose dark:prose-invert max-w-none">
               <Content components={mdxComponents} />
@@ -41,3 +41,4 @@ export default function KemutaiHanashi1() {
     </>
   )
 }
+

@@ -17,7 +17,7 @@ export default function LearningUtensils() {
                 <div className="flex items-center justify-between">
                     <DynamicBreadcrumb 
                         items={[
-                            { href: '/', label: 'Home', emoji: '👾' },
+                            { href: '/', label: 'Home', emoji: '🐶' },
                             { href: '/learning', label: 'Learning' },
                             { label: 'Personal utensils' }
                         ]}
@@ -50,3 +50,4 @@ export default function LearningUtensils() {
         </BaseContainer>
     )
 }
+

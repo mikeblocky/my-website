@@ -17,8 +17,8 @@ self.addEventListener('push', function (event) {
 
   const options = {
     body: data.body || 'Your question has been answered!',
-    icon: '/image-cover.png',
-    badge: '/image-cover.png',
+    icon: '/icon-512.png',
+    badge: '/icon-512.png',
     tag: data.tag || 'ask-reply',
     data: {
       url: data.url || '/ask'

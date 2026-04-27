@@ -11,12 +11,12 @@ interface TextHeadingProps {
 }
 
 const defaultSizes = {
-    h1: 'text-xl sm:text-2xl md:text-2xl lg:text-3xl',
-    h2: 'text-lg sm:text-xl md:text-xl lg:text-2xl',
-    h3: 'text-base sm:text-lg md:text-lg lg:text-xl',
-    h4: 'text-sm sm:text-base md:text-base lg:text-lg',
-    h5: 'text-xs sm:text-sm md:text-sm lg:text-base',
-    h6: 'text-[10px] sm:text-xs md:text-xs lg:text-sm'
+    h1: 'text-2xl sm:text-3xl md:text-3xl lg:text-4xl',
+    h2: 'text-xl sm:text-2xl md:text-2xl lg:text-3xl',
+    h3: 'text-lg sm:text-xl md:text-xl lg:text-2xl',
+    h4: 'text-base sm:text-lg md:text-lg lg:text-xl',
+    h5: 'text-sm sm:text-base md:text-base lg:text-lg',
+    h6: 'text-xs sm:text-sm md:text-sm lg:text-base'
 }
 
 const fontWeights = {

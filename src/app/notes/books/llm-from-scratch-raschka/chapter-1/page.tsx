@@ -17,7 +17,7 @@ export default function Chapter1() {
           <div className="flex items-center justify-between">
             <DynamicBreadcrumb 
               items={[
-                { href: '/', label: 'Home', emoji: '👾' },
+                { href: '/', label: 'Home', emoji: '🐶' },
                 { href: '/notes', label: 'Notes' },
                 { href: '/notes/books', label: 'Books' },
                 { href: '/notes/books/llm-from-scratch-raschka', label: 'LLM from Scratch' },
@@ -38,3 +38,4 @@ export default function Chapter1() {
     </>
   )
 }
+

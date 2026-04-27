@@ -25,9 +25,9 @@ export function HeroSection() {
                     <motion.div
                         animate={{ y: [0, -10, 0] }}
                         transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-                        className={cn("text-2xl sm:text-3xl md:text-4xl", monoFont.className)}
+                        className="w-10 h-10 sm:w-12 sm:h-12"
                     >
-                        👾
+                        <img src="/icon.svg" alt="mikeblocky" className="w-full h-full" />
                     </motion.div>
 
                     <motion.div
@@ -47,8 +47,8 @@ export function HeroSection() {
                         transition={{ delay: 0.4 }}
                     >
                         <Text>
-                            Hi, I’m Mike. I am a Vietnamese artist and student living somewhere between quiet drawings and long thoughts. 
-                            This site is my own little corner of the internet. It is a slow, personal space where I try my best to be honest.
+                            Hi, I’m Mike. I’m a Vietnamese artist and a Computer Science student, living somewhere between quiet drawings and long, wandering thoughts.
+                            This site is my small corner of the internet—a slow, personal space where I try to be as honest as I can, even when I don’t fully understand myself yet.
                         </Text>
 
                         <Ruler color='colorless' marginTop='lg' marginBottom='none'/>
@@ -59,10 +59,7 @@ export function HeroSection() {
                             transition={{ delay: 0.5 }}
                         >
                             <Text>
-                                I have always been moved by art, literature, and the way stories connect us. While I spent a lot of time 
-                                studying Computer Science and still appreciate how code can bring an idea to life, my curiosity 
-                                usually leads me back to Japanese language and literature. I want to read closely, to teach, and to 
-                                understand people better through the worlds they build.
+                                I started this space during a time when I felt a bit lost. I didn’t really know how to connect with people in a meaningful way, and a lot of things in my life felt distant or surface-level. Instead of forcing answers, I began building this place—something gentle, something that could grow with me. In a way, this is both a website and a record of me trying.
                             </Text>
                             <Ruler color='colorless' marginTop='sm' marginBottom='none'/>
                         </motion.div>
@@ -73,30 +70,71 @@ export function HeroSection() {
                             transition={{ delay: 0.6 }}
                         >
                             <Text>
-                                My artwork is simple and intentionally soft. I like drawing small scenes and the kind of quiet 
-                                feelings that don’t usually ask for attention. I am deeply shaped by stories like <em>Skip and Loafer</em> and 
-                                <em> Kemutai Hanashi</em>. <em>Skip and Loafer</em> taught me that personal growth doesn't have to 
-                                be loud to be meaningful, while <em>Kemutai Hanashi</em> showed me how regret and tenderness can exist 
-                                together. Both have changed the way I draw and how I look at the people around me.
+                                I’ve always been drawn to art, literature, and the quiet ways people express themselves.
+                                Even though I’m studying Computer Science—and I still find beauty in how code can shape ideas into something real—my attention often drifts back to language, especially Japanese.
+                            </Text>
+
+                            <Ruler color='colorless' marginTop='sm' marginBottom='none'/>
+
+                            <Text>
+                                I’ve been learning it slowly, not in a strict or perfect way, but in a way that feels natural to me: studying when I can, listening to music, watching videos, and trying to understand the rhythm and emotion behind it. It’s less about speed, more about feeling. I think that’s what keeps me going.
+                            </Text>
+
+                            <Ruler color='colorless' marginTop='sm' marginBottom='none'/>
+
+                            <Text>
+                                Over time, I’ve realized I want to read more closely, understand stories more deeply, and maybe one day share that understanding with others—whether through teaching, writing, or just quiet conversations.
+                            </Text>
+
+                            <Ruler color='colorless' marginTop='sm' marginBottom='none'/>
+
+                            <Text>
+                                My artwork reflects that same approach.
+                                It’s simple, soft, and often focused on small moments that don’t ask for attention. I like drawing scenes that feel lived-in—little pauses, subtle emotions, things that might otherwise go unnoticed.
+                            </Text>
+
+                            <Ruler color='colorless' marginTop='sm' marginBottom='none'/>
+
+                            <Text>
+                                Stories like Skip and Loafer and Kemutai Hanashi have shaped me a lot. Not in a quiet or dramatic way, but in something quieter. They taught me that growth can be slow and uneven, that people can carry both warmth and regret at the same time, and that even small connections can matter more than we think.
+                            </Text>
+
+                            <Ruler color='colorless' marginTop='sm' marginBottom='none'/>
+
+                            <Text>
+                                Those ideas stay with me when I draw—and honestly, when I try to understand people too.
                             </Text>
 
                             <Ruler color='colorless' marginTop='lg' marginBottom='none'/>
 
                             <Text>
-                                I use this site as both an archive and a diary. I share my illustrations, process notes, and 
-                                longer reflections over on the{' '}
-                                <Link href="/blog" className="text-purple-500 font-bold hover:underline">
-                                    blog
-                                </Link>
-                                .
+                                This site is both an archive and a diary.
+                                I use it to share my illustrations, thoughts, and reflections—sometimes structured, sometimes not. It’s one of the few places where I don’t feel the need to rush or perform.
                             </Text>
 
                             <Ruler color='colorless' marginTop='lg' marginBottom='none'/>
 
                             <Text>
-                                If you are new here, please feel free to look around and take your time. I hope you don't mind the 
-                                silence; I built it that way on purpose. I am still figuring out where I belong, but I am happy 
-                                to be here drawing and learning. I would be glad if some of it stays with you.
+                                You can find most of that over on the blog.
+                            </Text>
+
+                            <Ruler color='colorless' marginTop='lg' marginBottom='none'/>
+
+                            <Text>
+                                If you’re new here, feel free to take your time.
+                                There’s no pressure to read everything or understand it all. I built this space to be quiet on purpose.
+                            </Text>
+
+                            <Ruler color='colorless' marginTop='lg' marginBottom='none'/>
+
+                            <Text>
+                                I’m still figuring out where I belong, what I want to pursue, and how I want to live. But for now, I’m here—drawing, learning, and slowly trying to connect.
+                            </Text>
+
+                            <Ruler color='colorless' marginTop='lg' marginBottom='none'/>
+
+                            <Text>
+                                If something here stays with you, even a little, that’s already more than enough.
                             </Text>
 
                             <Ruler color='colorless' marginTop='md' marginBottom='none'/>
@@ -106,13 +144,13 @@ export function HeroSection() {
                                     <Link href="/about" className="underline hover:text-purple-500">About me</Link>
                                 </ListItem>
                                 <ListItem>
-                                    <Link href="/blog/sand-crab-thoughts" className="underline hover:text-purple-500">
-                                        Thoughts on Shima and the crab
+                                    <Link href="/blog/posts/kemutai-hanashi-fic-1" className="underline hover:text-purple-500">
+                                        I have my words, and time is ticking
                                     </Link>
                                 </ListItem>
                                 <ListItem>
-                                    <Link href="/blog/kemutai-hanashi-1-en" className="underline hover:text-purple-500">
-                                        Reflections on Kemutai Hanashi: Chapter 1
+                                    <Link href="/blog/kemutai-hanashi-2-3-en" className="underline hover:text-purple-500">
+                                        My thoughts about Kemutai Hanashi - Chapter 2, 3
                                     </Link>
                                 </ListItem>
                             </List>
@@ -120,7 +158,8 @@ export function HeroSection() {
                             <Ruler color='colorless' marginTop='lg' marginBottom='none'/>
 
                             <Text>
-                                I’ll keep updating this space as I go with more drawings and reading logs. Thank you for stopping by.
+                                I’ll keep updating this space as I go—more drawings, more thoughts, more fragments of whatever I’m becoming.
+                                Thank you for being here, even just for a moment.
                             </Text>
                         </motion.div>
                     </motion.div>

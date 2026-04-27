@@ -41,7 +41,7 @@ export default function AskPage() {
       <div className="mb-8 flex items-center justify-between">
         <DynamicBreadcrumb 
             items={[
-                { href: '/', label: 'Home', emoji: '👾' },
+                { href: '/', label: 'Home', emoji: '🐶' },
                 { label: 'Ask' }
             ]}
         />
@@ -68,3 +68,4 @@ export default function AskPage() {
     </BaseContainer>
   )
 }
+
