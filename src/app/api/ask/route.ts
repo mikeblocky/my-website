@@ -41,10 +41,6 @@ export async function PUT(request: NextRequest) {
     return NextResponse.json({ error: 'Invalid payload' }, { status: 400 })
   }
 
-  // To secure it a bit, we check a query param or secret.
-  // The user says "so I can answer immediately in there too", we can use a simple password header or just leave it for their local use.
-  // Since it's their personal website and they might deploy it, maybe we should add a very simple check.
-  // Let's just implement the logic.
   const { id, reply, passcode } = data
   
   if (process.env.ADMIN_PASSCODE && passcode !== process.env.ADMIN_PASSCODE) {
@@ -55,6 +51,43 @@ export async function PUT(request: NextRequest) {
   
   if (!updatedQuestion) {
     return NextResponse.json({ error: 'Question not found' }, { status: 404 })
+  }
+
+  // Send push notification to the person who asked
+  try {
+    const { getSubscriptionsForQuestion, removeSubscription } = await import('@/lib/kv/push')
+    const subscriptions = await getSubscriptionsForQuestion(id)
+    
+    if (subscriptions.length > 0) {
+      const webpush = await import('web-push')
+      
+      webpush.default.setVapidDetails(
+        'mailto:contact@mikeblocky.com',
+        process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY!,
+        process.env.VAPID_PRIVATE_KEY!
+      )
+
+      const notificationPayload = JSON.stringify({
+        title: 'mikeblocky answered your question!',
+        body: reply.trim().length > 120 ? reply.trim().slice(0, 120) + '...' : reply.trim(),
+        url: '/ask',
+        tag: `reply-${id}`
+      })
+
+      for (const sub of subscriptions) {
+        try {
+          await webpush.default.sendNotification(sub.subscription as any, notificationPayload)
+        } catch (pushError: any) {
+          console.error('Push notification failed for subscription:', pushError?.statusCode)
+        }
+      }
+
+      // Clean up used subscriptions
+      await removeSubscription(id)
+    }
+  } catch (pushError) {
+    // Don't fail the reply if push notifications fail
+    console.error('Push notification error (non-blocking):', pushError)
   }
 
   return NextResponse.json({ question: updatedQuestion }, { status: 200 })

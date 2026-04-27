@@ -7,10 +7,11 @@ import { StackVertical } from '@/components/layout/layout-stack/layout-stack'
 import TextHeading from '@/components/ui/text-heading/text-heading'
 import Text from '@/components/ui/text/text'
 import { Button } from '@/components/ui/primitives/button'
-import { ChevronLeft, ChevronRight, MessageSquareReply, Camera } from 'lucide-react'
+import { ChevronLeft, ChevronRight, MessageSquareReply, Camera, Bell } from 'lucide-react'
 import { sansFont, monoFont } from '@/styles/fonts/fonts'
 import { cn } from '@/lib/utils/utils'
 import { AnimatePresence, motion } from 'framer-motion'
+import { isPushSupported, subscribeToPush, registerServiceWorker } from '@/lib/push/client'
 
 const seededQuestions = [...initialQuestions].sort(
   (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
@@ -45,6 +46,10 @@ export function AskBoard() {
   const [replyBody, setReplyBody] = useState('')
   const [passcode, setPasscode] = useState('')
 
+  // Push notification state
+  const [wantNotification, setWantNotification] = useState(true)
+  const [pushSupported, setPushSupported] = useState(false)
+
   // Toast Notification State
   const [notification, setNotification] = useState<string | null>(null)
 
@@ -57,6 +62,10 @@ export function AskBoard() {
 
   useEffect(() => {
     let cancelled = false
+
+    // Check push support & register service worker
+    setPushSupported(isPushSupported())
+    registerServiceWorker()
 
     async function loadQuestions() {
       try {
@@ -118,7 +127,18 @@ export function AskBoard() {
         setQuestions((previous) => [question, ...previous])
         setFormState({ author: '', body: '' })
         setCurrentPage(1)
-        showNotification('Question sent successfully!')
+
+        // Subscribe to push notifications for this question
+        if (wantNotification && pushSupported) {
+          const subscribed = await subscribeToPush(question.id)
+          if (subscribed) {
+            showNotification('Question sent! You will be notified when answered.')
+          } else {
+            showNotification('Question sent! (Notifications could not be enabled)')
+          }
+        } else {
+          showNotification('Question sent successfully!')
+        }
       } catch (error) {
         const fallback = error instanceof Error ? error.message : 'Unable to send your question.'
         setErrorMessage(fallback)
@@ -239,6 +259,21 @@ export function AskBoard() {
             />
           </label>
         </div>
+
+        {pushSupported && (
+          <label className="flex items-center gap-2 cursor-pointer select-none">
+            <input
+              type="checkbox"
+              checked={wantNotification}
+              onChange={(e) => setWantNotification(e.target.checked)}
+              className="h-4 w-4 rounded border-purple-300 text-purple-600 focus:ring-purple-500 accent-purple-600"
+            />
+            <span className={cn(sansFont.className, "text-sm text-slate-600 dark:text-slate-400 flex items-center gap-1.5")}>
+              <Bell size={14} className="text-purple-500" />
+              Notify me when answered
+            </span>
+          </label>
+        )}
 
         <div className="flex justify-end">
           <Button type="submit" disabled={!formState.body.trim() || isPending}>
