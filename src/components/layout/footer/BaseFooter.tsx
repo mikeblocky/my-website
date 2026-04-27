@@ -20,7 +20,7 @@ interface BaseFooterProps {
 }
 
 export function BaseFooter({ 
-    color = 'purple', 
+    color = 'blue', 
     navigationLinks, 
     className,
     showToTop = true,
@@ -46,9 +46,9 @@ export function BaseFooter({
                     "absolute inset-0 w-full",
                     "h-[1px]",
                     "bg-gradient-to-r",
-                    color === 'purple' && [
-                        "from-transparent via-purple-500/30 to-transparent",
-                        "dark:via-purple-400/30"
+                    color === 'blue' && [
+                        "from-transparent via-blue-500/30 to-transparent",
+                        "dark:via-blue-400/30"
                     ],
                     color === 'blue' && [
                         "from-transparent via-blue-500/30 to-transparent",
@@ -96,11 +96,11 @@ export function BaseFooter({
                                             href={link.href}
                                             target={link.href.startsWith('mailto:') ? undefined : '_blank'}
                                             className={cn(
-                                                "block text-purple-400/80 hover:text-purple-400",
+                                                "block text-blue-400/80 hover:text-blue-400",
                                                 "transition-all duration-200",
                                                 "-m-2 p-2",
-                                                "hover:bg-purple-400/10 rounded-md",
-                                                "hover:shadow-md hover:shadow-purple-500/5"
+                                                "hover:bg-blue-400/10 rounded-md",
+                                                "hover:shadow-md hover:shadow-blue-500/5"
                                             )}
                                         >
                                             {link.icon}
@@ -113,7 +113,7 @@ export function BaseFooter({
                         {/* Copyright */}
                         {showCopyright && (
                             <motion.span 
-                                className="text-[10px] sm:text-xs text-purple-400"
+                                className="text-[10px] sm:text-xs text-blue-400"
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}
                                 transition={{ delay: 0.4 }}

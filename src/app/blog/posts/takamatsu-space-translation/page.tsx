@@ -28,7 +28,7 @@ export default function TakamatsuJan13thSpace() {
 
           <article>
             <TextHeading as="h1">Takamatsu-sensei's January 13th space - translation</TextHeading>
-            <div className="flex items-center gap-2 flex-wrap mb-8"><Text variant="muted" size="xs">November 13th, 2025 | 45 min read</Text><span className="text-muted-foreground/30">•</span><span className="text-[14px] text-purple-600 dark:text-purple-400 font-medium">Translation</span></div>
+            <div className="flex items-center gap-2 flex-wrap mb-8"><span className="text-[14px] sm:text-[15px] text-muted-foreground dark:text-gray-400">November 13th, 2025 | 45 min read</span><span className="text-muted-foreground/30">•</span><span className="text-[14px] text-blue-600 dark:text-blue-400 font-medium">Translation</span></div>
 
             <div className="prose dark:prose-invert max-w-none">
               <Content components={mdxComponents} />

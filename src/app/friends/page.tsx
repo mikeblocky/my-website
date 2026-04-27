@@ -15,8 +15,8 @@ import { developedFriends, upcomingFriends, type Friend } from './_data/friends'
 
 function FriendCard({ friend, tag }: { friend: Friend, tag: string }) {
     return (
-        <div className="group relative rounded-3xl border border-purple-200/60 bg-white/50 p-6 dark:border-purple-500/20 dark:bg-[#1a1525]/50 transition-all hover:bg-white hover:shadow-xl hover:shadow-purple-500/5 dark:hover:bg-[#1a1525] overflow-hidden">
-            <div className="absolute -right-4 -top-4 h-24 w-24 rounded-full bg-purple-50/50 blur-3xl transition-colors group-hover:bg-purple-100/50 dark:bg-purple-900/10 dark:group-hover:bg-purple-800/20" />
+        <div className="group relative rounded-3xl border border-blue-200/60 bg-white/50 p-6 dark:border-blue-500/20 dark:bg-[#1a1525]/50 transition-all hover:bg-white hover:shadow-xl hover:shadow-blue-500/5 dark:hover:bg-[#1a1525] overflow-hidden">
+            <div className="absolute -right-4 -top-4 h-24 w-24 rounded-full bg-blue-50/50 blur-3xl transition-colors group-hover:bg-blue-100/50 dark:bg-blue-900/10 dark:group-hover:bg-blue-800/20" />
             
             <div className="relative flex flex-col md:flex-row gap-6 items-start">
                 <div className="relative shrink-0 self-center md:self-start">
@@ -34,7 +34,7 @@ function FriendCard({ friend, tag }: { friend: Friend, tag: string }) {
                 <StackVertical gap="sm" className="flex-1">
                     <div className="flex flex-col">
                         <div className="flex items-center gap-2">
-                            <span className={cn(sansFont.className, "text-sm font-bold text-purple-700 dark:text-purple-300 bg-purple-100/50 dark:bg-purple-900/40 px-2 py-0.5 rounded-md")}>
+                            <span className={cn(sansFont.className, "text-sm font-bold text-blue-700 dark:text-blue-300 bg-blue-100/50 dark:bg-blue-900/40 px-2 py-0.5 rounded-md")}>
                                 @{friend.username}
                             </span>
                         </div>
@@ -49,7 +49,7 @@ function FriendCard({ friend, tag }: { friend: Friend, tag: string }) {
                             href={`https://twitter.com/${friend.username}`}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="text-sm font-semibold text-purple-600 hover:text-purple-800 dark:text-purple-400 dark:hover:text-purple-200 transition-colors flex items-center gap-1"
+                            className="text-sm font-semibold text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-200 transition-colors flex items-center gap-1"
                         >
                             View profile →
                         </a>
@@ -94,7 +94,7 @@ export default function FriendsList() {
                     </div>
 
                     <StackVertical gap="lg">
-                        <div className="flex flex-wrap gap-2 mb-2 border-b border-purple-100 dark:border-purple-900/50 pb-4">
+                        <div className="flex flex-wrap gap-2 mb-2 border-b border-blue-100 dark:border-blue-900/50 pb-4">
                             {tabs.map((tab) => (
                                 <button
                                     key={tab.id}
@@ -102,14 +102,14 @@ export default function FriendsList() {
                                     className={cn(
                                         "px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 flex items-center gap-2",
                                         activeTab === tab.id
-                                            ? "bg-purple-500 text-white shadow-lg shadow-purple-500/20"
-                                            : "bg-purple-50 text-purple-600 hover:bg-purple-100 dark:bg-purple-900/20 dark:text-purple-400 dark:hover:bg-purple-900/40"
+                                            ? "bg-blue-500 text-white shadow-lg shadow-blue-500/20"
+                                            : "bg-blue-50 text-blue-600 hover:bg-blue-100 dark:bg-blue-900/20 dark:text-blue-400 dark:hover:bg-blue-900/40"
                                     )}
                                 >
                                     <span>{tab.label}</span>
                                     <span className={cn(
                                         "text-[10px] px-1.5 py-0.5 rounded-full",
-                                        activeTab === tab.id ? "bg-white/20" : "bg-purple-500/10"
+                                        activeTab === tab.id ? "bg-white/20" : "bg-blue-500/10"
                                     )}>
                                         {tab.count}
                                     </span>

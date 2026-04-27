@@ -22,13 +22,13 @@ function WorkItem({ icon, text, delay, hyperlink, hyperlinkText, endText }: Work
             transition={{ delay, duration: 0.5 }}
             className="flex items-center gap-3"
         >
-            <div className="text-purple-500">
+            <div className="text-blue-500">
                 {icon}
             </div>
             <Text variant="muted" size="sm">
                 {text}
                 {hyperlink && hyperlinkText && (
-                    <Link href={hyperlink} className="text-purple-500 hover:underline">
+                    <Link href={hyperlink} className="text-blue-500 hover:underline">
                         {hyperlinkText}
                     </Link>
                 )}
@@ -44,19 +44,19 @@ export function CurrentWork() {
     const items = [
         {
             icon: <BookOpen className="w-4 h-4" />,
-            text: "Studying Japanese language and literature, preparing for JLPT and exploring cultural nuances through readings."
+            text: "Learning Japanese at my own pace, mixing study with music, videos, and whatever helps me get used to the language."
         },
         {
             icon: <Palette className="w-4 h-4" />,
-            text: "Working on new illustration projects that focus on warmth, memory, and quiet human connection."
+            text: "Drawing small, quiet scenes and just trying to make things that feel right to me."
         },
         {
             icon: <PenTool className="w-4 h-4" />,
-            text: "Writing reflections and small essays about art, identity, and stories like Skip and Loafer and Kemutai Hanashi."
+            text: "Writing down thoughts here and there—about life, art, and the stories that stick with me."
         },
         {
             icon: <Sparkles className="w-4 h-4" />,
-            text: "Designing small creative tools and improving my site to feel more like a personal journal than a portfolio."
+            text: "Working on this site slowly, turning it into a place where I can share things and hopefully connect with people."
         }
     ]
 
@@ -70,7 +70,7 @@ export function CurrentWork() {
                 <TextHeading as="h2">Current ongoings</TextHeading>
                 <StackVertical gap="md">
                     {items.map((item, index) => (
-                        <WorkItem 
+                        <WorkItem
                             key={index}
                             icon={item.icon}
                             text={item.text}

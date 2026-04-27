@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { buildQuestionPayload, fetchQuestions, saveQuestion } from '@/lib/kv/ask'
 import { initialQuestions } from '@/app/ask/_data/questions'
+import { notifyOwnerNewQuestion } from '@/lib/notify/discord'
 
 const MAX_BODY_LENGTH = 800
 
@@ -31,6 +32,9 @@ export async function POST(request: NextRequest) {
   const question = buildQuestionPayload({ author, body })
 
   await saveQuestion(question)
+
+  // Notify owner about the new question (non-blocking)
+  notifyOwnerNewQuestion(author, body).catch(() => {})
 
   return NextResponse.json({ question }, { status: 201 })
 }

@@ -61,8 +61,8 @@ export function BlogSearchPanel({ posts }: BlogSearchPanelProps) {
             {/* Search Input */}
             <div className="w-full">
                 <motion.div
-                    className="relative w-full overflow-hidden rounded-xl border border-purple-500/30 bg-[#f2f5ff] transition-colors dark:border-purple-500/40 dark:bg-[#2a1f3f]"
-                    animate={{ boxShadow: isSearching ? "0 0 0 1.5px rgba(168, 85, 247, 0.25)" : "0 0 0 1px rgba(148, 163, 184, 0.2)" }}
+                    className="relative w-full overflow-hidden rounded-xl border border-blue-500/30 bg-transparent transition-colors dark:border-blue-500/40 dark:bg-transparent"
+                    animate={{ boxShadow: isSearching ? "0 0 0 1.5px rgba(59, 130, 246, 0.25)" : "0 0 0 1px rgba(148, 163, 184, 0.2)" }}
                     transition={{ type: "spring", stiffness: 120, damping: 18 }}
                 >
                     <motion.input
@@ -71,14 +71,14 @@ export function BlogSearchPanel({ posts }: BlogSearchPanelProps) {
                         value={query}
                         onChange={(event) => setQuery(event.target.value)}
                         placeholder="Search by title, theme, or keyword..."
-                        className="w-full bg-transparent px-4 py-3 text-base text-slate-900 placeholder:text-slate-500 focus:outline-none dark:text-slate-100 dark:placeholder:text-purple-200"
+                        className="w-full bg-transparent px-4 py-3 text-base text-slate-900 placeholder:text-slate-500 focus:outline-none dark:text-slate-100 dark:placeholder:text-blue-200"
                         whileFocus={{ scale: 1.01 }}
                         transition={{ type: "spring", stiffness: 260, damping: 18 }}
                         aria-label="Search blog posts"
                         autoComplete="off"
                     />
                     <motion.div
-                        className="pointer-events-none absolute inset-x-0 bottom-0 h-0.5 bg-gradient-to-r from-transparent via-purple-500/60 to-transparent"
+                        className="pointer-events-none absolute inset-x-0 bottom-0 h-0.5 bg-gradient-to-r from-transparent via-blue-500/60 to-transparent"
                         animate={{ opacity: isSearching ? 0.8 : 0.2 }}
                         transition={{ duration: 0.4 }}
                     />
@@ -92,8 +92,8 @@ export function BlogSearchPanel({ posts }: BlogSearchPanelProps) {
                             onClick={() => setSelectedTheme(theme)}
                             className={`px-3 py-1.5 text-xs font-medium rounded-full transition-all duration-200 border ${
                                 selectedTheme === theme
-                                    ? 'bg-purple-500 text-white border-purple-500 shadow-md shadow-purple-500/20'
-                                    : 'bg-transparent text-slate-600 border-slate-300 hover:border-purple-300 hover:text-purple-600 dark:text-slate-400 dark:border-slate-700 dark:hover:border-purple-500/50 dark:hover:text-purple-300'
+                                    ? 'bg-blue-500 text-white border-blue-500 shadow-md shadow-blue-500/20'
+                                    : 'bg-transparent text-slate-600 border-slate-300 hover:border-blue-300 hover:text-blue-600 dark:text-slate-400 dark:border-slate-700 dark:hover:border-blue-500/50 dark:hover:text-blue-300'
                             }`}
                         >
                             {theme}
@@ -134,7 +134,7 @@ export function BlogSearchPanel({ posts }: BlogSearchPanelProps) {
                             animate={{ opacity: 1 }}
                             exit={{ opacity: 0 }}
                             transition={{ duration: 0.2 }}
-                            className="rounded-lg border border-purple-300/30 bg-purple-50/50 p-6 text-center dark:border-purple-500/30 dark:bg-purple-900/20"
+                            className="rounded-lg border border-blue-300/30 bg-blue-50/50 p-6 text-center dark:border-blue-500/30 dark:bg-blue-900/20"
                         >
                             <TextHeadingMessage term={trimmedQuery || selectedTheme} />
                         </motion.div>
@@ -161,7 +161,7 @@ export function BlogSearchPanel({ posts }: BlogSearchPanelProps) {
                                 onClick={() => setCurrentPage(i + 1)}
                                 className={`w-8 h-8 rounded-lg text-sm font-medium transition-colors ${
                                     currentPage === i + 1
-                                        ? 'bg-purple-500 text-white'
+                                        ? 'bg-blue-500 text-white'
                                         : 'text-slate-600 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800'
                                 }`}
                             >
@@ -188,7 +188,7 @@ function TextHeadingMessage({ term }: { term: string }) {
     return (
         <Text variant="muted" size="sm">
             No stories match "
-            <span className="text-purple-700 dark:text-purple-200">{term}</span>
+            <span className="text-blue-700 dark:text-blue-200">{term}</span>
             " just yet - try a different keyword or theme.
         </Text>
     )

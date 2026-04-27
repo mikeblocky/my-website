@@ -32,7 +32,7 @@ export default function MathReferences() {
                         <Text variant="red">
                             If you have somehow reached this page, you probably have too much time on your hands. But if it's a genuine mistake, click the link below to see all my math references.
                         </Text>
-                        <Text className="underline font-bold hover:text-purple-500">
+                        <Text className="underline font-bold hover:text-blue-500">
                             <Link href="https://sumitdotml.notion.site/math">This one</Link>
                         </Text>
                     </StackVertical>

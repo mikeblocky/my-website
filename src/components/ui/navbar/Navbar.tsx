@@ -20,7 +20,7 @@ function NavLink({ href, children, onClick }: NavLinkProps) {
             onClick={onClick}
             className={cn(
                 "block w-full",
-                "text-sm text-muted-foreground hover:text-purple-500",
+                "text-sm text-muted-foreground hover:text-blue-500",
                 "transition-colors duration-200",
                 monoFont.className
             )}
@@ -64,7 +64,7 @@ export function Navbar() {
                         key={link.href}
                         whileHover={{ y: -1 }}
                         transition={{ duration: 0.2 }}
-                        className="relative after:content-[''] after:absolute after:w-0 after:h-[1px] after:bg-purple-500 after:left-0 after:bottom-[-2px] after:transition-all after:duration-200 hover:after:w-full"
+                        className="relative after:content-[''] after:absolute after:w-0 after:h-[1px] after:bg-blue-500 after:left-0 after:bottom-[-2px] after:transition-all after:duration-200 hover:after:w-full"
                     >
                         <NavLink href={link.href}>
                             {link.label}
@@ -86,8 +86,8 @@ export function Navbar() {
                         "w-9 h-9",
                         "text-muted-foreground",
                         "transition-all duration-300",
-                        isMenuOpen && "text-purple-500 bg-purple-500/10 rounded-lg",
-                        "hover:text-purple-500"
+                        isMenuOpen && "text-blue-500 bg-blue-500/10 rounded-lg",
+                        "hover:text-blue-500"
                     )}
                     aria-label={isMenuOpen ? "Close menu" : "Open menu"}
                 >
@@ -127,7 +127,7 @@ export function Navbar() {
                                     "bg-background/80 dark:bg-gray-950/80",
                                     "backdrop-blur-md",
                                     "border border-border/50 rounded-lg",
-                                    "shadow-lg shadow-purple-500/5",
+                                    "shadow-lg shadow-blue-500/5",
                                     "overflow-hidden"
                                 )}
                             >
@@ -150,7 +150,7 @@ export function Navbar() {
                                                     monoFont.className,
                                                     "block px-4 py-2.5",
                                                     "text-sm text-muted-foreground",
-                                                    "hover:bg-purple-500/10 hover:text-purple-500",
+                                                    "hover:bg-blue-500/10 hover:text-blue-500",
                                                     "transition-colors duration-200"
                                                 )}
                                             >

@@ -242,7 +242,7 @@ export function AskBoard() {
               value={formState.author}
               onChange={(event) => setFormState((state) => ({ ...state, author: event.target.value }))}
               placeholder="How should I call you?"
-              className="w-full rounded-lg border border-purple-200 bg-white px-3 py-2 text-sm text-slate-900 focus:border-purple-400 focus:outline-none focus:ring-2 focus:ring-purple-200 dark:border-purple-500/50 dark:bg-slate-900 dark:text-slate-100 dark:focus:border-purple-400 dark:focus:ring-purple-500/30"
+              className="w-full rounded-lg border border-blue-200 bg-white px-3 py-2 text-sm text-slate-900 focus:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-200 dark:border-blue-500/50 dark:bg-slate-900 dark:text-slate-100 dark:focus:border-blue-400 dark:focus:ring-blue-500/30"
             />
           </label>
 
@@ -255,7 +255,7 @@ export function AskBoard() {
               onChange={(event) => setFormState((state) => ({ ...state, body: event.target.value }))}
               placeholder="Ask me anything..."
               rows={4}
-              className="w-full rounded-lg border border-purple-200 bg-white px-3 py-3 text-sm text-slate-900 focus:border-purple-400 focus:outline-none focus:ring-2 focus:ring-purple-200 dark:border-purple-500/50 dark:bg-slate-900 dark:text-slate-100 dark:focus:border-purple-400 dark:focus:ring-purple-500/30"
+              className="w-full rounded-lg border border-blue-200 bg-white px-3 py-3 text-sm text-slate-900 focus:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-200 dark:border-blue-500/50 dark:bg-slate-900 dark:text-slate-100 dark:focus:border-blue-400 dark:focus:ring-blue-500/30"
             />
           </label>
         </div>
@@ -266,10 +266,10 @@ export function AskBoard() {
               type="checkbox"
               checked={wantNotification}
               onChange={(e) => setWantNotification(e.target.checked)}
-              className="h-4 w-4 rounded border-purple-300 text-purple-600 focus:ring-purple-500 accent-purple-600"
+              className="h-4 w-4 rounded border-blue-300 text-blue-600 focus:ring-blue-500 accent-blue-600"
             />
             <span className={cn(sansFont.className, "text-sm text-slate-600 dark:text-slate-400 flex items-center gap-1.5")}>
-              <Bell size={14} className="text-purple-500" />
+              <Bell size={14} className="text-blue-500" />
               Notify me when answered
             </span>
           </label>
@@ -289,7 +289,7 @@ export function AskBoard() {
       )}
 
       <section className="space-y-6">
-        <div className="flex items-baseline justify-between border-b border-purple-200 dark:border-purple-500/50 pb-3">
+        <div className="flex items-baseline justify-between border-b border-blue-200 dark:border-blue-500/50 pb-3">
           <TextHeading as="h3" weight="semibold" className="text-lg">
             Questions
           </TextHeading>
@@ -310,12 +310,12 @@ export function AskBoard() {
               <article 
                 id={`question-${question.id}`} 
                 key={question.id} 
-                className="rounded-2xl border border-purple-200 bg-white p-6 dark:border-purple-500/40 dark:bg-[#1a1525] relative group transition-all"
+                className="rounded-2xl border border-blue-200 bg-white p-6 dark:border-blue-500/40 dark:bg-[#1a1525] relative group transition-all"
               >
                 <StackVertical gap="sm">
                   <div className="flex justify-between items-start mb-1">
-                    <h4 className="text-sm font-semibold text-purple-700 dark:text-purple-300 flex items-center gap-2">
-                      <span className={cn(monoFont.className, "bg-purple-50 dark:bg-purple-900/40 px-2.5 py-1 rounded-full")}>{question.author} asked</span>
+                    <h4 className="text-sm font-semibold text-blue-700 dark:text-blue-300 flex items-center gap-2">
+                      <span className={cn(monoFont.className, "bg-blue-50 dark:bg-blue-900/40 px-2.5 py-1 rounded-full")}>{question.author} asked</span>
                     </h4>
                     <span className={cn(monoFont.className, "text-xs text-muted-foreground mt-1.5")}>
                       {formatDate(question.createdAt)}
@@ -327,11 +327,11 @@ export function AskBoard() {
                   </p>
 
                   {question.reply && (
-                    <div className="mt-3 rounded-xl bg-purple-50/50 p-5 border border-purple-100 dark:bg-purple-900/20 dark:border-purple-500/30">
+                    <div className="mt-3 rounded-xl bg-blue-50/50 p-5 border border-blue-100 dark:bg-blue-900/20 dark:border-blue-500/30">
                       <div className="flex items-center gap-2 mb-2">
-                        <span className="text-sm font-bold text-purple-900 dark:text-purple-200">Answer</span>
+                        <span className="text-sm font-bold text-blue-900 dark:text-blue-200">Answer</span>
                         {question.repliedAt && (
-                          <span className={cn(monoFont.className, "text-xs text-purple-400 dark:text-purple-500 ml-auto")}>
+                          <span className={cn(monoFont.className, "text-xs text-blue-400 dark:text-blue-500 ml-auto")}>
                             {formatDate(question.repliedAt)}
                           </span>
                         )}
@@ -345,7 +345,7 @@ export function AskBoard() {
                   <div className="question-actions mt-1 flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                     <button
                       onClick={() => takeScreenshot(question.id)}
-                      className="flex items-center gap-1.5 text-xs font-medium text-slate-500 hover:text-purple-600 dark:text-slate-400 dark:hover:text-purple-300 bg-slate-50 dark:bg-slate-800/50 px-3 py-1.5 rounded-full"
+                      className="flex items-center gap-1.5 text-xs font-medium text-slate-500 hover:text-blue-600 dark:text-slate-400 dark:hover:text-blue-300 bg-slate-50 dark:bg-slate-800/50 px-3 py-1.5 rounded-full"
                     >
                       <Camera size={14} />
                       Snap
@@ -356,7 +356,7 @@ export function AskBoard() {
                           setReplyingTo(replyingTo === question.id ? null : question.id)
                           setReplyBody('')
                         }}
-                        className="flex items-center gap-1.5 text-xs font-medium text-purple-600 hover:text-purple-800 dark:text-purple-400 dark:hover:text-purple-300 bg-purple-50 dark:bg-purple-900/30 px-3 py-1.5 rounded-full"
+                        className="flex items-center gap-1.5 text-xs font-medium text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 bg-blue-50 dark:bg-blue-900/30 px-3 py-1.5 rounded-full"
                       >
                         <MessageSquareReply size={14} />
                         Reply
@@ -365,7 +365,7 @@ export function AskBoard() {
                   </div>
 
                   {replyingTo === question.id && !question.reply && (
-                    <div className="mt-3 pt-3 border-t border-purple-100 dark:border-purple-500/30">
+                    <div className="mt-3 pt-3 border-t border-blue-100 dark:border-blue-500/30">
                       <textarea
                         value={replyBody}
                         onChange={(e) => setReplyBody(e.target.value)}
@@ -375,7 +375,7 @@ export function AskBoard() {
                         }}
                         placeholder="Write your answer..."
                         rows={1}
-                        className={cn(sansFont.className, "w-full rounded-xl border border-purple-200 bg-white px-4 py-3 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-purple-300 dark:border-purple-500/50 dark:bg-slate-900 dark:text-slate-100 resize-none overflow-hidden min-h-[44px]")}
+                        className={cn(sansFont.className, "w-full rounded-xl border border-blue-200 bg-white px-4 py-3 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-300 dark:border-blue-500/50 dark:bg-slate-900 dark:text-slate-100 resize-none overflow-hidden min-h-[44px]")}
                       />
                       <div className="mt-2 flex justify-between items-center gap-2">
                         <input 
@@ -383,13 +383,13 @@ export function AskBoard() {
                           value={passcode}
                           onChange={e => setPasscode(e.target.value)}
                           placeholder="Passcode"
-                          className="w-24 rounded-full border border-purple-200 bg-white px-3 py-1.5 text-xs text-slate-900 dark:border-purple-500/50 dark:bg-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-purple-300"
+                          className="w-24 rounded-full border border-blue-200 bg-white px-3 py-1.5 text-xs text-slate-900 dark:border-blue-500/50 dark:bg-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-300"
                         />
                         <div className="flex gap-2">
                           <Button variant="ghost" size="sm" onClick={() => setReplyingTo(null)} className="text-xs h-8">
                             Cancel
                           </Button>
-                          <Button size="sm" disabled={isPending || !replyBody.trim()} onClick={() => handleReplySubmit(question.id)} className="text-xs h-8 rounded-full px-4 bg-purple-600 hover:bg-purple-700 text-white">
+                          <Button size="sm" disabled={isPending || !replyBody.trim()} onClick={() => handleReplySubmit(question.id)} className="text-xs h-8 rounded-full px-4 bg-blue-600 hover:bg-blue-700 text-white">
                             Post
                           </Button>
                         </div>
@@ -404,11 +404,11 @@ export function AskBoard() {
 
         {/* Pagination Controls */}
         {!isLoading && totalPages > 1 && (
-          <div className="mt-8 flex items-center justify-center gap-4 border-t border-purple-200 dark:border-purple-500/50 pt-6">
+          <div className="mt-8 flex items-center justify-center gap-4 border-t border-blue-200 dark:border-blue-500/50 pt-6">
             <button
               onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
               disabled={currentPage === 1}
-              className="p-2 rounded-lg text-slate-500 hover:bg-purple-100 disabled:opacity-50 disabled:hover:bg-transparent dark:text-slate-400 dark:hover:bg-purple-900/30 transition-colors"
+              className="p-2 rounded-lg text-slate-500 hover:bg-blue-100 disabled:opacity-50 disabled:hover:bg-transparent dark:text-slate-400 dark:hover:bg-blue-900/30 transition-colors"
               aria-label="Previous page"
             >
               <ChevronLeft className="w-5 h-5" />
@@ -421,8 +421,8 @@ export function AskBoard() {
                   onClick={() => setCurrentPage(i + 1)}
                   className={`w-8 h-8 rounded-lg text-sm font-medium transition-colors ${
                     currentPage === i + 1
-                      ? 'bg-purple-500 text-white'
-                      : 'text-slate-600 hover:bg-purple-100 dark:text-slate-400 dark:hover:bg-purple-900/30'
+                      ? 'bg-blue-500 text-white'
+                      : 'text-slate-600 hover:bg-blue-100 dark:text-slate-400 dark:hover:bg-blue-900/30'
                   }`}
                 >
                   {i + 1}
@@ -433,7 +433,7 @@ export function AskBoard() {
             <button
               onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
               disabled={currentPage === totalPages}
-              className="p-2 rounded-lg text-slate-500 hover:bg-purple-100 disabled:opacity-50 disabled:hover:bg-transparent dark:text-slate-400 dark:hover:bg-purple-900/30 transition-colors"
+              className="p-2 rounded-lg text-slate-500 hover:bg-blue-100 disabled:opacity-50 disabled:hover:bg-transparent dark:text-slate-400 dark:hover:bg-blue-900/30 transition-colors"
               aria-label="Next page"
             >
               <ChevronRight className="w-5 h-5" />
@@ -448,15 +448,15 @@ export function AskBoard() {
             initial={{ opacity: 0, y: 50, scale: 0.95, x: '-50%' }}
             animate={{ opacity: 1, y: 0, scale: 1, x: '-50%' }}
             exit={{ opacity: 0, y: 20, scale: 0.95, x: '-50%' }}
-            className="fixed bottom-6 left-1/2 -translate-x-1/2 md:left-auto md:right-6 md:translate-x-0 z-50 flex items-center gap-2 rounded-xl border border-purple-200 bg-white/95 backdrop-blur-sm pl-4 pr-1.5 py-1.5 shadow-sm dark:border-purple-500/30 dark:bg-[#1a1525] w-[calc(100%-2rem)] md:w-auto max-w-sm"
+            className="fixed bottom-6 left-1/2 -translate-x-1/2 md:left-auto md:right-6 md:translate-x-0 z-50 flex items-center gap-2 rounded-xl border border-blue-200 bg-white/95 backdrop-blur-sm pl-4 pr-1.5 py-1.5 shadow-sm dark:border-blue-500/30 dark:bg-[#1a1525] w-[calc(100%-2rem)] md:w-auto max-w-sm"
           >
-            <div className="h-2 w-2 rounded-full bg-purple-600 dark:bg-purple-400 shrink-0" />
+            <div className="h-2 w-2 rounded-full bg-blue-600 dark:bg-blue-400 shrink-0" />
             <span className={cn(monoFont.className, "text-sm text-slate-800 dark:text-slate-200 truncate")}>
               {notification}
             </span>
             <button
               onClick={() => setNotification(null)}
-              className={cn(monoFont.className, "ml-auto rounded-lg border border-purple-100 bg-purple-50/50 px-2 py-0.5 text-xs text-purple-600 hover:bg-purple-100 dark:border-purple-800 dark:bg-purple-900/30 dark:text-purple-300 dark:hover:bg-purple-900/50")}
+              className={cn(monoFont.className, "ml-auto rounded-lg border border-blue-100 bg-blue-50/50 px-2 py-0.5 text-xs text-blue-600 hover:bg-blue-100 dark:border-blue-800 dark:bg-blue-900/30 dark:text-blue-300 dark:hover:bg-blue-900/50")}
             >
               close
             </button>

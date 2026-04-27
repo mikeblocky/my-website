@@ -30,10 +30,11 @@ export default function KemutaiHanashiFicContent() {
             <div className="mb-8">
                 <TextHeading as="h1" className="mb-2">I have my words, and time is ticking</TextHeading>
                 <div className="flex items-center gap-2 flex-wrap">
-                    <Text variant="muted" size="xs">April 26th, 2026 | 15 min read</Text>
-                    <span className="text-[14px] text-purple-600 dark:text-purple-400 font-medium">Kemutai Hanashi</span>
+                    <span className="text-[14px] sm:text-[15px] text-muted-foreground dark:text-gray-400">April 26th, 2026 | 15 min read</span>
                     <span className="text-muted-foreground/30">•</span>
-                    <span className="text-[14px] text-purple-600 dark:text-purple-400 font-medium">Fanfiction</span>
+                    <span className="text-[14px] text-blue-600 dark:text-blue-400 font-medium">Kemutai Hanashi</span>
+                    <span className="text-muted-foreground/30">•</span>
+                    <span className="text-[14px] text-blue-600 dark:text-blue-400 font-medium">Fanfiction</span>
                 </div>
             </div>
 

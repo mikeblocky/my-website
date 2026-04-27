@@ -139,7 +139,7 @@ export function ArtworksGallery({
 										setSelectedIndex(currentIndex)
 									}}
 									className={cn(
-										'group mb-4 block w-full break-inside-avoid overflow-hidden rounded-xl border border-border/50 bg-background focus:outline-none focus:ring-2 focus:ring-purple-500/40',
+										'group mb-4 block w-full break-inside-avoid overflow-hidden rounded-xl border border-border/50 bg-background focus:outline-none focus:ring-2 focus:ring-blue-500/40',
 										cardClassName
 									)}
 								>

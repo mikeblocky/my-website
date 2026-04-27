@@ -6,7 +6,7 @@ interface TextProps {
     className?: string;
     size?: 'xs' | 'sm' | 'md' | 'base' | 'lg' | 'xl' | '2xl';
     weight?: 'normal' | 'medium' | 'semibold' | 'bold';
-    variant?: 'default' | 'purple' | 'blue' | 'green' | 'red' | 'orange' | 'muted' | 'caption';
+    variant?: 'default' | 'blue' | 'sky' | 'green' | 'red' | 'orange' | 'muted' | 'caption';
     align?: 'left' | 'center' | 'right' | 'justify';
     transform?: 'none' | 'uppercase' | 'lowercase' | 'capitalize';
     truncate?: boolean;
@@ -57,8 +57,8 @@ const fontWeights = {
 
 const variants = {
     default: 'text-foreground dark:text-white',
-    purple: 'text-purple-600 dark:text-purple-400',
     blue: 'text-blue-600 dark:text-blue-400',
+    sky: 'text-sky-600 dark:text-sky-400',
     green: 'text-green-600 dark:text-green-400',
     red: 'text-red-600 dark:text-red-400',
     orange: 'text-orange-600 dark:text-orange-400',

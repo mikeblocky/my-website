@@ -6,7 +6,7 @@ import { monoFont } from '@/styles/fonts/fonts'
 interface CalloutProps {
     children: React.ReactNode;
     className?: string;
-    variant?: 'purple' | 'orange' | 'green' | 'blue' | 'red';
+    variant?: 'sky' | 'orange' | 'green' | 'blue' | 'red';
     title?: string;
     marginTop?: 'none' | 'sm' | 'md' | 'lg';
     marginBottom?: 'none' | 'sm' | 'md' | 'lg';
@@ -34,11 +34,11 @@ const marginBottom = {
 }
 
 const variants = {
-    purple: {
-        container: 'bg-purple-50 dark:bg-purple-950 text-purple-950 dark:text-purple-50',
-        title: 'text-purple-800 dark:text-purple-200 font-bold',
-        icon: 'text-purple-700 dark:text-purple-300',
-        border: 'border-purple-200 dark:border-purple-800',
+    sky: {
+        container: 'bg-blue-50 dark:bg-blue-950 text-blue-950 dark:text-blue-50',
+        title: 'text-blue-800 dark:text-blue-200 font-bold',
+        icon: 'text-blue-700 dark:text-blue-300',
+        border: 'border-blue-200 dark:border-blue-800',
         Icon: Lightbulb
     },
     orange: {
@@ -74,7 +74,7 @@ const variants = {
 export default function Callout({ 
     children, 
     className,
-    variant = 'purple',
+    variant = 'sky',
     title,
     marginTop: mt,
     marginBottom: mb

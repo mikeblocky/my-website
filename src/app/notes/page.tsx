@@ -24,7 +24,7 @@ export default function Notes() {
                     </StackVertical>
                 </StackVertical>
             </BaseContainer>
-            <SectionFooter color="purple" showToTop={false} />
+            <SectionFooter color="blue" showToTop={false} />
         </>
     )
 }

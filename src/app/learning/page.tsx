@@ -38,7 +38,7 @@ export default function Learning() {
                     >
                         <Text 
                             size="md" 
-                            className="underline font-bold transition-colors duration-200 group-hover:text-purple-500"
+                            className="underline font-bold transition-colors duration-200 group-hover:text-blue-500"
                         >
                             Weekly Reflections
                         </Text>
@@ -49,7 +49,7 @@ export default function Learning() {
                     >
                         <Text 
                             size="md" 
-                            className="underline font-bold transition-colors duration-200 group-hover:text-purple-500"
+                            className="underline font-bold transition-colors duration-200 group-hover:text-blue-500"
                         >
                             Learning Utensils
                         </Text>
@@ -57,7 +57,7 @@ export default function Learning() {
                 </StackVertical>
             </div>
             </StackVertical>
-            <SectionFooter color="purple" showToTop={false} />
+            <SectionFooter color="blue" showToTop={false} />
         </BaseContainer>
     )
 }

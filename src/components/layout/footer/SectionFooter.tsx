@@ -15,7 +15,7 @@ interface SectionFooterProps {
 }
 
 export function SectionFooter({ 
-    color = 'purple',
+    color = 'blue',
     showToTop = true,
     showHomePage = true,
     showSocialLinks = true,

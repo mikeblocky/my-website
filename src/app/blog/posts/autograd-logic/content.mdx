@@ -101,7 +101,7 @@ Computation graph here refers to a Directed Acyclic Graph (DAG) where the nodes 
 
 <Image src="/blog/autograd-logic/dag.png" alt="Computation Graph" width={300} height={300} className="mx-auto" />
 
-<Text variant="muted" size="xs" className="text-center mt-4 mb-8">A simple illustration of a Directed Acyclic Graph (DAG). <Link href="https://thenlp.space/blog/graph-convolutional-network-for-dummies" target="_blank" className="underline text-purple-400 hover:text-purple-600">Source</Link>.</Text>
+<Text variant="muted" size="xs" className="text-center mt-4 mb-8">A simple illustration of a Directed Acyclic Graph (DAG). <Link href="https://thenlp.space/blog/graph-convolutional-network-for-dummies" target="_blank" className="underline text-blue-400 hover:text-blue-600">Source</Link>.</Text>
 
 Building the graph happens during the forward pass by recording operations. Freeing the graph ([lines 178-181 in my chibigrad](https://github.com/sumitdotml/chibigrad/blob/main/chibigrad/tensor.py#L178-L181) implementation of PyTorch's `tensor.py`) involves clearing references to allow garbage collection, which was not mentioned. This is important for memory management, especially in large models.
 

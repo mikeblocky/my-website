@@ -28,7 +28,7 @@ export default function KemutaiHanashi1() {
 
           <article>
             <TextHeading as="h1">My thoughts about Kemutai Hanashi - Chapter 1</TextHeading>
-            <div className="flex items-center gap-2 flex-wrap mb-8"><Text variant="muted" size="xs">May 14th, 2025 | 20 min read</Text><span className="text-muted-foreground/30">•</span><span className="text-[14px] text-purple-600 dark:text-purple-400 font-medium">Kemutai Hanashi</span></div>
+            <div className="flex items-center gap-2 flex-wrap mb-8"><span className="text-[14px] sm:text-[15px] text-muted-foreground dark:text-gray-400">May 14th, 2025 | 20 min read</span><span className="text-muted-foreground/30">•</span><span className="text-[14px] text-blue-600 dark:text-blue-400 font-medium">Kemutai Hanashi</span></div>
 
             <div className="prose dark:prose-invert max-w-none">
               <Content components={mdxComponents} />

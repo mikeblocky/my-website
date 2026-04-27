@@ -140,12 +140,12 @@ export function DynamicBreadcrumb({ items, className }: BreadcrumbProps) {
                         <React.Fragment key={item.href || item.label}>
                             <BreadcrumbItem>
                                 {index === items.length - 1 ? (
-                                    <BreadcrumbPage className="line-clamp-1 text-base">
+                                    <BreadcrumbPage className="line-clamp-1 text-sm">
                                         {item.label}
                                     </BreadcrumbPage>
                                 ) : (
                                     <BreadcrumbLink asChild>
-                                        <Link href={item.href || '#'} className="flex items-center whitespace-nowrap text-base gap-2">
+                                        <Link href={item.href || '#'} className="flex items-center whitespace-nowrap text-sm gap-2">
                                             {item.emoji && <img src="/icon.svg" alt="" className="inline-block w-5 h-5 shrink-0" />}
                                             {item.label}
                                         </Link>
@@ -169,13 +169,13 @@ export function DynamicBreadcrumb({ items, className }: BreadcrumbProps) {
                                 {item.href ? (
                                     <Link 
                                         href={item.href} 
-                                        className="flex items-center gap-2 text-[13px] text-muted-foreground/80 hover:text-foreground transition-colors"
+                                        className="flex items-center gap-2 text-sm text-muted-foreground/80 hover:text-foreground transition-colors"
                                     >
                                         {item.emoji && <img src="/icon.svg" alt="" className="inline-block w-4 h-4 shrink-0" />}
                                         <span>{item.label}</span>
                                     </Link>
                                 ) : (
-                                    <span className="flex items-center gap-2 text-[13px] text-foreground">
+                                    <span className="flex items-center gap-2 text-sm text-foreground">
                                         {item.emoji && <img src="/icon.svg" alt="" className="inline-block w-4 h-4 shrink-0" />}
                                         <span>{item.label}</span>
                                     </span>

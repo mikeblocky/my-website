@@ -38,7 +38,7 @@ export default function Diary() {
                     >
                         <Text 
                             size="md" 
-                            className="underline font-bold transition-colors duration-200 group-hover:text-purple-500"
+                            className="underline font-bold transition-colors duration-200 group-hover:text-blue-500"
                         >
                             Daily Notes
                         </Text>
@@ -49,7 +49,7 @@ export default function Diary() {
                     >
                         <Text 
                             size="md" 
-                            className="underline font-bold transition-colors duration-200 group-hover:text-purple-500"
+                            className="underline font-bold transition-colors duration-200 group-hover:text-blue-500"
                         >
                             Diary Utensils
                         </Text>
@@ -57,7 +57,7 @@ export default function Diary() {
                 </StackVertical>
             </div>
             </StackVertical>
-            <SectionFooter color="purple" showToTop={false} />
+            <SectionFooter color="blue" showToTop={false} />
         </BaseContainer>
     )
 }

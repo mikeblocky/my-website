@@ -58,7 +58,7 @@ export function TableOfContents({ contentId }: TableOfContentsProps) {
               heading.level === 2 && 'pl-4',
               heading.level === 3 && 'pl-8',
               activeId === heading.id
-                ? 'text-purple-500'
+                ? 'text-blue-500'
                 : 'text-muted-foreground hover:text-foreground'
             )}
           >

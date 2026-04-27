@@ -33,7 +33,7 @@ export function BlogCard({ post, isLast, searchTerm }: BlogCardProps) {
                             as="h4" 
                             weight="medium" 
                             className={cn(
-                                "group-hover:text-purple-500 transition-colors duration-300 mb-2 mt-0"
+                                "group-hover:text-blue-500 transition-colors duration-300 mb-2 mt-0"
                             )}
                         >
                             {highlightedTitle}
@@ -56,7 +56,7 @@ export function BlogCard({ post, isLast, searchTerm }: BlogCardProps) {
                             {post.themes && post.themes.map((theme) => (
                                 <div key={theme} className="flex items-center gap-2">
                                     <span>•</span>
-                                    <span className="text-purple-600 dark:text-purple-400 font-medium">
+                                    <span className="text-blue-600 dark:text-blue-400 font-medium">
                                         {theme}
                                     </span>
                                 </div>
@@ -87,7 +87,7 @@ function highlightText(text: string, term?: string): ReactNode {
             return (
                 <span
                     key={`highlight-${index}`}
-                    className="rounded-sm bg-purple-300/60 px-1 font-semibold text-purple-900 dark:bg-purple-500/50 dark:text-purple-50"
+                    className="rounded-sm bg-blue-300/60 px-1 font-semibold text-blue-900 dark:bg-blue-500/50 dark:text-blue-50"
                 >
                     {part}
                 </span>

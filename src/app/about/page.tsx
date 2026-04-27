@@ -115,7 +115,7 @@ export default function About() {
                 </div>
             </StackVertical>
 
-            <SectionFooter color="purple" />
+            <SectionFooter color="blue" />
         </BaseContainer>
     )
 }

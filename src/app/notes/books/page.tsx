@@ -33,7 +33,7 @@ export default function Books() {
                     </Text>
 
                 <StackVertical gap="md">
-                    <Text className="underline font-bold hover:text-purple-500">
+                    <Text className="underline font-bold hover:text-blue-500">
                         <Link href="/notes/books/llm-from-scratch-raschka/">LLMs From Scratch by Sebastian Raschka</Link>
                     </Text>
                     <Text variant = 'red'>

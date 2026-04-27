@@ -11,7 +11,7 @@ interface HomepageFooterProps {
 }
 
 export function HomepageFooter({ 
-    color = 'purple',
+    color = 'blue',
     showToTop = true,
     showSocialLinks = true,
     showCopyright = true

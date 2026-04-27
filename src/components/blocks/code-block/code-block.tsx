@@ -46,7 +46,7 @@ const CopyButton = ({ code, language }: { code: string; language?: string }) => 
                     "transition-all duration-300",
                     "h-5 flex items-center",
                     isDark
-                        ? "text-purple-400"
+                        ? "text-blue-400"
                         : "text-[#8839ef]",
                     copied
                         ? "w-12 opacity-100"
@@ -60,13 +60,13 @@ const CopyButton = ({ code, language }: { code: string; language?: string }) => 
                         "p-1 -mr-1",
                         "rounded-md",
                         "transition-all duration-300 ease-in-out",
-                        "hover:bg-purple-500/10",
+                        "hover:bg-blue-500/10",
                         "opacity-60 hover:opacity-100",
                         copied 
                             ? isDark
-                                ? "text-purple-400"
+                                ? "text-blue-400"
                                 : "text-[#8839ef]"
-                            : "text-gray-400 hover:text-purple-400"
+                            : "text-gray-400 hover:text-blue-400"
                     )}
                     aria-label="Copy code"
                 >

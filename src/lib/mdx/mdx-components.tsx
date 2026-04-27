@@ -165,8 +165,8 @@ export const mdxComponents: MDXComponents = {
                     monoFont.className,
                     "px-1.5 py-0.5 mx-0.5 my-0.5",
                     "text-inherit",
-                    "bg-purple-100/80 dark:bg-purple-900/50",
-                    "text-purple-800 dark:text-purple-200",
+                    "bg-blue-100/80 dark:bg-blue-900/50",
+                    "text-blue-800 dark:text-blue-200",
                     "rounded-md",
                     "inline-block leading-normal"
                 )}>
@@ -187,7 +187,7 @@ export const mdxComponents: MDXComponents = {
     // Block elements
     blockquote: ({ children }) => (
         <blockquote className={cn(
-            "pl-4 border-l-2 border-purple-500/50",
+            "pl-4 border-l-2 border-blue-500/50",
             "my-4 italic",
             "text-muted-foreground/90 dark:text-muted-foreground/90"
         )}>
@@ -201,12 +201,12 @@ export const mdxComponents: MDXComponents = {
         <a 
             href={href} 
             className={cn(
-                "text-purple-600 dark:text-purple-300",
-                "hover:text-purple-700 dark:hover:text-purple-200",
+                "text-blue-600 dark:text-blue-300",
+                "hover:text-blue-700 dark:hover:text-blue-200",
                 "transition-colors duration-200",
                 "underline underline-offset-4",
-                "decoration-purple-300/50 dark:decoration-purple-500/50",
-                "hover:decoration-purple-400 dark:hover:decoration-purple-400"
+                "decoration-blue-300/50 dark:decoration-blue-500/50",
+                "hover:decoration-blue-400 dark:hover:decoration-blue-400"
             )}
             target={href?.startsWith('http') ? '_blank' : undefined}
             rel={href?.startsWith('http') ? 'noopener noreferrer' : undefined}

@@ -4,7 +4,7 @@ interface RulerProps {
     className?: string;
     orientation?: 'horizontal' | 'vertical';
     weight?: 'thin' | 'normal' | 'slightlyThick' | 'thick' | 'heavy';
-    color?: 'default' | 'muted' | 'purple' | 'gray' | 'white' | 'colorless';
+    color?: 'default' | 'muted' | 'blue' | 'gray' | 'white' | 'colorless';
     marginTop?: 'none' | 'sm' | 'md' | 'lg';
     marginBottom?: 'none' | 'sm' | 'md' | 'lg';
     fullWidth?: boolean;
@@ -21,7 +21,7 @@ const weights = {
 const colors = {
     default: 'border-border',
     muted: 'border-muted',
-    purple: 'border-purple-300',
+    blue: 'border-blue-300',
     gray: 'border-gray-300',
     white: 'border-white',
     colorless: 'border-transparent'

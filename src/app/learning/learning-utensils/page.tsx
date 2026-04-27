@@ -35,8 +35,8 @@ export default function LearningUtensils() {
                     </Text>
 
                 <StackVertical gap="md">
-                    <Text><span className="font-bold">Keyboard:</span> <Link href="https://www.logitech.com/en-us/products/keyboards/pop-keys-wireless-mechanical.920-010708.html" className="underline hover:text-purple-500">Logitech POP Keys</Link></Text>
-                    <Text><span className="font-bold">Mouse:</span> <Link href="https://www.logitech.com/en-us/products/mice/pop-wireless-mouse.html" className="underline hover:text-purple-500">Logitech POP Mouse</Link></Text>
+                    <Text><span className="font-bold">Keyboard:</span> <Link href="https://www.logitech.com/en-us/products/keyboards/pop-keys-wireless-mechanical.920-010708.html" className="underline hover:text-blue-500">Logitech POP Keys</Link></Text>
+                    <Text><span className="font-bold">Mouse:</span> <Link href="https://www.logitech.com/en-us/products/mice/pop-wireless-mouse.html" className="underline hover:text-blue-500">Logitech POP Mouse</Link></Text>
                     <Text><span className="font-bold">Notebook (physical):</span> Normal notebook from Muji Japan</Text>
                     <Text><span className="font-bold">Pen:</span> 0.5 black ink ballpoint pen from Muji Japan (same store as above)</Text>
                     

@@ -12,7 +12,7 @@ interface FooterLinkProps {
     icon?: React.ReactNode;
 }
 
-export function FooterLink({ href, children, color = 'purple', external, icon }: FooterLinkProps) {
+export function FooterLink({ href, children, color = 'blue', external, icon }: FooterLinkProps) {
     return (
         <Link 
             href={href}

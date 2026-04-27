@@ -26,7 +26,7 @@ function SocialLink({ href, icon, label, delay }: SocialLinkProps) {
                 className={cn(
                     "flex items-center gap-2 group",
                     "text-sm text-muted-foreground",
-                    "hover:text-purple-500 transition-colors"
+                    "hover:text-blue-500 transition-colors"
                 )}
             >
                 <motion.div
