@@ -50,10 +50,7 @@ export function BaseFooter({
                         "from-transparent via-blue-500/30 to-transparent",
                         "dark:via-blue-400/30"
                     ],
-                    color === 'blue' && [
-                        "from-transparent via-blue-500/30 to-transparent",
-                        "dark:via-blue-400/30"
-                    ],
+
                     color === 'green' && [
                         "from-transparent via-green-500/30 to-transparent",
                         "dark:via-green-400/30"
