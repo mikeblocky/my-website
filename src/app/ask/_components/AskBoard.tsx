@@ -339,7 +339,7 @@ export function AskBoard() {
                     </span>
                   </div>
                   
-                  <p className={cn(sansFont.className, "text-lg text-slate-800 dark:text-slate-200 leading-relaxed font-medium mb-2")}>
+                  <p className={cn(sansFont.className, "text-lg text-slate-800 dark:text-slate-200 leading-relaxed font-medium mb-2 whitespace-pre-wrap break-words")}>
                     "{question.body}"
                   </p>
 
@@ -353,7 +353,7 @@ export function AskBoard() {
                           </span>
                         )}
                       </div>
-                      <p className={cn(sansFont.className, "text-base text-slate-700 dark:text-slate-300 leading-relaxed")}>
+                      <p className={cn(sansFont.className, "text-base text-slate-700 dark:text-slate-300 leading-relaxed whitespace-pre-wrap break-words")}>
                         {question.reply}
                       </p>
                     </div>
