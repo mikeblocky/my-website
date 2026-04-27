@@ -3,7 +3,7 @@
 import Image from 'next/image'
 import { AnimatePresence, motion } from 'framer-motion'
 import { ChevronLeft, ChevronRight, X } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { cn } from '@/lib/utils/utils'
 
@@ -50,21 +50,25 @@ export function ArtworksGallery({
 
 	useEffect(() => setMounted(true), [])
 
-	const closeLightbox = () => setSelectedIndex(null)
-	const showPrevious = () => {
-		if (selectedIndex === null) {
-			return
-		}
-		setDirection(-1)
-		setSelectedIndex((selectedIndex - 1 + allArtworks.length) % allArtworks.length)
-	}
-	const showNext = () => {
-		if (selectedIndex === null) {
-			return
-		}
-		setDirection(1)
-		setSelectedIndex((selectedIndex + 1) % allArtworks.length)
-	}
+	const closeLightbox = useCallback(() => setSelectedIndex(null), [])
+	const showPrevious = useCallback(() => {
+		setSelectedIndex((currentIndex) => {
+			if (currentIndex === null) {
+				return currentIndex
+			}
+			setDirection(-1)
+			return (currentIndex - 1 + allArtworks.length) % allArtworks.length
+		})
+	}, [allArtworks.length])
+	const showNext = useCallback(() => {
+		setSelectedIndex((currentIndex) => {
+			if (currentIndex === null) {
+				return currentIndex
+			}
+			setDirection(1)
+			return (currentIndex + 1) % allArtworks.length
+		})
+	}, [allArtworks.length])
 
 	useEffect(() => {
 		if (selectedIndex === null) {
@@ -92,7 +96,7 @@ export function ArtworksGallery({
 			document.body.style.overflow = ''
 			window.removeEventListener('keydown', handleKey)
 		}
-	}, [selectedIndex])
+	}, [closeLightbox, selectedIndex, showNext, showPrevious])
 
 	let absoluteIndex = 0
 

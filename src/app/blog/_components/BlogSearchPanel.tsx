@@ -1,6 +1,6 @@
 'use client'
 
-import { useDeferredValue, useMemo, useState, useEffect } from "react"
+import { useDeferredValue, useMemo, useState } from "react"
 import { AnimatePresence, motion } from "framer-motion"
 import { BlogCard } from "./BlogCard"
 import { StackVertical } from "@/components/layout/layout-stack/layout-stack"
@@ -20,11 +20,6 @@ export function BlogSearchPanel({ posts }: BlogSearchPanelProps) {
     const deferredQuery = useDeferredValue(query)
     const [selectedTheme, setSelectedTheme] = useState('All')
     const [currentPage, setCurrentPage] = useState(1)
-
-    // Reset to page 1 when filters change
-    useEffect(() => {
-        setCurrentPage(1)
-    }, [deferredQuery, selectedTheme])
 
     const filteredPosts = useMemo(() => {
         let result = posts
@@ -48,9 +43,10 @@ export function BlogSearchPanel({ posts }: BlogSearchPanelProps) {
     }, [posts, deferredQuery, selectedTheme])
 
     const totalPages = Math.ceil(filteredPosts.length / POSTS_PER_PAGE)
+    const safeCurrentPage = Math.min(currentPage, Math.max(totalPages, 1))
     const paginatedPosts = filteredPosts.slice(
-        (currentPage - 1) * POSTS_PER_PAGE,
-        currentPage * POSTS_PER_PAGE
+        (safeCurrentPage - 1) * POSTS_PER_PAGE,
+        safeCurrentPage * POSTS_PER_PAGE
     )
 
     const trimmedQuery = deferredQuery.trim()
@@ -69,7 +65,10 @@ export function BlogSearchPanel({ posts }: BlogSearchPanelProps) {
                         id="blog-search"
                         type="search"
                         value={query}
-                        onChange={(event) => setQuery(event.target.value)}
+                        onChange={(event) => {
+                            setQuery(event.target.value)
+                            setCurrentPage(1)
+                        }}
                         placeholder="Search by title, theme, or keyword..."
                         className="w-full bg-transparent px-4 py-3 text-base text-slate-900 placeholder:text-slate-500 focus:outline-none dark:text-slate-100 dark:placeholder:text-blue-200"
                         whileFocus={{ scale: 1.01 }}
@@ -89,7 +88,10 @@ export function BlogSearchPanel({ posts }: BlogSearchPanelProps) {
                     {THEMES.map(theme => (
                         <button
                             key={theme}
-                            onClick={() => setSelectedTheme(theme)}
+                            onClick={() => {
+                                setSelectedTheme(theme)
+                                setCurrentPage(1)
+                            }}
                             className={`px-3 py-1.5 text-xs font-medium rounded-full transition-all duration-200 border ${
                                 selectedTheme === theme
                                     ? 'bg-blue-500 text-white border-blue-500 shadow-md shadow-blue-500/20'
@@ -147,7 +149,7 @@ export function BlogSearchPanel({ posts }: BlogSearchPanelProps) {
                 <div className="mt-8 flex items-center justify-center gap-4">
                     <button
                         onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
-                        disabled={currentPage === 1}
+                        disabled={safeCurrentPage === 1}
                         className="p-2 rounded-lg text-slate-500 hover:bg-slate-100 disabled:opacity-50 disabled:hover:bg-transparent dark:text-slate-400 dark:hover:bg-slate-800 transition-colors"
                         aria-label="Previous page"
                     >
@@ -160,7 +162,7 @@ export function BlogSearchPanel({ posts }: BlogSearchPanelProps) {
                                 key={i}
                                 onClick={() => setCurrentPage(i + 1)}
                                 className={`w-8 h-8 rounded-lg text-sm font-medium transition-colors ${
-                                    currentPage === i + 1
+                                    safeCurrentPage === i + 1
                                         ? 'bg-blue-500 text-white'
                                         : 'text-slate-600 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800'
                                 }`}
@@ -172,7 +174,7 @@ export function BlogSearchPanel({ posts }: BlogSearchPanelProps) {
 
                     <button
                         onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
-                        disabled={currentPage === totalPages}
+                        disabled={safeCurrentPage === totalPages}
                         className="p-2 rounded-lg text-slate-500 hover:bg-slate-100 disabled:opacity-50 disabled:hover:bg-transparent dark:text-slate-400 dark:hover:bg-slate-800 transition-colors"
                         aria-label="Next page"
                     >

@@ -2,7 +2,7 @@
 
 import { cn } from '@/lib/utils/utils'
 import { monoFont } from '@/styles/fonts/fonts'
-import { Github, Twitter, Mail } from 'lucide-react'
+import { Bird, GitFork, Mail } from 'lucide-react'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 
@@ -31,8 +31,8 @@ export function BaseFooter({
 }: BaseFooterProps) {
     const socialLinks = [
         { href: "mailto:me@mikeblocky.com", icon: <Mail className="w-3 h-3 sm:w-4 sm:h-4" /> },
-        { href: "https://github.com/mikeblocky", icon: <Github className="w-3 h-3 sm:w-4 sm:h-4" /> },
-        { href: "https://x.com/mikeblocky", icon: <Twitter className="w-3 h-3 sm:w-4 sm:h-4" /> }
+        { href: "https://github.com/mikeblocky", icon: <GitFork className="w-3 h-3 sm:w-4 sm:h-4" /> },
+        { href: "https://x.com/mikeblocky", icon: <Bird className="w-3 h-3 sm:w-4 sm:h-4" /> }
     ]
 
     const paddingTopClass = spacing === 'compact' ? 'pt-6' : spacing === 'none' ? 'pt-0' : 'pt-12'

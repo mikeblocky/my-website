@@ -19,9 +19,7 @@ type KvClient = {
 }
 
 declare global {
-	// eslint-disable-next-line no-var
 	var __redisClient: RedisClient | undefined
-	// eslint-disable-next-line no-var
 	var __memorySortedSets: Map<string, Array<{ score: number; value: string }>> | undefined
 }
 

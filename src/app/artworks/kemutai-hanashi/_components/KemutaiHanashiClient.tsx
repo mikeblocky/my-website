@@ -306,6 +306,7 @@ function Lightbox({ allSrcs, initialIndex, onClose }: {
    ══════════════════════════════════════════════ */
 export function KemutaiHanashiClient({ items }: Props) {
 	const [lightboxIndex, setLightboxIndex] = useState<number | null>(null)
+	const [scatterSeed] = useState(() => Math.floor(Math.random() * 100000))
 	const allSrcs = items.map((i) => i.src)
 
 	const oceanRef = useRef<HTMLDivElement>(null)
@@ -315,7 +316,7 @@ export function KemutaiHanashiClient({ items }: Props) {
 
 	/* ── truly random scatter: no grid logic, pure chaos ── */
 	const scatterData = useMemo(() => {
-		const rand = seededRandom(Date.now() % 100000) // different every load
+		const rand = seededRandom(scatterSeed)
 		return items.map(() => {
 			const left = 2 + rand() * 72            // 2-74% from left
 			const rotation = (rand() - 0.5) * 20    // -10 to +10 degrees
@@ -323,7 +324,7 @@ export function KemutaiHanashiClient({ items }: Props) {
 			const zIndex = Math.floor(rand() * 20)
 			return { left, rotation, width, zIndex }
 		})
-	}, [items])
+	}, [items, scatterSeed])
 
 	return (
 		<div className="relative min-h-screen">

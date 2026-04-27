@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion'
 import Link from 'next/link'
-import { Github, Twitter, Mail } from 'lucide-react'
+import { Bird, GitFork, Mail } from 'lucide-react'
 import { cn } from '@/lib/utils/utils'
 import { monoFont } from '@/styles/fonts/fonts'
 import { StackVertical } from '@/components/layout/layout-stack/layout-stack'
@@ -45,12 +45,12 @@ export function SocialLinks() {
     const links = [
         {
             href: "https://github.com/mikeblocky",
-            icon: <Github className="w-4 h-4" />,
+            icon: <GitFork className="w-4 h-4" />,
             label: "github"
         },
         {
             href: "https://x.com/mikeblocky",
-            icon: <Twitter className="w-4 h-4" />,
+            icon: <Bird className="w-4 h-4" />,
             label: "twitter"
         },
         {

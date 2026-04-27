@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState, useSyncExternalStore } from 'react';
 import { cn } from '@/lib/utils/utils';
 
 interface TableOfContentsProps {
@@ -11,22 +11,32 @@ interface HeadingItem {
   level: number;
 }
 
+const subscribe = () => () => {};
+
+function getHeadings(contentId: string): HeadingItem[] {
+  const content = document.getElementById(contentId);
+  if (!content) return [];
+
+  const elements = content.querySelectorAll('h1, h2, h3');
+  return Array.from(elements).map((element) => ({
+    id: element.id,
+    text: element.textContent || '',
+    level: parseInt(element.tagName[1]),
+  }));
+}
+
 export function TableOfContents({ contentId }: TableOfContentsProps) {
-  const [headings, setHeadings] = useState<HeadingItem[]>([]);
   const [activeId, setActiveId] = useState<string>('');
+  const mounted = useSyncExternalStore(subscribe, () => true, () => false);
+  const headings = useMemo(
+    () => (mounted ? getHeadings(contentId) : []),
+    [contentId, mounted]
+  );
 
   useEffect(() => {
     const content = document.getElementById(contentId);
     if (!content) return;
-
     const elements = content.querySelectorAll('h1, h2, h3');
-    const items: HeadingItem[] = Array.from(elements).map((element) => ({
-      id: element.id,
-      text: element.textContent || '',
-      level: parseInt(element.tagName[1]),
-    }));
-
-    setHeadings(items);
 
     const observer = new IntersectionObserver(
       (entries) => {
@@ -42,7 +52,7 @@ export function TableOfContents({ contentId }: TableOfContentsProps) {
     elements.forEach((element) => observer.observe(element));
 
     return () => observer.disconnect();
-  }, [contentId]);
+  }, [contentId, headings]);
 
   return (
     <div className="fixed right-8 top-32 w-64 max-h-[calc(100vh-12rem)] overflow-y-auto hidden xl:block">
