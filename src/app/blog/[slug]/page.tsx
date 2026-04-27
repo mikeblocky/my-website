@@ -1,9 +1,26 @@
 import { notFound } from 'next/navigation'
+import { existsSync } from 'node:fs'
+import path from 'node:path'
 import { blogPosts } from '../_data/posts'
 
 const SITE_URL = 'https://www.mikeblocky.com'
+const SOCIAL_IMAGE_EXTENSIONS = ['png', 'jpg', 'jpeg', 'webp'] as const
 
 type Params = Promise<{ slug: string }>
+
+function resolveSocialImageUrl(slug: string, imageName: 'opengraph-image' | 'twitter-image') {
+    const postDir = path.join(process.cwd(), 'src', 'app', 'blog', 'posts', slug)
+
+    for (const extension of SOCIAL_IMAGE_EXTENSIONS) {
+        const imagePath = path.join(postDir, `${imageName}.${extension}`)
+
+        if (existsSync(imagePath)) {
+            return new URL(`/blog/posts/${slug}/${imageName}.${extension}`, SITE_URL).toString()
+        }
+    }
+
+    return undefined
+}
 
 // Generate static params for all blog posts
 export async function generateStaticParams() {
@@ -24,9 +41,8 @@ export async function generateMetadata({ params }: { params: Params }) {
 
     const title = `${post.title} | mikeblocky.com`
     const description = post.description
-    const extension = post.imageFormat || 'png'
-    const openGraphImageUrl = new URL(`/blog/posts/${slug}/opengraph-image.${extension}`, SITE_URL).toString()
-    const twitterImageUrl = new URL(`/blog/posts/${slug}/twitter-image.${extension}`, SITE_URL).toString()
+    const openGraphImageUrl = resolveSocialImageUrl(slug, 'opengraph-image')
+    const twitterImageUrl = resolveSocialImageUrl(slug, 'twitter-image')
     const altText = description || post.title
   
     return {
@@ -35,20 +51,20 @@ export async function generateMetadata({ params }: { params: Params }) {
       openGraph: {
         title,
         description,
-        images: [
+        images: openGraphImageUrl ? [
           {
             url: openGraphImageUrl,
             width: 1200,
             height: 630,
             alt: altText
           },
-        ],
+        ] : undefined,
       },
       twitter: {
         card: "summary_large_image",
         title,
         description,
-        images: [twitterImageUrl],
+        images: twitterImageUrl ? [twitterImageUrl] : undefined,
       },
     };
   }

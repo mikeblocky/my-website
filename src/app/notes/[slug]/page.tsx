@@ -1,6 +1,8 @@
 import { notFound } from 'next/navigation'
 import { notes } from '../_data/posts'
 
+const SITE_URL = 'https://www.mikeblocky.com'
+
 type Params = Promise<{ slug: string }>
 
 // Generate static params for all reference pages
@@ -12,32 +14,35 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: { params: Params }) {
     const { slug } = await params
+    const note = notes.find((post) => post.slug === slug)
+
+    if (!note) {
+        return {
+            title: 'Note not found | mikeblocky.com'
+        }
+    }
   
     return {
-      title: `${notes.find(post => post.slug === slug)?.title} | mikeblocky.com`,
+      title: `${note.title} | mikeblocky.com`,
+      description: note.description,
       openGraph: {
-        title: `${notes.find(post => post.slug === slug)?.title} | mikeblocky.com`,
-        description: `${notes.find(post => post.slug === slug)?.description}`,
+        title: `${note.title} | mikeblocky.com`,
+        description: note.description,
         images: [
           {
-            url: `/references/posts/${slug}/opengraph-image.png`,
+            url: new URL('/notes/opengraph-image.png', SITE_URL).toString(),
             width: 1200,
             height: 630,
-            alt: `${notes.find(post => post.slug === slug)?.description}`,
+            alt: note.description,
           },
         ],
       },
       twitter: {
         card: "summary_large_image",
-        title: `${notes.find(post => post.slug === slug)?.title} | mikeblocky.com`,
-        description: `${notes.find(post => post.slug === slug)?.description}`,
+        title: `${note.title} | mikeblocky.com`,
+        description: note.description,
         images: [
-          {
-            url: `/references/posts/${slug}/twitter-image.png`,
-            width: 1200,
-            height: 630,
-            alt: `${notes.find(post => post.slug === slug)?.description}`,
-          },
+          new URL('/notes/twitter-image.png', SITE_URL).toString(),
         ],
       },
     };
