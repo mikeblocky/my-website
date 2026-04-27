@@ -231,54 +231,71 @@ export function AskBoard() {
 
   return (
     <StackVertical gap="lg">
-      <form className="space-y-4" onSubmit={handleSubmit}>
-        <div className="grid gap-3">
-          <label className="flex flex-col gap-2">
-            <span className="text-base font-semibold text-foreground">
-              Alias (optional)
-            </span>
+      <form 
+        className="rounded-xl border border-blue-200 bg-white dark:border-blue-800 dark:bg-slate-950 transition-colors focus-within:border-blue-400 dark:focus-within:border-blue-500" 
+        onSubmit={handleSubmit}
+      >
+        <div className="flex flex-col">
+          {/* Top: Alias Field */}
+          <div className="px-4 py-3 border-b border-blue-100 dark:border-blue-900">
             <input
               type="text"
               value={formState.author}
               onChange={(event) => setFormState((state) => ({ ...state, author: event.target.value }))}
-              placeholder="How should I call you?"
-              className="w-full rounded-lg border border-blue-200 bg-white px-3 py-2 text-sm text-slate-900 focus:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-200 dark:border-blue-500/50 dark:bg-slate-900 dark:text-slate-100 dark:focus:border-blue-400 dark:focus:ring-blue-500/30"
+              placeholder="Your alias (optional)"
+              className={cn(
+                sansFont.className,
+                "w-full bg-transparent text-sm font-semibold text-blue-600 placeholder:text-blue-300 focus:outline-none dark:text-blue-400 dark:placeholder:text-blue-500/40"
+              )}
             />
-          </label>
+          </div>
 
-          <label className="flex flex-col gap-2">
-            <span className="text-base font-semibold text-foreground">
-              Your question
-            </span>
+          {/* Middle: Question Field */}
+          <div className="px-4 py-2">
             <textarea
               value={formState.body}
               onChange={(event) => setFormState((state) => ({ ...state, body: event.target.value }))}
+              onInput={(e) => {
+                e.currentTarget.style.height = 'auto';
+                e.currentTarget.style.height = `${e.currentTarget.scrollHeight}px`;
+              }}
               placeholder="Ask me anything..."
-              rows={4}
-              className="w-full rounded-lg border border-blue-200 bg-white px-3 py-3 text-sm text-slate-900 focus:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-200 dark:border-blue-500/50 dark:bg-slate-900 dark:text-slate-100 dark:focus:border-blue-400 dark:focus:ring-blue-500/30"
+              rows={1}
+              className={cn(
+                sansFont.className,
+                "w-full bg-transparent py-2 text-base text-slate-900 placeholder:text-slate-400 focus:outline-none dark:text-slate-100 dark:placeholder:text-slate-600 resize-none overflow-hidden min-h-[100px]"
+              )}
             />
-          </label>
-        </div>
+          </div>
 
-        {pushSupported && (
-          <label className="flex items-center gap-2 cursor-pointer select-none">
-            <input
-              type="checkbox"
-              checked={wantNotification}
-              onChange={(e) => setWantNotification(e.target.checked)}
-              className="h-4 w-4 rounded border-blue-300 text-blue-600 focus:ring-blue-500 accent-blue-600"
-            />
-            <span className={cn(sansFont.className, "text-sm text-slate-600 dark:text-slate-400 flex items-center gap-1.5")}>
-              <Bell size={14} className="text-blue-500" />
-              Notify me when answered
-            </span>
-          </label>
-        )}
-
-        <div className="flex justify-end">
-          <Button type="submit" disabled={!formState.body.trim() || isPending}>
-            Send question
-          </Button>
+          {/* Bottom: Action Bar */}
+          <div className="px-4 py-3 border-t border-blue-500/10 flex items-center justify-between gap-4">
+            <div className="flex items-center">
+              {pushSupported && (
+                <label className="flex items-center gap-2.5 cursor-pointer group/notify select-none">
+                  <input
+                    type="checkbox"
+                    checked={wantNotification}
+                    onChange={(e) => setWantNotification(e.target.checked)}
+                    className="h-4 w-4 rounded border-blue-300 text-blue-600 focus:ring-0 accent-blue-600 cursor-pointer"
+                  />
+                  <span className={cn(sansFont.className, "text-sm font-medium text-slate-500 dark:text-slate-400 flex items-center gap-1.5 group-hover/notify:text-blue-500 transition-colors")}>
+                    <Bell size={14} />
+                    Notify me
+                  </span>
+                </label>
+              )}
+            </div>
+            
+            <Button 
+              type="submit" 
+              size="sm"
+              disabled={!formState.body.trim() || isPending}
+              className="rounded-lg px-5 py-1.5 h-10 text-sm font-bold bg-blue-600 hover:bg-blue-700 text-white transition-colors"
+            >
+              Send question
+            </Button>
+          </div>
         </div>
       </form>
 
@@ -315,9 +332,9 @@ export function AskBoard() {
                 <StackVertical gap="sm">
                   <div className="flex justify-between items-start mb-1">
                     <h4 className="text-sm font-semibold text-blue-700 dark:text-blue-300 flex items-center gap-2">
-                      <span className={cn(monoFont.className, "bg-blue-50 dark:bg-blue-900/40 px-2.5 py-1 rounded-full")}>{question.author} asked</span>
+                      <span className={cn(sansFont.className, "bg-blue-50 dark:bg-blue-900/40 px-2.5 py-1 rounded-full")}>{question.author} asked</span>
                     </h4>
-                    <span className={cn(monoFont.className, "text-xs text-muted-foreground mt-1.5")}>
+                    <span className={cn(sansFont.className, "text-xs text-muted-foreground mt-1.5")}>
                       {formatDate(question.createdAt)}
                     </span>
                   </div>
@@ -331,7 +348,7 @@ export function AskBoard() {
                       <div className="flex items-center gap-2 mb-2">
                         <span className="text-sm font-bold text-blue-900 dark:text-blue-200">Answer</span>
                         {question.repliedAt && (
-                          <span className={cn(monoFont.className, "text-xs text-blue-400 dark:text-blue-500 ml-auto")}>
+                          <span className={cn(sansFont.className, "text-xs text-blue-400 dark:text-blue-500 ml-auto")}>
                             {formatDate(question.repliedAt)}
                           </span>
                         )}
@@ -451,7 +468,7 @@ export function AskBoard() {
             className="fixed bottom-6 left-1/2 -translate-x-1/2 md:left-auto md:right-6 md:translate-x-0 z-50 flex items-center gap-2 rounded-xl border border-blue-200 bg-white/95 backdrop-blur-sm pl-4 pr-1.5 py-1.5 shadow-sm dark:border-blue-500/30 dark:bg-[#1a1525] w-[calc(100%-2rem)] md:w-auto max-w-sm"
           >
             <div className="h-2 w-2 rounded-full bg-blue-600 dark:bg-blue-400 shrink-0" />
-            <span className={cn(monoFont.className, "text-sm text-slate-800 dark:text-slate-200 truncate")}>
+            <span className={cn(sansFont.className, "text-sm text-slate-800 dark:text-slate-200 truncate")}>
               {notification}
             </span>
             <button

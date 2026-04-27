@@ -33,8 +33,9 @@ export async function POST(request: NextRequest) {
 
   await saveQuestion(question)
 
-  // Notify owner about the new question (non-blocking)
-  notifyOwnerNewQuestion(author, body).catch(() => {})
+  // Await the webhook in the request lifecycle so serverless execution
+  // doesn't end before Discord receives the POST.
+  await notifyOwnerNewQuestion(author, body)
 
   return NextResponse.json({ question }, { status: 201 })
 }

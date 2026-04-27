@@ -37,15 +37,23 @@ export async function notifyOwnerNewQuestion(author: string, body: string) {
       },
     }
 
-    await fetch(webhookUrl, {
+    const response = await fetch(webhookUrl, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         username: 'mikeblocky.com',
         avatar_url: 'https://mikeblocky.com/icon-512.png',
+        content: 'New Ask board question received.',
         embeds: [embed],
       }),
     })
+
+    if (!response.ok) {
+      const errorText = await response.text().catch(() => '')
+      throw new Error(
+        `Discord webhook responded with ${response.status}${errorText ? `: ${errorText}` : ''}`
+      )
+    }
   } catch (err) {
     // Non-blocking: don't fail the request if notification fails
     console.error('[notify] Discord webhook failed:', err)
