@@ -12,7 +12,7 @@ interface BlogSearchPanelProps {
     posts: BlogPost[]
 }
 
-const THEMES = ['All', 'Skip and Loafer', 'Kemutai Hanashi', 'Fanfiction', 'Translation', 'Personal']
+const THEMES = ['All', 'Skip and Loafer', 'Kemutai Hanashi', 'Hoshiai no Sora', 'Fanfiction', 'Translation', 'Personal']
 const POSTS_PER_PAGE = 5
 
 export function BlogSearchPanel({ posts }: BlogSearchPanelProps) {

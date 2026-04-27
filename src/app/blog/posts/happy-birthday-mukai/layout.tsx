@@ -11,7 +11,7 @@ export const metadata: Metadata = {
     },
     twitter: {
         card: 'summary_large_image',
-        title: 'My thoughts about Kemutai Hanashi - Chapter 1',
+        title: 'Happy birthday, Mukai',
         description: 'May 19th may seem to be a bright day, for us.',
     }
 }

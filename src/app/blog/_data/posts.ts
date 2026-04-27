@@ -1,6 +1,15 @@
 import { BlogPost } from "../_types/blog"
 
 export const blogPosts: BlogPost[] = [
+     {
+        id: 16,
+        title: "My thoughts about Hoshiai no Sora",
+        description: "To define who we are, our purposes and to go with it.",
+        date: "April 28th, 2026",
+        readingTime: "5 min read",
+        slug: "hoshiai-no-sora",
+        themes: ["Hoshiai no Sora"]
+    },
     {
         id: 15,
         title: "I have my words, and time is ticking",
