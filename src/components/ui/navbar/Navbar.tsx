@@ -38,8 +38,9 @@ export function Navbar() {
         { href: '/blog', label: 'Blog' },
         { href: '/artworks', label: 'Artworks' },
         { href: '/diary', label: 'Diary' },
-        { href: '/friends', label: 'Friend list' },
-        { href: '/ask', label: 'Ask' }
+        { href: '/ask', label: 'Ask' },
+        { href: '/pet', label: 'Pet annoy' },
+        { href: '/friends', label: 'Friend list' }
     ]
 
     // Close menu when clicking outside
