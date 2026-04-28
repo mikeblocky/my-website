@@ -1,4 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { getRedisClient, lastPetGiftKey } from '@/lib/kv/client'
+
+export async function GET() {
+  try {
+    const redis = await getRedisClient()
+    const lastGif = await redis.get(lastPetGiftKey)
+    return NextResponse.json({ gif: lastGif })
+  } catch (err) {
+    return NextResponse.json({ gif: null })
+  }
+}
 
 export async function POST(request: NextRequest) {
   const webhookUrl = process.env.DISCORD_WEBHOOK_URL
@@ -20,6 +31,10 @@ export async function POST(request: NextRequest) {
     if (!gifUrl) {
       throw new Error('Failed to fetch GIF from source')
     }
+
+    // Save to KV
+    const redis = await getRedisClient()
+    await redis.set(lastPetGiftKey, gifUrl)
 
     const response = await fetch(webhookUrl, {
       method: 'POST',

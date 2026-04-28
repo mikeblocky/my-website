@@ -1,6 +1,7 @@
 import { createClient, RedisClientType } from 'redis'
 
 export const askQuestionsKey = 'ask:questions'
+export const lastPetGiftKey = 'pet:last_gift'
 
 type RedisClient = RedisClientType<any, any, any>
 type ZAddMember = { score: number; value: string }
@@ -16,11 +17,14 @@ type KvClient = {
 		options?: { REV?: boolean }
 	) => Promise<string[]>
 	zRem: (key: string, member: string) => Promise<number>
+	set: (key: string, value: string) => Promise<string | null>
+	get: (key: string) => Promise<string | null>
 }
 
 declare global {
 	var __redisClient: RedisClient | undefined
 	var __memorySortedSets: Map<string, Array<{ score: number; value: string }>> | undefined
+	var __memoryStrings: Map<string, string> | undefined
 }
 
 const redisUrl = process.env.REDIS_URL
@@ -28,6 +32,9 @@ const redisUrl = process.env.REDIS_URL
 function getMemoryClient(): KvClient {
 	if (!global.__memorySortedSets) {
 		global.__memorySortedSets = new Map()
+	}
+	if (!global.__memoryStrings) {
+		global.__memoryStrings = new Map()
 	}
 
 	const getSet = (key: string) => {
@@ -104,6 +111,13 @@ function getMemoryClient(): KvClient {
 				return 1
 			}
 			return 0
+		},
+		async set(key, value) {
+			global.__memoryStrings?.set(key, value)
+			return value
+		},
+		async get(key) {
+			return global.__memoryStrings?.get(key) || null
 		}
 	}
 }

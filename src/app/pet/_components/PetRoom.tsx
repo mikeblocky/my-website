@@ -30,6 +30,21 @@ export function PetRoom() {
   }
 
 
+  useEffect(() => {
+    async function fetchLastGif() {
+      try {
+        const res = await fetch('/api/annoy')
+        const data = await res.json()
+        if (data.gif) {
+          setLastGif(data.gif)
+        }
+      } catch (err) {
+        console.error('Failed to fetch last gift:', err)
+      }
+    }
+    fetchLastGif()
+  }, [])
+
   return (
     <div className="space-y-12">
       <div className="flex flex-col items-center justify-center space-y-4">
