@@ -9,7 +9,7 @@ import { ThemeToggle } from "@/components/ui/theme/theme-toggle"
 import { IndividualPageFooter } from "@/components/layout/footer/IndividualPageFooter"
 
 export const metadata: Metadata = {
-  title: "Pet Room | mikeblocky.com",
+  title: "Pet annoy | mikeblocky.com",
   description: "Send a small pet gift to Mike via Discord.",
 }
 
@@ -31,7 +31,7 @@ export default function PetPage() {
             Pet annoy 🐾
           </TextHeading>
           <Text variant="muted" size="sm" className="leading-relaxed">
-            Every visit and every click here sends a random animal GIF to my Discord. Use this to annoy me.
+            Every click here sends a random animal GIF to my Discord. Use this to annoy me.
           </Text>
         </header>
 

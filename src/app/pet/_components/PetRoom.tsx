@@ -29,9 +29,6 @@ export function PetRoom() {
     }
   }
 
-  useEffect(() => {
-    sendGift()
-  }, [])
 
   return (
     <div className="space-y-12">
