@@ -1,13 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getRedisClient, lastPetGiftKey } from '@/lib/kv/client'
+import { getRedisClient, lastPetGiftKey, totalPetGiftsKey } from '@/lib/kv/client'
 
 export async function GET() {
   try {
     const redis = await getRedisClient()
     const lastGif = await redis.get(lastPetGiftKey)
-    return NextResponse.json({ gif: lastGif })
+    const total = await redis.get(totalPetGiftsKey)
+    return NextResponse.json({ gif: lastGif, total: parseInt(total || '0', 10) })
   } catch (err) {
-    return NextResponse.json({ gif: null })
+    return NextResponse.json({ gif: null, total: 0 })
   }
 }
 
@@ -32,9 +33,10 @@ export async function POST(request: NextRequest) {
       throw new Error('Failed to fetch GIF from source')
     }
 
-    // Save to KV
+    // Save to KV and increment total
     const redis = await getRedisClient()
     await redis.set(lastPetGiftKey, gifUrl)
+    const newTotal = await redis.incr(totalPetGiftsKey)
 
     const response = await fetch(webhookUrl, {
       method: 'POST',
@@ -49,7 +51,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Failed to send to Discord' }, { status: 500 })
     }
 
-    return NextResponse.json({ success: true, gif: gifUrl })
+    return NextResponse.json({ success: true, gif: gifUrl, total: newTotal })
   } catch (err) {
     console.error('Error in annoy route:', err)
     return NextResponse.json({ error: 'Internal error' }, { status: 500 })

@@ -20,7 +20,9 @@ export function PetRoom() {
       const data = await res.json()
       if (data.gif) {
         setLastGif(data.gif)
-        setGiftCount(prev => prev + 1)
+        if (typeof data.total === 'number') {
+          setGiftCount(data.total)
+        }
       }
     } catch (err) {
       console.error('Failed to send gift:', err)
@@ -29,7 +31,6 @@ export function PetRoom() {
     }
   }
 
-
   useEffect(() => {
     async function fetchLastGif() {
       try {
@@ -37,6 +38,9 @@ export function PetRoom() {
         const data = await res.json()
         if (data.gif) {
           setLastGif(data.gif)
+        }
+        if (typeof data.total === 'number') {
+          setGiftCount(data.total)
         }
       } catch (err) {
         console.error('Failed to fetch last gift:', err)
@@ -58,7 +62,7 @@ export function PetRoom() {
 
         {giftCount > 0 && (
           <Text variant="muted" size="xs" className="font-mono">
-            {giftCount} {giftCount === 1 ? 'gift' : 'gifts'} shared today
+            {giftCount} {giftCount === 1 ? 'gift' : 'gifts'} shared in total
           </Text>
         )}
       </div>

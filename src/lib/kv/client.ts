@@ -2,6 +2,7 @@ import { createClient, RedisClientType } from 'redis'
 
 export const askQuestionsKey = 'ask:questions'
 export const lastPetGiftKey = 'pet:last_gift'
+export const totalPetGiftsKey = 'pet:total_gifts'
 
 type RedisClient = RedisClientType<any, any, any>
 type ZAddMember = { score: number; value: string }
@@ -19,6 +20,7 @@ type KvClient = {
 	zRem: (key: string, member: string) => Promise<number>
 	set: (key: string, value: string) => Promise<string | null>
 	get: (key: string) => Promise<string | null>
+	incr: (key: string) => Promise<number>
 }
 
 declare global {
@@ -118,6 +120,12 @@ function getMemoryClient(): KvClient {
 		},
 		async get(key) {
 			return global.__memoryStrings?.get(key) || null
+		},
+		async incr(key) {
+			const current = global.__memoryStrings?.get(key)
+			const next = (parseInt(current || '0', 10) + 1).toString()
+			global.__memoryStrings?.set(key, next)
+			return parseInt(next, 10)
 		}
 	}
 }
