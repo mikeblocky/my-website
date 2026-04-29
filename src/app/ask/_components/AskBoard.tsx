@@ -319,17 +319,17 @@ export function AskBoard({ initialQuestions = seededQuestions }: { initialQuesti
       )}
 
       <section className="space-y-6">
-        <div className="flex items-baseline justify-between border-b border-border/60 pb-3">
-          <TextHeading as="h3" weight="semibold" className="text-lg">
+        <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 border-b border-border/60 pb-3 sm:flex-nowrap">
+          <TextHeading as="h3" weight="semibold" className="mt-0 mb-0 text-lg">
             Questions
           </TextHeading>
-          <div className="flex items-center gap-3">
+          <div className="flex shrink-0 items-center gap-3">
             {isRefreshing ? (
               <Text variant="muted" size="xs">
                 Refreshing...
               </Text>
             ) : null}
-            <Text variant="muted" size="sm">
+            <Text variant="muted" size="sm" className="whitespace-nowrap">
               {questions.length} questions collected
             </Text>
           </div>
@@ -347,12 +347,12 @@ export function AskBoard({ initialQuestions = seededQuestions }: { initialQuesti
               <article 
                 id={`question-${question.id}`} 
                 key={question.id} 
-                className="group relative rounded-2xl border border-border/60 bg-background/80 p-6 transition-colors hover:border-blue-500/20 hover:bg-muted/15"
+                className="group relative rounded-2xl border border-border/60 bg-background/80 p-6 transition-colors hover:border-blue-500/15 hover:bg-muted/10"
               >
                 <StackVertical gap="sm">
                   <div className="flex justify-between items-start mb-1">
-                    <h4 className="text-sm font-semibold text-blue-700 dark:text-blue-300 flex items-center gap-2">
-                      <span className={cn(sansFont.className, "rounded-full bg-blue-50 px-2.5 py-1 dark:bg-blue-950/50")}>{question.author} asked</span>
+                    <h4 className="flex items-center gap-2 text-sm font-semibold text-blue-600 dark:text-blue-400">
+                      <span className={cn(sansFont.className, "rounded-full border border-blue-200/70 bg-blue-50/70 px-2.5 py-1 dark:border-blue-500/20 dark:bg-blue-500/10")}>{question.author} asked</span>
                     </h4>
                     <span className={cn(sansFont.className, "text-xs text-muted-foreground mt-1.5")}>
                       {formatDate(question.createdAt)}
@@ -364,11 +364,11 @@ export function AskBoard({ initialQuestions = seededQuestions }: { initialQuesti
                   </p>
 
                   {question.reply && (
-                    <div className="mt-3 rounded-xl border border-border/60 bg-muted/30 p-5">
+                    <div className="mt-3 rounded-xl border border-blue-200/60 bg-blue-50/30 p-5 dark:border-blue-500/15 dark:bg-blue-500/5">
                       <div className="flex items-center gap-2 mb-2">
-                        <span className="text-sm font-bold text-blue-900 dark:text-blue-200">Answer</span>
+                        <span className="text-sm font-bold text-blue-600 dark:text-blue-400">Answer</span>
                         {question.repliedAt && (
-                          <span className={cn(sansFont.className, "text-xs text-blue-400 dark:text-blue-500 ml-auto")}>
+                          <span className={cn(sansFont.className, "ml-auto text-xs text-muted-foreground")}>
                             {formatDate(question.repliedAt)}
                           </span>
                         )}
@@ -393,7 +393,7 @@ export function AskBoard({ initialQuestions = seededQuestions }: { initialQuesti
                           setReplyingTo(replyingTo === question.id ? null : question.id)
                           setReplyBody('')
                         }}
-                        className="flex items-center gap-1.5 rounded-full border border-blue-200 bg-blue-50 px-3 py-1.5 text-xs font-medium text-blue-600 transition-colors hover:text-blue-800 dark:border-blue-500/30 dark:bg-blue-950/50 dark:text-blue-400 dark:hover:text-blue-300"
+                        className="flex items-center gap-1.5 rounded-full border border-blue-200/70 bg-blue-50/70 px-3 py-1.5 text-xs font-medium text-blue-600 transition-colors hover:border-blue-300 hover:bg-blue-50 dark:border-blue-500/20 dark:bg-blue-500/10 dark:text-blue-400 dark:hover:border-blue-500/30 dark:hover:bg-blue-500/15"
                       >
                         <MessageSquareReply size={14} />
                         Reply

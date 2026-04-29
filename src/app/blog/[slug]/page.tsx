@@ -1,9 +1,10 @@
 import { notFound } from 'next/navigation'
-import { existsSync } from 'node:fs'
+import { existsSync, readFileSync } from 'node:fs'
 import path from 'node:path'
 import { buildSocialMetadata } from '@/lib/metadata/social'
 import { blogPosts, getBlogPostBySlug } from '../_data/posts'
 import { BlogPostMdxPage } from '../_components/BlogPostMdxPage'
+import { extractOutlineFromMdx } from '@/lib/mdx/outline'
 
 const SITE_URL = 'https://www.mikeblocky.com'
 const SOCIAL_IMAGE_EXTENSIONS = ['png', 'jpg', 'jpeg', 'webp'] as const
@@ -79,6 +80,11 @@ export default async function BlogPost({
         return <PostComponent />
     }
 
-    return <BlogPostMdxPage post={post} />
+    const contentPath = path.join(process.cwd(), 'src', 'app', 'blog', 'posts', slug, 'content.mdx')
+    const outlineSections = existsSync(contentPath)
+        ? extractOutlineFromMdx(readFileSync(contentPath, 'utf8'))
+        : extractOutlineFromMdx('')
+
+    return <BlogPostMdxPage post={post} outlineSections={outlineSections} />
 }
 

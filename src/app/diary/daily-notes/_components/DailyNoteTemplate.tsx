@@ -3,9 +3,8 @@
 import BaseContainer from "@/components/layout/container/base-container"
 import { IndividualPageFooter } from "@/components/layout/footer/IndividualPageFooter"
 import { StackVertical } from "@/components/layout/layout-stack/layout-stack"
-import { DynamicBreadcrumb } from "@/components/ui/primitives/breadcrumb"
-import { ThemeToggle } from "@/components/ui/theme/theme-toggle"
-import TextHeading from "@/components/ui/text-heading/text-heading"
+import Text from "@/components/ui/text/text"
+import { ContentPageHeader } from "@/components/layout/page-header/ContentPageHeader"
 
 interface DailyNoteTemplateProps {
     title: string
@@ -16,22 +15,22 @@ export function DailyNoteTemplate({ title, children }: DailyNoteTemplateProps) {
     return (
         <BaseContainer size="md" paddingX="md" paddingY="lg">
             <StackVertical gap="md">
-                <div className="flex items-center justify-between">
-                    <DynamicBreadcrumb
-                        items={[
-                            { href: '/', label: 'Home', emoji: '🐶' },
-                            { href: '/diary', label: 'Diary' },
-                            { href: '/diary/daily-notes', label: 'Daily notes' },
-                            { label: title }
-                        ]}
-                    />
-                    <ThemeToggle />
-                </div>
+                <ContentPageHeader
+                    title={title}
+                    breadcrumbs={[
+                        { href: '/', label: 'Home', emoji: '🐶' },
+                        { href: '/diary', label: 'Diary' },
+                        { href: '/diary/daily-notes', label: 'Daily notes' },
+                        { label: title }
+                    ]}
+                >
+                    <Text variant="muted" size="sm">
+                        A daily note from the diary archive.
+                    </Text>
+                </ContentPageHeader>
 
                 <article>
-                    <TextHeading as="h1">{title}</TextHeading>
-
-                    <div className="prose mt-8 max-w-none dark:prose-invert">
+                    <div className="prose max-w-none pt-2 dark:prose-invert">
                         {children}
                     </div>
                 </article>

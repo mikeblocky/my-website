@@ -152,7 +152,7 @@ export default function CodeBlock({ code, language, className }: CodeBlockProps)
 
     return (
         <div className={cn(
-            "relative my-4",
+            "relative my-4 max-w-full",
             "rounded-lg overflow-hidden",
             "border w-full",
             isDark
@@ -185,7 +185,7 @@ export default function CodeBlock({ code, language, className }: CodeBlockProps)
                         className={cn(
                             highlightClassName,
                             "font-code",
-                            "overflow-x-auto whitespace-pre-wrap break-words",
+                            "max-w-full overflow-x-hidden whitespace-pre-wrap break-words [overflow-wrap:anywhere]",
                             "transition-colors duration-200",
                             "p-4",
                             "text-[13px] sm:text-sm leading-relaxed",
@@ -197,7 +197,13 @@ export default function CodeBlock({ code, language, className }: CodeBlockProps)
                         style={style}
                     >
                         {tokens.slice(0, -1).map((line, i) => (
-                            <div key={i} {...getLineProps({ line, className: "leading-6 sm:leading-7" })}>
+                            <div
+                                key={i}
+                                {...getLineProps({
+                                    line,
+                                    className: "min-w-0 whitespace-pre-wrap break-words [overflow-wrap:anywhere] leading-6 sm:leading-7"
+                                })}
+                            >
                                 {line.map((token, key) => (
                                     <span key={key} {...getTokenProps({ token })} />
                                 ))}

@@ -11,9 +11,13 @@ type BlogCardProps = {
     post: BlogPost
     isLast?: boolean
     searchTerm?: string
+    searchMatches?: Array<{
+        lineNumber: number
+        excerpt: string
+    }>
 }
 
-export function BlogCard({ post, isLast, searchTerm }: BlogCardProps) {
+export function BlogCard({ post, isLast, searchTerm, searchMatches = [] }: BlogCardProps) {
     const highlightedTitle = highlightText(post.title, searchTerm)
     const highlightedDescription = highlightText(post.description, searchTerm)
 
@@ -46,6 +50,22 @@ export function BlogCard({ post, isLast, searchTerm }: BlogCardProps) {
                         >
                             {highlightedDescription}
                         </p>
+                        {searchTerm && searchMatches.length > 0 && (
+                            <div className="mb-3 rounded-xl border border-border/50 bg-muted/20 px-3 py-2.5">
+                                <StackVertical gap="sm">
+                                    {searchMatches.map((match) => (
+                                        <div key={`${post.slug}-line-${match.lineNumber}`} className="space-y-1">
+                                            <Text size="xs" weight="medium" className="text-blue-600 dark:text-blue-400">
+                                                Line {match.lineNumber}
+                                            </Text>
+                                            <p className={cn(sansFont.className, "text-sm leading-6 text-muted-foreground")}>
+                                                {highlightText(match.excerpt, searchTerm)}
+                                            </p>
+                                        </div>
+                                    ))}
+                                </StackVertical>
+                            </div>
+                        )}
                         <div className={cn(
                             monoFont.className,
                             "flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-muted-foreground"

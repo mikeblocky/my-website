@@ -10,4 +10,9 @@ export interface BlogPost {
     imageFormat?: 'png' | 'jpg';
     contentClassName?: string;
     renderMode?: 'mdx' | 'custom';
+    searchText?: string;
+    searchLines?: Array<{
+        lineNumber: number;
+        text: string;
+    }>;
 }

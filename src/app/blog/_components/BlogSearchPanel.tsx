@@ -1,31 +1,53 @@
 'use client'
 
-import { useDeferredValue, useMemo, useState } from "react"
+import { useDeferredValue, useEffect, useMemo, useState } from "react"
 import { AnimatePresence, motion } from "framer-motion"
 import { BlogCard } from "./BlogCard"
 import { StackVertical } from "@/components/layout/layout-stack/layout-stack"
 import Text from "@/components/ui/text/text"
 import type { BlogPost } from "../_types/blog"
-import { ChevronLeft, ChevronRight } from "lucide-react"
+import { ChevronLeft, ChevronRight, X } from "lucide-react"
+import { cn } from "@/lib/utils/utils"
+import { sansFont } from "@/styles/fonts/fonts"
 
 interface BlogSearchPanelProps {
     posts: BlogPost[]
 }
 
+type SearchMatch = {
+    lineNumber: number
+    excerpt: string
+}
+
+type SearchableBlogPost = BlogPost & {
+    searchMatches?: SearchMatch[]
+}
+
 const POSTS_PER_PAGE = 5
+const BLOG_PAGE_STORAGE_KEY = 'blog-list-current-page'
 
 export function BlogSearchPanel({ posts }: BlogSearchPanelProps) {
     const [query, setQuery] = useState("")
     const deferredQuery = useDeferredValue(query)
+    const [isFocused, setIsFocused] = useState(false)
     const [selectedTheme, setSelectedTheme] = useState('All')
-    const [currentPage, setCurrentPage] = useState(1)
+    const [currentPage, setCurrentPage] = useState(() => {
+        if (typeof window === 'undefined') {
+            return 1
+        }
+
+        const storedPage = window.sessionStorage.getItem(BLOG_PAGE_STORAGE_KEY)
+        const parsedPage = storedPage ? Number.parseInt(storedPage, 10) : NaN
+
+        return Number.isFinite(parsedPage) && parsedPage > 0 ? parsedPage : 1
+    })
     const themes = useMemo(() => {
         const uniqueThemes = new Set(posts.flatMap((post) => post.themes ?? []))
         return ['All', ...Array.from(uniqueThemes)]
     }, [posts])
 
-    const filteredPosts = useMemo(() => {
-        let result = posts
+    const filteredPosts = useMemo<SearchableBlogPost[]>(() => {
+        let result: SearchableBlogPost[] = posts.map((post) => ({ ...post }))
 
         // Theme filter
         if (selectedTheme !== 'All') {
@@ -35,11 +57,31 @@ export function BlogSearchPanel({ posts }: BlogSearchPanelProps) {
         // Keyword filter
         const nextQuery = deferredQuery.trim().toLowerCase()
         if (nextQuery) {
-            result = result.filter((post) => {
+            result = result.map((post) => {
                 const themeString = post.themes?.join(" ") ?? ""
-                const haystack = `${post.title} ${post.description ?? ""} ${themeString}`.toLowerCase()
-                return haystack.includes(nextQuery)
+                const haystack = `${post.title} ${post.description ?? ""} ${themeString} ${post.searchText ?? ""}`.toLowerCase()
+
+                if (!haystack.includes(nextQuery)) {
+                    return {
+                        ...post,
+                        searchMatches: [],
+                    }
+                }
+
+                const searchMatches = (post.searchLines ?? [])
+                    .filter((line) => line.text.toLowerCase().includes(nextQuery))
+                    .slice(0, 2)
+                    .map((line) => ({
+                        lineNumber: line.lineNumber,
+                        excerpt: buildExcerpt(line.text, nextQuery),
+                    }))
+
+                return {
+                    ...post,
+                    searchMatches,
+                }
             })
+            .filter((post) => (post.searchMatches?.length ?? 0) > 0 || `${post.title} ${post.description ?? ""} ${post.themes?.join(" ") ?? ""}`.toLowerCase().includes(nextQuery))
         }
 
         return result
@@ -55,36 +97,68 @@ export function BlogSearchPanel({ posts }: BlogSearchPanelProps) {
     const trimmedQuery = deferredQuery.trim()
     const isSearching = Boolean(trimmedQuery)
 
+    useEffect(() => {
+        if (typeof window === 'undefined') {
+            return
+        }
+
+        window.sessionStorage.setItem(BLOG_PAGE_STORAGE_KEY, String(safeCurrentPage))
+    }, [safeCurrentPage])
+
     return (
         <StackVertical gap="md">
             {/* Search Input */}
             <div className="w-full">
-                <motion.div
-                    className="relative w-full overflow-hidden rounded-xl border border-blue-500/30 bg-transparent transition-colors dark:border-blue-500/40 dark:bg-transparent"
-                    animate={{ boxShadow: isSearching ? "0 0 0 1.5px rgba(59, 130, 246, 0.25)" : "0 0 0 1px rgba(148, 163, 184, 0.2)" }}
-                    transition={{ type: "spring", stiffness: 120, damping: 18 }}
+                <div
+                    className="relative w-full overflow-hidden rounded-xl border border-border/60 bg-background/40"
                 >
-                    <motion.input
+                    <motion.div
+                        aria-hidden="true"
+                        className="pointer-events-none absolute inset-0 rounded-xl border border-blue-500"
+                        animate={{
+                            opacity: isFocused ? 1 : 0,
+                            scale: isFocused ? 1 : 0.985,
+                        }}
+                        transition={{ type: "spring", stiffness: 240, damping: 22 }}
+                    />
+                    <input
                         id="blog-search"
-                        type="search"
+                        type="text"
                         value={query}
                         onChange={(event) => {
                             setQuery(event.target.value)
                             setCurrentPage(1)
                         }}
-                        placeholder="Search by title, theme, or keyword..."
-                        className="w-full bg-transparent px-4 py-3 text-base text-slate-900 placeholder:text-slate-500 focus:outline-none dark:text-slate-100 dark:placeholder:text-blue-200"
-                        whileFocus={{ scale: 1.01 }}
-                        transition={{ type: "spring", stiffness: 260, damping: 18 }}
+                        onFocus={() => setIsFocused(true)}
+                        onBlur={() => setIsFocused(false)}
+                        placeholder="Search titles, themes, or post content..."
+                        className={cn(
+                            sansFont.className,
+                            "w-full bg-transparent px-4 py-3 pr-12 text-base text-slate-900 placeholder:text-slate-400 focus:outline-none dark:text-slate-100 dark:placeholder:text-slate-500"
+                        )}
                         aria-label="Search blog posts"
                         autoComplete="off"
                     />
-                    <motion.div
-                        className="pointer-events-none absolute inset-x-0 bottom-0 h-0.5 bg-gradient-to-r from-transparent via-blue-500/60 to-transparent"
-                        animate={{ opacity: isSearching ? 0.8 : 0.2 }}
-                        transition={{ duration: 0.4 }}
-                    />
-                </motion.div>
+                    <AnimatePresence>
+                        {query ? (
+                            <motion.button
+                                type="button"
+                                onClick={() => {
+                                    setQuery("")
+                                    setCurrentPage(1)
+                                }}
+                                initial={{ opacity: 0, x: 10, scale: 0.92 }}
+                                animate={{ opacity: 1, x: 0, scale: 1 }}
+                                exit={{ opacity: 0, x: 10, scale: 0.92 }}
+                                transition={{ type: "spring", stiffness: 260, damping: 20 }}
+                                className="absolute right-3 top-1/2 -translate-y-1/2 rounded-md p-1 text-blue-600 transition-colors hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
+                                aria-label="Clear search"
+                            >
+                                <X className="h-5 w-5" />
+                            </motion.button>
+                        ) : null}
+                    </AnimatePresence>
+                </div>
                 
                 {/* Theme Filter Tabs */}
                 <div className="mt-4 flex flex-wrap gap-2">
@@ -129,6 +203,7 @@ export function BlogSearchPanel({ posts }: BlogSearchPanelProps) {
                                     post={post}
                                     isLast={index === paginatedPosts.length - 1}
                                     searchTerm={trimmedQuery}
+                                    searchMatches={post.searchMatches}
                                 />
                             </motion.div>
                         ))
@@ -197,4 +272,19 @@ function TextHeadingMessage({ term }: { term: string }) {
             " just yet - try a different keyword or theme.
         </Text>
     )
+}
+
+function buildExcerpt(text: string, query: string) {
+    const index = text.toLowerCase().indexOf(query)
+
+    if (index === -1 || text.length <= 160) {
+        return text
+    }
+
+    const start = Math.max(0, index - 55)
+    const end = Math.min(text.length, index + query.length + 85)
+    const prefix = start > 0 ? '... ' : ''
+    const suffix = end < text.length ? ' ...' : ''
+
+    return `${prefix}${text.slice(start, end).trim()}${suffix}`
 }

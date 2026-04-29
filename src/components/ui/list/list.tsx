@@ -1,6 +1,7 @@
 import { cn } from '@/lib/utils/utils'
 import { StackVertical } from '@/components/layout/layout-stack/layout-stack'
 import { monoFont } from '@/styles/fonts/fonts'
+
 interface ListProps {
     children: React.ReactNode;
     className?: string;
@@ -15,24 +16,25 @@ interface ListProps {
 interface ListItemProps {
     children: React.ReactNode;
     className?: string;
+    markerClassName?: string;
 }
 
 const listFontClass = monoFont.className
 
 const listFontSize = {
-    xs: 'text-[10px] sm:text-xs md:text-xs',           // 10px -> 12px -> 12px
-    sm: 'text-xs sm:text-sm md:text-sm',               // 12px -> 14px -> 14px
-    md: 'text-sm sm:text-base md:text-base',           // 14px -> 16px -> 16px
-    base: 'text-sm sm:text-base md:text-base',         // 14px -> 16px -> 16px
-    lg: 'text-base sm:text-lg md:text-lg',             // 16px -> 18px -> 18px
-    xl: 'text-lg sm:text-xl md:text-xl',               // 18px -> 20px -> 20px
-    '2xl': 'text-xl sm:text-2xl md:text-2xl'           // 20px -> 24px -> 24px
+    xs: 'text-[14px] sm:text-[15px]',
+    sm: 'text-[15px] sm:text-[16px] md:text-[17px]',
+    md: 'text-[16px] sm:text-[17px] md:text-[18px]',
+    base: 'text-[18px] sm:text-[20px]',
+    lg: 'text-[20px] sm:text-[22px]',
+    xl: 'text-[22px] sm:text-[26px]',
+    '2xl': 'text-[26px] sm:text-[33px]'
 }
 
 const spacingStyles = {
-    tight: 'space-y-0.5 sm:space-y-1',
-    normal: 'space-y-1 sm:space-y-2',
-    relaxed: 'space-y-2 sm:space-y-3'
+    tight: 'space-y-1.5 sm:space-y-2',
+    normal: 'space-y-2 sm:space-y-3',
+    relaxed: 'space-y-3 sm:space-y-4'
 }
 
 const markerStyles = {
@@ -44,10 +46,10 @@ const markerStyles = {
 }
 
 const paddingLeftStyles = {
-    sm: 'pl-1 sm:pl-2',
-    md: 'pl-2 sm:pl-4',
+    sm: 'pl-2 sm:pl-3',
+    md: 'pl-3 sm:pl-5',
     lg: 'pl-4 sm:pl-6',
-    xs: 'pl-0.5 sm:pl-1',
+    xs: 'pl-1 sm:pl-2',
     none: 'pl-0'
 }
 
@@ -66,13 +68,15 @@ export function List({
     return (
         <Component
             className={cn(
-                'ml-4 sm:ml-6',
+                'ml-3 sm:ml-5',
                 markerStyles[marker],
                 spacingStyles[spacing],
-                variant === 'compact' && 'text-sm',
+                variant === 'compact' && 'text-[14px] sm:text-[15px]',
                 listFontClass,
                 listFontSize[fontSize],
                 paddingLeftStyles[paddingLeft],
+                'text-foreground dark:text-white',
+                'marker:text-[0.9em] marker:text-muted-foreground dark:marker:text-gray-400',
                 className
             )}
         >
@@ -81,11 +85,11 @@ export function List({
     )
 }
 
-export function ListItem({ children, className }: ListItemProps) {
+export function ListItem({ children, className, markerClassName }: ListItemProps) {
     return (
         <li className={cn(
-            'pl-1 sm:pl-2', // Reduced padding on mobile
-            'marker:text-muted-foreground dark:marker:text-gray-400',
+            'pl-1.5 sm:pl-2.5 leading-8',
+            markerClassName,
             listFontClass,
             className
         )}>

@@ -10,6 +10,7 @@ import { cn } from '@/lib/utils/utils'
 import { monoFont } from '@/styles/fonts/fonts'
 import CodeBlock from '@/components/blocks/code-block/code-block'
 import Math from '@/components/ui/math/math'
+import { getTextFromNode, slugifyHeading } from './outline'
 
 type FuriganaProps = {
     kanji: string
@@ -89,23 +90,23 @@ const processMathInText = (text: string): (string | React.ReactElement)[] => {
 export const mdxComponents: MDXComponents = {
     Furigana,
     // Headings
-    h1: ({ children }) => (
-        <TextHeading as="h1" weight="bold" className="mt-8 mb-4">
+    h1: ({ children, id }) => (
+        <TextHeading as="h1" id={id || slugifyHeading(getTextFromNode(children))} weight="bold" className="mt-8 mb-4">
             {children}
         </TextHeading>
     ),
-    h2: ({ children }) => (
-        <TextHeading as="h2" weight="bold" className="mt-6 mb-3">
+    h2: ({ children, id }) => (
+        <TextHeading as="h2" id={id || slugifyHeading(getTextFromNode(children))} weight="bold" className="mt-6 mb-3">
             {children}
         </TextHeading>
     ),
-    h3: ({ children }) => (
-        <TextHeading as="h3" weight="medium" className="mt-4 mb-2">
+    h3: ({ children, id }) => (
+        <TextHeading as="h3" id={id || slugifyHeading(getTextFromNode(children))} weight="medium" className="mt-4 mb-2">
             {children}
         </TextHeading>
     ),
-    h4: ({ children }) => (
-        <TextHeading as="h4" weight="medium" className="mt-3 mb-2">
+    h4: ({ children, id }) => (
+        <TextHeading as="h4" id={id || slugifyHeading(getTextFromNode(children))} weight="medium" className="mt-3 mb-2">
             {children}
         </TextHeading>
     ),
@@ -128,17 +129,17 @@ export const mdxComponents: MDXComponents = {
 
     // Lists
     ul: ({ children }) => (
-        <List className="mb-4">
+        <List className="mb-5" spacing="relaxed">
             {children}
         </List>
     ),
     ol: ({ children }) => (
-        <List type="ordered" className="mb-4">
+        <List type="ordered" className="mb-5" spacing="relaxed">
             {children}
         </List>
     ),
     li: ({ children }) => (
-        <ListItem>
+        <ListItem className="text-foreground dark:text-foreground">
             {children}
         </ListItem>
     ),

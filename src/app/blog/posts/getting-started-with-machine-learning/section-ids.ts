@@ -1,5 +1,6 @@
 export const SECTION_IDS = {
     ARTICLE_CONTENT: 'article-content',
+    INTRODUCTION: 'introduction',
     MATH: {
         MATH: 'math',
         COURSERA_MATH_FOR_ML: 'course-math-for-ml',
@@ -16,7 +17,11 @@ export const SECTION_IDS = {
       ADVANCED_PYTHON: 'advanced-python'
     },
     ML_STUFF: {
+      ML_STUFF: 'ml-stuff',
       NN_3B1B: '3b1b-neural-networks',
       ML_HANDS_ON: 'hands-on-ml'
+    },
+    RESOURCES: {
+      RESOURCES: 'resources'
     }
   } as const;

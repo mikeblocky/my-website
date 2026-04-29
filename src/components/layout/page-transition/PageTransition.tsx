@@ -30,10 +30,10 @@ export function PageTransition({ children }: PageTransitionProps) {
     return (
         <motion.div
             key={pathname}
-            initial={{ opacity: 0.85, filter: 'blur(6px)', y: 4 }}
-            animate={{ opacity: 1, filter: 'blur(0px)', y: 0 }}
+            initial={{ opacity: 0.85, filter: 'blur(6px)' }}
+            animate={{ opacity: 1, filter: 'blur(0px)' }}
             transition={transition}
-            className="min-h-full will-change-[opacity,filter,transform]"
+            className="min-h-full"
         >
             {children}
         </motion.div>

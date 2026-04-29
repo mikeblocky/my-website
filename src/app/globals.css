@@ -70,7 +70,18 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground transition-colors duration-300;
   }
 }
 
+/* Ensure code blocks wrap on mobile */
+article pre {
+  white-space: pre-wrap !important;
+  word-break: break-all !important;
+  overflow-wrap: anywhere !important;
+}
+
+article code {
+  white-space: pre-wrap !important;
+  word-break: break-all !important;
+}

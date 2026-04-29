@@ -1,43 +1,34 @@
 'use client'
 
-import { IndividualPageFooter } from "@/components/layout/footer/IndividualPageFooter"
+import { BlogPostTemplate } from "@/app/blog/_components/BlogPostTemplate"
 import Text from "@/components/ui/text/text"
 import TextHeading from "@/components/ui/text-heading/text-heading"
-import BaseContainer from "@/components/layout/container/base-container"
 import { StackVertical } from "@/components/layout/layout-stack/layout-stack"
 
 import { List, ListItem } from "@/components/ui/list/list"
 
 import Callout from "@/components/blocks/callout/callout"
 import Ruler from "@/components/ui/ruler/ruler"
-import { DynamicBreadcrumb } from "@/components/ui/primitives/breadcrumb"
 import Link from "next/link"
 import { SECTION_IDS } from "./section-ids"
-import { ThemeToggle } from "@/components/ui/theme/theme-toggle"
+import { ARTICLE_OUTLINE } from "./article-outline"
+import { ArticleSectionPreview } from "./_components/ArticleSectionPreview"
+import { ArticleLineRail } from "./_components/ArticleLineRail"
 
 export default function GettingStartedWithMLPost() {
   return (
     <>
-      <BaseContainer size="md" paddingX="md" paddingY="lg">
-        <StackVertical gap="md">
-          <div className="flex items-center justify-between">
-            <DynamicBreadcrumb 
-                items={[
-                    { href: '/', label: 'Home', emoji: '🐶' },
-                    { href: '/blog', label: 'Blog' },
-                    { label: 'Getting Started with ML' }
-                ]} 
-            />
-            <ThemeToggle />
-          </div>
-
-
-          <article id={SECTION_IDS.ARTICLE_CONTENT}>
-
-            <TextHeading as="h1">Getting Started with Machine Learning</TextHeading>
-            <div className="flex items-center gap-2 flex-wrap mb-8"><span className="text-[14px] sm:text-[15px] text-muted-foreground dark:text-gray-400">December 25, 2024 | 10 min read</span><span className="text-muted-foreground/30">•</span><span className="text-[14px] text-blue-600 dark:text-blue-400 font-medium">Computer Science</span></div>
-
-              <section>
+      <BlogPostTemplate
+        title="Getting Started with Machine Learning"
+        date="December 25, 2024"
+        readingTime="10 min read"
+        themes={["Computer Science"]}
+        articleId={SECTION_IDS.ARTICLE_CONTENT}
+        containerSize="xl"
+        aside={<ArticleSectionPreview sections={ARTICLE_OUTLINE} />}
+        rightRail={<ArticleLineRail sections={ARTICLE_OUTLINE} />}
+      >
+              <section id={SECTION_IDS.INTRODUCTION}>
                 <StackVertical gap="md">
                   <Text><u><strong>Disclaimer</strong></u>: I am not an expert; I'm a learner, and I've just outlined what has worked for me and although I have tried making it more general, this could still, to some extent, be a subjective list.</Text>
                   
@@ -168,7 +159,7 @@ export default function GettingStartedWithMLPost() {
 
               <Ruler weight="slightlyThick" />
               
-              <section>
+              <section id={SECTION_IDS.ML_STUFF.ML_STUFF}>
                 <TextHeading as="h2">3. The "ML" Stuff</TextHeading>
                 <StackVertical gap="md">
                   <Text>This section is where I'm going to list out some of the resources I've found useful for getting started with machine learning. People have their own views on how to start this as well, so I’ll list out the ones that worked (and are working) pretty well for me.</Text>
@@ -221,7 +212,7 @@ export default function GettingStartedWithMLPost() {
               
               <Ruler />
               
-              <section>
+              <section id={SECTION_IDS.RESOURCES.RESOURCES}>
                 <TextHeading as="h2">4. Some More Resources</TextHeading>
                 <StackVertical gap="md">
                   <Text>
@@ -263,11 +254,7 @@ export default function GettingStartedWithMLPost() {
                   </Text>
                 </StackVertical>
               </section>
-          </article>
-        </StackVertical>
-      </BaseContainer>
-
-      <IndividualPageFooter sectionName="Blog" />
+      </BlogPostTemplate>
     </>
   )
 }

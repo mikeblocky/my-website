@@ -19,12 +19,12 @@ export default function Diary() {
                 <StackVertical gap="md">
                     <SectionLinkItem
                         href="/diary/daily-notes/"
-                        title="Daily Notes"
+                        title="Daily notes"
                         description="Short entries, snapshots, and daily writing."
                     />
                     <SectionLinkItem
                         href="/diary/diary-utensils/"
-                        title="Diary Utensils"
+                        title="Diary utensils"
                         description="The tools, supplies, and setup behind my diary pages."
                     />
                 </StackVertical>
