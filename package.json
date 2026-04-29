@@ -6,7 +6,9 @@
     "dev": "next dev --turbopack",
     "build": "next build --webpack",
     "start": "next start",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "create:blog": "node scripts/create-blog-post.js",
+    "create:diary": "node script.js"
   },
   "dependencies": {
     "@mdx-js/loader": "^3.1.1",

@@ -27,6 +27,7 @@ declare global {
 	var __redisClient: RedisClient | undefined
 	var __memorySortedSets: Map<string, Array<{ score: number; value: string }>> | undefined
 	var __memoryStrings: Map<string, string> | undefined
+	var __redisUnavailable: boolean | undefined
 }
 
 const redisUrl = process.env.REDIS_URL
@@ -131,7 +132,7 @@ function getMemoryClient(): KvClient {
 }
 
 export async function getRedisClient(): Promise<KvClient> {
-	if (!redisUrl) {
+	if (!redisUrl || global.__redisUnavailable) {
 		return getMemoryClient()
 	}
 
@@ -144,10 +145,19 @@ export async function getRedisClient(): Promise<KvClient> {
 		console.error('Redis client error', err)
 	})
 
-	if (!client.isOpen) {
-		await client.connect()
-	}
+	try {
+		if (!client.isOpen) {
+			await client.connect()
+		}
 
-	global.__redisClient = client
-	return client
+		global.__redisClient = client
+		return client
+	} catch (error) {
+		global.__redisUnavailable = true
+		console.error('Redis unavailable, falling back to in-memory storage', error)
+		try {
+			client.destroy()
+		} catch {}
+		return getMemoryClient()
+	}
 }

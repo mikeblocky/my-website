@@ -1,19 +1,12 @@
-import { Metadata } from 'next'
+import { buildSocialMetadata } from '@/lib/metadata/social'
 
-export const metadata: Metadata = {
+export const metadata = buildSocialMetadata({
     title: 'Weekly Reflections | mikeblocky.com',
     description: 'Weekly documentation of my learning progress, reflections, and insights',
-    openGraph: {
-        title: 'Weekly Reflections | mikeblocky.com',
-        description: 'Weekly documentation of my learning progress, reflections, and insights',
-        type: 'website',
-    },
-    twitter: {
-        card: 'summary_large_image',
-        title: 'Weekly Reflections | mikeblocky.com',
-        description: 'Weekly documentation of my learning progress, reflections, and insights',
-    }
-}
+    path: '/learning/weekly-reflections',
+    imagePath: '/learning/opengraph-image.png',
+    twitterImagePath: '/learning/twitter-image.png',
+})
 
 export default function Layout({
     children,

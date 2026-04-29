@@ -1,33 +1,12 @@
-import { StackVertical } from "@/components/layout/layout-stack/layout-stack"
-import Text from "@/components/ui/text/text"
-import TextHeading from "@/components/ui/text-heading/text-heading"
-import { DynamicBreadcrumb } from "@/components/ui/primitives/breadcrumb"
-import { ThemeToggle } from "@/components/ui/theme/theme-toggle"
+import { SectionPageHeader } from "@/components/layout/page-header/SectionPageHeader"
 
 export function NotesHeader() {
     return (
-        <StackVertical gap="md">
-            <title>Notes | mikeblocky.com</title>
-
-            <div className="flex items-center justify-between">
-                <DynamicBreadcrumb 
-                    items={[
-                        { href: '/', label: 'Home', emoji: '🐶' },
-                        { label: 'Notes' }
-                    ]}
-                />
-                <ThemeToggle />
-            </div>
-
-            <div>
-                <TextHeading as="h1" weight="bold">
-                    Notes
-                </TextHeading>
-                <Text variant="muted" size="sm">
-                    A collection of notes that I have collected from my learning journey. Mostly Math and ML-related. (I will reupdate this to my personal one soon)
-                </Text>
-            </div>
-        </StackVertical>
+        <SectionPageHeader
+            title="Notes"
+            description="A collection of notes from my learning journey, mostly around math and machine learning."
+            currentLabel="Notes"
+        />
     )
 } 
 

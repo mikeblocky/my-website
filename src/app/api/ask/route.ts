@@ -1,16 +1,21 @@
-import { NextRequest, NextResponse } from 'next/server'
-import { buildQuestionPayload, fetchQuestions, saveQuestion } from '@/lib/kv/ask'
-import { initialQuestions } from '@/app/ask/_data/questions'
+import { after, NextRequest, NextResponse } from 'next/server'
+import { revalidateTag } from 'next/cache'
+import { buildQuestionPayload, saveQuestion } from '@/lib/kv/ask'
+import { ASK_QUESTIONS_TAG, getAskQuestions } from '@/lib/kv/ask-cache'
 import { notifyOwnerNewQuestion } from '@/lib/notify/discord'
 
 const MAX_BODY_LENGTH = 800
 
 export async function GET() {
-  const stored = await fetchQuestions()
-  const merged = (stored.length > 0 ? stored : initialQuestions).slice().sort(
-    (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+  const questions = await getAskQuestions()
+  return NextResponse.json(
+    { questions },
+    {
+      headers: {
+        'Cache-Control': 'public, s-maxage=30, stale-while-revalidate=300'
+      }
+    }
   )
-  return NextResponse.json({ questions: merged })
 }
 
 export async function POST(request: NextRequest) {
@@ -32,10 +37,11 @@ export async function POST(request: NextRequest) {
   const question = buildQuestionPayload({ author, body })
 
   await saveQuestion(question)
+  revalidateTag(ASK_QUESTIONS_TAG, 'max')
 
-  // Await the webhook in the request lifecycle so serverless execution
-  // doesn't end before Discord receives the POST.
-  await notifyOwnerNewQuestion(author, body)
+  after(async () => {
+    await notifyOwnerNewQuestion(author, body)
+  })
 
   return NextResponse.json({ question }, { status: 201 })
 }
@@ -57,43 +63,43 @@ export async function PUT(request: NextRequest) {
   if (!updatedQuestion) {
     return NextResponse.json({ error: 'Question not found' }, { status: 404 })
   }
+  revalidateTag(ASK_QUESTIONS_TAG, 'max')
 
-  // Send push notification to the person who asked
-  try {
-    const { getSubscriptionsForQuestion, removeSubscription } = await import('@/lib/kv/push')
-    const subscriptions = await getSubscriptionsForQuestion(id)
-    
-    if (subscriptions.length > 0) {
-      const webpush = await import('web-push')
+  after(async () => {
+    try {
+      const { getSubscriptionsForQuestion, removeSubscription } = await import('@/lib/kv/push')
+      const subscriptions = await getSubscriptionsForQuestion(id)
       
-      webpush.default.setVapidDetails(
-        'mailto:contact@mikeblocky.com',
-        process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY!,
-        process.env.VAPID_PRIVATE_KEY!
-      )
+      if (subscriptions.length > 0) {
+        const webpush = await import('web-push')
+        
+        webpush.default.setVapidDetails(
+          'mailto:contact@mikeblocky.com',
+          process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY!,
+          process.env.VAPID_PRIVATE_KEY!
+        )
 
-      const notificationPayload = JSON.stringify({
-        title: 'mikeblocky answered your question!',
-        body: reply.trim().length > 120 ? reply.trim().slice(0, 120) + '...' : reply.trim(),
-        url: '/ask',
-        tag: `reply-${id}`
-      })
+        const notificationPayload = JSON.stringify({
+          title: 'mikeblocky answered your question!',
+          body: reply.trim().length > 120 ? reply.trim().slice(0, 120) + '...' : reply.trim(),
+          url: '/ask',
+          tag: `reply-${id}`
+        })
 
-      for (const sub of subscriptions) {
-        try {
-          await webpush.default.sendNotification(sub.subscription as any, notificationPayload)
-        } catch (pushError: any) {
-          console.error('Push notification failed for subscription:', pushError?.statusCode)
+        for (const sub of subscriptions) {
+          try {
+            await webpush.default.sendNotification(sub.subscription as any, notificationPayload)
+          } catch (pushError: any) {
+            console.error('Push notification failed for subscription:', pushError?.statusCode)
+          }
         }
-      }
 
-      // Clean up used subscriptions
-      await removeSubscription(id)
+        await removeSubscription(id)
+      }
+    } catch (pushError) {
+      console.error('Push notification error (non-blocking):', pushError)
     }
-  } catch (pushError) {
-    // Don't fail the reply if push notifications fail
-    console.error('Push notification error (non-blocking):', pushError)
-  }
+  })
 
   return NextResponse.json({ question: updatedQuestion }, { status: 200 })
 }

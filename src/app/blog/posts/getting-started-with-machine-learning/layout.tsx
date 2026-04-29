@@ -1,28 +1,14 @@
-import { Metadata } from 'next'
+import { buildSocialMetadata } from '@/lib/metadata/social'
 
-export const metadata: Metadata = {
+export const metadata = buildSocialMetadata({
     title: 'Getting Started with Machine Learning | mikeblocky.com',
     description: 'A beginner\'s guide to starting your ML journey',
-    openGraph: {
-        title: 'Getting Started with Machine Learning | mikeblocky.com',
-        description: 'A beginner\'s guide to starting your ML journey',
-        type: 'article',
-        publishedTime: '2025-01-14T00:00:00.000Z',
-        images: [
-        {
-                url: '/blog/posts/getting-started-with-machine-learning/opengraph-image.png',
-                width: 1200,
-                height: 630,
-            }
-        ],
-    },
-    twitter: {
-        card: 'summary_large_image',
-        title: 'Getting Started with Machine Learning',
-        description: 'A beginner\'s guide to starting your ML journey',
-        images: ['/blog/posts/getting-started-with-machine-learning/twitter-image.png'],
-    }
-}
+    path: '/blog/posts/getting-started-with-machine-learning',
+    imagePath: '/blog/posts/getting-started-with-machine-learning/opengraph-image.png',
+    twitterImagePath: '/blog/posts/getting-started-with-machine-learning/twitter-image.png',
+    type: 'article',
+    publishedTime: '2025-01-14T00:00:00.000Z',
+})
 
 export default function Layout({
     children,

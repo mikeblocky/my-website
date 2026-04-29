@@ -12,7 +12,6 @@ interface BlogSearchPanelProps {
     posts: BlogPost[]
 }
 
-const THEMES = ['All', 'Skip and Loafer', 'Kemutai Hanashi', 'Hoshiai no Sora', 'Fanfiction', 'Translation', 'Personal']
 const POSTS_PER_PAGE = 5
 
 export function BlogSearchPanel({ posts }: BlogSearchPanelProps) {
@@ -20,6 +19,10 @@ export function BlogSearchPanel({ posts }: BlogSearchPanelProps) {
     const deferredQuery = useDeferredValue(query)
     const [selectedTheme, setSelectedTheme] = useState('All')
     const [currentPage, setCurrentPage] = useState(1)
+    const themes = useMemo(() => {
+        const uniqueThemes = new Set(posts.flatMap((post) => post.themes ?? []))
+        return ['All', ...Array.from(uniqueThemes)]
+    }, [posts])
 
     const filteredPosts = useMemo(() => {
         let result = posts
@@ -85,7 +88,7 @@ export function BlogSearchPanel({ posts }: BlogSearchPanelProps) {
                 
                 {/* Theme Filter Tabs */}
                 <div className="mt-4 flex flex-wrap gap-2">
-                    {THEMES.map(theme => (
+                    {themes.map(theme => (
                         <button
                             key={theme}
                             onClick={() => {

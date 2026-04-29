@@ -2,11 +2,9 @@
 
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import Image from 'next/image'
 import { Button } from '@/components/ui/primitives/button'
-import { Sparkles, Loader2 } from 'lucide-react'
 import Text from '@/components/ui/text/text'
-import { cn } from '@/lib/utils/utils'
-import { sansFont } from '@/styles/fonts/fonts'
 
 export function PetRoom() {
   const [isSending, setIsSending] = useState(false)
@@ -55,7 +53,7 @@ export function PetRoom() {
         <Button 
           onClick={sendGift} 
           disabled={isSending}
-          className="rounded-lg px-6 py-2 h-auto text-sm font-bold bg-blue-600 hover:bg-blue-700 text-white transition-all active:scale-95 shadow-none"
+          className="h-auto px-6 py-2 text-sm font-semibold transition-transform active:scale-95"
         >
           {isSending ? 'Sending...' : 'Send'}
         </Button>
@@ -82,11 +80,14 @@ export function PetRoom() {
               <div className="h-px w-8 bg-border" />
             </div>
             
-            <div className="relative rounded-2xl overflow-hidden border border-border shadow-md max-w-sm bg-background">
-              <img 
-                src={lastGif} 
-                alt="Pet gift" 
-                className="w-full h-auto object-cover min-h-[200px]" 
+            <div className="relative aspect-[4/3] w-full max-w-sm overflow-hidden rounded-2xl border border-border bg-background shadow-md">
+              <Image
+                src={lastGif}
+                alt="Pet gift"
+                fill
+                unoptimized
+                sizes="(max-width: 768px) 100vw, 24rem"
+                className="object-contain"
               />
             </div>
           </motion.div>

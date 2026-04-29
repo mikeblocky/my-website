@@ -1,6 +1,8 @@
 interface Day {
 	title: string;
+	slug: string;
 	href: string;
+	description: string;
 	date: Date;
 }
 
@@ -12,7 +14,9 @@ interface MonthGroup {
 const days: Day[] = [
 	{
 		title: 'April 26, 2026',
+		slug: 'april-26',
 		href: '/diary/daily-notes/days/april-26',
+		description: 'My daily notes for April 26, 2026',
 		date: new Date('2026-04-26T00:00:00.000Z')
 	},
 	
@@ -38,6 +42,10 @@ export function getDaysByMonth(): MonthGroup[] {
 		return new Date(Date.parse(`${bMonth} 1, 2000`)).getMonth() - 
 			   new Date(Date.parse(`${aMonth} 1, 2000`)).getMonth();
 	});
+}
+
+export function getDayBySlug(slug: string) {
+	return days.find((day) => day.slug === slug)
 }
 
 export { days };

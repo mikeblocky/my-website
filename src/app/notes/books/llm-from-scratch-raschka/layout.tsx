@@ -1,20 +1,14 @@
-import { Metadata } from 'next'
+import { buildSocialMetadata } from '@/lib/metadata/social'
 
-export const metadata: Metadata = {
+export const metadata = buildSocialMetadata({
     title: 'LLM from Scratch Notes | Books | mikeblocky.com',
     description: 'My notes and learnings from "Build a Large Language Model (from Scratch)" by Sebastian Raschka',
-    openGraph: {
-        title: 'LLM from Scratch Notes | Books | mikeblocky.com',
-        description: 'My notes and learnings from "Build a Large Language Model (from Scratch)" by Sebastian Raschka',
-        type: 'article',
-        publishedTime: '2025-01-14T00:00:00.000Z',
-    },
-    twitter: {
-        card: 'summary_large_image',
-        title: 'LLM from Scratch Notes | Books | mikeblocky.com',
-        description: 'My notes and learnings from "Build a Large Language Model (from Scratch)" by Sebastian Raschka',
-    }
-}
+    path: '/notes/books/llm-from-scratch-raschka',
+    imagePath: '/notes/opengraph-image.png',
+    twitterImagePath: '/notes/twitter-image.png',
+    type: 'article',
+    publishedTime: '2025-01-14T00:00:00.000Z',
+})
 
 export default function Layout({
     children,

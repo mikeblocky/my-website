@@ -1,13 +1,9 @@
 import BaseContainer from "@/components/layout/container/base-container"
 import { StackVertical } from "@/components/layout/layout-stack/layout-stack"
-import TextHeading from "@/components/ui/text-heading/text-heading"
-import Text from "@/components/ui/text/text"
 import { Metadata } from "next"
 import { AskBoard } from "./_components/AskBoard"
-import { DynamicBreadcrumb } from "@/components/ui/primitives/breadcrumb"
-import { ThemeToggle } from "@/components/ui/theme/theme-toggle"
-import { SectionFooter } from "@/components/layout/footer/SectionFooter"
 import { IndividualPageFooter } from "@/components/layout/footer/IndividualPageFooter"
+import { SectionPageHeader } from "@/components/layout/page-header/SectionPageHeader"
 
 const shareImage = '/ask/twitter-image.png'
 const shareAlt = 'Hand-drawn illustration of two friends sharing questions for the Ask page.'
@@ -38,24 +34,12 @@ export const metadata: Metadata = {
 export default function AskPage() {
   return (
     <BaseContainer size="md" paddingX="md" paddingY="lg">
-      <div className="mb-8 flex items-center justify-between">
-        <DynamicBreadcrumb 
-            items={[
-                { href: '/', label: 'Home', emoji: '🐶' },
-                { label: 'Ask' }
-            ]}
-        />
-        <ThemeToggle />
-      </div>
       <StackVertical gap="lg">
-        <header className="space-y-2">
-          <TextHeading as="h1" weight="bold">
-            Anonymous asking!
-          </TextHeading>
-          <Text variant="muted" size="sm">
-            Ask anything about me! I will keep every submission here so others can read through the anonymous archive!
-          </Text>
-        </header>
+        <SectionPageHeader
+          title="Anonymous asking!"
+          description="Ask anything about me. Every submission stays here so others can read through the anonymous archive."
+          currentLabel="Ask"
+        />
 
         <AskBoard />
       </StackVertical>

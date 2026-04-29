@@ -1,160 +1,122 @@
-const fs = require('fs');
-const path = require('path');
+const fs = require('fs')
+const path = require('path')
 
-const baseDir = path.join(__dirname, 'src', 'app', 'diary', 'daily-notes');
-const daysDir = path.join(baseDir, 'days');
+function parseArgs(argv) {
+  const entries = argv
+    .map((arg) => arg.match(/^--([^=]+)=(.*)$/))
+    .filter(Boolean)
+    .map(([, key, value]) => [key, value])
 
-// Create directories
-fs.mkdirSync(daysDir, { recursive: true });
-
-// Data for the days
-const daysData = [];
-for (let i = 20; i <= 26; i++) {
-    const slug = `april-${i}`;
-    const dateStr = `2026-04-${i}`;
-    const title = `April ${i}, 2026`;
-    
-    daysData.push({
-        title: title,
-        href: `/diary/daily-notes/days/${slug}`,
-        date: new Date(dateStr)
-    });
-
-    const dayDir = path.join(daysDir, slug);
-    fs.mkdirSync(dayDir, { recursive: true });
-
-    // layout.tsx
-    const layoutContent = `import { Metadata } from 'next'
-
-export const metadata: Metadata = {
-    title: '${title} | mikeblocky.com',
-    description: 'My daily notes for ${title}',
-    openGraph: {
-        title: '${title} | mikeblocky.com',
-        description: 'My daily notes for ${title}',
-        type: 'article',
-    },
-    twitter: {
-        card: 'summary_large_image',
-        title: '${title} | mikeblocky.com',
-        description: 'My daily notes for ${title}',
-    }
+  return Object.fromEntries(entries)
 }
 
-export default function Layout({
-    children,
-}: {
-    children: React.ReactNode
-}) {
-    return children
-} 
-`;
-    fs.writeFileSync(path.join(dayDir, 'layout.tsx'), layoutContent);
-
-    // page.tsx
-    const pageContent = `'use client'
-
-import Content from './content.mdx'
-import { mdxComponents } from '@/lib/mdx/mdx-components'
-import BaseContainer from '@/components/layout/container/base-container'
-import { StackVertical } from '@/components/layout/layout-stack/layout-stack'
-import { DynamicBreadcrumb } from '@/components/ui/primitives/breadcrumb'
-import { ThemeToggle } from '@/components/ui/theme/theme-toggle'
-import { IndividualPageFooter } from '@/components/layout/footer/IndividualPageFooter'
-import TextHeading from '@/components/ui/text-heading/text-heading'
-import Text from '@/components/ui/text/text'
-
-export default function DailyNote() {
-    return (
-        <BaseContainer size="md" paddingX="md" paddingY="lg">
-            <StackVertical gap="md">
-                <div className="flex items-center justify-between">
-                    <DynamicBreadcrumb 
-                        items={[
-                            { href: '/', label: 'Home', emoji: '👾' },
-                            { href: '/diary', label: 'Diary' },
-                            { href: '/diary/daily-notes', label: 'Daily notes' },
-                            { label: '${title}' }
-                        ]}
-                    />
-                    <ThemeToggle />
-                </div>
-
-                <article>
-                    <TextHeading as="h1">${title}</TextHeading>
-
-                    <div className="prose dark:prose-invert max-w-none mt-8">
-                        <Content components={mdxComponents} />
-                    </div>
-                </article>
-            </StackVertical>
-
-            <IndividualPageFooter parentPageName='Daily notes' showToTop={false} />
-        </BaseContainer>
-    )
-}
-`;
-    fs.writeFileSync(path.join(dayDir, 'page.tsx'), pageContent);
-
-    // content.mdx
-    const mdxContent = `This is my note for ${title}.
-
-### Today's reflection
-
-*   Did some reading.
-*   Practiced drawing.
-*   Wrote some code.
-`;
-    fs.writeFileSync(path.join(dayDir, 'content.mdx'), mdxContent);
+function stringifyForTs(value) {
+  return JSON.stringify(value)
 }
 
-// Write _data/days.ts
-const dataDir = path.join(baseDir, '_data');
-fs.mkdirSync(dataDir, { recursive: true });
-
-const daysTsContent = `interface Day {
-	title: string;
-	href: string;
-	date: Date;
+function usage() {
+  console.log(`Usage:
+npm run create:diary -- --date=2026-04-29
+npm run create:diary -- --date=2026-04-29 --slug=april-29 --title="April 29, 2026" --description="My daily notes for April 29, 2026"
+`)
 }
 
-interface MonthGroup {
-	month: string;
-	days: Day[];
+function isValidIsoDate(value) {
+  return /^\d{4}-\d{2}-\d{2}$/.test(value)
 }
 
-const days: Day[] = [
-${daysData.reverse().map(d => `	{
-		title: '${d.title}',
-		href: '${d.href}',
-		date: new Date('${d.date.toISOString()}')
-	}`).join(',\n')}
-]
+function monthSlug(date) {
+  const months = [
+    'january',
+    'february',
+    'march',
+    'april',
+    'may',
+    'june',
+    'july',
+    'august',
+    'september',
+    'october',
+    'november',
+    'december'
+  ]
 
-export function getDaysByMonth(): MonthGroup[] {
-	const groupedDays = days.reduce((acc: { [key: string]: Day[] }, day) => {
-		const monthYear = day.date.toLocaleString('en-US', { month: 'long', year: 'numeric' });
-		if (!acc[monthYear]) {
-			acc[monthYear] = [];
-		}
-		acc[monthYear].push(day);
-		return acc;
-	}, {});
-
-	return Object.entries(groupedDays).map(([month, days]) => ({
-		month,
-		days
-	})).sort((a, b) => {
-		const [aMonth, aYear] = a.month.split(' ');
-		const [bMonth, bYear] = b.month.split(' ');
-		if (aYear !== bYear) return parseInt(bYear) - parseInt(aYear);
-		return new Date(Date.parse(\`\${bMonth} 1, 2000\`)).getMonth() - 
-			   new Date(Date.parse(\`\${aMonth} 1, 2000\`)).getMonth();
-	});
+  return `${months[date.getUTCMonth()]}-${date.getUTCDate()}`
 }
 
-export { days };
-`;
-fs.writeFileSync(path.join(dataDir, 'days.ts'), daysTsContent);
+function formatTitle(date) {
+  return new Intl.DateTimeFormat('en-US', {
+    month: 'long',
+    day: 'numeric',
+    year: 'numeric',
+    timeZone: 'UTC'
+  }).format(date)
+}
 
-console.log("Created successfully");
+const args = parseArgs(process.argv.slice(2))
+const { date, slug, title, description } = args
+
+if (!date || !isValidIsoDate(date)) {
+  usage()
+  process.exit(1)
+}
+
+const noteDate = new Date(`${date}T00:00:00.000Z`)
+
+if (Number.isNaN(noteDate.getTime())) {
+  console.error(`Invalid date: ${date}`)
+  process.exit(1)
+}
+
+const resolvedSlug = slug || monthSlug(noteDate)
+const resolvedTitle = title || formatTitle(noteDate)
+const resolvedDescription = description || `My daily notes for ${resolvedTitle}`
+
+const projectRoot = __dirname
+const noteDir = path.join(projectRoot, 'src', 'app', 'diary', 'daily-notes', 'days', resolvedSlug)
+const daysFile = path.join(projectRoot, 'src', 'app', 'diary', 'daily-notes', '_data', 'days.ts')
+
+if (fs.existsSync(noteDir)) {
+  console.error(`Diary note directory already exists: ${noteDir}`)
+  process.exit(1)
+}
+
+const daysSource = fs.readFileSync(daysFile, 'utf8')
+
+if (daysSource.includes(`slug: ${stringifyForTs(resolvedSlug)}`)) {
+  console.error(`Diary note entry already exists for slug: ${resolvedSlug}`)
+  process.exit(1)
+}
+
+fs.mkdirSync(noteDir, { recursive: true })
+
+const mdxContent = `Write your daily note here.
+`
+
+fs.writeFileSync(path.join(noteDir, 'content.mdx'), mdxContent)
+
+const newEntry = `\t{
+\t\ttitle: ${stringifyForTs(resolvedTitle)},
+\t\tslug: ${stringifyForTs(resolvedSlug)},
+\t\thref: ${stringifyForTs(`/diary/daily-notes/days/${resolvedSlug}`)},
+\t\tdescription: ${stringifyForTs(resolvedDescription)},
+\t\tdate: new Date(${stringifyForTs(noteDate.toISOString())})
+\t},
+`
+
+const arrayStartToken = 'const days: Day[] = [\n'
+const arrayStart = daysSource.indexOf(arrayStartToken)
+
+if (arrayStart === -1) {
+  console.error('Could not find days array in days.ts')
+  process.exit(1)
+}
+
+const insertAt = arrayStart + arrayStartToken.length
+const updatedDaysSource = `${daysSource.slice(0, insertAt)}${newEntry}${daysSource.slice(insertAt)}`
+fs.writeFileSync(daysFile, updatedDaysSource)
+
+console.log(`Created diary scaffold at ${noteDir}`)
+console.log('Next steps:')
+console.log('1. Write the content in content.mdx')
+console.log('2. Review the generated entry in src/app/diary/daily-notes/_data/days.ts')

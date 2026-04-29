@@ -44,7 +44,7 @@ export async function fetchQuestions(limit = 100): Promise<AskQuestion[]> {
 
 export async function replyToQuestion(id: string, replyBody: string): Promise<AskQuestion | null> {
   const redis = await getRedisClient()
-  const questions = await fetchQuestions()
+  const questions = await fetchQuestions(MAX_STORED_QUESTIONS)
   
   const target = questions.find(q => q.id === id)
   if (!target) return null

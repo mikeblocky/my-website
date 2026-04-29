@@ -1,20 +1,14 @@
-import { Metadata } from 'next'
+import { buildSocialMetadata } from '@/lib/metadata/social'
 
-export const metadata: Metadata = {
-    title: 'Week 6, 2025 | Weekly Reflections | sumit.ml',
+export const metadata = buildSocialMetadata({
+    title: 'Week 6, 2025 | Weekly Reflections | mikeblocky.com',
     description: 'My learning journey and reflections from Week 6 (Feb 3 - Feb 9, 2025)',
-    openGraph: {
-        title: 'Week 6, 2025 | Weekly Reflections | sumit.ml',
-        description: 'My learning journey and reflections from Week 6 (Feb 3 - Feb 9, 2025)',
-        type: 'article',
-        publishedTime: '2025-02-09T00:00:00.000Z',
-    },
-    twitter: {
-        card: 'summary_large_image',
-        title: 'Week 6, 2025 | Weekly Reflections',
-        description: 'My learning journey and reflections from Week 6 (Feb 3 - Feb 9, 2025)',
-    }
-}
+    path: '/learning/weekly-reflections/weeks/week-6',
+    imagePath: '/learning/opengraph-image.png',
+    twitterImagePath: '/learning/twitter-image.png',
+    type: 'article',
+    publishedTime: '2025-02-09T00:00:00.000Z',
+})
 
 export default function Layout({
     children,

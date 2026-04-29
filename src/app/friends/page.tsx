@@ -3,24 +3,21 @@
 import { useState } from 'react'
 import BaseContainer from '@/components/layout/container/base-container'
 import { StackVertical } from '@/components/layout/layout-stack/layout-stack'
-import TextHeading from '@/components/ui/text-heading/text-heading'
-import Text from '@/components/ui/text/text'
-import { DynamicBreadcrumb } from '@/components/ui/primitives/breadcrumb'
-import { ThemeToggle } from '@/components/ui/theme/theme-toggle'
 import { SectionFooter } from '@/components/layout/footer/SectionFooter'
-import { monoFont, sansFont } from '@/styles/fonts/fonts'
+import { sansFont } from '@/styles/fonts/fonts'
 import { cn } from '@/lib/utils/utils'
 import Image from 'next/image'
 import { developedFriends, upcomingFriends, type Friend } from './_data/friends'
+import TextUI from '@/components/ui/text/text'
+import TextHeading from '@/components/ui/text-heading/text-heading'
+import { SectionPageHeader } from '@/components/layout/page-header/SectionPageHeader'
 
 function FriendCard({ friend, tag }: { friend: Friend, tag: string }) {
     return (
-        <div className="group relative rounded-3xl border border-blue-200/60 bg-white/50 p-6 dark:border-blue-500/20 dark:bg-[#1a1525]/50 transition-all hover:bg-white hover:shadow-xl hover:shadow-blue-500/5 dark:hover:bg-[#1a1525] overflow-hidden">
-            <div className="absolute -right-4 -top-4 h-24 w-24 rounded-full bg-blue-50/50 blur-3xl transition-colors group-hover:bg-blue-100/50 dark:bg-blue-900/10 dark:group-hover:bg-blue-800/20" />
-            
-            <div className="relative flex flex-col md:flex-row gap-6 items-start">
+        <div className="group rounded-2xl border border-border/60 bg-background/80 p-5 transition-colors hover:border-blue-500/30 hover:bg-muted/20">
+            <div className="flex flex-col items-start gap-5 md:flex-row">
                 <div className="relative shrink-0 self-center md:self-start">
-                    <div className="relative w-20 h-20 rounded-2xl overflow-hidden rotate-3 group-hover:rotate-0 transition-transform duration-500 shadow-md bg-slate-100 dark:bg-slate-800">
+                    <div className="relative h-20 w-20 overflow-hidden rounded-2xl bg-slate-100 transition-transform duration-300 group-hover:-translate-y-0.5 dark:bg-slate-800">
                         <Image 
                             src={`https://unavatar.io/twitter/${friend.username}`}
                             alt={friend.username}
@@ -32,24 +29,23 @@ function FriendCard({ friend, tag }: { friend: Friend, tag: string }) {
                 </div>
                 
                 <StackVertical gap="sm" className="flex-1">
-                    <div className="flex flex-col">
-                        <div className="flex items-center gap-2">
-                            <span className={cn(sansFont.className, "text-sm font-bold text-blue-700 dark:text-blue-300 bg-blue-100/50 dark:bg-blue-900/40 px-2 py-0.5 rounded-md")}>
+                    <div className="flex items-center gap-2">
+                        <span className={cn(sansFont.className, "rounded-md bg-blue-50 px-2 py-1 text-sm font-semibold text-blue-700 dark:bg-blue-950/50 dark:text-blue-300")}>
                                 @{friend.username}
-                            </span>
-                        </div>
+                        </span>
+                        <span className="text-xs text-muted-foreground">{tag}</span>
                     </div>
                     
-                    <p className={cn(sansFont.className, "text-slate-700 dark:text-slate-200 leading-relaxed text-[15px] italic")}>
+                    <p className={cn(sansFont.className, "text-[15px] leading-relaxed text-slate-700 dark:text-slate-200")}>
                         "{friend.description}"
                     </p>
                     
-                    <div className="pt-2 flex justify-end">
+                    <div className="pt-1">
                         <a 
                             href={`https://twitter.com/${friend.username}`}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="text-sm font-semibold text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-200 transition-colors flex items-center gap-1"
+                            className="inline-flex items-center gap-1 text-sm font-medium text-blue-600 transition-colors hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-200"
                         >
                             View profile →
                         </a>
@@ -73,66 +69,50 @@ export default function FriendsList() {
     return (
         <BaseContainer size="md" paddingX="md" paddingY="lg">
             <StackVertical gap="md">
-                <div className="flex items-center justify-between">
-                    <DynamicBreadcrumb 
-                        items={[
-                            { href: '/', label: 'Home', emoji: '🐶' },
-                            { label: 'Friend list' }
-                        ]}
-                    />
-                    <ThemeToggle />
-                </div>
+                <SectionPageHeader
+                    title="Friend list"
+                    description="A small archive of the connections and friendships I've built along the way."
+                    currentLabel="Friend list"
+                />
 
-                <div className="max-w-2xl">
-                    <div className="mb-8">
-                        <TextHeading as="h1" weight="bold" className="text-4xl mb-2">
-                            Friend list
-                        </TextHeading>
-                        <Text variant="muted" className="text-lg leading-relaxed">
-                            A small archive of the connections and friendships I've built along the way.
-                        </Text>
+                <StackVertical gap="lg" className="pt-4">
+                    <div className="flex flex-wrap gap-2 border-b border-border/60 pb-4">
+                        {tabs.map((tab) => (
+                            <button
+                                key={tab.id}
+                                onClick={() => setActiveTab(tab.id as Tab)}
+                                className={cn(
+                                    "flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-medium transition-colors duration-200",
+                                    activeTab === tab.id
+                                        ? "border-blue-500 bg-blue-500 text-white"
+                                        : "border-border bg-background text-muted-foreground hover:border-blue-500/30 hover:text-blue-600 dark:hover:text-blue-300"
+                                )}
+                            >
+                                <span>{tab.label}</span>
+                                <span className={cn(
+                                    "rounded-full px-1.5 py-0.5 text-[10px]",
+                                    activeTab === tab.id ? "bg-white/20" : "bg-muted text-foreground/70"
+                                )}>
+                                    {tab.count}
+                                </span>
+                            </button>
+                        ))}
                     </div>
 
-                    <StackVertical gap="lg">
-                        <div className="flex flex-wrap gap-2 mb-2 border-b border-blue-100 dark:border-blue-900/50 pb-4">
-                            {tabs.map((tab) => (
-                                <button
-                                    key={tab.id}
-                                    onClick={() => setActiveTab(tab.id as Tab)}
-                                    className={cn(
-                                        "px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 flex items-center gap-2",
-                                        activeTab === tab.id
-                                            ? "bg-blue-500 text-white shadow-lg shadow-blue-500/20"
-                                            : "bg-blue-50 text-blue-600 hover:bg-blue-100 dark:bg-blue-900/20 dark:text-blue-400 dark:hover:bg-blue-900/40"
-                                    )}
-                                >
-                                    <span>{tab.label}</span>
-                                    <span className={cn(
-                                        "text-[10px] px-1.5 py-0.5 rounded-full",
-                                        activeTab === tab.id ? "bg-white/20" : "bg-blue-500/10"
-                                    )}>
-                                        {tab.count}
-                                    </span>
-                                </button>
-                            ))}
-                        </div>
-
-                        <div className="grid gap-8 min-h-[400px]">
-                            {activeTab === 'developed' ? (
-                                developedFriends.map((friend) => (
-                                    <FriendCard key={friend.username} friend={friend} tag="Friend" />
-                                ))
-                            ) : (
-                                upcomingFriends.map((friend) => (
-                                    <FriendCard key={friend.username} friend={friend} tag="Upcoming" />
-                                ))
-                            )}
-                        </div>
-                    </StackVertical>
-                </div>
+                    <div className="grid min-h-[400px] gap-5">
+                        {activeTab === 'developed' ? (
+                            developedFriends.map((friend) => (
+                                <FriendCard key={friend.username} friend={friend} tag="Friend" />
+                            ))
+                        ) : (
+                            upcomingFriends.map((friend) => (
+                                <FriendCard key={friend.username} friend={friend} tag="Upcoming" />
+                            ))
+                        )}
+                    </div>
+                </StackVertical>
             </StackVertical>
             <SectionFooter showToTop={false} />
         </BaseContainer>
     )
 }
-

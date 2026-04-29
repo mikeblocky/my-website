@@ -214,6 +214,20 @@ export const mdxComponents: MDXComponents = {
             {children}
         </a>
     ),
+    img: ({ src, alt = "", className, ...props }) => (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
+            src={typeof src === 'string' ? src : ''}
+            alt={alt}
+            loading="lazy"
+            decoding="async"
+            className={cn(
+                "my-6 h-auto w-full rounded-xl border border-border/50 bg-background/60",
+                className
+            )}
+            {...props}
+        />
+    ),
 
     ruby: ({ children, className }) => (
         <ruby className={cn('align-baseline', className)}>

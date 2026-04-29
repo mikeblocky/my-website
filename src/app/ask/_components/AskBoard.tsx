@@ -31,11 +31,18 @@ type FormState = {
 
 const ITEMS_PER_PAGE = 5
 
-export function AskBoard() {
+function sortQuestions(items: AskQuestion[]) {
+  return items.slice().sort(
+    (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+  )
+}
+
+export function AskBoard({ initialQuestions = seededQuestions }: { initialQuestions?: AskQuestion[] }) {
   const [formState, setFormState] = useState<FormState>({ author: '', body: '' })
-  const [questions, setQuestions] = useState<AskQuestion[]>(seededQuestions)
+  const [questions, setQuestions] = useState<AskQuestion[]>(sortQuestions(initialQuestions))
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
-  const [isLoading, setIsLoading] = useState(true)
+  const [isLoading, setIsLoading] = useState(initialQuestions.length === 0)
+  const [isRefreshing, setIsRefreshing] = useState(initialQuestions.length > 0)
   const [isPending, startTransition] = useTransition()
   
   // Pagination
@@ -61,6 +68,7 @@ export function AskBoard() {
   }
 
   useEffect(() => {
+    const controller = new AbortController()
     let cancelled = false
 
     // Check push support & register service worker
@@ -69,24 +77,28 @@ export function AskBoard() {
 
     async function loadQuestions() {
       try {
-        const response = await fetch('/api/ask', { cache: 'no-store' })
+        const response = await fetch('/api/ask', { signal: controller.signal })
         if (!response.ok) {
           throw new Error(`Failed with status ${response.status}`)
         }
 
         const payload = (await response.json()) as { questions?: AskQuestion[] }
         if (!cancelled && Array.isArray(payload.questions)) {
-          setQuestions(payload.questions)
+          setQuestions(sortQuestions(payload.questions))
         }
       } catch (error) {
+        if (controller.signal.aborted) {
+          return
+        }
+
         console.error('Unable to load questions', error)
         if (!cancelled) {
-          showNotification('Unable to load archive. Showing starter questions.')
-          setQuestions(seededQuestions)
+          showNotification('Unable to refresh the archive. Showing the latest cached list.')
         }
       } finally {
         if (!cancelled) {
           setIsLoading(false)
+          setIsRefreshing(false)
         }
       }
     }
@@ -95,6 +107,7 @@ export function AskBoard() {
 
     return () => {
       cancelled = true
+      controller.abort()
     }
   }, [])
 
@@ -232,12 +245,12 @@ export function AskBoard() {
   return (
     <StackVertical gap="lg">
       <form 
-        className="rounded-xl border border-blue-200 bg-white dark:border-blue-800 dark:bg-slate-950 transition-colors focus-within:border-blue-400 dark:focus-within:border-blue-500" 
+        className="rounded-2xl border border-border/60 bg-background/90 transition-colors focus-within:border-blue-400 dark:focus-within:border-blue-500" 
         onSubmit={handleSubmit}
       >
         <div className="flex flex-col">
           {/* Top: Alias Field */}
-          <div className="px-4 py-3 border-b border-blue-100 dark:border-blue-900">
+          <div className="border-b border-border/60 px-4 py-3">
             <input
               type="text"
               value={formState.author}
@@ -245,7 +258,7 @@ export function AskBoard() {
               placeholder="Your alias (optional)"
               className={cn(
                 sansFont.className,
-                "w-full bg-transparent text-sm font-semibold text-blue-600 placeholder:text-blue-300 focus:outline-none dark:text-blue-400 dark:placeholder:text-blue-500/40"
+                "w-full bg-transparent text-sm font-semibold text-blue-600 placeholder:text-muted-foreground/60 focus:outline-none dark:text-blue-400"
               )}
             />
           </div>
@@ -269,7 +282,7 @@ export function AskBoard() {
           </div>
 
           {/* Bottom: Action Bar */}
-          <div className="px-4 py-3 border-t border-blue-500/10 flex items-center justify-between gap-4">
+          <div className="flex items-center justify-between gap-4 border-t border-border/60 px-4 py-3">
             <div className="flex items-center">
               {pushSupported && (
                 <label className="flex items-center gap-2.5 cursor-pointer group/notify select-none">
@@ -291,7 +304,7 @@ export function AskBoard() {
               type="submit" 
               size="sm"
               disabled={!formState.body.trim() || isPending}
-              className="rounded-lg px-5 py-1.5 h-10 text-sm font-bold bg-blue-600 hover:bg-blue-700 text-white transition-colors"
+              className="h-10 px-5 text-sm font-semibold"
             >
               Send question
             </Button>
@@ -306,17 +319,24 @@ export function AskBoard() {
       )}
 
       <section className="space-y-6">
-        <div className="flex items-baseline justify-between border-b border-blue-200 dark:border-blue-500/50 pb-3">
+        <div className="flex items-baseline justify-between border-b border-border/60 pb-3">
           <TextHeading as="h3" weight="semibold" className="text-lg">
             Questions
           </TextHeading>
-          <Text variant="muted" size="sm">
-            {questions.length} questions collected
-          </Text>
+          <div className="flex items-center gap-3">
+            {isRefreshing ? (
+              <Text variant="muted" size="xs">
+                Refreshing...
+              </Text>
+            ) : null}
+            <Text variant="muted" size="sm">
+              {questions.length} questions collected
+            </Text>
+          </div>
         </div>
 
         <StackVertical gap="md">
-          {isLoading ? (
+          {isLoading && questions.length === 0 ? (
             <div className="py-8 text-center">
               <Text variant="muted" size="sm">
                 Loading history...
@@ -327,12 +347,12 @@ export function AskBoard() {
               <article 
                 id={`question-${question.id}`} 
                 key={question.id} 
-                className="rounded-2xl border border-blue-200 bg-white p-6 dark:border-blue-500/40 dark:bg-[#1a1525] relative group transition-all"
+                className="group relative rounded-2xl border border-border/60 bg-background/80 p-6 transition-colors hover:border-blue-500/20 hover:bg-muted/15"
               >
                 <StackVertical gap="sm">
                   <div className="flex justify-between items-start mb-1">
                     <h4 className="text-sm font-semibold text-blue-700 dark:text-blue-300 flex items-center gap-2">
-                      <span className={cn(sansFont.className, "bg-blue-50 dark:bg-blue-900/40 px-2.5 py-1 rounded-full")}>{question.author} asked</span>
+                      <span className={cn(sansFont.className, "rounded-full bg-blue-50 px-2.5 py-1 dark:bg-blue-950/50")}>{question.author} asked</span>
                     </h4>
                     <span className={cn(sansFont.className, "text-xs text-muted-foreground mt-1.5")}>
                       {formatDate(question.createdAt)}
@@ -344,7 +364,7 @@ export function AskBoard() {
                   </p>
 
                   {question.reply && (
-                    <div className="mt-3 rounded-xl bg-blue-50/50 p-5 border border-blue-100 dark:bg-blue-900/20 dark:border-blue-500/30">
+                    <div className="mt-3 rounded-xl border border-border/60 bg-muted/30 p-5">
                       <div className="flex items-center gap-2 mb-2">
                         <span className="text-sm font-bold text-blue-900 dark:text-blue-200">Answer</span>
                         {question.repliedAt && (
@@ -359,10 +379,10 @@ export function AskBoard() {
                     </div>
                   )}
 
-                  <div className="question-actions mt-1 flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                  <div className="question-actions mt-1 flex justify-end gap-2 opacity-0 transition-opacity group-hover:opacity-100">
                     <button
                       onClick={() => takeScreenshot(question.id)}
-                      className="flex items-center gap-1.5 text-xs font-medium text-slate-500 hover:text-blue-600 dark:text-slate-400 dark:hover:text-blue-300 bg-slate-50 dark:bg-slate-800/50 px-3 py-1.5 rounded-full"
+                      className="flex items-center gap-1.5 rounded-full border border-border/60 bg-background px-3 py-1.5 text-xs font-medium text-slate-500 transition-colors hover:text-blue-600 dark:text-slate-400 dark:hover:text-blue-300"
                     >
                       <Camera size={14} />
                       Snap
@@ -373,7 +393,7 @@ export function AskBoard() {
                           setReplyingTo(replyingTo === question.id ? null : question.id)
                           setReplyBody('')
                         }}
-                        className="flex items-center gap-1.5 text-xs font-medium text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 bg-blue-50 dark:bg-blue-900/30 px-3 py-1.5 rounded-full"
+                        className="flex items-center gap-1.5 rounded-full border border-blue-200 bg-blue-50 px-3 py-1.5 text-xs font-medium text-blue-600 transition-colors hover:text-blue-800 dark:border-blue-500/30 dark:bg-blue-950/50 dark:text-blue-400 dark:hover:text-blue-300"
                       >
                         <MessageSquareReply size={14} />
                         Reply
@@ -382,7 +402,7 @@ export function AskBoard() {
                   </div>
 
                   {replyingTo === question.id && !question.reply && (
-                    <div className="mt-3 pt-3 border-t border-blue-100 dark:border-blue-500/30">
+                    <div className="mt-3 border-t border-border/60 pt-3">
                       <textarea
                         value={replyBody}
                         onChange={(e) => setReplyBody(e.target.value)}
@@ -392,7 +412,7 @@ export function AskBoard() {
                         }}
                         placeholder="Write your answer..."
                         rows={1}
-                        className={cn(sansFont.className, "w-full rounded-xl border border-blue-200 bg-white px-4 py-3 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-300 dark:border-blue-500/50 dark:bg-slate-900 dark:text-slate-100 resize-none overflow-hidden min-h-[44px]")}
+                        className={cn(sansFont.className, "min-h-[44px] w-full resize-none overflow-hidden rounded-xl border border-border bg-background px-4 py-3 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-300 dark:text-slate-100")}
                       />
                       <div className="mt-2 flex justify-between items-center gap-2">
                         <input 
@@ -400,13 +420,13 @@ export function AskBoard() {
                           value={passcode}
                           onChange={e => setPasscode(e.target.value)}
                           placeholder="Passcode"
-                          className="w-24 rounded-full border border-blue-200 bg-white px-3 py-1.5 text-xs text-slate-900 dark:border-blue-500/50 dark:bg-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-300"
+                          className="w-24 rounded-full border border-border bg-background px-3 py-1.5 text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-300 dark:text-slate-100"
                         />
                         <div className="flex gap-2">
                           <Button variant="ghost" size="sm" onClick={() => setReplyingTo(null)} className="text-xs h-8">
                             Cancel
                           </Button>
-                          <Button size="sm" disabled={isPending || !replyBody.trim()} onClick={() => handleReplySubmit(question.id)} className="text-xs h-8 rounded-full px-4 bg-blue-600 hover:bg-blue-700 text-white">
+                          <Button size="sm" disabled={isPending || !replyBody.trim()} onClick={() => handleReplySubmit(question.id)} className="h-8 rounded-full px-4 text-xs">
                             Post
                           </Button>
                         </div>
@@ -421,7 +441,7 @@ export function AskBoard() {
 
         {/* Pagination Controls */}
         {!isLoading && totalPages > 1 && (
-          <div className="mt-8 flex items-center justify-center gap-4 border-t border-blue-200 dark:border-blue-500/50 pt-6">
+          <div className="mt-8 flex items-center justify-center gap-4 border-t border-border/60 pt-6">
             <button
               onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
               disabled={currentPage === 1}

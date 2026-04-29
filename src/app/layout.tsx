@@ -12,13 +12,25 @@ export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: 'mikeblocky.com',
   description: 'a site where i share my thoughts and archive my artworks',
+  alternates: {
+    canonical: SITE_URL
+  },
   openGraph: {
     siteName: 'mikeblocky.com',
     url: SITE_URL,
-    type: 'website'
+    type: 'website',
+    images: [
+      {
+        url: '/opengraph-image.jpg',
+        width: 1200,
+        height: 630,
+        alt: 'mikeblocky.com'
+      }
+    ]
   },
   twitter: {
-    card: 'summary_large_image'
+    card: 'summary_large_image',
+    images: ['/twitter-image.jpg']
   }
 }
 

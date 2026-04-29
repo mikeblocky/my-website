@@ -40,7 +40,8 @@ export function Navbar() {
         { href: '/diary', label: 'Diary' },
         { href: '/ask', label: 'Ask' },
         { href: '/pet', label: 'Pet annoy' },
-        { href: '/friends', label: 'Friend list' }
+        { href: '/friends', label: 'Friend list' },
+        { href: '/stats', label: 'Drawing stats' }
     ]
 
     // Close menu when clicking outside
@@ -59,13 +60,13 @@ export function Navbar() {
     return (
         <nav className={cn(monoFont.className, "relative z-50")}>
             {/* Desktop Navigation */}
-            <div className="hidden sm:flex items-center gap-6">
+            <div className="hidden sm:flex items-center gap-5">
                 {links.map((link) => (
                     <motion.div
                         key={link.href}
                         whileHover={{ y: -1 }}
                         transition={{ duration: 0.2 }}
-                        className="relative after:content-[''] after:absolute after:w-0 after:h-[1px] after:bg-blue-500 after:left-0 after:bottom-[-2px] after:transition-all after:duration-200 hover:after:w-full"
+                        className="relative after:absolute after:bottom-[-2px] after:left-0 after:h-[1px] after:w-0 after:bg-blue-500 after:transition-all after:duration-200 after:content-[''] hover:after:w-full"
                     >
                         <NavLink href={link.href}>
                             {link.label}
@@ -85,9 +86,9 @@ export function Navbar() {
                         "relative z-[60]",
                         "flex items-center justify-center",
                         "w-9 h-9",
-                        "text-muted-foreground",
+                        "rounded-lg border border-transparent text-muted-foreground",
                         "transition-all duration-300",
-                        isMenuOpen && "text-blue-500 bg-blue-500/10 rounded-lg",
+                        isMenuOpen && "border-blue-500/20 bg-blue-500/10 text-blue-500",
                         "hover:text-blue-500"
                     )}
                     aria-label={isMenuOpen ? "Close menu" : "Open menu"}
@@ -125,10 +126,10 @@ export function Navbar() {
                                 className={cn(
                                     "absolute top-12 left-[-8px] z-[60]",
                                     "min-w-[200px] w-auto",
-                                    "bg-background/80 dark:bg-gray-950/80",
+                                    "bg-background/90 dark:bg-gray-950/90",
                                     "backdrop-blur-md",
-                                    "border border-border/50 rounded-lg",
-                                    "shadow-lg shadow-blue-500/5",
+                                    "rounded-xl border border-border/60",
+                                    "shadow-lg shadow-black/5",
                                     "overflow-hidden"
                                 )}
                             >

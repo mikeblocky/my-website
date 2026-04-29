@@ -2,60 +2,31 @@
 
 import BaseContainer from "@/components/layout/container/base-container"
 import { StackVertical } from "@/components/layout/layout-stack/layout-stack"
-import TextHeading from "@/components/ui/text-heading/text-heading"
 import { SectionFooter } from "@/components/layout/footer/SectionFooter"
-import Text from "@/components/ui/text/text"
-import { DynamicBreadcrumb } from "@/components/ui/primitives/breadcrumb"
-import { ThemeToggle } from "@/components/ui/theme/theme-toggle"
-import Link from "next/link"
+import { SectionPageHeader } from "@/components/layout/page-header/SectionPageHeader"
+import { SectionLinkItem } from "@/components/layout/page-header/SectionLinkList"
 
 export default function Learning() {
     return (
         <BaseContainer size="md" paddingX="md" paddingY="lg">
             <StackVertical gap="md">
-                <div className="flex items-center justify-between">
-                    <DynamicBreadcrumb 
-                        items={[
-                            { href: '/', label: 'Home', emoji: '🐶' },
-                            { label: 'Learning' }
-                        ]}
-                    />
-                    <ThemeToggle />
-                </div>
-
-                <div>
-                <TextHeading as="h1" weight="bold">
-                    Learning
-                </TextHeading>
-                <Text variant="muted" className="mb-8">
-                    A collection of my learning: weekly reflections, materials I use, and more.
-                </Text>
-
+                <SectionPageHeader
+                    title="Learning"
+                    description="A collection of my learning pages: weekly reflections, materials I use, and more."
+                    currentLabel="Learning"
+                />
                 <StackVertical gap="md">
-                    <Link 
+                    <SectionLinkItem
                         href="/learning/weekly-reflections/"
-                        className="group"
-                    >
-                        <Text 
-                            size="md" 
-                            className="underline font-bold transition-colors duration-200 group-hover:text-blue-500"
-                        >
-                            Weekly Reflections
-                        </Text>
-                    </Link>
-                    <Link 
+                        title="Weekly Reflections"
+                        description="A running log of what I studied, noticed, and want to improve."
+                    />
+                    <SectionLinkItem
                         href="/learning/learning-utensils/"
-                        className="group"
-                    >
-                        <Text 
-                            size="md" 
-                            className="underline font-bold transition-colors duration-200 group-hover:text-blue-500"
-                        >
-                            Learning Utensils
-                        </Text>
-                    </Link>
+                        title="Learning Utensils"
+                        description="The books, apps, and equipment I use while learning."
+                    />
                 </StackVertical>
-            </div>
             </StackVertical>
             <SectionFooter color="blue" showToTop={false} />
         </BaseContainer>

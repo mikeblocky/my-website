@@ -2,16 +2,13 @@
 
 import BaseContainer from "@/components/layout/container/base-container";
 import { StackVertical } from "@/components/layout/layout-stack/layout-stack";
-import TextHeading from "@/components/ui/text-heading/text-heading";
-import Text from "@/components/ui/text/text";
-import { DynamicBreadcrumb } from "@/components/ui/primitives/breadcrumb";
-import { ThemeToggle } from "@/components/ui/theme/theme-toggle";
 import { IndividualPageFooter } from "@/components/layout/footer/IndividualPageFooter";
 import { getDaysByMonth } from "./_data/days";
 import Link from "next/link";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion/accordion";
 import { cn } from "@/lib/utils/utils";
 import { monoFont } from "@/styles/fonts/fonts";
+import { SectionPageHeader } from "@/components/layout/page-header/SectionPageHeader";
 
 export default function DailyNotes() {
 	const monthGroups = getDaysByMonth();
@@ -21,25 +18,11 @@ export default function DailyNotes() {
 	return (
 		<BaseContainer size="md" paddingX="md" paddingY="lg">
 			<StackVertical gap="md">
-				<div className="flex items-center justify-between">
-					<DynamicBreadcrumb
-						items={[
-							{ href: "/", label: "Home", emoji: "👾" },
-							{ href: "/diary", label: "Diary" },
-							{ label: "Daily notes" },
-						]}
-					/>
-					<ThemeToggle />
-				</div>
-
-				<div>
-					<TextHeading as="h1" weight="bold">
-						Daily notes
-					</TextHeading>
-					<Text variant="muted" className="mb-8">
-						My attempt at documenting, reflecting on, and being grateful for
-						what I learned each day in my pursuit of knowledge.
-					</Text>
+				<SectionPageHeader
+					title="Daily notes"
+					description="My attempt at documenting, reflecting on, and being grateful for what I learned each day in my pursuit of knowledge."
+					currentLabel="Daily notes"
+				/>
 
 					<Accordion 
 						type="single" 
@@ -80,7 +63,7 @@ export default function DailyNotes() {
 								<AccordionContent>
 									<div className="pt-4 pl-4">
 										<StackVertical gap="none">
-											{group.days.map((day, dayIndex) => (
+											{group.days.map((day) => (
 												<div 
 													key={day.href} 
 													className={cn(
@@ -123,10 +106,9 @@ export default function DailyNotes() {
 							</AccordionItem>
 						))}
 					</Accordion>
-				</div>
 			</StackVertical>
 
-			<IndividualPageFooter parentPageName={`Notes`} showToTop={false} />
+			<IndividualPageFooter parentPageName="Diary" showToTop={false} />
 		</BaseContainer>
 	);
 }

@@ -26,7 +26,7 @@ export function HeroSection() {
                         transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
                         className="w-10 h-10 sm:w-12 sm:h-12"
                     >
-                        <img src="/icon.svg" alt="mikeblocky" className="w-full h-full" />
+                        <Image src="/icon.svg" alt="mikeblocky" width={48} height={48} className="h-full w-full" priority />
                     </motion.div>
 
                     <motion.div
@@ -110,12 +110,12 @@ export function HeroSection() {
                                 <Link href="/about" className="underline hover:text-blue-500">About me</Link>
                             </ListItem>
                             <ListItem>
-                                <Link href="/blog/posts/kemutai-hanashi-fic-1" className="underline hover:text-blue-500">
+                                <Link href="/blog/kemutai-hanashi-fic-1" className="underline hover:text-blue-500">
                                     I have my words, and time is ticking
                                 </Link>
                             </ListItem>
                             <ListItem>
-                                <Link href="/blog/posts/kemutai-hanashi-2-3-en" className="underline hover:text-blue-500">
+                                <Link href="/blog/kemutai-hanashi-2-3-en" className="underline hover:text-blue-500">
                                     My thoughts about Kemutai Hanashi - Chapter 2, 3
                                 </Link>
                             </ListItem>

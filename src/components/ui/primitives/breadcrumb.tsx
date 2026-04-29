@@ -4,6 +4,7 @@ import * as React from "react"
 import { Slot } from "@radix-ui/react-slot"
 import { ChevronRight, MoreHorizontal, Slash } from "lucide-react"
 import Link from "next/link"
+import Image from "next/image"
 import { monoFont } from "@/styles/fonts/fonts"
 import { cn } from "@/lib/utils/utils"
 
@@ -130,6 +131,8 @@ export function DynamicBreadcrumb({ items, className }: BreadcrumbProps) {
     const mobileItems = parentItem 
         ? (parentItem.href === '/' ? [homeItem, lastItem] : [homeItem, parentItem, lastItem])
         : [homeItem, lastItem];
+    const icon = <Image src="/icon.svg" alt="" width={20} height={20} className="inline-block shrink-0" />
+    const mobileIcon = <Image src="/icon.svg" alt="" width={16} height={16} className="inline-block shrink-0" />
 
     return (
         <Breadcrumb className={cn(monoFont.className, className)}>
@@ -146,7 +149,7 @@ export function DynamicBreadcrumb({ items, className }: BreadcrumbProps) {
                                 ) : (
                                     <BreadcrumbLink asChild>
                                         <Link href={item.href || '#'} className="flex items-center whitespace-nowrap text-sm gap-2">
-                                            {item.emoji && <img src="/icon.svg" alt="" className="inline-block w-5 h-5 shrink-0" />}
+                                            {item.emoji && icon}
                                             {item.label}
                                         </Link>
                                     </BreadcrumbLink>
@@ -171,12 +174,12 @@ export function DynamicBreadcrumb({ items, className }: BreadcrumbProps) {
                                         href={item.href} 
                                         className="flex items-center gap-2 text-sm text-muted-foreground/80 hover:text-foreground transition-colors"
                                     >
-                                        {item.emoji && <img src="/icon.svg" alt="" className="inline-block w-4 h-4 shrink-0" />}
+                                        {item.emoji && mobileIcon}
                                         <span>{item.label}</span>
                                     </Link>
                                 ) : (
                                     <span className="flex items-center gap-2 text-sm text-foreground">
-                                        {item.emoji && <img src="/icon.svg" alt="" className="inline-block w-4 h-4 shrink-0" />}
+                                        {item.emoji && mobileIcon}
                                         <span>{item.label}</span>
                                     </span>
                                 )}
