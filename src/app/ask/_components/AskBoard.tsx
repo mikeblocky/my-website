@@ -293,14 +293,14 @@ export function AskBoard({ initialQuestions = seededQuestions }: { initialQuesti
           <div className="space-y-1">
             <div className="flex items-center gap-2">
               <h4 className={cn(sansFont.className, "text-sm font-bold text-blue-900 dark:text-blue-100")}>
-                Threaded Conversations
+                Threaded conversations
               </h4>
-              <span className="rounded-full bg-blue-600 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider text-white">
+              <span className="rounded-full bg-blue-600 px-1.5 py-0.5 text-[9px] font-bold tracking-wider text-white">
                 New
               </span>
             </div>
             <p className={cn(sansFont.className, "text-xs text-blue-800/70 dark:text-blue-300/70 leading-relaxed")}>
-              You can now follow up on any answered question! Click the <b>Follow up</b> button to ask more, or <b>Reply</b> if you're the admin.
+              You can now follow up on any answered question! Click the <b>Follow up</b> button to ask more!
               Questions with active notifications show a <b><Bell size={10} className="inline mb-0.5" /> bell</b> icon.
             </p>
           </div>
