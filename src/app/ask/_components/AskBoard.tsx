@@ -7,7 +7,7 @@ import { StackVertical } from '@/components/layout/layout-stack/layout-stack'
 import TextHeading from '@/components/ui/text-heading/text-heading'
 import Text from '@/components/ui/text/text'
 import { Button } from '@/components/ui/primitives/button'
-import { ChevronLeft, ChevronRight, MessageSquareReply, Camera, Bell, CornerDownRight } from 'lucide-react'
+import { ChevronLeft, ChevronRight, MessageSquareReply, Camera, Bell, CornerDownRight, Share2 } from 'lucide-react'
 import { sansFont, monoFont } from '@/styles/fonts/fonts'
 import { cn } from '@/lib/utils/utils'
 import { AnimatePresence, motion } from 'framer-motion'
@@ -283,6 +283,12 @@ export function AskBoard({ initialQuestions = seededQuestions }: { initialQuesti
     }
   }
 
+  function copyLink(id: string) {
+    const url = `${window.location.origin}/ask/${id}`
+    navigator.clipboard.writeText(url)
+    showNotification('Link copied!')
+  }
+
   return (
     <StackVertical gap="lg">
       <div className="rounded-2xl border border-blue-100 bg-blue-50/40 p-5 dark:border-blue-900/30 dark:bg-blue-900/10">
@@ -458,6 +464,13 @@ export function AskBoard({ initialQuestions = seededQuestions }: { initialQuesti
 
                     {/* Action buttons */}
                     <div className="question-actions mt-1 flex justify-end gap-2 opacity-0 transition-opacity group-hover:opacity-100">
+                      <button
+                        onClick={() => copyLink(question.id)}
+                        className="flex items-center gap-1.5 rounded-full border border-border/60 bg-background px-3 py-1.5 text-xs font-medium text-slate-500 transition-colors hover:text-blue-600 dark:text-slate-400 dark:hover:text-blue-300"
+                      >
+                        <Share2 size={14} />
+                        Share
+                      </button>
                       <button
                         onClick={() => takeScreenshot(question.id)}
                         className="flex items-center gap-1.5 rounded-full border border-border/60 bg-background px-3 py-1.5 text-xs font-medium text-slate-500 transition-colors hover:text-blue-600 dark:text-slate-400 dark:hover:text-blue-300"

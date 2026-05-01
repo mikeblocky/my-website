@@ -132,3 +132,8 @@ export async function followUpQuestion(id: string, followUpBody: string): Promis
   
   return updatedQuestion
 }
+
+export async function getQuestionById(id: string): Promise<AskQuestion | null> {
+  const questions = await fetchQuestions(MAX_STORED_QUESTIONS)
+  return questions.find(q => q.id === id) || null
+}
