@@ -46,6 +46,7 @@ export async function POST(request: NextRequest) {
   return NextResponse.json({ question }, { status: 201 })
 }
 
+/** Admin reply — requires passcode */
 export async function PUT(request: NextRequest) {
   const data = await request.json().catch(() => null)
   if (!data || typeof data.id !== 'string' || typeof data.reply !== 'string') {
@@ -98,6 +99,43 @@ export async function PUT(request: NextRequest) {
       }
     } catch (pushError) {
       console.error('Push notification error (non-blocking):', pushError)
+    }
+  })
+
+  return NextResponse.json({ question: updatedQuestion }, { status: 200 })
+}
+
+/** Visitor follow-up — no passcode needed, but the question must already have an admin reply */
+export async function PATCH(request: NextRequest) {
+  const data = await request.json().catch(() => null)
+  if (!data || typeof data.id !== 'string' || typeof data.body !== 'string') {
+    return NextResponse.json({ error: 'Invalid payload' }, { status: 400 })
+  }
+
+  const body = data.body.trim()
+  if (body.length === 0) {
+    return NextResponse.json({ error: 'Follow-up cannot be empty' }, { status: 400 })
+  }
+  if (body.length > MAX_BODY_LENGTH) {
+    return NextResponse.json({ error: 'Follow-up is too long' }, { status: 400 })
+  }
+
+  const { followUpQuestion } = await import('@/lib/kv/ask')
+  const updatedQuestion = await followUpQuestion(data.id, body)
+
+  if (!updatedQuestion) {
+    return NextResponse.json({ error: 'Question not found or no admin reply yet' }, { status: 404 })
+  }
+  revalidateTag(ASK_QUESTIONS_TAG, 'max')
+
+  after(async () => {
+    try {
+      await notifyOwnerNewQuestion(
+        updatedQuestion.author || 'anonymous',
+        `[Follow-up] ${body}`
+      )
+    } catch (err) {
+      console.error('Follow-up notification error (non-blocking):', err)
     }
   })
 

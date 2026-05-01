@@ -2,12 +2,12 @@
 
 import { FormEvent, useEffect, useState, useTransition, useMemo } from 'react'
 import { initialQuestions } from '../_data/questions'
-import { AskQuestion } from '../_types/ask'
+import { AskQuestion, ThreadMessage } from '../_types/ask'
 import { StackVertical } from '@/components/layout/layout-stack/layout-stack'
 import TextHeading from '@/components/ui/text-heading/text-heading'
 import Text from '@/components/ui/text/text'
 import { Button } from '@/components/ui/primitives/button'
-import { ChevronLeft, ChevronRight, MessageSquareReply, Camera, Bell } from 'lucide-react'
+import { ChevronLeft, ChevronRight, MessageSquareReply, Camera, Bell, CornerDownRight } from 'lucide-react'
 import { sansFont, monoFont } from '@/styles/fonts/fonts'
 import { cn } from '@/lib/utils/utils'
 import { AnimatePresence, motion } from 'framer-motion'
@@ -37,6 +37,20 @@ function sortQuestions(items: AskQuestion[]) {
   )
 }
 
+function formatDate(iso: string) {
+  try {
+    return dateFormatter.format(new Date(iso))
+  } catch (error) {
+    return iso
+  }
+}
+
+/** Determine what the last message role is in the thread */
+function lastThreadRole(q: AskQuestion): 'asker' | 'admin' | null {
+  if (!q.thread || q.thread.length === 0) return null
+  return q.thread[q.thread.length - 1].role
+}
+
 export function AskBoard({ initialQuestions = seededQuestions }: { initialQuestions?: AskQuestion[] }) {
   const [formState, setFormState] = useState<FormState>({ author: '', body: '' })
   const [questions, setQuestions] = useState<AskQuestion[]>(sortQuestions(initialQuestions))
@@ -48,10 +62,14 @@ export function AskBoard({ initialQuestions = seededQuestions }: { initialQuesti
   // Pagination
   const [currentPage, setCurrentPage] = useState(1)
 
-  // Reply state
+  // Reply state (admin)
   const [replyingTo, setReplyingTo] = useState<string | null>(null)
   const [replyBody, setReplyBody] = useState('')
   const [passcode, setPasscode] = useState('')
+
+  // Follow-up state (visitor)
+  const [followingUp, setFollowingUp] = useState<string | null>(null)
+  const [followUpBody, setFollowUpBody] = useState('')
 
   // Push notification state
   const [wantNotification, setWantNotification] = useState(true)
@@ -126,9 +144,7 @@ export function AskBoard({ initialQuestions = seededQuestions }: { initialQuesti
         setErrorMessage(null)
         const response = await fetch('/api/ask', {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload)
         })
 
@@ -167,9 +183,7 @@ export function AskBoard({ initialQuestions = seededQuestions }: { initialQuesti
         setErrorMessage(null)
         const response = await fetch('/api/ask', {
           method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json'
-          },
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ id, reply: replyBody, passcode })
         })
 
@@ -188,6 +202,33 @@ export function AskBoard({ initialQuestions = seededQuestions }: { initialQuesti
     })
   }
 
+  async function handleFollowUpSubmit(id: string) {
+    if (!followUpBody.trim()) return
+
+    startTransition(async () => {
+      try {
+        setErrorMessage(null)
+        const response = await fetch('/api/ask', {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id, body: followUpBody })
+        })
+
+        if (!response.ok) {
+          throw new Error('Failed to send follow-up')
+        }
+
+        const { question } = await response.json()
+        setQuestions(prev => prev.map(q => q.id === id ? question : q))
+        setFollowingUp(null)
+        setFollowUpBody('')
+        showNotification('Follow-up sent!')
+      } catch (error) {
+        showNotification('Could not send follow-up.')
+      }
+    })
+  }
+
   const totalPages = Math.ceil(questions.length / ITEMS_PER_PAGE)
   const paginatedQuestions = useMemo(() => {
     const start = (currentPage - 1) * ITEMS_PER_PAGE
@@ -198,7 +239,6 @@ export function AskBoard({ initialQuestions = seededQuestions }: { initialQuesti
     const element = document.getElementById(`question-${id}`);
     if (!element) return;
     
-    // Hide the action buttons temporarily for the screenshot
     const actionsDiv = element.querySelector('.question-actions') as HTMLElement;
     if (actionsDiv) actionsDiv.style.visibility = 'hidden';
     
@@ -343,99 +383,141 @@ export function AskBoard({ initialQuestions = seededQuestions }: { initialQuesti
               </Text>
             </div>
           ) : (
-            paginatedQuestions.map((question: AskQuestion) => (
-              <article 
-                id={`question-${question.id}`} 
-                key={question.id} 
-                className="group relative rounded-2xl border border-border/60 bg-background/80 p-6 transition-colors hover:border-blue-500/15 hover:bg-muted/10"
-              >
-                <StackVertical gap="sm">
-                  <div className="flex justify-between items-start mb-1">
-                    <h4 className="flex items-center gap-2 text-sm font-semibold text-blue-600 dark:text-blue-400">
-                      <span className={cn(sansFont.className, "rounded-full border border-blue-200/70 bg-blue-50/70 px-2.5 py-1 dark:border-blue-500/20 dark:bg-blue-500/10")}>{question.author} asked</span>
-                    </h4>
-                    <span className={cn(sansFont.className, "text-xs text-muted-foreground mt-1.5")}>
-                      {formatDate(question.createdAt)}
-                    </span>
-                  </div>
-                  
-                  <p className={cn(sansFont.className, "text-lg text-slate-800 dark:text-slate-200 leading-relaxed font-medium mb-2 whitespace-pre-wrap break-words")}>
-                    "{question.body}"
-                  </p>
+            paginatedQuestions.map((question: AskQuestion) => {
+              const thread = question.thread || []
+              const lastRole = lastThreadRole(question)
+              const canFollowUp = lastRole === 'admin'
+              const canReply = !lastRole || lastRole === 'asker'
 
-                  {question.reply && (
-                    <div className="mt-3 rounded-xl border border-blue-200/60 bg-blue-50/30 p-5 dark:border-blue-500/15 dark:bg-blue-500/5">
-                      <div className="flex items-center gap-2 mb-2">
-                        <span className="text-sm font-bold text-blue-600 dark:text-blue-400">Answer</span>
-                        {question.repliedAt && (
-                          <span className={cn(sansFont.className, "ml-auto text-xs text-muted-foreground")}>
-                            {formatDate(question.repliedAt)}
-                          </span>
-                        )}
-                      </div>
-                      <p className={cn(sansFont.className, "text-base text-slate-700 dark:text-slate-300 leading-relaxed whitespace-pre-wrap break-words")}>
-                        {question.reply}
-                      </p>
+              return (
+                <article 
+                  id={`question-${question.id}`} 
+                  key={question.id} 
+                  className="group relative rounded-2xl border border-border/60 bg-background/80 p-6 transition-colors hover:border-blue-500/15 hover:bg-muted/10"
+                >
+                  <StackVertical gap="sm">
+                    {/* Original question */}
+                    <div className="flex justify-between items-start mb-1">
+                      <h4 className="flex items-center gap-2 text-sm font-semibold text-blue-600 dark:text-blue-400">
+                        <span className={cn(sansFont.className, "rounded-full border border-blue-200/70 bg-blue-50/70 px-2.5 py-1 dark:border-blue-500/20 dark:bg-blue-500/10")}>{question.author} asked</span>
+                      </h4>
+                      <span className={cn(sansFont.className, "text-xs text-muted-foreground mt-1.5")}>
+                        {formatDate(question.createdAt)}
+                      </span>
                     </div>
-                  )}
+                    
+                    <p className={cn(sansFont.className, "text-lg text-slate-800 dark:text-slate-200 leading-relaxed font-medium mb-2 whitespace-pre-wrap break-words")}>
+                      &ldquo;{question.body}&rdquo;
+                    </p>
 
-                  <div className="question-actions mt-1 flex justify-end gap-2 opacity-0 transition-opacity group-hover:opacity-100">
-                    <button
-                      onClick={() => takeScreenshot(question.id)}
-                      className="flex items-center gap-1.5 rounded-full border border-border/60 bg-background px-3 py-1.5 text-xs font-medium text-slate-500 transition-colors hover:text-blue-600 dark:text-slate-400 dark:hover:text-blue-300"
-                    >
-                      <Camera size={14} />
-                      Snap
-                    </button>
-                    {!question.reply && (
-                      <button
-                        onClick={() => {
-                          setReplyingTo(replyingTo === question.id ? null : question.id)
-                          setReplyBody('')
-                        }}
-                        className="flex items-center gap-1.5 rounded-full border border-blue-200/70 bg-blue-50/70 px-3 py-1.5 text-xs font-medium text-blue-600 transition-colors hover:border-blue-300 hover:bg-blue-50 dark:border-blue-500/20 dark:bg-blue-500/10 dark:text-blue-400 dark:hover:border-blue-500/30 dark:hover:bg-blue-500/15"
-                      >
-                        <MessageSquareReply size={14} />
-                        Reply
-                      </button>
+                    {/* Thread messages */}
+                    {thread.length > 0 && (
+                      <div className="mt-2 space-y-3">
+                        {thread.map((msg, i) => (
+                          <ThreadBubble key={msg.id} message={msg} depth={i} author={question.author} />
+                        ))}
+                      </div>
                     )}
-                  </div>
 
-                  {replyingTo === question.id && !question.reply && (
-                    <div className="mt-3 border-t border-border/60 pt-3">
-                      <textarea
-                        value={replyBody}
-                        onChange={(e) => setReplyBody(e.target.value)}
-                        onInput={(e) => {
-                          e.currentTarget.style.height = 'auto';
-                          e.currentTarget.style.height = `${e.currentTarget.scrollHeight}px`;
-                        }}
-                        placeholder="Write your answer..."
-                        rows={1}
-                        className={cn(sansFont.className, "min-h-[44px] w-full resize-none overflow-hidden rounded-xl border border-border bg-background px-4 py-3 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-300 dark:text-slate-100")}
-                      />
-                      <div className="mt-2 flex justify-between items-center gap-2">
-                        <input 
-                          type="password"
-                          value={passcode}
-                          onChange={e => setPasscode(e.target.value)}
-                          placeholder="Passcode"
-                          className="w-24 rounded-full border border-border bg-background px-3 py-1.5 text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-300 dark:text-slate-100"
+                    {/* Action buttons */}
+                    <div className="question-actions mt-1 flex justify-end gap-2 opacity-0 transition-opacity group-hover:opacity-100">
+                      <button
+                        onClick={() => takeScreenshot(question.id)}
+                        className="flex items-center gap-1.5 rounded-full border border-border/60 bg-background px-3 py-1.5 text-xs font-medium text-slate-500 transition-colors hover:text-blue-600 dark:text-slate-400 dark:hover:text-blue-300"
+                      >
+                        <Camera size={14} />
+                        Snap
+                      </button>
+                      {canFollowUp && (
+                        <button
+                          onClick={() => {
+                            setFollowingUp(followingUp === question.id ? null : question.id)
+                            setFollowUpBody('')
+                            setReplyingTo(null)
+                          }}
+                          className="flex items-center gap-1.5 rounded-full border border-emerald-200/70 bg-emerald-50/70 px-3 py-1.5 text-xs font-medium text-emerald-600 transition-colors hover:border-emerald-300 hover:bg-emerald-50 dark:border-emerald-500/20 dark:bg-emerald-500/10 dark:text-emerald-400 dark:hover:border-emerald-500/30 dark:hover:bg-emerald-500/15"
+                        >
+                          <CornerDownRight size={14} />
+                          Follow up
+                        </button>
+                      )}
+                      {canReply && (
+                        <button
+                          onClick={() => {
+                            setReplyingTo(replyingTo === question.id ? null : question.id)
+                            setReplyBody('')
+                            setFollowingUp(null)
+                          }}
+                          className="flex items-center gap-1.5 rounded-full border border-blue-200/70 bg-blue-50/70 px-3 py-1.5 text-xs font-medium text-blue-600 transition-colors hover:border-blue-300 hover:bg-blue-50 dark:border-blue-500/20 dark:bg-blue-500/10 dark:text-blue-400 dark:hover:border-blue-500/30 dark:hover:bg-blue-500/15"
+                        >
+                          <MessageSquareReply size={14} />
+                          Reply
+                        </button>
+                      )}
+                    </div>
+
+                    {/* Admin reply form */}
+                    {replyingTo === question.id && (
+                      <div className="mt-3 border-t border-border/60 pt-3">
+                        <textarea
+                          value={replyBody}
+                          onChange={(e) => setReplyBody(e.target.value)}
+                          onInput={(e) => {
+                            e.currentTarget.style.height = 'auto';
+                            e.currentTarget.style.height = `${e.currentTarget.scrollHeight}px`;
+                          }}
+                          placeholder="Write your answer..."
+                          rows={1}
+                          className={cn(sansFont.className, "min-h-[44px] w-full resize-none overflow-hidden rounded-xl border border-border bg-background px-4 py-3 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-300 dark:text-slate-100")}
                         />
-                        <div className="flex gap-2">
-                          <Button variant="ghost" size="sm" onClick={() => setReplyingTo(null)} className="text-xs h-8">
+                        <div className="mt-2 flex justify-between items-center gap-2">
+                          <input 
+                            type="password"
+                            value={passcode}
+                            onChange={e => setPasscode(e.target.value)}
+                            placeholder="Passcode"
+                            className="w-24 rounded-full border border-border bg-background px-3 py-1.5 text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-300 dark:text-slate-100"
+                          />
+                          <div className="flex gap-2">
+                            <Button variant="ghost" size="sm" onClick={() => setReplyingTo(null)} className="text-xs h-8">
+                              Cancel
+                            </Button>
+                            <Button size="sm" disabled={isPending || !replyBody.trim()} onClick={() => handleReplySubmit(question.id)} className="h-8 rounded-full px-4 text-xs">
+                              Post
+                            </Button>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Visitor follow-up form */}
+                    {followingUp === question.id && (
+                      <div className="mt-3 border-t border-border/60 pt-3">
+                        <textarea
+                          value={followUpBody}
+                          onChange={(e) => setFollowUpBody(e.target.value)}
+                          onInput={(e) => {
+                            e.currentTarget.style.height = 'auto';
+                            e.currentTarget.style.height = `${e.currentTarget.scrollHeight}px`;
+                          }}
+                          placeholder="Ask a follow-up..."
+                          rows={1}
+                          className={cn(sansFont.className, "min-h-[44px] w-full resize-none overflow-hidden rounded-xl border border-emerald-200 bg-background px-4 py-3 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-300 dark:border-emerald-500/30 dark:text-slate-100")}
+                        />
+                        <div className="mt-2 flex justify-end gap-2">
+                          <Button variant="ghost" size="sm" onClick={() => setFollowingUp(null)} className="text-xs h-8">
                             Cancel
                           </Button>
-                          <Button size="sm" disabled={isPending || !replyBody.trim()} onClick={() => handleReplySubmit(question.id)} className="h-8 rounded-full px-4 text-xs">
-                            Post
+                          <Button size="sm" disabled={isPending || !followUpBody.trim()} onClick={() => handleFollowUpSubmit(question.id)} className="h-8 rounded-full px-4 text-xs bg-emerald-600 hover:bg-emerald-700 text-white">
+                            Send follow-up
                           </Button>
                         </div>
                       </div>
-                    </div>
-                  )}
-                </StackVertical>
-              </article>
-            ))
+                    )}
+                  </StackVertical>
+                </article>
+              )
+            })
           )}
         </StackVertical>
 
@@ -504,10 +586,38 @@ export function AskBoard({ initialQuestions = seededQuestions }: { initialQuesti
   )
 }
 
-function formatDate(iso: string) {
-  try {
-    return dateFormatter.format(new Date(iso))
-  } catch (error) {
-    return iso
-  }
+/** A single thread message rendered as a layered bubble */
+function ThreadBubble({ message, depth, author }: { message: ThreadMessage; depth: number; author?: string }) {
+  const isAdmin = message.role === 'admin'
+  // Increase left margin with depth to create the "onion" nesting feel
+  const indent = Math.min(depth, 4) * 12
+
+  return (
+    <div
+      style={{ marginLeft: `${indent}px` }}
+      className={cn(
+        "rounded-xl border p-4 transition-colors",
+        isAdmin
+          ? "border-blue-200/60 bg-blue-50/30 dark:border-blue-500/15 dark:bg-blue-500/5"
+          : "border-emerald-200/60 bg-emerald-50/30 dark:border-emerald-500/15 dark:bg-emerald-500/5"
+      )}
+    >
+      <div className="flex items-center gap-2 mb-1.5">
+        <CornerDownRight size={12} className={isAdmin ? "text-blue-400" : "text-emerald-400"} />
+        <span className={cn(
+          sansFont.className,
+          "text-xs font-bold",
+          isAdmin ? "text-blue-600 dark:text-blue-400" : "text-emerald-600 dark:text-emerald-400"
+        )}>
+          {isAdmin ? 'Answer' : (author || 'anonymous')}
+        </span>
+        <span className={cn(sansFont.className, "ml-auto text-xs text-muted-foreground")}>
+          {formatDate(message.createdAt)}
+        </span>
+      </div>
+      <p className={cn(sansFont.className, "text-sm text-slate-700 dark:text-slate-300 leading-relaxed whitespace-pre-wrap break-words")}>
+        {message.body}
+      </p>
+    </div>
+  )
 }
