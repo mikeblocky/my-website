@@ -452,10 +452,6 @@ export function AskBoard({ initialQuestions = seededQuestions }: { initialQuesti
                     {/* Thread messages */}
                     {thread.length > 0 && (
                       <div className="mt-2 space-y-3">
-                        <div className="flex items-center gap-2 px-1 opacity-50">
-                          <span className={cn(monoFont.className, "text-[10px] uppercase tracking-widest text-muted-foreground")}>Conversation</span>
-                          <div className="h-px flex-1 bg-border/40" />
-                        </div>
                         {thread.map((msg, i) => (
                           <ThreadBubble key={msg.id} message={msg} depth={i} author={question.author} />
                         ))}
