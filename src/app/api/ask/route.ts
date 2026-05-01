@@ -22,7 +22,7 @@ export async function GET() {
     { questions: enriched },
     {
       headers: {
-        'Cache-Control': 'public, s-maxage=30, stale-while-revalidate=300'
+        'Cache-Control': 'no-store, must-revalidate'
       }
     }
   )

@@ -10,6 +10,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Missing questionId or subscription' }, { status: 400 })
     }
 
+    console.log(`[Push] Subscribing to question ${questionId}`);
     await savePushSubscription(questionId, subscription)
 
     return NextResponse.json({ success: true }, { status: 201 })

@@ -161,6 +161,7 @@ export function AskBoard({ initialQuestions = seededQuestions }: { initialQuesti
         if (wantNotification && pushSupported) {
           const subscribed = await subscribeToPush(question.id)
           if (subscribed) {
+            setQuestions(prev => prev.map(q => q.id === question.id ? { ...q, notifying: true } : q))
             showNotification('Question sent! You will be notified when answered.')
           } else {
             showNotification('Question sent! (Notifications could not be enabled)')
@@ -401,12 +402,14 @@ export function AskBoard({ initialQuestions = seededQuestions }: { initialQuesti
                       <h4 className="flex items-center gap-2 text-sm font-semibold text-blue-600 dark:text-blue-400">
                         <span className={cn(sansFont.className, "rounded-full border border-blue-200/70 bg-blue-50/70 px-2.5 py-1 dark:border-blue-500/20 dark:bg-blue-500/10")}>{question.author} asked</span>
                       </h4>
-                      <div className="flex items-center gap-2 mt-1.5">
+                      <div className="flex items-center gap-1 mt-1.5">
                         {question.notifying && (
-                          <span className="relative flex items-center" title="Notifications active">
-                            <Bell size={12} className="text-blue-500 dark:text-blue-400" />
-                            <span className="absolute -top-0.5 -right-0.5 h-1.5 w-1.5 rounded-full bg-blue-500 animate-pulse" />
-                          </span>
+                          <div className="flex items-center mr-1" title="Notifications active">
+                            <div className="relative flex items-center justify-center w-6 h-6 rounded-full bg-blue-50 dark:bg-blue-500/10">
+                              <Bell size={14} className="text-blue-600 dark:text-blue-400 fill-blue-600/10" />
+                              <span className="absolute top-0 right-0 h-2 w-2 rounded-full bg-blue-600 border-2 border-white dark:border-slate-900 animate-pulse" />
+                            </div>
+                          </div>
                         )}
                         <span className={cn(sansFont.className, "text-xs text-muted-foreground")}>
                           {formatDate(question.createdAt)}
