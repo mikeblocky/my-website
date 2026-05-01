@@ -3,7 +3,7 @@ import { getQuestionById } from '@/lib/kv/ask'
 
 export const runtime = 'nodejs'
 
-export const alt = 'Anonymous Question'
+export const alt = 'Anonymous question'
 export const size = {
   width: 1200,
   height: 630,
@@ -11,8 +11,8 @@ export const size = {
 
 export const contentType = 'image/png'
 
-export default async function Image({ params }: { params: { id: string } }) {
-  const { id } = params
+export default async function Image({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
   const question = await getQuestionById(id)
 
   if (!question) {

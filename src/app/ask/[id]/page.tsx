@@ -58,7 +58,7 @@ export default async function QuestionPage({ params }: PageProps) {
         />
 
         {/* We can highlight the specific question or just show the board */}
-        <AskBoard initialQuestions={[question]} />
+        <AskBoard initialQuestions={[question]} singleMode={true} />
         
         <div className="flex justify-center py-4">
           <a 

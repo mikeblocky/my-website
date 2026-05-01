@@ -51,7 +51,13 @@ function lastThreadRole(q: AskQuestion): 'asker' | 'admin' | null {
   return q.thread[q.thread.length - 1].role
 }
 
-export function AskBoard({ initialQuestions = seededQuestions }: { initialQuestions?: AskQuestion[] }) {
+export function AskBoard({ 
+  initialQuestions = seededQuestions,
+  singleMode = false
+}: { 
+  initialQuestions?: AskQuestion[]
+  singleMode?: boolean
+}) {
   const [formState, setFormState] = useState<FormState>({ author: '', body: '' })
   const [questions, setQuestions] = useState<AskQuestion[]>(sortQuestions(initialQuestions))
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
@@ -92,6 +98,12 @@ export function AskBoard({ initialQuestions = seededQuestions }: { initialQuesti
     // Check push support & register service worker
     setPushSupported(isPushSupported())
     registerServiceWorker()
+
+    if (singleMode) {
+      setIsLoading(false)
+      setIsRefreshing(false)
+      return
+    }
 
     async function loadQuestions() {
       try {
@@ -291,32 +303,35 @@ export function AskBoard({ initialQuestions = seededQuestions }: { initialQuesti
 
   return (
     <StackVertical gap="lg">
-      <div className="rounded-2xl border border-blue-100 bg-blue-50/40 p-5 dark:border-blue-900/30 dark:bg-blue-900/10">
-        <div className="flex gap-4">
-          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-blue-100 text-blue-600 dark:bg-blue-500/20 dark:text-blue-400">
-            <CornerDownRight size={22} />
-          </div>
-          <div className="space-y-1">
-            <div className="flex items-center gap-2">
-              <h4 className={cn(sansFont.className, "text-sm font-bold text-blue-900 dark:text-blue-100")}>
-                Threaded conversations
-              </h4>
-              <span className="rounded-full bg-blue-600 px-1.5 py-0.5 text-[9px] font-bold tracking-wider text-white">
-                New
-              </span>
+      {!singleMode && (
+        <div className="rounded-2xl border border-blue-100 bg-blue-50/40 p-5 dark:border-blue-900/30 dark:bg-blue-900/10">
+          <div className="flex gap-4">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-blue-100 text-blue-600 dark:bg-blue-500/20 dark:text-blue-400">
+              <CornerDownRight size={22} />
             </div>
-            <p className={cn(sansFont.className, "text-xs text-blue-800/70 dark:text-blue-300/70 leading-relaxed")}>
-              You can now follow up on any answered question! Click the <b>Follow up</b> button to ask more!
-              Questions with active notifications show a <b><Bell size={10} className="inline mb-0.5" /> bell</b> icon.
-            </p>
+            <div className="space-y-1">
+              <div className="flex items-center gap-2">
+                <h4 className={cn(sansFont.className, "text-sm font-bold text-blue-900 dark:text-blue-100")}>
+                  Threaded conversations
+                </h4>
+                <span className="rounded-full bg-blue-600 px-1.5 py-0.5 text-[9px] font-bold tracking-wider text-white">
+                  New
+                </span>
+              </div>
+              <p className={cn(sansFont.className, "text-xs text-blue-800/70 dark:text-blue-300/70 leading-relaxed")}>
+                You can now follow up on any answered question! Click the <b>Follow up</b> button to ask more!
+                Questions with active notifications show a <b><Bell size={10} className="inline mb-0.5" /> bell</b> icon.
+              </p>
+            </div>
           </div>
         </div>
-      </div>
+      )}
 
-      <form 
-        className="rounded-2xl border border-border/60 bg-background/90 transition-colors focus-within:border-blue-400 dark:focus-within:border-blue-500" 
-        onSubmit={handleSubmit}
-      >
+      {!singleMode && (
+        <form 
+          className="rounded-2xl border border-border/60 bg-background/90 transition-colors focus-within:border-blue-400 dark:focus-within:border-blue-500" 
+          onSubmit={handleSubmit}
+        >
         <div className="flex flex-col">
           {/* Top: Alias Field */}
           <div className="border-b border-border/60 px-4 py-3">
@@ -380,6 +395,7 @@ export function AskBoard({ initialQuestions = seededQuestions }: { initialQuesti
           </div>
         </div>
       </form>
+      )}
 
       {errorMessage && (
         <div className="rounded-lg border border-orange-300 bg-orange-50 px-3 py-2 text-sm text-orange-800 dark:border-orange-500/50 dark:bg-orange-900/20 dark:text-orange-100">
@@ -390,7 +406,7 @@ export function AskBoard({ initialQuestions = seededQuestions }: { initialQuesti
       <section className="space-y-6">
         <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 border-b border-border/60 pb-3 sm:flex-nowrap">
           <TextHeading as="h3" weight="semibold" className="mt-0 mb-0 text-lg">
-            Questions
+            {singleMode ? "Question" : "Questions"}
           </TextHeading>
           <div className="flex shrink-0 items-center gap-3">
             {isRefreshing ? (
