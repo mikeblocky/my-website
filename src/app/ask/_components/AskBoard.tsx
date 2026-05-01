@@ -401,9 +401,17 @@ export function AskBoard({ initialQuestions = seededQuestions }: { initialQuesti
                       <h4 className="flex items-center gap-2 text-sm font-semibold text-blue-600 dark:text-blue-400">
                         <span className={cn(sansFont.className, "rounded-full border border-blue-200/70 bg-blue-50/70 px-2.5 py-1 dark:border-blue-500/20 dark:bg-blue-500/10")}>{question.author} asked</span>
                       </h4>
-                      <span className={cn(sansFont.className, "text-xs text-muted-foreground mt-1.5")}>
-                        {formatDate(question.createdAt)}
-                      </span>
+                      <div className="flex items-center gap-2 mt-1.5">
+                        {question.notifying && (
+                          <span className="relative flex items-center" title="Notifications active">
+                            <Bell size={12} className="text-blue-500 dark:text-blue-400" />
+                            <span className="absolute -top-0.5 -right-0.5 h-1.5 w-1.5 rounded-full bg-blue-500 animate-pulse" />
+                          </span>
+                        )}
+                        <span className={cn(sansFont.className, "text-xs text-muted-foreground")}>
+                          {formatDate(question.createdAt)}
+                        </span>
+                      </div>
                     </div>
                     
                     <p className={cn(sansFont.className, "text-lg text-slate-800 dark:text-slate-200 leading-relaxed font-medium mb-2 whitespace-pre-wrap break-words")}>

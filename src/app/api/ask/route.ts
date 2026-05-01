@@ -3,13 +3,23 @@ import { revalidateTag } from 'next/cache'
 import { buildQuestionPayload, saveQuestion } from '@/lib/kv/ask'
 import { ASK_QUESTIONS_TAG, getAskQuestions } from '@/lib/kv/ask-cache'
 import { notifyOwnerNewQuestion } from '@/lib/notify/discord'
+import { getSubscribedQuestionIds } from '@/lib/kv/push'
 
 const MAX_BODY_LENGTH = 800
 
 export async function GET() {
-  const questions = await getAskQuestions()
+  const [questions, subscribedIds] = await Promise.all([
+    getAskQuestions(),
+    getSubscribedQuestionIds()
+  ])
+
+  const enriched = questions.map(q => ({
+    ...q,
+    notifying: subscribedIds.has(q.id)
+  }))
+
   return NextResponse.json(
-    { questions },
+    { questions: enriched },
     {
       headers: {
         'Cache-Control': 'public, s-maxage=30, stale-while-revalidate=300'
@@ -68,7 +78,7 @@ export async function PUT(request: NextRequest) {
 
   after(async () => {
     try {
-      const { getSubscriptionsForQuestion, removeSubscription } = await import('@/lib/kv/push')
+      const { getSubscriptionsForQuestion } = await import('@/lib/kv/push')
       const subscriptions = await getSubscriptionsForQuestion(id)
       
       if (subscriptions.length > 0) {
@@ -95,7 +105,7 @@ export async function PUT(request: NextRequest) {
           }
         }
 
-        await removeSubscription(id)
+        // Don't remove subscriptions — keep them alive for threaded follow-ups
       }
     } catch (pushError) {
       console.error('Push notification error (non-blocking):', pushError)

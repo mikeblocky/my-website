@@ -41,6 +41,21 @@ export async function getSubscriptionsForQuestion(questionId: string): Promise<P
     .filter((item): item is PushSubscriptionData => item !== null && item.questionId === questionId)
 }
 
+export async function getSubscribedQuestionIds(): Promise<Set<string>> {
+  const redis = await getRedisClient()
+  const raw = await redis.zRange(PUSH_SUBSCRIPTIONS_KEY, 0, -1)
+  const ids = new Set<string>()
+  for (const entry of raw) {
+    try {
+      const parsed = JSON.parse(entry) as PushSubscriptionData
+      ids.add(parsed.questionId)
+    } catch {
+      // skip invalid entries
+    }
+  }
+  return ids
+}
+
 export async function removeSubscription(questionId: string) {
   const redis = await getRedisClient()
   const raw = await redis.zRange(PUSH_SUBSCRIPTIONS_KEY, 0, -1)
