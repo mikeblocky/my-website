@@ -1,4 +1,3 @@
-import { randomUUID } from 'crypto'
 import { getRedisClient, askQuestionsKey } from './client'
 import { AskQuestion, ThreadMessage } from '@/app/ask/_types/ask'
 
@@ -7,7 +6,7 @@ const MAX_STORED_QUESTIONS = 200
 export function buildQuestionPayload(partial: { author: string; body: string }): AskQuestion {
   const now = new Date().toISOString()
   return {
-    id: randomUUID(),
+    id: Math.random().toString(36).substring(2, 11),
     author: partial.author.trim() || 'anonymous',
     body: partial.body.trim(),
     createdAt: now,
@@ -71,7 +70,7 @@ export async function replyToQuestion(id: string, replyBody: string): Promise<As
 
   const now = new Date().toISOString()
   const newMessage: ThreadMessage = {
-    id: randomUUID(),
+    id: Math.random().toString(36).substring(2, 11),
     role: 'admin',
     body: replyBody.trim(),
     createdAt: now
@@ -113,7 +112,7 @@ export async function followUpQuestion(id: string, followUpBody: string): Promis
   if (!rawMember) return null
 
   const newMessage: ThreadMessage = {
-    id: randomUUID(),
+    id: Math.random().toString(36).substring(2, 11),
     role: 'asker',
     body: followUpBody.trim(),
     createdAt: new Date().toISOString()

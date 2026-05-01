@@ -1,7 +1,7 @@
 import { ImageResponse } from 'next/og'
 import { getQuestionById } from '@/lib/kv/ask'
 
-export const runtime = 'edge'
+export const runtime = 'nodejs'
 
 export const alt = 'Anonymous Question'
 export const size = {
