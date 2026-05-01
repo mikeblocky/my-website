@@ -24,46 +24,47 @@ function useSectionTracker(sections: readonly OutlineSection[]) {
         }
 
         const headings = sections
-            .map((section) => document.getElementById(section.id))
-            .filter((heading): heading is HTMLElement => Boolean(heading))
+            .map((section) => ({
+                id: section.id,
+                element: document.getElementById(section.id)
+            }))
+            .filter((h): h is { id: string; element: HTMLElement } => Boolean(h.element))
 
         if (headings.length === 0) {
             return
         }
 
-        const observer = new IntersectionObserver(
-            (entries) => {
-                const visibleEntries = entries
-                    .filter((entry) => entry.isIntersecting)
-                    .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top)
-
-                if (visibleEntries[0]?.target.id && !isClickingRef.current) {
-                    setActiveId(visibleEntries[0].target.id)
-                }
-            },
-            {
-                // Trigger when section is in the top half of the screen
-                rootMargin: '-10% 0px -50% 0px',
-                threshold: [0, 0.1],
-            }
-        )
-
-        headings.forEach((heading) => observer.observe(heading))
-
         const handleScroll = () => {
-            const firstHeading = headings[0]
+            // 1. Update isScrolledPastStart
+            const firstHeading = headings[0].element
             if (firstHeading) {
                 const rect = firstHeading.getBoundingClientRect()
-                // Show ONLY when reached the section (<= 10px buffer)
                 setIsScrolledPastStart(rect.top <= 10)
             }
+
+            // 2. Update activeId
+            if (isClickingRef.current) return
+
+            // Threshold is 100px from top
+            const threshold = 100
+            let currentActive = sections[0].id
+
+            for (const h of headings) {
+                const rect = h.element.getBoundingClientRect()
+                if (rect.top <= threshold) {
+                    currentActive = h.id
+                } else {
+                    break
+                }
+            }
+
+            setActiveId(currentActive)
         }
 
         window.addEventListener('scroll', handleScroll, { passive: true })
         handleScroll()
 
         return () => {
-            observer.disconnect()
             window.removeEventListener('scroll', handleScroll)
         }
     }, [sections])
@@ -149,6 +150,7 @@ export function ArticleSectionPreviewMobile({ sections }: ArticleSectionPreviewP
                                                 ? "bg-blue-50 text-blue-700 dark:bg-blue-500/10 dark:text-blue-300"
                                                 : "text-muted-foreground hover:bg-muted/40 hover:text-foreground dark:hover:text-white"
                                         )}
+                                        style={{ paddingLeft: `${16 + Math.max(0, section.level - 1) * 12}px` }}
                                     >
                                         <span className={cn(monoFont.className, "text-[11px] shrink-0")}>
                                             {String(index + 1).padStart(2, '0')}
@@ -200,6 +202,7 @@ export function ArticleSectionPreview({ sections }: ArticleSectionPreviewProps) 
                                 href={`#${section.id}`}
                                 onClick={() => handleLinkClick(section.id)}
                                 className="flex items-center gap-3 group/link justify-end w-full"
+                                style={{ paddingRight: `${Math.max(0, section.level - 1) * 8}px` }}
                             >
                                 <span className={cn(
                                     sansFont.className,

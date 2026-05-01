@@ -3,7 +3,7 @@ import React from 'react'
 export type OutlineSection = {
     id: string
     label: string
-    level: 2 | 3 | 4
+    level: 1 | 2 | 3 | 4 | 5 | 6
 }
 
 export function slugifyHeading(text: string) {
@@ -47,13 +47,13 @@ export function extractOutlineFromMdx(source: string): OutlineSection[] {
         .split(/\r?\n/)
         .map((line) => line.trim())
         .map((line) => {
-            const match = line.match(/^(#{2,4})\s+(.+)$/)
+            const match = line.match(/^(#{1,6})\s+(.+)$/)
 
             if (!match) {
                 return null
             }
 
-            const level = match[1].length as 2 | 3 | 4
+            const level = match[1].length as 1 | 2 | 3 | 4 | 5 | 6
             const label = match[2].trim()
             const cleanLabel = stripMarkdown(label.replace(/\{#.+\}$/, '').trim())
             const id = slugifyHeading(cleanLabel)
