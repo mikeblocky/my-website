@@ -285,6 +285,28 @@ export function AskBoard({ initialQuestions = seededQuestions }: { initialQuesti
 
   return (
     <StackVertical gap="lg">
+      <div className="rounded-2xl border border-blue-100 bg-blue-50/40 p-5 dark:border-blue-900/30 dark:bg-blue-900/10">
+        <div className="flex gap-4">
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-blue-100 text-blue-600 dark:bg-blue-500/20 dark:text-blue-400">
+            <CornerDownRight size={22} />
+          </div>
+          <div className="space-y-1">
+            <div className="flex items-center gap-2">
+              <h4 className={cn(sansFont.className, "text-sm font-bold text-blue-900 dark:text-blue-100")}>
+                Threaded Conversations
+              </h4>
+              <span className="rounded-full bg-blue-600 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider text-white">
+                New
+              </span>
+            </div>
+            <p className={cn(sansFont.className, "text-xs text-blue-800/70 dark:text-blue-300/70 leading-relaxed")}>
+              You can now follow up on any answered question! Click the <b>Follow up</b> button to ask more, or <b>Reply</b> if you're the admin.
+              Questions with active notifications show a <b><Bell size={10} className="inline mb-0.5" /> bell</b> icon.
+            </p>
+          </div>
+        </div>
+      </div>
+
       <form 
         className="rounded-2xl border border-border/60 bg-background/90 transition-colors focus-within:border-blue-400 dark:focus-within:border-blue-500" 
         onSubmit={handleSubmit}
@@ -424,6 +446,10 @@ export function AskBoard({ initialQuestions = seededQuestions }: { initialQuesti
                     {/* Thread messages */}
                     {thread.length > 0 && (
                       <div className="mt-2 space-y-3">
+                        <div className="flex items-center gap-2 px-1 opacity-50">
+                          <span className={cn(monoFont.className, "text-[10px] uppercase tracking-widest text-muted-foreground")}>Conversation</span>
+                          <div className="h-px flex-1 bg-border/40" />
+                        </div>
                         {thread.map((msg, i) => (
                           <ThreadBubble key={msg.id} message={msg} depth={i} author={question.author} />
                         ))}

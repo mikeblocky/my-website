@@ -10,7 +10,7 @@ const shareAlt = 'Hand-drawn illustration of two friends sharing questions for t
 
 export const metadata: Metadata = {
   title: "Ask | mikeblocky.com",
-  description: "Send an anonymous question and browse the community archive.",
+  description: "Send an anonymous question and browse the community archive. Now with threaded follow-up conversations!",
   openGraph: {
     images: [
       {
@@ -37,7 +37,7 @@ export default function AskPage() {
       <StackVertical gap="lg">
         <SectionPageHeader
           title="Anonymous asking!"
-          description="Ask anything about me. Every submission stays here so others can read through the anonymous archive."
+          description="Ask anything about me. Every submission stays here so others can read through the anonymous archive. Now with threaded follow-up conversations!"
           currentLabel="Ask"
         />
 
