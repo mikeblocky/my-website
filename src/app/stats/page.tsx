@@ -11,8 +11,6 @@ export const metadata: Metadata = {
     description: "A breakdown of the themes and distribution across my archived works.",
 }
 
-// Force dynamic to reflect filesystem changes immediately
-export const dynamic = 'force-dynamic'
 
 export default function DrawingStatsPage() {
     const data = getDrawingStats()

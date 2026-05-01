@@ -21,6 +21,9 @@ const nextConfig = {
       },
     ],
   },
+  outputFileTracingExcludes: {
+    '*': ['public/distribution/**/*'],
+  },
   async rewrites() {
     return [
       {
