@@ -2,6 +2,16 @@ import { BlogPost } from "../_types/blog"
 
 export const blogPosts: BlogPost[] = [
      {
+        id: 17,
+        title: "My thoughts about Kemutai Hanashi - Chapter 4: Decisions",
+        description: "Sometimes everything comes from a decision.",
+        date: "May 7th, 2026",
+        publishedAt: "2026-05-7T00:00:00.000Z",
+        readingTime: "10 min read",
+        slug: "kemutai-hanashi-4",
+        themes: ["Kemutai Hanashi"]
+    },
+     {
         id: 16,
         title: "My thoughts about Hoshiai no Sora",
         description: "To define who we are, our purposes and to go with it.",
