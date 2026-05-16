@@ -754,23 +754,24 @@ function ThreadBubble({
           {isAdmin ? 'Answer' : (author || 'anonymous')}
         </span>
         
-        <div className="ml-auto relative flex items-center h-5 overflow-hidden">
-          <div className={cn(
-            "flex items-center transition-transform duration-300 ease-out",
-            isAdmin && !isEditing ? "group-hover/bubble:-translate-x-11" : ""
+        <div className="ml-auto flex items-center gap-2">
+          <span className={cn(
+            sansFont.className, 
+            "text-[11px] text-muted-foreground whitespace-nowrap transition-transform duration-300",
+            isAdmin && !isEditing && "group-hover/bubble:-translate-x-1"
           )}>
-            <span className={cn(sansFont.className, "text-[11px] text-muted-foreground whitespace-nowrap")}>
-              {formatDate(message.createdAt)}
-            </span>
-            {isAdmin && !isEditing && (
+            {formatDate(message.createdAt)}
+          </span>
+          {isAdmin && !isEditing && (
+            <div className="w-0 overflow-hidden opacity-0 group-hover/bubble:w-8 group-hover/bubble:opacity-100 transition-all duration-300">
               <button 
                 onClick={onEditClick}
-                className="ml-3 text-[10px] font-bold uppercase tracking-wider text-blue-500 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 whitespace-nowrap"
+                className="text-[10px] font-bold uppercase tracking-wider text-blue-500 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
               >
                 Edit
               </button>
-            )}
-          </div>
+            </div>
+          )}
         </div>
       </div>
       
@@ -783,9 +784,9 @@ function ThreadBubble({
               e.currentTarget.style.height = 'auto';
               e.currentTarget.style.height = `${e.currentTarget.scrollHeight}px`;
             }}
-            rows={1}
+            rows={Math.max(3, message.body.split('\n').length)}
             autoFocus
-            className={cn(sansFont.className, "min-h-[60px] w-full resize-none overflow-hidden rounded-lg border border-blue-200 bg-background px-3 py-2 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-300 dark:border-blue-500/30 dark:text-slate-100")}
+            className={cn(sansFont.className, "min-h-[100px] w-full resize-none overflow-hidden rounded-lg border border-blue-200 bg-background px-4 py-3 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-300 dark:border-blue-500/30 dark:text-slate-100")}
           />
           <div className="flex justify-between items-center gap-2">
             <input 
