@@ -735,15 +735,16 @@ function ThreadBubble({
 
   return (
     <div
-      style={{ marginLeft: `${indent}px` }}
+      style={{ marginLeft: isEditing ? '0px' : `${indent}px` }}
       className={cn(
-        "group/bubble rounded-xl border p-4 transition-colors",
+        "group/bubble rounded-xl border p-4 transition-all duration-300",
         isAdmin
           ? "border-blue-200/60 bg-blue-50/30 dark:border-blue-500/15 dark:bg-blue-500/5"
-          : "border-emerald-200/60 bg-emerald-50/30 dark:border-emerald-500/15 dark:bg-emerald-500/5"
+          : "border-emerald-200/60 bg-emerald-50/30 dark:border-emerald-500/15 dark:bg-emerald-500/5",
+        isEditing && "border-blue-400 ring-4 ring-blue-500/5 dark:border-blue-400/50"
       )}
     >
-      <div className="flex items-center gap-2 mb-1.5">
+      <div className="flex items-center gap-2 mb-1.5 overflow-hidden">
         <CornerDownRight size={12} className={isAdmin ? "text-blue-400" : "text-emerald-400"} />
         <span className={cn(
           sansFont.className,
@@ -752,22 +753,29 @@ function ThreadBubble({
         )}>
           {isAdmin ? 'Answer' : (author || 'anonymous')}
         </span>
-        <span className={cn(sansFont.className, "ml-auto text-xs text-muted-foreground")}>
-          {formatDate(message.createdAt)}
-        </span>
         
-        {isAdmin && !isEditing && (
-          <button 
-            onClick={onEditClick}
-            className="opacity-0 group-hover/bubble:opacity-100 transition-opacity ml-2 text-[10px] font-bold uppercase tracking-wider text-blue-500 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
-          >
-            Edit
-          </button>
-        )}
+        <div className="ml-auto relative flex items-center h-5 overflow-hidden">
+          <div className={cn(
+            "flex items-center transition-transform duration-300 ease-out",
+            isAdmin && !isEditing ? "group-hover/bubble:-translate-x-11" : ""
+          )}>
+            <span className={cn(sansFont.className, "text-[11px] text-muted-foreground whitespace-nowrap")}>
+              {formatDate(message.createdAt)}
+            </span>
+            {isAdmin && !isEditing && (
+              <button 
+                onClick={onEditClick}
+                className="ml-3 text-[10px] font-bold uppercase tracking-wider text-blue-500 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 whitespace-nowrap"
+              >
+                Edit
+              </button>
+            )}
+          </div>
+        </div>
       </div>
       
       {isEditing ? (
-        <div className="space-y-2">
+        <div className="space-y-3">
           <textarea
             value={editBody}
             onChange={(e) => setEditBody(e.target.value)}
@@ -777,7 +785,7 @@ function ThreadBubble({
             }}
             rows={1}
             autoFocus
-            className={cn(sansFont.className, "min-h-[44px] w-full resize-none overflow-hidden rounded-lg border border-blue-200 bg-background px-3 py-2 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-300 dark:border-blue-500/30 dark:text-slate-100")}
+            className={cn(sansFont.className, "min-h-[60px] w-full resize-none overflow-hidden rounded-lg border border-blue-200 bg-background px-3 py-2 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-300 dark:border-blue-500/30 dark:text-slate-100")}
           />
           <div className="flex justify-between items-center gap-2">
             <input 
@@ -788,10 +796,10 @@ function ThreadBubble({
               className="w-24 rounded-full border border-border bg-background px-3 py-1.5 text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-300 dark:text-slate-100"
             />
             <div className="flex gap-2">
-              <Button variant="ghost" size="sm" onClick={onCancel} className="text-xs h-7">
+              <Button variant="ghost" size="sm" onClick={onCancel} className="text-xs h-8">
                 Cancel
               </Button>
-              <Button size="sm" disabled={isPending || !editBody.trim()} onClick={onSave} className="h-7 rounded-full px-3 text-xs">
+              <Button size="sm" disabled={isPending || !editBody.trim()} onClick={onSave} className="h-8 rounded-full px-4 text-xs">
                 Save
               </Button>
             </div>
