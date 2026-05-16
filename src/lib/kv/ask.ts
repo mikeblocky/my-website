@@ -136,3 +136,46 @@ export async function getQuestionById(id: string): Promise<AskQuestion | null> {
   const questions = await fetchQuestions(MAX_STORED_QUESTIONS)
   return questions.find(q => q.id === id) || null
 }
+
+/** Updates an existing thread message body */
+export async function updateThreadMessage(questionId: string, messageId: string, newBody: string): Promise<AskQuestion | null> {
+  const redis = await getRedisClient()
+  const questions = await fetchQuestions(MAX_STORED_QUESTIONS)
+  
+  const target = questions.find(q => q.id === questionId)
+  if (!target || !target.thread) return null
+  
+  const messageIndex = target.thread.findIndex(m => m.id === messageId)
+  if (messageIndex === -1) return null
+
+  const rawAll = await redis.zRange(askQuestionsKey, 0, -1)
+  const rawMember = rawAll.find((entry: string) => {
+    try { return JSON.parse(entry).id === questionId } catch { return false }
+  })
+  if (!rawMember) return null
+
+  const updatedThread = [...target.thread]
+  updatedThread[messageIndex] = {
+    ...updatedThread[messageIndex],
+    body: newBody.trim()
+  }
+
+  const updatedQuestion: AskQuestion = {
+    ...target,
+    thread: updatedThread
+  }
+  
+  // Update legacy field if this was the first admin reply
+  const isFirstAdminReply = target.thread.findIndex(m => m.role === 'admin') === messageIndex
+  if (isFirstAdminReply) {
+    updatedQuestion.reply = newBody.trim()
+  }
+  
+  const newMember = JSON.stringify(updatedQuestion)
+  const score = new Date(target.createdAt).getTime()
+  
+  await redis.zRem(askQuestionsKey, rawMember)
+  await redis.zAdd(askQuestionsKey, [{ score, value: newMember }])
+  
+  return updatedQuestion
+}

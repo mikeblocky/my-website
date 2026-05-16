@@ -84,6 +84,10 @@ export function AskBoard({
   // Toast Notification State
   const [notification, setNotification] = useState<string | null>(null)
 
+  // Edit state
+  const [editingMessageId, setEditingMessageId] = useState<string | null>(null)
+  const [editBody, setEditBody] = useState('')
+
   function showNotification(msg: string) {
     setNotification(msg)
     setTimeout(() => {
@@ -238,6 +242,33 @@ export function AskBoard({
         showNotification('Follow-up sent!')
       } catch (error) {
         showNotification('Could not send follow-up.')
+      }
+    })
+  }
+
+  async function handleEditSubmit(questionId: string, messageId: string) {
+    if (!editBody.trim()) return
+
+    startTransition(async () => {
+      try {
+        setErrorMessage(null)
+        const response = await fetch('/api/ask', {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id: questionId, messageId, body: editBody, passcode })
+        })
+
+        if (!response.ok) {
+          throw new Error('Failed to update message')
+        }
+
+        const { question } = await response.json()
+        setQuestions(prev => prev.map(q => q.id === questionId ? question : q))
+        setEditingMessageId(null)
+        setEditBody('')
+        showNotification('Message updated!')
+      } catch (error) {
+        showNotification('Could not update message.')
       }
     })
   }
@@ -469,7 +500,27 @@ export function AskBoard({
                     {thread.length > 0 && (
                       <div className="mt-2 space-y-3">
                         {thread.map((msg, i) => (
-                          <ThreadBubble key={msg.id} message={msg} depth={i} author={question.author} />
+                          <ThreadBubble 
+                            key={msg.id} 
+                            message={msg} 
+                            depth={i} 
+                            author={question.author}
+                            questionId={question.id}
+                            isEditing={editingMessageId === msg.id}
+                            editBody={editBody}
+                            setEditBody={setEditBody}
+                            onEditClick={() => {
+                              setEditingMessageId(msg.id)
+                              setEditBody(msg.body)
+                              setReplyingTo(null)
+                              setFollowingUp(null)
+                            }}
+                            onCancel={() => setEditingMessageId(null)}
+                            onSave={() => handleEditSubmit(question.id, msg.id)}
+                            passcode={passcode}
+                            setPasscode={setPasscode}
+                            isPending={isPending}
+                          />
                         ))}
                       </div>
                     )}
@@ -649,7 +700,35 @@ export function AskBoard({
 }
 
 /** A single thread message rendered as a layered bubble */
-function ThreadBubble({ message, depth, author }: { message: ThreadMessage; depth: number; author?: string }) {
+function ThreadBubble({ 
+  message, 
+  depth, 
+  author,
+  questionId,
+  isEditing,
+  editBody,
+  setEditBody,
+  onEditClick,
+  onCancel,
+  onSave,
+  passcode,
+  setPasscode,
+  isPending
+}: { 
+  message: ThreadMessage; 
+  depth: number; 
+  author?: string;
+  questionId: string;
+  isEditing: boolean;
+  editBody: string;
+  setEditBody: (v: string) => void;
+  onEditClick: () => void;
+  onCancel: () => void;
+  onSave: () => void;
+  passcode: string;
+  setPasscode: (v: string) => void;
+  isPending: boolean;
+}) {
   const isAdmin = message.role === 'admin'
   // Increase left margin with depth to create the "onion" nesting feel
   const indent = Math.min(depth, 4) * 12
@@ -658,7 +737,7 @@ function ThreadBubble({ message, depth, author }: { message: ThreadMessage; dept
     <div
       style={{ marginLeft: `${indent}px` }}
       className={cn(
-        "rounded-xl border p-4 transition-colors",
+        "group/bubble rounded-xl border p-4 transition-colors",
         isAdmin
           ? "border-blue-200/60 bg-blue-50/30 dark:border-blue-500/15 dark:bg-blue-500/5"
           : "border-emerald-200/60 bg-emerald-50/30 dark:border-emerald-500/15 dark:bg-emerald-500/5"
@@ -676,10 +755,53 @@ function ThreadBubble({ message, depth, author }: { message: ThreadMessage; dept
         <span className={cn(sansFont.className, "ml-auto text-xs text-muted-foreground")}>
           {formatDate(message.createdAt)}
         </span>
+        
+        {isAdmin && !isEditing && (
+          <button 
+            onClick={onEditClick}
+            className="opacity-0 group-hover/bubble:opacity-100 transition-opacity ml-2 text-[10px] font-bold uppercase tracking-wider text-blue-500 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
+          >
+            Edit
+          </button>
+        )}
       </div>
-      <p className={cn(sansFont.className, "text-sm text-slate-700 dark:text-slate-300 leading-relaxed whitespace-pre-wrap break-words")}>
-        {message.body}
-      </p>
+      
+      {isEditing ? (
+        <div className="space-y-2">
+          <textarea
+            value={editBody}
+            onChange={(e) => setEditBody(e.target.value)}
+            onInput={(e) => {
+              e.currentTarget.style.height = 'auto';
+              e.currentTarget.style.height = `${e.currentTarget.scrollHeight}px`;
+            }}
+            rows={1}
+            autoFocus
+            className={cn(sansFont.className, "min-h-[44px] w-full resize-none overflow-hidden rounded-lg border border-blue-200 bg-background px-3 py-2 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-300 dark:border-blue-500/30 dark:text-slate-100")}
+          />
+          <div className="flex justify-between items-center gap-2">
+            <input 
+              type="password"
+              value={passcode}
+              onChange={e => setPasscode(e.target.value)}
+              placeholder="Passcode"
+              className="w-24 rounded-full border border-border bg-background px-3 py-1.5 text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-300 dark:text-slate-100"
+            />
+            <div className="flex gap-2">
+              <Button variant="ghost" size="sm" onClick={onCancel} className="text-xs h-7">
+                Cancel
+              </Button>
+              <Button size="sm" disabled={isPending || !editBody.trim()} onClick={onSave} className="h-7 rounded-full px-3 text-xs">
+                Save
+              </Button>
+            </div>
+          </div>
+        </div>
+      ) : (
+        <p className={cn(sansFont.className, "text-sm text-slate-700 dark:text-slate-300 leading-relaxed whitespace-pre-wrap break-words")}>
+          {message.body}
+        </p>
+      )}
     </div>
   )
 }
