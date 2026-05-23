@@ -1,6 +1,16 @@
 import { BlogPost } from "../_types/blog"
 
 export const blogPosts: BlogPost[] = [
+    {
+        id: 21,
+        title: "[Archive] Let's talk about Kemutai Hanashi, everything about \"normality\"",
+        description: "After all, everyone wants to be normal, right?",
+        date: "May 23rd, 2026",
+        publishedAt: "2026-05-23T18:03:00.000Z",
+        readingTime: "3 min read",
+        slug: "kemutai-hanashi-normality",
+        themes: ["Kemutai Hanashi"]
+    },
      {
         id: 17,
         title: "My thoughts about Kemutai Hanashi - Chapter 4: Decisions",
