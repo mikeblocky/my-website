@@ -44,7 +44,11 @@ export async function POST(request: NextRequest) {
   }
 
   const author = typeof data.author === 'string' ? data.author : 'anonymous'
-  const question = buildQuestionPayload({ author, body })
+  const imageUrl = typeof data.imageUrl === 'string' ? data.imageUrl : undefined
+  const imageUrls = Array.isArray(data.imageUrls)
+    ? data.imageUrls.filter((url: any) => typeof url === 'string')
+    : undefined
+  const question = buildQuestionPayload({ author, body, imageUrl, imageUrls })
 
   await saveQuestion(question)
   revalidateTag(ASK_QUESTIONS_TAG, 'max')
@@ -63,13 +67,17 @@ export async function PUT(request: NextRequest) {
     return NextResponse.json({ error: 'Invalid payload' }, { status: 400 })
   }
 
-  const { id, reply, passcode } = data
+  const { id, reply, passcode, imageUrl, imageUrls } = data
   
   if (process.env.ADMIN_PASSCODE && passcode !== process.env.ADMIN_PASSCODE) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
-  const updatedQuestion = await import('@/lib/kv/ask').then(m => m.replyToQuestion(id, reply))
+  const cleanImageUrls = Array.isArray(imageUrls)
+    ? imageUrls.filter((url: any) => typeof url === 'string')
+    : undefined
+
+  const updatedQuestion = await import('@/lib/kv/ask').then(m => m.replyToQuestion(id, reply, imageUrl, cleanImageUrls))
   
   if (!updatedQuestion) {
     return NextResponse.json({ error: 'Question not found' }, { status: 404 })
@@ -122,7 +130,11 @@ export async function PATCH(request: NextRequest) {
     return NextResponse.json({ error: 'Invalid payload' }, { status: 400 })
   }
 
-  const { id, body, messageId, passcode } = data
+  const { id, body, messageId, passcode, imageUrl, imageUrls } = data
+
+  const cleanImageUrls = Array.isArray(imageUrls)
+    ? imageUrls.filter((url: any) => typeof url === 'string')
+    : undefined
 
   if (messageId) {
     // Edit an existing message (requires passcode)
@@ -134,7 +146,7 @@ export async function PATCH(request: NextRequest) {
     }
 
     const { updateThreadMessage } = await import('@/lib/kv/ask')
-    const updatedQuestion = await updateThreadMessage(id, messageId, body)
+    const updatedQuestion = await updateThreadMessage(id, messageId, body, imageUrl, cleanImageUrls)
     
     if (!updatedQuestion) {
       return NextResponse.json({ error: 'Message not found' }, { status: 404 })
@@ -156,7 +168,7 @@ export async function PATCH(request: NextRequest) {
     }
 
     const { followUpQuestion } = await import('@/lib/kv/ask')
-    const updatedQuestion = await followUpQuestion(id, trimmedBody)
+    const updatedQuestion = await followUpQuestion(id, trimmedBody, imageUrl, cleanImageUrls)
 
     if (!updatedQuestion) {
       return NextResponse.json({ error: 'Question not found or no admin reply yet' }, { status: 404 })

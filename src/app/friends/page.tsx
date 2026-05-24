@@ -7,7 +7,7 @@ import { SectionFooter } from '@/components/layout/footer/SectionFooter'
 import { sansFont } from '@/styles/fonts/fonts'
 import { cn } from '@/lib/utils/utils'
 import Image from 'next/image'
-import { developedFriends, upcomingFriends, type Friend } from './_data/friends'
+import { developedFriends, buddingFriends, upcomingFriends, type Friend } from './_data/friends'
 import TextUI from '@/components/ui/text/text'
 import TextHeading from '@/components/ui/text-heading/text-heading'
 import { SectionPageHeader } from '@/components/layout/page-header/SectionPageHeader'
@@ -56,13 +56,14 @@ function FriendCard({ friend, tag }: { friend: Friend, tag: string }) {
     )
 }
 
-type Tab = 'developed' | 'upcoming'
+type Tab = 'developed' | 'budding' | 'upcoming'
 
 export default function FriendsList() {
     const [activeTab, setActiveTab] = useState<Tab>('developed')
 
     const tabs = [
         { id: 'developed', label: 'Developed but still need effort', count: developedFriends.length },
+        { id: 'budding', label: 'Budding / In-between', count: buddingFriends.length },
         { id: 'upcoming', label: 'Will put effort to develop', count: upcomingFriends.length }
     ]
 
@@ -103,6 +104,10 @@ export default function FriendsList() {
                         {activeTab === 'developed' ? (
                             developedFriends.map((friend) => (
                                 <FriendCard key={friend.username} friend={friend} tag="Friend" />
+                            ))
+                        ) : activeTab === 'budding' ? (
+                            buddingFriends.map((friend) => (
+                                <FriendCard key={friend.username} friend={friend} tag="Budding" />
                             ))
                         ) : (
                             upcomingFriends.map((friend) => (

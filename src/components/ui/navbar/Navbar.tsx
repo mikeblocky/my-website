@@ -39,7 +39,7 @@ export function Navbar() {
         { href: '/artworks', label: 'Artworks' },
         { href: '/diary', label: 'Diary' },
         { href: '/ask', label: 'Ask' },
-        { href: '/pet', label: 'Pet annoy' },
+        { href: '/draw', label: 'Draw prompts' },
         { href: '/friends', label: 'Friend list' },
         { href: '/stats', label: 'Drawing stats' }
     ]
@@ -157,7 +157,7 @@ export function Navbar() {
                                                 )}
                                             >
                                                 {link.label}
-                                            </Link>
+                                             </Link>
                                         </motion.div>
                                     ))}
                                 </div>

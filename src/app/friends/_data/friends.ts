@@ -14,6 +14,17 @@ export const developedFriends: Friend[] = [
     }
 ]
 
+export const buddingFriends: Friend[] = [
+    {
+        username: 'multiplee_',
+        description: "A fellow fan of Kemutai Hanashi! We talk a lot in the server, which is a really fun coincidence. I'm still getting to know them, and since I usually take a while before adding people on Discord, I'm just taking things slow. But if it goes, then it goes—I'm happy to see where it leads."
+    },
+    {
+        username: '_azuace',
+        description: "A fellow fan of Kemutai Hanashi whom I first noticed on Tumblr. We’ve been talking a bit more lately and sharing thoughts on the server, bringing us a little closer. I really want to bridge that remaining gap and see this develop into an effortless, comfortable friendship."
+    }
+]
+
 export const upcomingFriends: Friend[] = [
     {
         username: 'to_nikaku',
@@ -34,10 +45,6 @@ export const upcomingFriends: Friend[] = [
     {
         username: 'thatyamakun',
         description: 'One of the most dedicated Witch Hat Atelier fans and someone I genuinely like. She was one of the first to appreciate my Kemutai Hanashi work, and that meant the world to me. I want to push past the "fan" stage and build a real, effortless bond with her.'
-    },
-    {
-        username: '_azuace',
-        description: 'A fellow fan of Kemutai Hanashi whom I first noticed on Tumblr. We’ve made small steps toward connecting, though it still feels a bit distant. I’m ready to put in the work to bridge that gap and turn our shared interests into a real friendship.'
     },
     {
         username: 'kuusand',

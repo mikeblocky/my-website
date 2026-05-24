@@ -1,9 +1,9 @@
 import { ImageResponse } from 'next/og'
-import { getQuestionById } from '@/lib/kv/ask'
+import { getPromptById } from '@/lib/kv/draw'
 
 export const runtime = 'nodejs'
 
-export const alt = 'Anonymous question'
+export const alt = 'Drawing prompt'
 export const size = {
   width: 1200,
   height: 630,
@@ -13,9 +13,9 @@ export const contentType = 'image/png'
 
 export default async function Image({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
-  const question = await getQuestionById(id)
+  const prompt = await getPromptById(id)
 
-  if (!question) {
+  if (!prompt) {
     return new ImageResponse(
       (
         <div
@@ -29,20 +29,20 @@ export default async function Image({ params }: { params: Promise<{ id: string }
             justifyContent: 'center',
           }}
         >
-          Question not found
+          Prompt not found
         </div>
       ),
       { ...size }
     )
   }
 
-  const hasImage = !!question.imageUrl
+  const hasImage = !!prompt.imageUrl
 
   return new ImageResponse(
     (
       <div
         style={{
-          background: 'linear-gradient(135deg, #f8fafc 0%, #eff6ff 100%)',
+          background: 'linear-gradient(135deg, #faf5ff 0%, #f5f3ff 100%)',
           width: '100%',
           height: '100%',
           display: 'flex',
@@ -69,7 +69,7 @@ export default async function Image({ params }: { params: Promise<{ id: string }
             style={{
               display: 'flex',
               alignItems: 'center',
-              marginBottom: '30px',
+              marginBottom: '20px',
             }}
           >
             <div
@@ -77,27 +77,70 @@ export default async function Image({ params }: { params: Promise<{ id: string }
                 padding: '10px 24px',
                 borderRadius: '999px',
                 background: 'white',
-                border: '2px solid #bfdbfe',
-                color: '#2563eb',
+                border: '2px solid #ddd6fe',
+                color: '#7c3aed',
                 fontSize: '24px',
                 fontWeight: 'bold',
               }}
             >
-              {question.author || 'anonymous'} asked
+              {prompt.author || 'anonymous'} suggested
             </div>
           </div>
 
+          {/* Character and Media labels in OG image */}
+          {(prompt.character || prompt.media) && (
+            <div
+              style={{
+                display: 'flex',
+                flexWrap: 'wrap',
+                gap: '12px',
+                marginBottom: '20px',
+              }}
+            >
+              {prompt.character && (
+                <div
+                  style={{
+                    padding: '6px 16px',
+                    borderRadius: '999px',
+                    background: '#f3e8ff',
+                    border: '1px solid #e9d5ff',
+                    color: '#6b21a8',
+                    fontSize: '18px',
+                    fontWeight: 'bold',
+                  }}
+                >
+                  👤 {prompt.character}
+                </div>
+              )}
+              {prompt.media && (
+                <div
+                  style={{
+                    padding: '6px 16px',
+                    borderRadius: '999px',
+                    background: '#e0e7ff',
+                    border: '1px solid #c7d2fe',
+                    color: '#3730a3',
+                    fontSize: '18px',
+                    fontWeight: 'bold',
+                  }}
+                >
+                  🎬 {prompt.media}
+                </div>
+              )}
+            </div>
+          )}
+
           <div
             style={{
-              fontSize: hasImage ? '48px' : '60px',
+              fontSize: hasImage ? '44px' : '56px',
               fontWeight: 'bold',
-              color: '#1e293b',
+              color: '#2e1065',
               lineHeight: 1.3,
               marginBottom: '30px',
               display: 'flex',
             }}
           >
-            &ldquo;{question.body.length > 180 ? question.body.slice(0, 180) + '...' : question.body}&rdquo;
+            &ldquo;{prompt.body.length > 180 ? prompt.body.slice(0, 180) + '...' : prompt.body}&rdquo;
           </div>
 
           <div
@@ -111,19 +154,20 @@ export default async function Image({ params }: { params: Promise<{ id: string }
             <div
               style={{
                 fontSize: '24px',
-                color: '#64748b',
+                color: '#6b21a8',
+                opacity: 0.7,
               }}
             >
-              mikeblocky.com/ask
+              mikeblocky.com/draw
             </div>
             <div
               style={{
                 marginLeft: 'auto',
                 fontSize: '24px',
-                color: '#94a3b8',
+                color: '#a78bfa',
               }}
             >
-              {new Date(question.createdAt).toLocaleDateString('en-US', {
+              {new Date(prompt.createdAt).toLocaleDateString('en-US', {
                 month: 'long',
                 day: 'numeric',
                 year: 'numeric',
@@ -132,7 +176,7 @@ export default async function Image({ params }: { params: Promise<{ id: string }
           </div>
         </div>
 
-        {/* Right image block if question has imageUrl */}
+        {/* Right image block if prompt has imageUrl */}
         {hasImage && (
           <div
             style={{
@@ -142,13 +186,13 @@ export default async function Image({ params }: { params: Promise<{ id: string }
               borderRadius: '24px',
               overflow: 'hidden',
               border: '6px solid white',
-              boxShadow: '0 20px 40px rgba(37, 99, 235, 0.1)',
+              boxShadow: '0 20px 40px rgba(124, 58, 237, 0.1)',
             }}
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src={question.imageUrl}
-              alt="Question attachment"
+              src={prompt.imageUrl}
+              alt="Prompt attachment"
               style={{
                 width: '100%',
                 height: '100%',

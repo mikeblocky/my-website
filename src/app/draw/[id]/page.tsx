@@ -1,6 +1,6 @@
 import BaseContainer from "@/components/layout/container/base-container"
 import { Metadata } from "next"
-import { getQuestionById } from "@/lib/kv/ask"
+import { getPromptById } from "@/lib/kv/draw"
 import { notFound } from "next/navigation"
 import { RedirectToBoard } from "@/components/ui/RedirectToBoard"
 import { IndividualPageFooter } from "@/components/layout/footer/IndividualPageFooter"
@@ -11,43 +11,43 @@ interface PageProps {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { id } = await params
-  const question = await getQuestionById(id)
+  const prompt = await getPromptById(id)
 
-  if (!question) {
+  if (!prompt) {
     return {
-      title: "Question Not Found | Ask",
+      title: "Prompt not found | Drawing prompts",
     }
   }
 
-  const description = `"${question.body.slice(0, 150)}${question.body.length > 150 ? '...' : ''}" — Asked by ${question.author || 'anonymous'}`
+  const description = `"${prompt.body.slice(0, 150)}${prompt.body.length > 150 ? '...' : ''}" — Suggested by ${prompt.author || 'anonymous'}`
 
   return {
-    title: `Question from ${question.author || 'anonymous'} | Ask`,
+    title: `Prompt from ${prompt.author || 'anonymous'} | Drawing prompts`,
     description,
     openGraph: {
-      title: `Anonymous Question`,
+      title: `Drawing prompt suggestion`,
       description,
       type: 'article',
     },
     twitter: {
       card: 'summary_large_image',
-      title: `Anonymous Question`,
+      title: `Drawing prompt suggestion`,
       description,
     },
   }
 }
 
-export default async function QuestionPage({ params }: PageProps) {
+export default async function PromptPage({ params }: PageProps) {
   const { id } = await params
-  const question = await getQuestionById(id)
+  const prompt = await getPromptById(id)
 
-  if (!question) {
+  if (!prompt) {
     notFound()
   }
 
   return (
     <BaseContainer size="md" paddingX="md" paddingY="lg">
-      <RedirectToBoard id={id} type="question" />
+      <RedirectToBoard id={id} type="prompt" />
       
       <IndividualPageFooter
         showParentPage={false}

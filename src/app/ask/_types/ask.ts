@@ -3,6 +3,8 @@ export type ThreadMessage = {
   role: 'asker' | 'admin'
   body: string
   createdAt: string
+  imageUrl?: string
+  imageUrls?: string[]
 }
 
 export type AskQuestion = {
@@ -10,6 +12,8 @@ export type AskQuestion = {
   author?: string
   body: string
   createdAt: string
+  imageUrl?: string
+  imageUrls?: string[]
   /** @deprecated — kept for backwards compat with old entries */
   reply?: string
   /** @deprecated — kept for backwards compat with old entries */

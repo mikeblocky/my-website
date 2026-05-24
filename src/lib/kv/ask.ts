@@ -3,13 +3,15 @@ import { AskQuestion, ThreadMessage } from '@/app/ask/_types/ask'
 
 const MAX_STORED_QUESTIONS = 200
 
-export function buildQuestionPayload(partial: { author: string; body: string }): AskQuestion {
+export function buildQuestionPayload(partial: { author: string; body: string; imageUrl?: string; imageUrls?: string[] }): AskQuestion {
   const now = new Date().toISOString()
   return {
     id: Math.random().toString(36).substring(2, 11),
     author: partial.author.trim() || 'anonymous',
     body: partial.body.trim(),
     createdAt: now,
+    imageUrl: partial.imageUrl,
+    imageUrls: partial.imageUrls,
     thread: []
   }
 }
@@ -54,7 +56,7 @@ export async function fetchQuestions(limit = 100): Promise<AskQuestion[]> {
 }
 
 /** Admin replies to a question (appends an admin message to the thread) */
-export async function replyToQuestion(id: string, replyBody: string): Promise<AskQuestion | null> {
+export async function replyToQuestion(id: string, replyBody: string, imageUrl?: string, imageUrls?: string[]): Promise<AskQuestion | null> {
   const redis = await getRedisClient()
   const questions = await fetchQuestions(MAX_STORED_QUESTIONS)
   
@@ -73,7 +75,9 @@ export async function replyToQuestion(id: string, replyBody: string): Promise<As
     id: Math.random().toString(36).substring(2, 11),
     role: 'admin',
     body: replyBody.trim(),
-    createdAt: now
+    createdAt: now,
+    imageUrl,
+    imageUrls
   }
 
   const updatedQuestion: AskQuestion = {
@@ -94,7 +98,7 @@ export async function replyToQuestion(id: string, replyBody: string): Promise<As
 }
 
 /** Visitor follows up on a question (appends an asker message to the thread) */
-export async function followUpQuestion(id: string, followUpBody: string): Promise<AskQuestion | null> {
+export async function followUpQuestion(id: string, followUpBody: string, imageUrl?: string, imageUrls?: string[]): Promise<AskQuestion | null> {
   const redis = await getRedisClient()
   const questions = await fetchQuestions(MAX_STORED_QUESTIONS)
   
@@ -115,7 +119,9 @@ export async function followUpQuestion(id: string, followUpBody: string): Promis
     id: Math.random().toString(36).substring(2, 11),
     role: 'asker',
     body: followUpBody.trim(),
-    createdAt: new Date().toISOString()
+    createdAt: new Date().toISOString(),
+    imageUrl,
+    imageUrls
   }
 
   const updatedQuestion: AskQuestion = {
@@ -138,7 +144,13 @@ export async function getQuestionById(id: string): Promise<AskQuestion | null> {
 }
 
 /** Updates an existing thread message body */
-export async function updateThreadMessage(questionId: string, messageId: string, newBody: string): Promise<AskQuestion | null> {
+export async function updateThreadMessage(
+  questionId: string, 
+  messageId: string, 
+  newBody: string, 
+  newImageUrl?: string,
+  newImageUrls?: string[]
+): Promise<AskQuestion | null> {
   const redis = await getRedisClient()
   const questions = await fetchQuestions(MAX_STORED_QUESTIONS)
   
@@ -157,7 +169,9 @@ export async function updateThreadMessage(questionId: string, messageId: string,
   const updatedThread = [...target.thread]
   updatedThread[messageIndex] = {
     ...updatedThread[messageIndex],
-    body: newBody.trim()
+    body: newBody.trim(),
+    imageUrl: newImageUrl !== undefined ? newImageUrl : updatedThread[messageIndex].imageUrl,
+    imageUrls: newImageUrls !== undefined ? newImageUrls : updatedThread[messageIndex].imageUrls
   }
 
   const updatedQuestion: AskQuestion = {
