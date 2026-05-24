@@ -1,4 +1,4 @@
-import { getRedisClient, talkMessagesKey } from './client'
+import { getRedisClient, talkMessagesKey, askQuestionsKey } from './client'
 import { TalkTopic, ThreadMessage } from '@/app/talk/_types/talk'
 
 const MAX_STORED_TALKS = 200
@@ -32,11 +32,28 @@ export async function saveTalk(talk: TalkTopic) {
 
 export async function fetchTalks(limit = 100): Promise<TalkTopic[]> {
   const redis = await getRedisClient()
-  const raw = await redis.zRange(talkMessagesKey, -limit, -1, { REV: true })
-  return raw
+  
+  // Fetch from current talk:messages key
+  const talkRaw = await redis.zRange(talkMessagesKey, -limit, -1, { REV: true })
+  
+  // Also fetch from legacy ask:questions key
+  let askRaw: string[] = []
+  try {
+    askRaw = await redis.zRange(askQuestionsKey, -limit, -1, { REV: true })
+  } catch (_e) {
+    // Legacy key might not exist
+  }
+  
+  const allRaw = [...talkRaw, ...askRaw]
+  const seen = new Set<string>()
+  
+  return allRaw
     .map((entry: string) => {
       try {
         const t = JSON.parse(entry) as TalkTopic
+        // Deduplicate by id
+        if (seen.has(t.id)) return null
+        seen.add(t.id)
         // Migrate legacy flat reply to thread format
         if (t.reply && (!t.thread || t.thread.length === 0)) {
           t.thread = [{

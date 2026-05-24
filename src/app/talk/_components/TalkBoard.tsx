@@ -365,16 +365,24 @@ export function TalkBoard({
     if (!element) return;
     
     const url = `${window.location.origin}/talk/${id}`;
+    const isDark = document.documentElement.classList.contains('dark');
     const actionsDiv = element.querySelector('.talk-actions') as HTMLElement;
     if (actionsDiv) actionsDiv.style.visibility = 'hidden';
     
-    // Hide +N overlays during screenshot
+    // Hide +N overlays and zoom icons during screenshot
     const moreOverlays = element.querySelectorAll('.gallery-more-overlay') as NodeListOf<HTMLElement>;
+    const zoomOverlays = element.querySelectorAll('.gallery-zoom-overlay') as NodeListOf<HTMLElement>;
     moreOverlays.forEach(el => el.style.display = 'none');
+    zoomOverlays.forEach(el => el.style.display = 'none');
+    
+    // Add URL watermark at bottom
+    const linkBar = document.createElement('div');
+    linkBar.style.cssText = `margin-top:12px;padding-top:10px;border-top:1px solid ${isDark ? '#ffffff15' : '#00000010'};font-size:12px;color:${isDark ? '#94a3b8' : '#64748b'};font-family:system-ui,sans-serif;letter-spacing:0.02em;`;
+    linkBar.textContent = `🔗 ${url}`;
+    element.appendChild(linkBar);
     
     try {
       const { toPng } = await import('html-to-image');
-      const isDark = document.documentElement.classList.contains('dark');
       
       const dataUrl = await toPng(element, { 
         backgroundColor: isDark ? '#1a1525' : '#ffffff',
@@ -394,15 +402,10 @@ export function TalkBoard({
       
       try {
         await navigator.clipboard.write([
-          new ClipboardItem({
-            'image/png': blob,
-            'text/plain': new Blob([url], { type: 'text/plain' })
-          })
+          new ClipboardItem({ 'image/png': blob })
         ]);
         showButtonFeedback(`share-${id}`, '✓ Copied');
       } catch (err) {
-        // Fallback: copy link as text + download image
-        navigator.clipboard.writeText(url);
         const a = document.createElement('a');
         a.href = dataUrl;
         a.download = `talk-${id}.png`;
@@ -411,12 +414,13 @@ export function TalkBoard({
       }
     } catch (e) {
       console.error('Screenshot failed', e);
-      // At least copy the link
       navigator.clipboard.writeText(url);
       showButtonFeedback(`share-${id}`, '✓ Link only');
     } finally {
       if (actionsDiv) actionsDiv.style.visibility = '';
       moreOverlays.forEach(el => el.style.display = '');
+      zoomOverlays.forEach(el => el.style.display = '');
+      linkBar.remove();
     }
   }
 

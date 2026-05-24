@@ -92,7 +92,7 @@ export const ImageGallery: React.FC<ImageGalleryProps> = ({ urls = [], theme = '
             className="w-full max-h-[360px] object-cover transition-transform duration-500 group-hover:scale-[1.02]"
             loading="lazy"
           />
-          <div className="absolute inset-0 bg-black/0 transition-colors duration-300 group-hover:bg-black/5 flex items-center justify-center">
+          <div className="gallery-zoom-overlay absolute inset-0 bg-black/0 transition-colors duration-300 group-hover:bg-black/5 flex items-center justify-center">
             <span className="opacity-0 scale-95 group-hover:opacity-100 group-hover:scale-100 transition-all duration-300 p-2.5 rounded-full bg-white/90 dark:bg-gray-950/90 text-gray-700 dark:text-gray-300 shadow-md">
               <ZoomIn className="h-5 w-5" />
             </span>
@@ -117,7 +117,7 @@ export const ImageGallery: React.FC<ImageGalleryProps> = ({ urls = [], theme = '
                 className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
                 loading="lazy"
               />
-              <div className="absolute inset-0 bg-black/0 transition-colors duration-300 group-hover:bg-black/5 flex items-center justify-center">
+              <div className="gallery-zoom-overlay absolute inset-0 bg-black/0 transition-colors duration-300 group-hover:bg-black/5 flex items-center justify-center">
                 <span className="opacity-0 scale-95 group-hover:opacity-100 group-hover:scale-100 transition-all duration-300 p-2 rounded-full bg-white/90 dark:bg-gray-950/90 text-gray-700 dark:text-gray-300 shadow-md">
                   <ZoomIn className="h-4.5 w-4.5" />
                 </span>
@@ -159,7 +159,7 @@ export const ImageGallery: React.FC<ImageGalleryProps> = ({ urls = [], theme = '
                   </span>
                 </div>
               ) : (
-                <div className="absolute inset-0 bg-black/0 transition-colors duration-300 group-hover:bg-black/5 flex items-center justify-center">
+                <div className="gallery-zoom-overlay absolute inset-0 bg-black/0 transition-colors duration-300 group-hover:bg-black/5 flex items-center justify-center">
                   <span className="opacity-0 scale-95 group-hover:opacity-100 group-hover:scale-100 transition-all duration-300 p-2 rounded-full bg-white/90 dark:bg-gray-950/90 text-gray-700 dark:text-gray-300 shadow-md">
                     <ZoomIn className="h-4.5 w-4.5" />
                   </span>
