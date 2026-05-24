@@ -155,22 +155,13 @@ export const ImageGallery: React.FC<ImageGalleryProps> = ({ urls = [], theme = '
       {/* Lightbox Overlay */}
       {activeIdx !== null && (
         <div 
-          className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/70 backdrop-blur-2xl transition-all duration-300 animate-in fade-in"
+          className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/85 transition-all duration-300 animate-in fade-in"
           onClick={() => setActiveIdx(null)}
         >
-          {/* Blurred replica of the image itself as a background to softly fill screen */}
-          <div className="absolute inset-0 z-[-1] overflow-hidden pointer-events-none select-none">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img 
-              src={cleanUrls[activeIdx]} 
-              alt="Blurred background animate-in fade-in duration-300" 
-              className="w-full h-full object-cover scale-110 blur-3xl opacity-35 dark:opacity-25" 
-            />
-          </div>
           {/* Close button */}
           <button
             onClick={() => setActiveIdx(null)}
-            className="absolute top-5 right-5 z-[10000] p-3 rounded-full bg-white/10 text-white/80 hover:bg-white/20 hover:text-white transition-all cursor-pointer border border-white/5 shadow-lg focus:outline-none"
+            className="absolute top-5 right-5 z-[10000] p-3 rounded-full bg-black/40 text-white/80 hover:bg-black/60 hover:text-white transition-all cursor-pointer border border-white/5 shadow-lg focus:outline-none"
             aria-label="Close Lightbox"
           >
             <X className="h-6 w-6" />
@@ -180,7 +171,7 @@ export const ImageGallery: React.FC<ImageGalleryProps> = ({ urls = [], theme = '
           {activeIdx > 0 && (
             <button
               onClick={handlePrev}
-              className="absolute left-5 z-[10000] p-3 rounded-full bg-white/10 text-white/80 hover:bg-white/20 hover:text-white transition-all cursor-pointer border border-white/5 shadow-lg focus:outline-none"
+              className="absolute left-5 z-[10000] p-3 rounded-full bg-black/40 text-white/80 hover:bg-black/60 hover:text-white transition-all cursor-pointer border border-white/5 shadow-lg focus:outline-none"
               aria-label="Previous Image"
             >
               <ChevronLeft className="h-6 w-6" />
@@ -208,7 +199,7 @@ export const ImageGallery: React.FC<ImageGalleryProps> = ({ urls = [], theme = '
           {activeIdx < cleanUrls.length - 1 && (
             <button
               onClick={handleNext}
-              className="absolute right-5 z-[10000] p-3 rounded-full bg-white/10 text-white/80 hover:bg-white/20 hover:text-white transition-all cursor-pointer border border-white/5 shadow-lg focus:outline-none"
+              className="absolute right-5 z-[10000] p-3 rounded-full bg-black/40 text-white/80 hover:bg-black/60 hover:text-white transition-all cursor-pointer border border-white/5 shadow-lg focus:outline-none"
               aria-label="Next Image"
             >
               <ChevronRight className="h-6 w-6" />

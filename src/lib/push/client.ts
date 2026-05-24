@@ -28,7 +28,7 @@ export async function registerServiceWorker(): Promise<ServiceWorkerRegistration
   }
 }
 
-export async function subscribeToPush(questionId: string): Promise<boolean> {
+export async function subscribeToPush(talkId: string): Promise<boolean> {
   if (!('PushManager' in window)) {
     console.warn('Push notifications are not supported')
     return false
@@ -65,7 +65,7 @@ export async function subscribeToPush(questionId: string): Promise<boolean> {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        questionId,
+        talkId,
         subscription: subscription.toJSON()
       })
     })

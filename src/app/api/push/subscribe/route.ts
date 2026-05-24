@@ -4,14 +4,15 @@ import { savePushSubscription } from '@/lib/kv/push'
 export async function POST(request: NextRequest) {
   try {
     const data = await request.json()
-    const { questionId, subscription } = data
+    const { talkId, questionId, subscription } = data
+    const targetId = talkId || questionId
 
-    if (!questionId || !subscription?.endpoint) {
-      return NextResponse.json({ error: 'Missing questionId or subscription' }, { status: 400 })
+    if (!targetId || !subscription?.endpoint) {
+      return NextResponse.json({ error: 'Missing talkId/questionId or subscription' }, { status: 400 })
     }
 
-    console.log(`[Push] Subscribing to question ${questionId}`);
-    await savePushSubscription(questionId, subscription)
+    console.log(`[Push] Subscribing to topic ${targetId}`);
+    await savePushSubscription(targetId, subscription)
 
     return NextResponse.json({ success: true }, { status: 201 })
   } catch (error) {

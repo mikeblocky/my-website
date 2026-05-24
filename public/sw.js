@@ -11,17 +11,17 @@ self.addEventListener('push', function (event) {
     data = {
       title: 'mikeblocky.com',
       body: event.data.text(),
-      url: '/ask'
+      url: '/talk'
     }
   }
 
   const options = {
-    body: data.body || 'Your question has been answered!',
+    body: data.body || 'Your post has received a response!',
     icon: '/icon-512.png',
     badge: '/icon-512.png',
-    tag: data.tag || 'ask-reply',
+    tag: data.tag || 'talk-reply',
     data: {
-      url: data.url || '/ask'
+      url: data.url || '/talk'
     },
     vibrate: [200, 100, 200],
     requireInteraction: true
@@ -35,7 +35,7 @@ self.addEventListener('push', function (event) {
 self.addEventListener('notificationclick', function (event) {
   event.notification.close()
 
-  const targetUrl = event.notification.data?.url || '/ask'
+  const targetUrl = event.notification.data?.url || '/talk'
 
   event.waitUntil(
     clients.matchAll({ type: 'window', includeUncontrolled: true }).then(function (clientList) {

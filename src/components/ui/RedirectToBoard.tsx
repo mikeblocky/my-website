@@ -6,21 +6,23 @@ import { cn } from '@/lib/utils/utils'
 
 interface RedirectToBoardProps {
   id: string
-  type: 'question' | 'prompt'
+  type: 'talk' | 'question' | 'prompt'
 }
 
 export function RedirectToBoard({ id, type }: RedirectToBoardProps) {
   useEffect(() => {
     // Immediate client-side redirection to the main board with hash
-    const destination = type === 'question' ? `/ask#question-${id}` : `/draw#prompt-${id}`
+    const destination = type === 'talk' || type === 'question' 
+      ? `/talk#talk-${id}` 
+      : `/draw#prompt-${id}`
     window.location.replace(destination)
   }, [id, type])
 
-  const accentColor = type === 'question' 
+  const accentColor = type === 'talk' || type === 'question' 
     ? 'text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/10 border-blue-100 dark:border-blue-900/20' 
     : 'text-violet-600 dark:text-violet-400 bg-violet-50 dark:bg-violet-900/10 border-violet-100 dark:border-violet-900/20'
 
-  const loaderColor = type === 'question' ? 'border-blue-500' : 'border-violet-500'
+  const loaderColor = type === 'talk' || type === 'question' ? 'border-blue-500' : 'border-violet-500'
 
   return (
     <div className="min-h-[60vh] flex flex-col items-center justify-center p-6 text-center">
@@ -38,10 +40,10 @@ export function RedirectToBoard({ id, type }: RedirectToBoardProps) {
         
         <div className="space-y-1">
           <h3 className={cn(sansFont.className, "text-sm font-bold")}>
-            Entering {type === 'question' ? 'Ask board' : 'Draw prompts'}
+            Entering {type === 'talk' || type === 'question' ? 'Talk board' : 'Draw prompts'}
           </h3>
           <p className={cn(sansFont.className, "text-xs opacity-75")}>
-            Locating your shared {type}...
+            Locating your shared item...
           </p>
         </div>
       </div>

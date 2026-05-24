@@ -1,25 +1,25 @@
 import { after, NextRequest, NextResponse } from 'next/server'
 import { revalidateTag } from 'next/cache'
-import { buildQuestionPayload, saveQuestion } from '@/lib/kv/ask'
-import { ASK_QUESTIONS_TAG, getAskQuestions } from '@/lib/kv/ask-cache'
-import { notifyOwnerNewQuestion } from '@/lib/notify/discord'
-import { getSubscribedQuestionIds } from '@/lib/kv/push'
+import { buildTalkPayload, saveTalk } from '@/lib/kv/talk'
+import { TALK_MESSAGES_TAG, getTalkMessages } from '@/lib/kv/talk-cache'
+import { notifyOwnerNewTalk } from '@/lib/notify/discord'
+import { getSubscribedTalkIds } from '@/lib/kv/push'
 
 const MAX_BODY_LENGTH = 800
 
 export async function GET() {
-  const [questions, subscribedIds] = await Promise.all([
-    getAskQuestions(),
-    getSubscribedQuestionIds()
+  const [talks, subscribedIds] = await Promise.all([
+    getTalkMessages(),
+    getSubscribedTalkIds()
   ])
 
-  const enriched = questions.map(q => ({
-    ...q,
-    notifying: subscribedIds.has(q.id)
+  const enriched = talks.map(t => ({
+    ...t,
+    notifying: subscribedIds.has(t.id)
   }))
 
   return NextResponse.json(
-    { questions: enriched },
+    { questions: enriched }, // Keep JSON payload key questions/talks compatible or change to talks. Let's keep questions or allow both for frontend safety. Wait, in TalkBoard: response.json() as { questions?: TalkTopic[] }, let's return { questions: enriched } to match perfectly!
     {
       headers: {
         'Cache-Control': 'no-store, must-revalidate'
@@ -36,11 +36,11 @@ export async function POST(request: NextRequest) {
 
   const body = data.body.trim()
   if (body.length === 0) {
-    return NextResponse.json({ error: 'Question cannot be empty' }, { status: 400 })
+    return NextResponse.json({ error: 'Message cannot be empty' }, { status: 400 })
   }
 
   if (body.length > MAX_BODY_LENGTH) {
-    return NextResponse.json({ error: 'Question is too long' }, { status: 400 })
+    return NextResponse.json({ error: 'Message is too long' }, { status: 400 })
   }
 
   const author = typeof data.author === 'string' ? data.author : 'anonymous'
@@ -48,16 +48,16 @@ export async function POST(request: NextRequest) {
   const imageUrls = Array.isArray(data.imageUrls)
     ? data.imageUrls.filter((url: any) => typeof url === 'string')
     : undefined
-  const question = buildQuestionPayload({ author, body, imageUrl, imageUrls })
+  const talk = buildTalkPayload({ author, body, imageUrl, imageUrls })
 
-  await saveQuestion(question)
-  revalidateTag(ASK_QUESTIONS_TAG, 'max')
+  await saveTalk(talk)
+  revalidateTag(TALK_MESSAGES_TAG, 'max')
 
   after(async () => {
-    await notifyOwnerNewQuestion(author, body)
+    await notifyOwnerNewTalk(author, body)
   })
 
-  return NextResponse.json({ question }, { status: 201 })
+  return NextResponse.json({ question: talk }, { status: 201 })
 }
 
 /** Admin reply — requires passcode */
@@ -77,17 +77,17 @@ export async function PUT(request: NextRequest) {
     ? imageUrls.filter((url: any) => typeof url === 'string')
     : undefined
 
-  const updatedQuestion = await import('@/lib/kv/ask').then(m => m.replyToQuestion(id, reply, imageUrl, cleanImageUrls))
+  const updatedTalk = await import('@/lib/kv/talk').then(m => m.replyToTalk(id, reply, imageUrl, cleanImageUrls))
   
-  if (!updatedQuestion) {
-    return NextResponse.json({ error: 'Question not found' }, { status: 404 })
+  if (!updatedTalk) {
+    return NextResponse.json({ error: 'Post not found' }, { status: 404 })
   }
-  revalidateTag(ASK_QUESTIONS_TAG, 'max')
+  revalidateTag(TALK_MESSAGES_TAG, 'max')
 
   after(async () => {
     try {
-      const { getSubscriptionsForQuestion } = await import('@/lib/kv/push')
-      const subscriptions = await getSubscriptionsForQuestion(id)
+      const { getSubscriptionsForTalk } = await import('@/lib/kv/push')
+      const subscriptions = await getSubscriptionsForTalk(id)
       
       if (subscriptions.length > 0) {
         const webpush = await import('web-push')
@@ -99,10 +99,10 @@ export async function PUT(request: NextRequest) {
         )
 
         const notificationPayload = JSON.stringify({
-          title: 'mikeblocky answered your question!',
+          title: 'mikeblocky responded to your post!',
           body: reply.trim().length > 120 ? reply.trim().slice(0, 120) + '...' : reply.trim(),
-          url: '/ask',
-          tag: `reply-${id}`
+          url: '/talk',
+          tag: `talk-${id}`
         })
 
         for (const sub of subscriptions) {
@@ -112,15 +112,13 @@ export async function PUT(request: NextRequest) {
             console.error('Push notification failed for subscription:', pushError?.statusCode)
           }
         }
-
-        // Don't remove subscriptions — keep them alive for threaded follow-ups
       }
     } catch (pushError) {
       console.error('Push notification error (non-blocking):', pushError)
     }
   })
 
-  return NextResponse.json({ question: updatedQuestion }, { status: 200 })
+  return NextResponse.json({ question: updatedTalk }, { status: 200 })
 }
 
 /** Visitor follow-up or Admin edit */
@@ -145,16 +143,16 @@ export async function PATCH(request: NextRequest) {
       return NextResponse.json({ error: 'Content cannot be empty' }, { status: 400 })
     }
 
-    const { updateThreadMessage } = await import('@/lib/kv/ask')
-    const updatedQuestion = await updateThreadMessage(id, messageId, body, imageUrl, cleanImageUrls)
+    const { updateThreadMessage } = await import('@/lib/kv/talk')
+    const updatedTalk = await updateThreadMessage(id, messageId, body, imageUrl, cleanImageUrls)
     
-    if (!updatedQuestion) {
+    if (!updatedTalk) {
       return NextResponse.json({ error: 'Message not found' }, { status: 404 })
     }
-    revalidateTag(ASK_QUESTIONS_TAG, 'max')
-    return NextResponse.json({ question: updatedQuestion }, { status: 200 })
+    revalidateTag(TALK_MESSAGES_TAG, 'max')
+    return NextResponse.json({ question: updatedTalk }, { status: 200 })
   } else {
-    // Visitor follow-up — no passcode needed, but the question must already have an admin reply
+    // Visitor follow-up — no passcode needed, but the post must already have an admin reply
     if (typeof body !== 'string') {
       return NextResponse.json({ error: 'Invalid payload' }, { status: 400 })
     }
@@ -167,18 +165,18 @@ export async function PATCH(request: NextRequest) {
       return NextResponse.json({ error: 'Follow-up is too long' }, { status: 400 })
     }
 
-    const { followUpQuestion } = await import('@/lib/kv/ask')
-    const updatedQuestion = await followUpQuestion(id, trimmedBody, imageUrl, cleanImageUrls)
+    const { followUpTalk } = await import('@/lib/kv/talk')
+    const updatedTalk = await followUpTalk(id, trimmedBody, imageUrl, cleanImageUrls)
 
-    if (!updatedQuestion) {
-      return NextResponse.json({ error: 'Question not found or no admin reply yet' }, { status: 404 })
+    if (!updatedTalk) {
+      return NextResponse.json({ error: 'Post not found or no admin reply yet' }, { status: 404 })
     }
-    revalidateTag(ASK_QUESTIONS_TAG, 'max')
+    revalidateTag(TALK_MESSAGES_TAG, 'max')
 
     after(async () => {
       try {
-        await notifyOwnerNewQuestion(
-          updatedQuestion.author || 'anonymous',
+        await notifyOwnerNewTalk(
+          updatedTalk.author || 'anonymous',
           `[Follow-up] ${trimmedBody}`
         )
       } catch (err) {
@@ -186,6 +184,6 @@ export async function PATCH(request: NextRequest) {
       }
     })
 
-    return NextResponse.json({ question: updatedQuestion }, { status: 200 })
+    return NextResponse.json({ question: updatedTalk }, { status: 200 })
   }
 }

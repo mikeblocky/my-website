@@ -3,7 +3,7 @@
  * Set DISCORD_WEBHOOK_URL in your environment variables.
  */
 
-export async function notifyOwnerNewQuestion(author: string, body: string) {
+export async function notifyOwnerNewTalk(author: string, body: string) {
   const webhookUrl = process.env.DISCORD_WEBHOOK_URL
   if (!webhookUrl) {
     console.log('[notify] DISCORD_WEBHOOK_URL not set, skipping owner notification')
@@ -14,7 +14,7 @@ export async function notifyOwnerNewQuestion(author: string, body: string) {
     const truncatedBody = body.length > 300 ? body.slice(0, 300) + '...' : body
 
     const embed = {
-      title: '📬 New question on Ask board',
+      title: '📬 New post on Talk board',
       color: 0x2563eb, // blue-600
       fields: [
         {
@@ -28,12 +28,12 @@ export async function notifyOwnerNewQuestion(author: string, body: string) {
           inline: true,
         },
         {
-          name: 'Question',
+          name: 'Content',
           value: truncatedBody,
         },
       ],
       footer: {
-        text: 'mikeblocky.com/ask',
+        text: 'mikeblocky.com/talk',
       },
     }
 
@@ -43,7 +43,7 @@ export async function notifyOwnerNewQuestion(author: string, body: string) {
       body: JSON.stringify({
         username: 'mikeblocky.com',
         avatar_url: 'https://mikeblocky.com/icon-512.png',
-        content: 'New Ask board question received.',
+        content: 'New Talk board post received.',
         embeds: [embed],
       }),
     })

@@ -1,8 +1,8 @@
 'use client'
 
 import { FormEvent, useEffect, useState, useTransition, useMemo } from 'react'
-import { initialQuestions } from '../_data/questions'
-import { AskQuestion, ThreadMessage } from '../_types/ask'
+import { initialTalks } from '../_data/talks'
+import { TalkTopic, ThreadMessage } from '../_types/talk'
 import { RichText } from '@/components/ui/RichText'
 import { ImageGallery } from '@/components/ui/ImageGallery'
 import { StackVertical } from '@/components/layout/layout-stack/layout-stack'
@@ -15,7 +15,7 @@ import { cn } from '@/lib/utils/utils'
 import { AnimatePresence, motion } from 'framer-motion'
 import { isPushSupported, subscribeToPush, registerServiceWorker } from '@/lib/push/client'
 
-const seededQuestions = [...initialQuestions].sort(
+const seededTalks = [...initialTalks].sort(
   (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
 )
 const dateFormatter = new Intl.DateTimeFormat('en', {
@@ -33,7 +33,7 @@ type FormState = {
 
 const ITEMS_PER_PAGE = 5
 
-function sortQuestions(items: AskQuestion[]) {
+function sortTalks(items: TalkTopic[]) {
   return items.slice().sort(
     (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
   )
@@ -48,23 +48,23 @@ function formatDate(iso: string) {
 }
 
 /** Determine what the last message role is in the thread */
-function lastThreadRole(q: AskQuestion): 'asker' | 'admin' | null {
-  if (!q.thread || q.thread.length === 0) return null
-  return q.thread[q.thread.length - 1].role
+function lastThreadRole(t: TalkTopic): 'asker' | 'admin' | null {
+  if (!t.thread || t.thread.length === 0) return null
+  return t.thread[t.thread.length - 1].role
 }
 
-export function AskBoard({ 
-  initialQuestions = seededQuestions,
+export function TalkBoard({ 
+  initialTalks: incomingTalks = seededTalks,
   singleMode = false
 }: { 
-  initialQuestions?: AskQuestion[]
+  initialTalks?: TalkTopic[]
   singleMode?: boolean
 }) {
   const [formState, setFormState] = useState<FormState>({ author: '', body: '' })
-  const [questions, setQuestions] = useState<AskQuestion[]>(sortQuestions(initialQuestions))
+  const [talks, setTalks] = useState<TalkTopic[]>(sortTalks(incomingTalks))
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
-  const [isLoading, setIsLoading] = useState(initialQuestions.length === 0)
-  const [isRefreshing, setIsRefreshing] = useState(initialQuestions.length > 0)
+  const [isLoading, setIsLoading] = useState(incomingTalks.length === 0)
+  const [isRefreshing, setIsRefreshing] = useState(incomingTalks.length > 0)
   const [isPending, startTransition] = useTransition()
   
   // Pagination
@@ -125,23 +125,23 @@ export function AskBoard({
       return
     }
 
-    async function loadQuestions() {
+    async function loadTalks() {
       try {
-        const response = await fetch('/api/ask', { signal: controller.signal })
+        const response = await fetch('/api/talk', { signal: controller.signal })
         if (!response.ok) {
           throw new Error(`Failed with status ${response.status}`)
         }
 
-        const payload = (await response.json()) as { questions?: AskQuestion[] }
+        const payload = (await response.json()) as { questions?: TalkTopic[] }
         if (!cancelled && Array.isArray(payload.questions)) {
-          setQuestions(sortQuestions(payload.questions))
+          setTalks(sortTalks(payload.questions))
         }
       } catch (error) {
         if (controller.signal.aborted) {
           return
         }
 
-        console.error('Unable to load questions', error)
+        console.error('Unable to load talks', error)
         if (!cancelled) {
           showNotification('Unable to refresh the archive. Showing the latest cached list.')
         }
@@ -153,7 +153,7 @@ export function AskBoard({
       }
     }
 
-    loadQuestions()
+    loadTalks()
 
     return () => {
       cancelled = true
@@ -164,17 +164,17 @@ export function AskBoard({
   useEffect(() => {
     if (typeof window !== 'undefined' && window.location.hash) {
       const hash = window.location.hash;
-      if (hash.startsWith('#question-')) {
-        const id = hash.replace('#question-', '');
-        // Find which index this question has in the sorted questions array
-        const index = questions.findIndex(q => q.id === id);
+      if (hash.startsWith('#talk-')) {
+        const id = hash.replace('#talk-', '');
+        // Find which index this talk has in the sorted talks array
+        const index = talks.findIndex(t => t.id === id);
         if (index !== -1) {
           const page = Math.ceil((index + 1) / ITEMS_PER_PAGE);
           setCurrentPage(page);
           
           // Now scroll and highlight after setting page and allowing DOM to update
           setTimeout(() => {
-            const element = document.getElementById(`question-${id}`);
+            const element = document.getElementById(`talk-${id}`);
             if (element) {
               element.scrollIntoView({ behavior: 'smooth', block: 'center' });
               element.classList.add('ring-4', 'ring-blue-500/30', 'border-blue-500');
@@ -186,7 +186,7 @@ export function AskBoard({
         }
       }
     }
-  }, [questions]);
+  }, [talks]);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -203,36 +203,36 @@ export function AskBoard({
     startTransition(async () => {
       try {
         setErrorMessage(null)
-        const response = await fetch('/api/ask', {
+        const response = await fetch('/api/talk', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload)
         })
 
         if (!response.ok) {
-          throw new Error('Something went wrong while sending your question.')
+          throw new Error('Something went wrong while posting your message.')
         }
 
-        const { question } = (await response.json()) as { question: AskQuestion }
-        setQuestions((previous) => [question, ...previous])
+        const { question: talk } = (await response.json()) as { question: TalkTopic }
+        setTalks((previous) => [talk, ...previous])
         setFormState({ author: '', body: '' })
         setImageUrls([])
         setCurrentPage(1)
 
-        // Subscribe to push notifications for this question
+        // Subscribe to push notifications for this talk
         if (wantNotification && pushSupported) {
-          const subscribed = await subscribeToPush(question.id)
+          const subscribed = await subscribeToPush(talk.id)
           if (subscribed) {
-            setQuestions(prev => prev.map(q => q.id === question.id ? { ...q, notifying: true } : q))
-            showNotification('Question sent! You will be notified when answered.')
+            setTalks(prev => prev.map(t => t.id === talk.id ? { ...t, notifying: true } : t))
+            showNotification('Post sent! You will be notified when replied.')
           } else {
-            showNotification('Question sent! (Notifications could not be enabled)')
+            showNotification('Post sent! (Notifications could not be enabled)')
           }
         } else {
-          showNotification('Question sent successfully!')
+          showNotification('Post sent successfully!')
         }
       } catch (error) {
-        const fallback = error instanceof Error ? error.message : 'Unable to send your question.'
+        const fallback = error instanceof Error ? error.message : 'Unable to send your post.'
         setErrorMessage(fallback)
       }
     })
@@ -244,7 +244,7 @@ export function AskBoard({
     startTransition(async () => {
       try {
         setErrorMessage(null)
-        const response = await fetch('/api/ask', {
+        const response = await fetch('/api/talk', {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -260,12 +260,12 @@ export function AskBoard({
           throw new Error('Failed to post reply')
         }
 
-        const { question } = await response.json()
-        setQuestions(prev => prev.map(q => q.id === id ? question : q))
+        const { question: talk } = await response.json()
+        setTalks(prev => prev.map(t => t.id === id ? talk : t))
         setReplyingTo(null)
         setReplyBody('')
         setReplyImageUrls([])
-        showNotification('Answer posted successfully!')
+        showNotification('Response posted successfully!')
       } catch (error) {
         showNotification('Could not post reply.')
       }
@@ -278,7 +278,7 @@ export function AskBoard({
     startTransition(async () => {
       try {
         setErrorMessage(null)
-        const response = await fetch('/api/ask', {
+        const response = await fetch('/api/talk', {
           method: 'PATCH',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -293,8 +293,8 @@ export function AskBoard({
           throw new Error('Failed to send follow-up')
         }
 
-        const { question } = await response.json()
-        setQuestions(prev => prev.map(q => q.id === id ? question : q))
+        const { question: talk } = await response.json()
+        setTalks(prev => prev.map(t => t.id === id ? talk : t))
         setFollowingUp(null)
         setFollowUpBody('')
         setFollowUpImageUrls([])
@@ -305,17 +305,17 @@ export function AskBoard({
     })
   }
 
-  async function handleEditSubmit(questionId: string, messageId: string) {
+  async function handleEditSubmit(talkId: string, messageId: string) {
     if (!editBody.trim()) return
 
     startTransition(async () => {
       try {
         setErrorMessage(null)
-        const response = await fetch('/api/ask', {
+        const response = await fetch('/api/talk', {
           method: 'PATCH',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            id: questionId,
+            id: talkId,
             messageId,
             body: editBody,
             passcode,
@@ -328,8 +328,8 @@ export function AskBoard({
           throw new Error('Failed to update message')
         }
 
-        const { question } = await response.json()
-        setQuestions(prev => prev.map(q => q.id === questionId ? question : q))
+        const { question: talk } = await response.json()
+        setTalks(prev => prev.map(t => t.id === talkId ? talk : t))
         setEditingMessageId(null)
         setEditBody('')
         setEditImageUrls([])
@@ -340,17 +340,17 @@ export function AskBoard({
     })
   }
 
-  const totalPages = Math.ceil(questions.length / ITEMS_PER_PAGE)
-  const paginatedQuestions = useMemo(() => {
+  const totalPages = Math.ceil(talks.length / ITEMS_PER_PAGE)
+  const paginatedTalks = useMemo(() => {
     const start = (currentPage - 1) * ITEMS_PER_PAGE
-    return questions.slice(start, start + ITEMS_PER_PAGE)
-  }, [questions, currentPage])
+    return talks.slice(start, start + ITEMS_PER_PAGE)
+  }, [talks, currentPage])
 
   async function takeScreenshot(id: string) {
-    const element = document.getElementById(`question-${id}`);
+    const element = document.getElementById(`talk-${id}`);
     if (!element) return;
     
-    const actionsDiv = element.querySelector('.question-actions') as HTMLElement;
+    const actionsDiv = element.querySelector('.talk-actions') as HTMLElement;
     if (actionsDiv) actionsDiv.style.visibility = 'hidden';
     
     try {
@@ -381,7 +381,7 @@ export function AskBoard({
       } catch (err) {
         const a = document.createElement('a');
         a.href = dataUrl;
-        a.download = `ask-${id}.png`;
+        a.download = `talk-${id}.png`;
         a.click();
         showNotification('Downloaded');
       }
@@ -394,7 +394,7 @@ export function AskBoard({
   }
 
   function copyLink(id: string) {
-    const url = `${window.location.origin}/ask/${id}`
+    const url = `${window.location.origin}/talk/${id}`
     navigator.clipboard.writeText(url)
     showNotification('Link copied!')
   }
@@ -417,8 +417,8 @@ export function AskBoard({
                 </span>
               </div>
               <p className={cn(sansFont.className, "text-xs text-blue-800/70 dark:text-blue-300/70 leading-relaxed")}>
-                You can now follow up on any answered question! Click the <b>Follow up</b> button to ask more!
-                Questions with active notifications show a <b><Bell size={10} className="inline mb-0.5" /> bell</b> icon.
+                You can now follow up on any discussion! Click the <b>Follow up</b> button to reply more!
+                Threads with active notifications show a <b><Bell size={10} className="inline mb-0.5" /> bell</b> icon.
               </p>
             </div>
           </div>
@@ -445,7 +445,7 @@ export function AskBoard({
               />
             </div>
 
-            {/* Middle: Question Field */}
+            {/* Middle: Message Field */}
             <div className="px-4 py-2">
               <textarea
                 value={formState.body}
@@ -454,7 +454,7 @@ export function AskBoard({
                   e.currentTarget.style.height = 'auto';
                   e.currentTarget.style.height = `${e.currentTarget.scrollHeight}px`;
                 }}
-                placeholder="Ask me anything..."
+                placeholder="Let's talk about anything... (ask questions, ask for suggestions, casual chat)"
                 rows={1}
                 className={cn(
                   sansFont.className,
@@ -527,7 +527,7 @@ export function AskBoard({
                 disabled={!formState.body.trim() || isPending}
                 className="h-10 px-5 text-sm font-semibold"
               >
-                Send question
+                Post message
               </Button>
             </div>
           </div>
@@ -543,7 +543,7 @@ export function AskBoard({
       <section className="space-y-6">
         <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 border-b border-border/60 pb-3 sm:flex-nowrap">
           <TextHeading as="h3" weight="semibold" className="mt-0 mb-0 text-lg">
-            {singleMode ? "Question" : "Questions"}
+            {singleMode ? "Post" : "Talk archive"}
           </TextHeading>
           <div className="flex shrink-0 items-center gap-3">
             {isRefreshing ? (
@@ -552,39 +552,39 @@ export function AskBoard({
               </Text>
             ) : null}
             <Text variant="muted" size="sm" className="whitespace-nowrap">
-              {questions.length} questions collected
+              {talks.length} posts collected
             </Text>
           </div>
         </div>
 
         <StackVertical gap="md">
-          {isLoading && questions.length === 0 ? (
+          {isLoading && talks.length === 0 ? (
             <div className="py-8 text-center">
               <Text variant="muted" size="sm">
                 Loading history...
               </Text>
             </div>
           ) : (
-            paginatedQuestions.map((question: AskQuestion) => {
-              const thread = question.thread || []
-              const lastRole = lastThreadRole(question)
+            paginatedTalks.map((talk: TalkTopic) => {
+              const thread = talk.thread || []
+              const lastRole = lastThreadRole(talk)
               const canFollowUp = lastRole === 'admin'
               const canReply = true
 
               return (
                 <article 
-                  id={`question-${question.id}`} 
-                  key={question.id} 
+                  id={`talk-${talk.id}`} 
+                  key={talk.id} 
                   className="group relative rounded-2xl border border-border/60 bg-background/80 p-6 transition-colors hover:border-blue-500/15 hover:bg-muted/10"
                 >
                   <StackVertical gap="sm">
-                    {/* Original question */}
+                    {/* Original talk */}
                     <div className="flex justify-between items-start mb-1">
                       <h4 className="flex items-center gap-2 text-sm font-semibold text-blue-600 dark:text-blue-400">
-                        <span className={cn(sansFont.className, "rounded-full border border-blue-200/70 bg-blue-50/70 px-2.5 py-1 dark:border-blue-500/20 dark:bg-blue-500/10")}>{question.author} asked</span>
+                        <span className={cn(sansFont.className, "rounded-full border border-blue-200/70 bg-blue-50/70 px-2.5 py-1 dark:border-blue-500/20 dark:bg-blue-500/10")}>{talk.author} shared</span>
                       </h4>
                       <div className="flex items-center gap-1 mt-1.5">
-                        {question.notifying && (
+                        {talk.notifying && (
                           <div className="flex items-center mr-1" title="Notifications active">
                             <div className="relative flex items-center justify-center w-6 h-6 rounded-full bg-blue-50 dark:bg-blue-500/10">
                               <Bell size={14} className="text-blue-600 dark:text-blue-400 fill-blue-600/10" />
@@ -593,18 +593,18 @@ export function AskBoard({
                           </div>
                         )}
                         <span className={cn(sansFont.className, "text-xs text-muted-foreground")}>
-                          {formatDate(question.createdAt)}
+                          {formatDate(talk.createdAt)}
                         </span>
                       </div>
                     </div>
                     
                     <div className={cn(sansFont.className, "text-lg text-slate-800 dark:text-slate-200 leading-relaxed font-medium mb-2 break-words")}>
-                      <RichText text={question.body} theme="blue" />
+                      <RichText text={talk.body} theme="blue" />
                     </div>
 
-                    {/* Question image attachment */}
+                    {/* Talk image attachment */}
                     <ImageGallery 
-                      urls={question.imageUrls?.length ? question.imageUrls : (question.imageUrl ? [question.imageUrl] : [])} 
+                      urls={talk.imageUrls?.length ? talk.imageUrls : (talk.imageUrl ? [talk.imageUrl] : [])} 
                       theme="blue"
                     />
 
@@ -616,8 +616,8 @@ export function AskBoard({
                             key={msg.id} 
                             message={msg} 
                             depth={i} 
-                            author={question.author}
-                            questionId={question.id}
+                            author={talk.author}
+                            talkId={talk.id}
                             isEditing={editingMessageId === msg.id}
                             editBody={editBody}
                             setEditBody={setEditBody}
@@ -634,7 +634,7 @@ export function AskBoard({
                               setFollowingUp(null)
                             }}
                             onCancel={() => setEditingMessageId(null)}
-                            onSave={() => handleEditSubmit(question.id, msg.id)}
+                            onSave={() => handleEditSubmit(talk.id, msg.id)}
                             passcode={passcode}
                             setPasscode={setPasscode}
                             isPending={isPending}
@@ -644,16 +644,16 @@ export function AskBoard({
                     )}
 
                     {/* Action buttons */}
-                    <div className="question-actions mt-1 flex justify-end gap-2 opacity-0 transition-opacity group-hover:opacity-100">
+                    <div className="talk-actions mt-1 flex justify-end gap-2 opacity-0 transition-opacity group-hover:opacity-100">
                       <button
-                        onClick={() => copyLink(question.id)}
+                        onClick={() => copyLink(talk.id)}
                         className="flex items-center gap-1.5 rounded-full border border-border/60 bg-background px-3 py-1.5 text-xs font-medium text-slate-500 transition-colors hover:text-blue-600 dark:text-slate-400 dark:hover:text-blue-300"
                       >
                         <Share2 size={14} />
                         Share
                       </button>
                       <button
-                        onClick={() => takeScreenshot(question.id)}
+                        onClick={() => takeScreenshot(talk.id)}
                         className="flex items-center gap-1.5 rounded-full border border-border/60 bg-background px-3 py-1.5 text-xs font-medium text-slate-500 transition-colors hover:text-blue-600 dark:text-slate-400 dark:hover:text-blue-300"
                       >
                         <Camera size={14} />
@@ -662,7 +662,7 @@ export function AskBoard({
                       {canFollowUp && (
                         <button
                           onClick={() => {
-                             setFollowingUp(followingUp === question.id ? null : question.id)
+                             setFollowingUp(followingUp === talk.id ? null : talk.id)
                              setFollowUpBody('')
                              setFollowUpImageUrls([])
                              setReplyingTo(null)
@@ -676,7 +676,7 @@ export function AskBoard({
                       {canReply && (
                         <button
                           onClick={() => {
-                             setReplyingTo(replyingTo === question.id ? null : question.id)
+                             setReplyingTo(replyingTo === talk.id ? null : talk.id)
                              setReplyBody('')
                              setReplyImageUrls([])
                              setFollowingUp(null)
@@ -690,7 +690,7 @@ export function AskBoard({
                     </div>
 
                     {/* Admin reply form */}
-                    {replyingTo === question.id && (
+                    {replyingTo === talk.id && (
                       <div className="mt-3 border-t border-border/60 pt-3">
                         <textarea
                           value={replyBody}
@@ -699,7 +699,7 @@ export function AskBoard({
                             e.currentTarget.style.height = 'auto';
                             e.currentTarget.style.height = `${e.currentTarget.scrollHeight}px`;
                           }}
-                          placeholder="Write your answer..."
+                          placeholder="Write your response..."
                           rows={1}
                           className={cn(sansFont.className, "min-h-[44px] w-full resize-none overflow-hidden rounded-xl border border-border bg-background px-4 py-3 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-300 dark:text-slate-100")}
                         />
@@ -753,7 +753,7 @@ export function AskBoard({
                             <Button variant="ghost" size="sm" onClick={() => setReplyingTo(null)} className="text-xs h-8">
                               Cancel
                             </Button>
-                            <Button size="sm" disabled={isPending || !replyBody.trim()} onClick={() => handleReplySubmit(question.id)} className="h-8 rounded-full px-4 text-xs">
+                            <Button size="sm" disabled={isPending || !replyBody.trim()} onClick={() => handleReplySubmit(talk.id)} className="h-8 rounded-full px-4 text-xs">
                               Post
                             </Button>
                           </div>
@@ -762,7 +762,7 @@ export function AskBoard({
                     )}
 
                     {/* Visitor follow-up form */}
-                    {followingUp === question.id && (
+                    {followingUp === talk.id && (
                       <div className="mt-3 border-t border-border/60 pt-3">
                         <textarea
                           value={followUpBody}
@@ -771,7 +771,7 @@ export function AskBoard({
                             e.currentTarget.style.height = 'auto';
                             e.currentTarget.style.height = `${e.currentTarget.scrollHeight}px`;
                           }}
-                          placeholder="Ask a follow-up..."
+                          placeholder="Add to this discussion..."
                           rows={1}
                           className={cn(sansFont.className, "min-h-[44px] w-full resize-none overflow-hidden rounded-xl border border-emerald-200 bg-background px-4 py-3 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-300 dark:border-emerald-500/30 dark:text-slate-100")}
                         />
@@ -816,7 +816,7 @@ export function AskBoard({
                             <Button variant="ghost" size="sm" onClick={() => setFollowingUp(null)} className="text-xs h-8">
                               Cancel
                             </Button>
-                            <Button size="sm" disabled={isPending || !followUpBody.trim()} onClick={() => handleFollowUpSubmit(question.id)} className="h-8 rounded-full px-4 text-xs bg-emerald-600 hover:bg-emerald-700 text-white">
+                            <Button size="sm" disabled={isPending || !followUpBody.trim()} onClick={() => handleFollowUpSubmit(talk.id)} className="h-8 rounded-full px-4 text-xs bg-emerald-600 hover:bg-emerald-700 text-white">
                               Send follow-up
                             </Button>
                           </div>
@@ -900,7 +900,7 @@ function ThreadBubble({
   message, 
   depth, 
   author,
-  questionId,
+  talkId,
   isEditing,
   editBody,
   setEditBody,
@@ -916,7 +916,7 @@ function ThreadBubble({
   message: ThreadMessage; 
   depth: number; 
   author?: string;
-  questionId: string;
+  talkId: string;
   isEditing: boolean;
   editBody: string;
   setEditBody: (v: string) => void;
@@ -968,7 +968,7 @@ function ThreadBubble({
           "text-xs font-bold",
           isAdmin ? "text-blue-600 dark:text-blue-400" : "text-emerald-600 dark:text-emerald-400"
         )}>
-          {isAdmin ? 'Answer' : (author || 'anonymous')}
+          {isAdmin ? 'Response' : (author || 'anonymous')}
         </span>
         
         <div className="ml-auto flex items-center gap-2">

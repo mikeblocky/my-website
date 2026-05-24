@@ -1,9 +1,9 @@
 import { ImageResponse } from 'next/og'
-import { getQuestionById } from '@/lib/kv/ask'
+import { getTalkById } from '@/lib/kv/talk'
 
 export const runtime = 'nodejs'
 
-export const alt = 'Anonymous question'
+export const alt = 'Talk board post'
 export const size = {
   width: 1200,
   height: 630,
@@ -13,9 +13,9 @@ export const contentType = 'image/png'
 
 export default async function Image({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
-  const question = await getQuestionById(id)
+  const talk = await getTalkById(id)
 
-  if (!question) {
+  if (!talk) {
     return new ImageResponse(
       (
         <div
@@ -29,14 +29,14 @@ export default async function Image({ params }: { params: Promise<{ id: string }
             justifyContent: 'center',
           }}
         >
-          Question not found
+          Post not found
         </div>
       ),
       { ...size }
     )
   }
 
-  const hasImage = !!question.imageUrl
+  const hasImage = !!talk.imageUrl
 
   return new ImageResponse(
     (
@@ -83,7 +83,7 @@ export default async function Image({ params }: { params: Promise<{ id: string }
                 fontWeight: 'bold',
               }}
             >
-              Question from {question.author || 'anonymous'}
+              Post from {talk.author || 'anonymous'}
             </div>
           </div>
 
@@ -110,7 +110,7 @@ export default async function Image({ params }: { params: Promise<{ id: string }
                 paddingRight: hasImage ? '40px' : '0px',
               }}
             >
-              &ldquo;{question.body.length > 160 ? question.body.slice(0, 160) + '...' : question.body}&rdquo;
+              &ldquo;{talk.body.length > 160 ? talk.body.slice(0, 160) + '...' : talk.body}&rdquo;
             </div>
 
             {hasImage && (
@@ -127,8 +127,8 @@ export default async function Image({ params }: { params: Promise<{ id: string }
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
-                  src={question.imageUrl}
-                  alt="Question attachment"
+                  src={talk.imageUrl}
+                  alt="Post attachment"
                   style={{
                     width: '100%',
                     height: '100%',
@@ -157,7 +157,7 @@ export default async function Image({ params }: { params: Promise<{ id: string }
                 color: '#3b82f6',
               }}
             >
-              mikeblocky.com/ask
+              mikeblocky.com/talk
             </div>
             <div
               style={{
@@ -165,7 +165,7 @@ export default async function Image({ params }: { params: Promise<{ id: string }
                 color: '#94a3b8',
               }}
             >
-              {new Date(question.createdAt).toLocaleDateString('en-US', {
+              {new Date(talk.createdAt).toLocaleDateString('en-US', {
                 month: 'long',
                 day: 'numeric',
                 year: 'numeric',

@@ -7,7 +7,7 @@ export type ThreadMessage = {
   imageUrls?: string[]
 }
 
-export type AskQuestion = {
+export type TalkTopic = {
   id: string
   author?: string
   body: string
@@ -20,6 +20,6 @@ export type AskQuestion = {
   repliedAt?: string
   /** Threaded follow-up conversation */
   thread?: ThreadMessage[]
-  /** Whether this question has active push notification subscribers (set by API, not stored) */
+  /** Whether this post has active push notification subscribers (set by API, not stored) */
   notifying?: boolean
 }

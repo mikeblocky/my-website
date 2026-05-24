@@ -1,6 +1,7 @@
 import { createClient, RedisClientType } from 'redis'
 
 export const askQuestionsKey = 'ask:questions'
+export const talkMessagesKey = 'talk:messages'
 export const drawPromptsKey = 'draw:prompts'
 export const lastPetGiftKey = 'pet:last_gift'
 export const totalPetGiftsKey = 'pet:total_gifts'
