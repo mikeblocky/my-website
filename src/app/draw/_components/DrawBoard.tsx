@@ -32,6 +32,11 @@ type FormState = {
 
 const ITEMS_PER_PAGE = 5
 
+type ApiCooldown = {
+  expiresAt: string | null
+  remainingMs: number
+}
+
 function sortPrompts(items: DrawPrompt[]) {
   return items.slice().sort(
     (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
@@ -44,6 +49,19 @@ function formatDate(iso: string) {
   } catch (error) {
     return iso
   }
+}
+
+function formatCooldown(ms: number) {
+  const totalSeconds = Math.max(0, Math.ceil(ms / 1000))
+  const hours = Math.floor(totalSeconds / 3600)
+  const minutes = Math.floor((totalSeconds % 3600) / 60)
+  const seconds = totalSeconds % 60
+
+  if (hours > 0) {
+    return `${hours}h ${minutes.toString().padStart(2, '0')}m ${seconds.toString().padStart(2, '0')}s`
+  }
+
+  return `${minutes}m ${seconds.toString().padStart(2, '0')}s`
 }
 
 /** Determine what the last message role is in the thread */
@@ -95,6 +113,22 @@ export function DrawBoard({
 
   // Inline button feedback state
   const [buttonFeedback, setButtonFeedback] = useState<Record<string, string>>({})
+  const [cooldownExpiresAt, setCooldownExpiresAt] = useState<string | null>(null)
+  const [cooldownRemainingMs, setCooldownRemainingMs] = useState(0)
+
+  const isCooldownActive = cooldownRemainingMs > 0
+  const cooldownLabel = formatCooldown(cooldownRemainingMs)
+
+  function applyCooldown(cooldown?: ApiCooldown | null) {
+    if (!cooldown?.expiresAt || cooldown.remainingMs <= 0) {
+      setCooldownExpiresAt(null)
+      setCooldownRemainingMs(0)
+      return
+    }
+
+    setCooldownExpiresAt(cooldown.expiresAt)
+    setCooldownRemainingMs(cooldown.remainingMs)
+  }
 
   function showButtonFeedback(key: string, msg: string) {
     setButtonFeedback(prev => ({ ...prev, [key]: msg }))
@@ -123,6 +157,22 @@ export function DrawBoard({
   }
 
   useEffect(() => {
+    if (!cooldownExpiresAt) return
+
+    const tick = () => {
+      const remaining = Math.max(0, new Date(cooldownExpiresAt).getTime() - Date.now())
+      setCooldownRemainingMs(remaining)
+      if (remaining === 0) {
+        setCooldownExpiresAt(null)
+      }
+    }
+
+    tick()
+    const interval = window.setInterval(tick, 1000)
+    return () => window.clearInterval(interval)
+  }, [cooldownExpiresAt])
+
+  useEffect(() => {
     const controller = new AbortController()
     let cancelled = false
 
@@ -139,9 +189,10 @@ export function DrawBoard({
           throw new Error(`Failed with status ${response.status}`)
         }
 
-        const payload = (await response.json()) as { prompts?: DrawPrompt[] }
+        const payload = (await response.json()) as { prompts?: DrawPrompt[], cooldown?: ApiCooldown }
         if (!cancelled && Array.isArray(payload.prompts)) {
           setPrompts(sortPrompts(payload.prompts))
+          applyCooldown(payload.cooldown)
         }
       } catch (error) {
         if (controller.signal.aborted) {
@@ -166,7 +217,7 @@ export function DrawBoard({
       cancelled = true
       controller.abort()
     }
-  }, [])
+  }, [singleMode])
 
   useEffect(() => {
     if (typeof window !== 'undefined' && window.location.hash) {
@@ -196,7 +247,7 @@ export function DrawBoard({
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
     const trimmedBody = formState.body.trim()
-    if (!trimmedBody) return
+    if (!trimmedBody || isCooldownActive) return
 
     const payload = {
       author: formState.author,
@@ -216,11 +267,14 @@ export function DrawBoard({
           body: JSON.stringify(payload)
         })
 
-        if (!response.ok) {
-          throw new Error('Something went wrong while sending your prompt.')
+        const result = (await response.json()) as { prompt?: DrawPrompt, cooldown?: ApiCooldown, error?: string }
+        applyCooldown(result.cooldown)
+
+        if (!response.ok || !result.prompt) {
+          throw new Error(result.error || 'Something went wrong while sending your prompt.')
         }
 
-        const { prompt } = (await response.json()) as { prompt: DrawPrompt }
+        const prompt = result.prompt
         setPrompts((previous) => [prompt, ...previous])
         setFormState({ author: '', body: '' })
         setCharacter('')
@@ -270,7 +324,7 @@ export function DrawBoard({
   }
 
   async function handleFollowUpSubmit(id: string) {
-    if (!followUpBody.trim()) return
+    if (!followUpBody.trim() || isCooldownActive) return
 
     startTransition(async () => {
       try {
@@ -286,18 +340,21 @@ export function DrawBoard({
           })
         })
 
-        if (!response.ok) {
-          throw new Error('Failed to send follow-up')
+        const result = (await response.json()) as { prompt?: DrawPrompt, cooldown?: ApiCooldown, error?: string }
+        applyCooldown(result.cooldown)
+
+        if (!response.ok || !result.prompt) {
+          throw new Error(result.error || 'Failed to send follow-up')
         }
 
-        const { prompt } = await response.json()
+        const prompt = result.prompt
         setPrompts(prev => prev.map(p => p.id === id ? prompt : p))
         setFollowingUp(null)
         setFollowUpBody('')
         setFollowUpImageUrls([])
         showNotification('Follow-up sent!')
       } catch (error) {
-        showNotification('Could not send follow-up.')
+        showNotification(error instanceof Error ? error.message : 'Could not send follow-up.')
       }
     })
   }
@@ -384,16 +441,22 @@ export function DrawBoard({
       const blob = await res.blob();
       
       try {
+        const html = `<a href="${url}"><img src="${dataUrl}" alt="Drawing prompt thumbnail" /></a><p><a href="${url}">${url}</a></p>`;
         await navigator.clipboard.write([
-          new ClipboardItem({ 'image/png': blob })
+          new ClipboardItem({
+            'text/plain': new Blob([url], { type: 'text/plain' }),
+            'text/html': new Blob([html], { type: 'text/html' }),
+            'image/png': blob
+          })
         ]);
         showButtonFeedback(`share-${id}`, '✓ Copied');
       } catch (err) {
+        await navigator.clipboard.writeText(url);
         const a = document.createElement('a');
         a.href = dataUrl;
         a.download = `draw-${id}.png`;
         a.click();
-        showButtonFeedback(`share-${id}`, '✓ Saved');
+        showButtonFeedback(`share-${id}`, '✓ Link + image');
       }
     } catch (e) {
       console.error('Screenshot failed', e);
@@ -543,10 +606,11 @@ export function DrawBoard({
               <Button 
                 type="submit" 
                 size="sm"
-                disabled={!formState.body.trim() || isPending}
+                disabled={!formState.body.trim() || isPending || isCooldownActive}
                 className="h-10 px-5 text-sm font-semibold bg-violet-600 hover:bg-violet-700 text-white dark:bg-violet-600 dark:hover:bg-violet-700"
+                title={isCooldownActive ? `You can send another prompt in ${cooldownLabel}` : undefined}
               >
-                Send prompt
+                {isCooldownActive ? cooldownLabel : 'Send prompt'}
               </Button>
             </div>
           </div>
@@ -843,8 +907,8 @@ export function DrawBoard({
                             <Button variant="ghost" size="sm" onClick={() => setFollowingUp(null)} className="text-xs h-8">
                               Cancel
                             </Button>
-                            <Button size="sm" disabled={isPending || !followUpBody.trim()} onClick={() => handleFollowUpSubmit(prompt.id)} className="h-8 rounded-full px-4 text-xs bg-emerald-600 hover:bg-emerald-700 text-white">
-                              Send follow-up
+                            <Button size="sm" disabled={isPending || !followUpBody.trim() || isCooldownActive} onClick={() => handleFollowUpSubmit(prompt.id)} className="h-8 rounded-full px-4 text-xs bg-emerald-600 hover:bg-emerald-700 text-white" title={isCooldownActive ? `You can send another prompt in ${cooldownLabel}` : undefined}>
+                              {isCooldownActive ? cooldownLabel : 'Send follow-up'}
                             </Button>
                           </div>
                         </div>

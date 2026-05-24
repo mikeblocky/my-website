@@ -33,6 +33,11 @@ type FormState = {
 
 const ITEMS_PER_PAGE = 5
 
+type ApiCooldown = {
+  expiresAt: string | null
+  remainingMs: number
+}
+
 function sortTalks(items: TalkTopic[]) {
   return items.slice().sort(
     (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
@@ -45,6 +50,19 @@ function formatDate(iso: string) {
   } catch (error) {
     return iso
   }
+}
+
+function formatCooldown(ms: number) {
+  const totalSeconds = Math.max(0, Math.ceil(ms / 1000))
+  const hours = Math.floor(totalSeconds / 3600)
+  const minutes = Math.floor((totalSeconds % 3600) / 60)
+  const seconds = totalSeconds % 60
+
+  if (hours > 0) {
+    return `${hours}h ${minutes.toString().padStart(2, '0')}m ${seconds.toString().padStart(2, '0')}s`
+  }
+
+  return `${minutes}m ${seconds.toString().padStart(2, '0')}s`
 }
 
 /** Determine what the last message role is in the thread */
@@ -98,6 +116,22 @@ export function TalkBoard({
 
   // Inline button feedback state
   const [buttonFeedback, setButtonFeedback] = useState<Record<string, string>>({})
+  const [cooldownExpiresAt, setCooldownExpiresAt] = useState<string | null>(null)
+  const [cooldownRemainingMs, setCooldownRemainingMs] = useState(0)
+
+  const isCooldownActive = cooldownRemainingMs > 0
+  const cooldownLabel = formatCooldown(cooldownRemainingMs)
+
+  function applyCooldown(cooldown?: ApiCooldown | null) {
+    if (!cooldown?.expiresAt || cooldown.remainingMs <= 0) {
+      setCooldownExpiresAt(null)
+      setCooldownRemainingMs(0)
+      return
+    }
+
+    setCooldownExpiresAt(cooldown.expiresAt)
+    setCooldownRemainingMs(cooldown.remainingMs)
+  }
 
   function showNotification(msg: string) {
     setNotification(msg)
@@ -126,6 +160,22 @@ export function TalkBoard({
   }
 
   useEffect(() => {
+    if (!cooldownExpiresAt) return
+
+    const tick = () => {
+      const remaining = Math.max(0, new Date(cooldownExpiresAt).getTime() - Date.now())
+      setCooldownRemainingMs(remaining)
+      if (remaining === 0) {
+        setCooldownExpiresAt(null)
+      }
+    }
+
+    tick()
+    const interval = window.setInterval(tick, 1000)
+    return () => window.clearInterval(interval)
+  }, [cooldownExpiresAt])
+
+  useEffect(() => {
     const controller = new AbortController()
     let cancelled = false
 
@@ -146,9 +196,10 @@ export function TalkBoard({
           throw new Error(`Failed with status ${response.status}`)
         }
 
-        const payload = (await response.json()) as { questions?: TalkTopic[] }
+        const payload = (await response.json()) as { questions?: TalkTopic[], cooldown?: ApiCooldown }
         if (!cancelled && Array.isArray(payload.questions)) {
           setTalks(sortTalks(payload.questions))
+          applyCooldown(payload.cooldown)
         }
       } catch (error) {
         if (controller.signal.aborted) {
@@ -173,7 +224,7 @@ export function TalkBoard({
       cancelled = true
       controller.abort()
     }
-  }, [])
+  }, [singleMode])
 
   useEffect(() => {
     if (typeof window !== 'undefined' && window.location.hash) {
@@ -205,7 +256,7 @@ export function TalkBoard({
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
     const trimmedBody = formState.body.trim()
-    if (!trimmedBody) return
+    if (!trimmedBody || isCooldownActive) return
 
     const payload = {
       author: formState.author,
@@ -223,11 +274,14 @@ export function TalkBoard({
           body: JSON.stringify(payload)
         })
 
-        if (!response.ok) {
-          throw new Error('Something went wrong while posting your message.')
+        const result = (await response.json()) as { question?: TalkTopic, cooldown?: ApiCooldown, error?: string }
+        applyCooldown(result.cooldown)
+
+        if (!response.ok || !result.question) {
+          throw new Error(result.error || 'Something went wrong while posting your message.')
         }
 
-        const { question: talk } = (await response.json()) as { question: TalkTopic }
+        const talk = result.question
         setTalks((previous) => [talk, ...previous])
         setFormState({ author: '', body: '' })
         setImageUrls([])
@@ -287,7 +341,7 @@ export function TalkBoard({
   }
 
   async function handleFollowUpSubmit(id: string) {
-    if (!followUpBody.trim()) return
+    if (!followUpBody.trim() || isCooldownActive) return
 
     startTransition(async () => {
       try {
@@ -303,18 +357,21 @@ export function TalkBoard({
           })
         })
 
-        if (!response.ok) {
-          throw new Error('Failed to send follow-up')
+        const result = (await response.json()) as { question?: TalkTopic, cooldown?: ApiCooldown, error?: string }
+        applyCooldown(result.cooldown)
+
+        if (!response.ok || !result.question) {
+          throw new Error(result.error || 'Failed to send follow-up')
         }
 
-        const { question: talk } = await response.json()
+        const talk = result.question
         setTalks(prev => prev.map(t => t.id === id ? talk : t))
         setFollowingUp(null)
         setFollowUpBody('')
         setFollowUpImageUrls([])
         showNotification('Follow-up sent!')
       } catch (error) {
-        showNotification('Could not send follow-up.')
+        showNotification(error instanceof Error ? error.message : 'Could not send follow-up.')
       }
     })
   }
@@ -401,16 +458,22 @@ export function TalkBoard({
       const blob = await res.blob();
       
       try {
+        const html = `<a href="${url}"><img src="${dataUrl}" alt="Talk board post thumbnail" /></a><p><a href="${url}">${url}</a></p>`;
         await navigator.clipboard.write([
-          new ClipboardItem({ 'image/png': blob })
+          new ClipboardItem({
+            'text/plain': new Blob([url], { type: 'text/plain' }),
+            'text/html': new Blob([html], { type: 'text/html' }),
+            'image/png': blob
+          })
         ]);
         showButtonFeedback(`share-${id}`, '✓ Copied');
       } catch (err) {
+        await navigator.clipboard.writeText(url);
         const a = document.createElement('a');
         a.href = dataUrl;
         a.download = `talk-${id}.png`;
         a.click();
-        showButtonFeedback(`share-${id}`, '✓ Saved');
+        showButtonFeedback(`share-${id}`, '✓ Link + image');
       }
     } catch (e) {
       console.error('Screenshot failed', e);
@@ -549,10 +612,11 @@ export function TalkBoard({
               <Button 
                 type="submit" 
                 size="sm"
-                disabled={!formState.body.trim() || isPending}
+                disabled={!formState.body.trim() || isPending || isCooldownActive}
                 className="h-10 px-5 text-sm font-semibold"
+                title={isCooldownActive ? `You can send another message in ${cooldownLabel}` : undefined}
               >
-                Post message
+                {isCooldownActive ? cooldownLabel : 'Post message'}
               </Button>
             </div>
           </div>
@@ -834,8 +898,8 @@ export function TalkBoard({
                             <Button variant="ghost" size="sm" onClick={() => setFollowingUp(null)} className="text-xs h-8">
                               Cancel
                             </Button>
-                            <Button size="sm" disabled={isPending || !followUpBody.trim()} onClick={() => handleFollowUpSubmit(talk.id)} className="h-8 rounded-full px-4 text-xs bg-emerald-600 hover:bg-emerald-700 text-white">
-                              Send follow-up
+                            <Button size="sm" disabled={isPending || !followUpBody.trim() || isCooldownActive} onClick={() => handleFollowUpSubmit(talk.id)} className="h-8 rounded-full px-4 text-xs bg-emerald-600 hover:bg-emerald-700 text-white" title={isCooldownActive ? `You can send another message in ${cooldownLabel}` : undefined}>
+                              {isCooldownActive ? cooldownLabel : 'Send follow-up'}
                             </Button>
                           </div>
                         </div>

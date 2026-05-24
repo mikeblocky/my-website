@@ -4,14 +4,16 @@ import { buildTalkPayload, saveTalk } from '@/lib/kv/talk'
 import { TALK_MESSAGES_TAG, getTalkMessages } from '@/lib/kv/talk-cache'
 import { notifyOwnerNewTalk } from '@/lib/notify/discord'
 import { getSubscribedTalkIds } from '@/lib/kv/push'
+import { getMessageCooldown, reserveMessageCooldown } from '@/lib/kv/cooldown'
 
 const MAX_BODY_LENGTH = 800
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   const [talks, subscribedIds] = await Promise.all([
     getTalkMessages(),
     getSubscribedTalkIds()
   ])
+  const cooldown = await getMessageCooldown('talk', request)
 
   const enriched = talks.map(t => ({
     ...t,
@@ -19,7 +21,7 @@ export async function GET() {
   }))
 
   return NextResponse.json(
-    { questions: enriched }, // Keep JSON payload key questions/talks compatible or change to talks. Let's keep questions or allow both for frontend safety. Wait, in TalkBoard: response.json() as { questions?: TalkTopic[] }, let's return { questions: enriched } to match perfectly!
+    { questions: enriched, cooldown }, // Keep JSON payload key questions/talks compatible or change to talks.
     {
       headers: {
         'Cache-Control': 'no-store, must-revalidate'
@@ -43,6 +45,19 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Message is too long' }, { status: 400 })
   }
 
+  const reservation = await reserveMessageCooldown('talk', request)
+  if (reservation.blocked) {
+    return NextResponse.json(
+      { error: 'Please wait before sending another message.', cooldown: reservation.cooldown },
+      {
+        status: 429,
+        headers: {
+          'Retry-After': Math.ceil(reservation.cooldown.remainingMs / 1000).toString()
+        }
+      }
+    )
+  }
+
   const author = typeof data.author === 'string' ? data.author : 'anonymous'
   const imageUrl = typeof data.imageUrl === 'string' ? data.imageUrl : undefined
   const imageUrls = Array.isArray(data.imageUrls)
@@ -57,7 +72,7 @@ export async function POST(request: NextRequest) {
     await notifyOwnerNewTalk(author, body)
   })
 
-  return NextResponse.json({ question: talk }, { status: 201 })
+  return NextResponse.json({ question: talk, cooldown: reservation.cooldown }, { status: 201 })
 }
 
 /** Admin reply — requires passcode */
@@ -165,6 +180,19 @@ export async function PATCH(request: NextRequest) {
       return NextResponse.json({ error: 'Follow-up is too long' }, { status: 400 })
     }
 
+    const reservation = await reserveMessageCooldown('talk', request)
+    if (reservation.blocked) {
+      return NextResponse.json(
+        { error: 'Please wait before sending another message.', cooldown: reservation.cooldown },
+        {
+          status: 429,
+          headers: {
+            'Retry-After': Math.ceil(reservation.cooldown.remainingMs / 1000).toString()
+          }
+        }
+      )
+    }
+
     const { followUpTalk } = await import('@/lib/kv/talk')
     const updatedTalk = await followUpTalk(id, trimmedBody, imageUrl, cleanImageUrls)
 
@@ -184,6 +212,6 @@ export async function PATCH(request: NextRequest) {
       }
     })
 
-    return NextResponse.json({ question: updatedTalk }, { status: 200 })
+    return NextResponse.json({ question: updatedTalk, cooldown: reservation.cooldown }, { status: 200 })
   }
 }

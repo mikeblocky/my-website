@@ -3,14 +3,18 @@ import { revalidateTag } from 'next/cache'
 import { buildPromptPayload, savePrompt } from '@/lib/kv/draw'
 import { DRAW_PROMPTS_TAG, getDrawPrompts } from '@/lib/kv/draw-cache'
 import { notifyOwnerNewPrompt } from '@/lib/notify/discord'
+import { getMessageCooldown, reserveMessageCooldown } from '@/lib/kv/cooldown'
 
 const MAX_BODY_LENGTH = 800
 
-export async function GET() {
-  const prompts = await getDrawPrompts()
+export async function GET(request: NextRequest) {
+  const [prompts, cooldown] = await Promise.all([
+    getDrawPrompts(),
+    getMessageCooldown('draw', request)
+  ])
 
   return NextResponse.json(
-    { prompts },
+    { prompts, cooldown },
     {
       headers: {
         'Cache-Control': 'no-store, must-revalidate'
@@ -34,6 +38,19 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Prompt is too long' }, { status: 400 })
   }
 
+  const reservation = await reserveMessageCooldown('draw', request)
+  if (reservation.blocked) {
+    return NextResponse.json(
+      { error: 'Please wait before sending another prompt.', cooldown: reservation.cooldown },
+      {
+        status: 429,
+        headers: {
+          'Retry-After': Math.ceil(reservation.cooldown.remainingMs / 1000).toString()
+        }
+      }
+    )
+  }
+
   const author = typeof data.author === 'string' ? data.author : 'anonymous'
   const character = typeof data.character === 'string' ? data.character : undefined
   const media = typeof data.media === 'string' ? data.media : undefined
@@ -50,7 +67,7 @@ export async function POST(request: NextRequest) {
     await notifyOwnerNewPrompt(author, body)
   })
 
-  return NextResponse.json({ prompt }, { status: 201 })
+  return NextResponse.json({ prompt, cooldown: reservation.cooldown }, { status: 201 })
 }
 
 /** Admin reply — requires passcode */
@@ -124,6 +141,19 @@ export async function PATCH(request: NextRequest) {
       return NextResponse.json({ error: 'Follow-up is too long' }, { status: 400 })
     }
 
+    const reservation = await reserveMessageCooldown('draw', request)
+    if (reservation.blocked) {
+      return NextResponse.json(
+        { error: 'Please wait before sending another prompt.', cooldown: reservation.cooldown },
+        {
+          status: 429,
+          headers: {
+            'Retry-After': Math.ceil(reservation.cooldown.remainingMs / 1000).toString()
+          }
+        }
+      )
+    }
+
     const { followUpPrompt } = await import('@/lib/kv/draw')
     const updatedPrompt = await followUpPrompt(id, trimmedBody, imageUrl, cleanImageUrls)
 
@@ -143,6 +173,6 @@ export async function PATCH(request: NextRequest) {
       }
     })
 
-    return NextResponse.json({ prompt: updatedPrompt }, { status: 200 })
+    return NextResponse.json({ prompt: updatedPrompt, cooldown: reservation.cooldown }, { status: 200 })
   }
 }

@@ -21,6 +21,7 @@ type KvClient = {
 	) => Promise<string[]>
 	zRem: (key: string, member: string) => Promise<number>
 	set: (key: string, value: string) => Promise<string | null>
+	setIfNotExists: (key: string, value: string) => Promise<boolean>
 	get: (key: string) => Promise<string | null>
 	incr: (key: string) => Promise<number>
 }
@@ -121,6 +122,13 @@ function getMemoryClient(): KvClient {
 			global.__memoryStrings?.set(key, value)
 			return value
 		},
+		async setIfNotExists(key, value) {
+			if (global.__memoryStrings?.has(key)) {
+				return false
+			}
+			global.__memoryStrings?.set(key, value)
+			return true
+		},
 		async get(key) {
 			return global.__memoryStrings?.get(key) || null
 		},
@@ -139,7 +147,14 @@ export async function getRedisClient(): Promise<KvClient> {
 	}
 
 	if (global.__redisClient && global.__redisClient.isOpen) {
-		return global.__redisClient
+		const client = global.__redisClient as any
+		if (!client.setIfNotExists) {
+			client.setIfNotExists = async (key: string, value: string) => {
+				const result = await client.set(key, value, { NX: true })
+				return result === 'OK'
+			}
+		}
+		return client
 	}
 
 	const client = createClient({ url: redisUrl }) as RedisClient
@@ -152,8 +167,14 @@ export async function getRedisClient(): Promise<KvClient> {
 			await client.connect()
 		}
 
+		const kvClient = client as any
+		kvClient.setIfNotExists = async (key: string, value: string) => {
+			const result = await kvClient.set(key, value, { NX: true })
+			return result === 'OK'
+		}
+
 		global.__redisClient = client
-		return client
+		return kvClient
 	} catch (error) {
 		global.__redisUnavailable = true
 		console.error('Redis unavailable, falling back to in-memory storage', error)
