@@ -9,7 +9,7 @@ import { StackVertical } from '@/components/layout/layout-stack/layout-stack'
 import TextHeading from '@/components/ui/text-heading/text-heading'
 import Text from '@/components/ui/text/text'
 import { Button } from '@/components/ui/primitives/button'
-import { ChevronLeft, ChevronRight, MessageSquareReply, Camera, CornerDownRight, Share2, Palette, Bell, Image as ImageIcon } from 'lucide-react'
+import { ChevronLeft, ChevronRight, MessageSquareReply, CornerDownRight, Share2, Palette, Bell, Image as ImageIcon } from 'lucide-react'
 import { sansFont, monoFont } from '@/styles/fonts/fonts'
 import { cn } from '@/lib/utils/utils'
 import { AnimatePresence, motion } from 'framer-motion'
@@ -92,6 +92,20 @@ export function DrawBoard({
   const [replyImageUrls, setReplyImageUrls] = useState<string[]>([])
   const [followUpImageUrls, setFollowUpImageUrls] = useState<string[]>([])
   const [editImageUrls, setEditImageUrls] = useState<string[]>([])
+
+  // Inline button feedback state
+  const [buttonFeedback, setButtonFeedback] = useState<Record<string, string>>({})
+
+  function showButtonFeedback(key: string, msg: string) {
+    setButtonFeedback(prev => ({ ...prev, [key]: msg }))
+    setTimeout(() => {
+      setButtonFeedback(prev => {
+        const next = { ...prev }
+        if (next[key] === msg) delete next[key]
+        return next
+      })
+    }, 2000)
+  }
 
   function showNotification(msg: string) {
     setNotification(msg)
@@ -329,12 +343,17 @@ export function DrawBoard({
     return prompts.slice(start, start + ITEMS_PER_PAGE)
   }, [prompts, currentPage])
 
-  async function takeScreenshot(id: string) {
+  async function shareAndSnap(id: string) {
     const element = document.getElementById(`prompt-${id}`);
     if (!element) return;
     
+    const url = `${window.location.origin}/draw/${id}`;
     const actionsDiv = element.querySelector('.prompt-actions') as HTMLElement;
     if (actionsDiv) actionsDiv.style.visibility = 'hidden';
+    
+    // Hide +N overlays during screenshot
+    const moreOverlays = element.querySelectorAll('.gallery-more-overlay') as NodeListOf<HTMLElement>;
+    moreOverlays.forEach(el => el.style.display = 'none');
     
     try {
       const { toPng } = await import('html-to-image');
@@ -358,28 +377,30 @@ export function DrawBoard({
       
       try {
         await navigator.clipboard.write([
-          new ClipboardItem({ 'image/png': blob })
+          new ClipboardItem({
+            'image/png': blob,
+            'text/plain': new Blob([url], { type: 'text/plain' })
+          })
         ]);
-        showNotification('Copied');
+        showButtonFeedback(`share-${id}`, '✓ Copied');
       } catch (err) {
+        // Fallback: copy link as text + download image
+        navigator.clipboard.writeText(url);
         const a = document.createElement('a');
         a.href = dataUrl;
         a.download = `draw-${id}.png`;
         a.click();
-        showNotification('Downloaded');
+        showButtonFeedback(`share-${id}`, '✓ Saved');
       }
     } catch (e) {
       console.error('Screenshot failed', e);
-      showNotification('Failed');
+      // At least copy the link
+      navigator.clipboard.writeText(url);
+      showButtonFeedback(`share-${id}`, '✓ Link only');
     } finally {
       if (actionsDiv) actionsDiv.style.visibility = '';
+      moreOverlays.forEach(el => el.style.display = '');
     }
-  }
-
-  function copyLink(id: string) {
-    const url = `${window.location.origin}/draw/${id}`
-    navigator.clipboard.writeText(url)
-    showNotification('Link copied!')
   }
 
   return (
@@ -655,18 +676,11 @@ export function DrawBoard({
                     {/* Action buttons */}
                     <div className="prompt-actions mt-1 flex justify-end gap-2 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
                       <button
-                        onClick={() => copyLink(prompt.id)}
+                        onClick={() => shareAndSnap(prompt.id)}
                         className="flex items-center gap-1.5 rounded-full border border-border/60 bg-background px-3 py-1.5 text-xs font-medium text-slate-500 transition-colors hover:text-violet-600 dark:text-slate-400 dark:hover:text-violet-300"
                       >
                         <Share2 size={14} />
-                        Share
-                      </button>
-                      <button
-                        onClick={() => takeScreenshot(prompt.id)}
-                        className="flex items-center gap-1.5 rounded-full border border-border/60 bg-background px-3 py-1.5 text-xs font-medium text-slate-500 transition-colors hover:text-violet-600 dark:text-slate-400 dark:hover:text-violet-300"
-                      >
-                        <Camera size={14} />
-                        Snap
+                        {buttonFeedback[`share-${prompt.id}`] || 'Share'}
                       </button>
                       {canFollowUp && (
                         <button
