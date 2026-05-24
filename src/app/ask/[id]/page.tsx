@@ -25,14 +25,23 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     title: `Question from ${question.author || 'anonymous'} | Ask`,
     description,
     openGraph: {
-      title: `Anonymous Question`,
+      title: `Anonymous question`,
       description,
       type: 'article',
+      images: [
+        {
+          url: `/ask/${id}/opengraph-image?t=${new Date(question.createdAt).getTime()}`,
+          width: 1200,
+          height: 630,
+          alt: 'Anonymous question',
+        }
+      ]
     },
     twitter: {
       card: 'summary_large_image',
-      title: `Anonymous Question`,
+      title: `Anonymous question`,
       description,
+      images: [`/ask/${id}/opengraph-image?t=${new Date(question.createdAt).getTime()}`],
     },
   }
 }

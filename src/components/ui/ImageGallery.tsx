@@ -155,9 +155,18 @@ export const ImageGallery: React.FC<ImageGalleryProps> = ({ urls = [], theme = '
       {/* Lightbox Overlay */}
       {activeIdx !== null && (
         <div 
-          className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/90 backdrop-blur-md transition-all duration-300 animate-in fade-in"
+          className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/70 backdrop-blur-2xl transition-all duration-300 animate-in fade-in"
           onClick={() => setActiveIdx(null)}
         >
+          {/* Blurred replica of the image itself as a background to softly fill screen */}
+          <div className="absolute inset-0 z-[-1] overflow-hidden pointer-events-none select-none">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img 
+              src={cleanUrls[activeIdx]} 
+              alt="Blurred background animate-in fade-in duration-300" 
+              className="w-full h-full object-cover scale-110 blur-3xl opacity-35 dark:opacity-25" 
+            />
+          </div>
           {/* Close button */}
           <button
             onClick={() => setActiveIdx(null)}

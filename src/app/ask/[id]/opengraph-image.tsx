@@ -42,67 +42,31 @@ export default async function Image({ params }: { params: Promise<{ id: string }
     (
       <div
         style={{
-          background: 'linear-gradient(135deg, #f8fafc 0%, #eff6ff 100%)',
+          background: '#dbeafe',
           width: '100%',
           height: '100%',
           display: 'flex',
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          padding: '80px',
-          fontFamily: 'sans-serif',
+          padding: '40px',
+          boxSizing: 'border-box',
         }}
       >
-        {/* Left content block */}
         <div
           style={{
             display: 'flex',
             flexDirection: 'column',
-            alignItems: 'flex-start',
-            justifyContent: 'center',
-            flex: 1,
+            width: '100%',
             height: '100%',
-            paddingRight: hasImage ? '40px' : '0px',
+            background: '#ffffff',
+            border: '12px solid #3b82f6',
+            borderRadius: '32px',
+            padding: '50px 60px',
+            boxSizing: 'border-box',
+            justifyContent: 'space-between',
           }}
         >
+          {/* Header block */}
           <div
             style={{
-              display: 'flex',
-              alignItems: 'center',
-              marginBottom: '30px',
-            }}
-          >
-            <div
-              style={{
-                padding: '10px 24px',
-                borderRadius: '999px',
-                background: 'white',
-                border: '2px solid #bfdbfe',
-                color: '#2563eb',
-                fontSize: '24px',
-                fontWeight: 'bold',
-              }}
-            >
-              {question.author || 'anonymous'} asked
-            </div>
-          </div>
-
-          <div
-            style={{
-              fontSize: hasImage ? '48px' : '60px',
-              fontWeight: 'bold',
-              color: '#1e293b',
-              lineHeight: 1.3,
-              marginBottom: '30px',
-              display: 'flex',
-            }}
-          >
-            &ldquo;{question.body.length > 180 ? question.body.slice(0, 180) + '...' : question.body}&rdquo;
-          </div>
-
-          <div
-            style={{
-              marginTop: 'auto',
               display: 'flex',
               alignItems: 'center',
               width: '100%',
@@ -110,16 +74,94 @@ export default async function Image({ params }: { params: Promise<{ id: string }
           >
             <div
               style={{
-                fontSize: '24px',
-                color: '#64748b',
+                padding: '10px 28px',
+                borderRadius: '999px',
+                background: '#eff6ff',
+                border: '2px solid #bfdbfe',
+                color: '#1e3a8a',
+                fontSize: '26px',
+                fontWeight: 'bold',
+              }}
+            >
+              Question from {question.author || 'anonymous'}
+            </div>
+          </div>
+
+          {/* Middle Body block (side-by-side if hasImage) */}
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              flex: 1,
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              margin: '20px 0',
+              width: '100%',
+            }}
+          >
+            <div
+              style={{
+                display: 'flex',
+                flex: 1,
+                fontSize: hasImage ? '40px' : '52px',
+                fontWeight: 'bold',
+                color: '#1e293b',
+                lineHeight: 1.4,
+                paddingRight: hasImage ? '40px' : '0px',
+              }}
+            >
+              &ldquo;{question.body.length > 160 ? question.body.slice(0, 160) + '...' : question.body}&rdquo;
+            </div>
+
+            {hasImage && (
+              <div
+                style={{
+                  display: 'flex',
+                  width: '320px',
+                  height: '320px',
+                  borderRadius: '24px',
+                  overflow: 'hidden',
+                  border: '6px solid #bfdbfe',
+                  flexShrink: 0,
+                }}
+              >
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={question.imageUrl}
+                  alt="Question attachment"
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'cover',
+                  }}
+                />
+              </div>
+            )}
+          </div>
+
+          {/* Footer block */}
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              width: '100%',
+              borderTop: '2px solid #f1f5f9',
+              paddingTop: '25px',
+            }}
+          >
+            <div
+              style={{
+                fontSize: '26px',
+                fontWeight: 'bold',
+                color: '#3b82f6',
               }}
             >
               mikeblocky.com/ask
             </div>
             <div
               style={{
-                marginLeft: 'auto',
-                fontSize: '24px',
+                fontSize: '26px',
                 color: '#94a3b8',
               }}
             >
@@ -131,32 +173,6 @@ export default async function Image({ params }: { params: Promise<{ id: string }
             </div>
           </div>
         </div>
-
-        {/* Right image block if question has imageUrl */}
-        {hasImage && (
-          <div
-            style={{
-              display: 'flex',
-              width: '380px',
-              height: '380px',
-              borderRadius: '24px',
-              overflow: 'hidden',
-              border: '6px solid white',
-              boxShadow: '0 20px 40px rgba(37, 99, 235, 0.1)',
-            }}
-          >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={question.imageUrl}
-              alt="Question attachment"
-              style={{
-                width: '100%',
-                height: '100%',
-                objectFit: 'cover',
-              }}
-            />
-          </div>
-        )}
       </div>
     ),
     {

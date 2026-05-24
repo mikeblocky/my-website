@@ -28,11 +28,20 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       title: `Drawing prompt suggestion`,
       description,
       type: 'article',
+      images: [
+        {
+          url: `/draw/${id}/opengraph-image?t=${new Date(prompt.createdAt).getTime()}`,
+          width: 1200,
+          height: 630,
+          alt: 'Drawing prompt',
+        }
+      ]
     },
     twitter: {
       card: 'summary_large_image',
       title: `Drawing prompt suggestion`,
       description,
+      images: [`/draw/${id}/opengraph-image?t=${new Date(prompt.createdAt).getTime()}`],
     },
   }
 }

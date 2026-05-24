@@ -42,129 +42,164 @@ export default async function Image({ params }: { params: Promise<{ id: string }
     (
       <div
         style={{
-          background: 'linear-gradient(135deg, #faf5ff 0%, #f5f3ff 100%)',
+          background: '#f3e8ff',
           width: '100%',
           height: '100%',
           display: 'flex',
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          padding: '80px',
-          fontFamily: 'sans-serif',
+          padding: '40px',
+          boxSizing: 'border-box',
         }}
       >
-        {/* Left content block */}
         <div
           style={{
             display: 'flex',
             flexDirection: 'column',
-            alignItems: 'flex-start',
-            justifyContent: 'center',
-            flex: 1,
+            width: '100%',
             height: '100%',
-            paddingRight: hasImage ? '40px' : '0px',
+            background: '#ffffff',
+            border: '12px solid #8b5cf6',
+            borderRadius: '32px',
+            padding: '50px 60px',
+            boxSizing: 'border-box',
+            justifyContent: 'space-between',
           }}
         >
+          {/* Header block with Character and Media tags */}
           <div
             style={{
               display: 'flex',
-              alignItems: 'center',
-              marginBottom: '20px',
-            }}
-          >
-            <div
-              style={{
-                padding: '10px 24px',
-                borderRadius: '999px',
-                background: 'white',
-                border: '2px solid #ddd6fe',
-                color: '#7c3aed',
-                fontSize: '24px',
-                fontWeight: 'bold',
-              }}
-            >
-              {prompt.author || 'anonymous'} suggested
-            </div>
-          </div>
-
-          {/* Character and Media labels in OG image */}
-          {(prompt.character || prompt.media) && (
-            <div
-              style={{
-                display: 'flex',
-                flexWrap: 'wrap',
-                gap: '12px',
-                marginBottom: '20px',
-              }}
-            >
-              {prompt.character && (
-                <div
-                  style={{
-                    padding: '6px 16px',
-                    borderRadius: '999px',
-                    background: '#f3e8ff',
-                    border: '1px solid #e9d5ff',
-                    color: '#6b21a8',
-                    fontSize: '18px',
-                    fontWeight: 'bold',
-                  }}
-                >
-                  👤 {prompt.character}
-                </div>
-              )}
-              {prompt.media && (
-                <div
-                  style={{
-                    padding: '6px 16px',
-                    borderRadius: '999px',
-                    background: '#e0e7ff',
-                    border: '1px solid #c7d2fe',
-                    color: '#3730a3',
-                    fontSize: '18px',
-                    fontWeight: 'bold',
-                  }}
-                >
-                  🎬 {prompt.media}
-                </div>
-              )}
-            </div>
-          )}
-
-          <div
-            style={{
-              fontSize: hasImage ? '44px' : '56px',
-              fontWeight: 'bold',
-              color: '#2e1065',
-              lineHeight: 1.3,
-              marginBottom: '30px',
-              display: 'flex',
-            }}
-          >
-            &ldquo;{prompt.body.length > 180 ? prompt.body.slice(0, 180) + '...' : prompt.body}&rdquo;
-          </div>
-
-          <div
-            style={{
-              marginTop: 'auto',
-              display: 'flex',
+              flexDirection: 'row',
               alignItems: 'center',
               width: '100%',
             }}
           >
             <div
               style={{
-                fontSize: '24px',
-                color: '#6b21a8',
-                opacity: 0.7,
+                padding: '10px 28px',
+                borderRadius: '999px',
+                background: '#faf5ff',
+                border: '2px solid #ddd6fe',
+                color: '#4c1d95',
+                fontSize: '26px',
+                fontWeight: 'bold',
+                marginRight: '16px',
+              }}
+            >
+              Suggestion from {prompt.author || 'anonymous'}
+            </div>
+            
+            {prompt.character && (
+              <div
+                style={{
+                  padding: '8px 22px',
+                  borderRadius: '999px',
+                  background: '#f3e8ff',
+                  border: '1.5px solid #e9d5ff',
+                  color: '#6b21a8',
+                  fontSize: '22px',
+                  fontWeight: 'bold',
+                  display: 'flex',
+                  marginRight: '12px',
+                }}
+              >
+                👤 {prompt.character}
+              </div>
+            )}
+            
+            {prompt.media && (
+              <div
+                style={{
+                  padding: '8px 22px',
+                  borderRadius: '999px',
+                  background: '#e0e7ff',
+                  border: '1.5px solid #c7d2fe',
+                  color: '#3730a3',
+                  fontSize: '22px',
+                  fontWeight: 'bold',
+                  display: 'flex',
+                }}
+              >
+                🎬 {prompt.media}
+              </div>
+            )}
+          </div>
+
+          {/* Middle Body block (side-by-side if hasImage) */}
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              flex: 1,
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              margin: '20px 0',
+              width: '100%',
+            }}
+          >
+            <div
+              style={{
+                display: 'flex',
+                flex: 1,
+                fontSize: hasImage ? '40px' : '52px',
+                fontWeight: 'bold',
+                color: '#2e1065',
+                lineHeight: 1.4,
+                paddingRight: hasImage ? '40px' : '0px',
+              }}
+            >
+              &ldquo;{prompt.body.length > 160 ? prompt.body.slice(0, 160) + '...' : prompt.body}&rdquo;
+            </div>
+
+            {hasImage && (
+              <div
+                style={{
+                  display: 'flex',
+                  width: '320px',
+                  height: '320px',
+                  borderRadius: '24px',
+                  overflow: 'hidden',
+                  border: '6px solid #ddd6fe',
+                  flexShrink: 0,
+                }}
+              >
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={prompt.imageUrl}
+                  alt="Prompt attachment"
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'cover',
+                  }}
+                />
+              </div>
+            )}
+          </div>
+
+          {/* Footer block */}
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              width: '100%',
+              borderTop: '2px solid #f3f4f6',
+              paddingTop: '25px',
+            }}
+          >
+            <div
+              style={{
+                fontSize: '26px',
+                fontWeight: 'bold',
+                color: '#8b5cf6',
               }}
             >
               mikeblocky.com/draw
             </div>
             <div
               style={{
-                marginLeft: 'auto',
-                fontSize: '24px',
-                color: '#a78bfa',
+                fontSize: '26px',
+                color: '#c084fc',
               }}
             >
               {new Date(prompt.createdAt).toLocaleDateString('en-US', {
@@ -175,32 +210,6 @@ export default async function Image({ params }: { params: Promise<{ id: string }
             </div>
           </div>
         </div>
-
-        {/* Right image block if prompt has imageUrl */}
-        {hasImage && (
-          <div
-            style={{
-              display: 'flex',
-              width: '380px',
-              height: '380px',
-              borderRadius: '24px',
-              overflow: 'hidden',
-              border: '6px solid white',
-              boxShadow: '0 20px 40px rgba(124, 58, 237, 0.1)',
-            }}
-          >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={prompt.imageUrl}
-              alt="Prompt attachment"
-              style={{
-                width: '100%',
-                height: '100%',
-                objectFit: 'cover',
-              }}
-            />
-          </div>
-        )}
       </div>
     ),
     {
