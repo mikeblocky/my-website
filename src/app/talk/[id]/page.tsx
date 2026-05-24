@@ -5,6 +5,8 @@ import { notFound } from "next/navigation"
 import { RedirectToBoard } from "@/components/ui/RedirectToBoard"
 import { IndividualPageFooter } from "@/components/layout/footer/IndividualPageFooter"
 
+const SITE_URL = 'https://www.mikeblocky.com'
+
 interface PageProps {
   params: Promise<{ id: string }>
 }
@@ -20,6 +22,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 
   const description = `"${talk.body.slice(0, 150)}${talk.body.length > 150 ? '...' : ''}" — Shared by ${talk.author || 'anonymous'}`
+  const imageUrl = `${SITE_URL}/talk/${id}/opengraph-image?t=${new Date(talk.createdAt).getTime()}`
 
   return {
     title: `Post from ${talk.author || 'anonymous'} | Talk`,
@@ -30,9 +33,10 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       type: 'article',
       images: [
         {
-          url: `/talk/${id}/opengraph-image?t=${new Date(talk.createdAt).getTime()}`,
+          url: imageUrl,
           width: 1200,
           height: 630,
+          type: 'image/png',
           alt: 'Talk board post',
         }
       ]
@@ -41,7 +45,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       card: 'summary_large_image',
       title: `Talk board post`,
       description,
-      images: [`/talk/${id}/opengraph-image?t=${new Date(talk.createdAt).getTime()}`],
+      images: [
+        {
+          url: imageUrl,
+          alt: 'Talk board post',
+        }
+      ],
     },
   }
 }

@@ -13,6 +13,8 @@ import { ChevronLeft, ChevronRight, MessageSquareReply, CornerDownRight, Share2,
 import { sansFont, monoFont } from '@/styles/fonts/fonts'
 import { cn } from '@/lib/utils/utils'
 import { AnimatePresence, motion } from 'framer-motion'
+import { prepareImageForUpload } from '@/lib/images/prepare-upload'
+import { MAX_ATTACHMENT_COUNT } from '@/lib/images/attachment-limits'
 
 const seededPrompts = [...initialPrompts].sort(
   (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
@@ -22,7 +24,8 @@ const dateFormatter = new Intl.DateTimeFormat('en', {
   month: 'short',
   day: 'numeric',
   hour: 'numeric',
-  minute: '2-digit'
+  minute: '2-digit',
+  timeZone: 'Asia/Bangkok'
 })
 
 type FormState = {
@@ -148,12 +151,12 @@ export function DrawBoard({
     }, 4000)
   }
 
-  const handleImageUpload = (file: File, callback: (url: string) => void) => {
-    const reader = new FileReader()
-    reader.onloadend = () => {
-      callback(reader.result as string)
+  const handleImageUpload = async (file: File, callback: (url: string) => void) => {
+    try {
+      callback(await prepareImageForUpload(file))
+    } catch (error) {
+      showNotification(error instanceof Error ? error.message : 'Could not attach image.')
     }
-    reader.readAsDataURL(file)
   }
 
   useEffect(() => {
@@ -401,72 +404,22 @@ export function DrawBoard({
   }, [prompts, currentPage])
 
   async function shareAndSnap(id: string) {
-    const element = document.getElementById(`prompt-${id}`);
-    if (!element) return;
-    
     const url = `${window.location.origin}/draw/${id}`;
-    const isDark = document.documentElement.classList.contains('dark');
-    const actionsDiv = element.querySelector('.prompt-actions') as HTMLElement;
-    if (actionsDiv) actionsDiv.style.visibility = 'hidden';
-    
-    // Hide +N overlays and zoom icons during screenshot
-    const moreOverlays = element.querySelectorAll('.gallery-more-overlay') as NodeListOf<HTMLElement>;
-    const zoomOverlays = element.querySelectorAll('.gallery-zoom-overlay') as NodeListOf<HTMLElement>;
-    moreOverlays.forEach(el => el.style.display = 'none');
-    zoomOverlays.forEach(el => el.style.display = 'none');
-    
-    // Add URL watermark at bottom
-    const linkBar = document.createElement('div');
-    linkBar.style.cssText = `margin-top:12px;padding-top:10px;border-top:1px solid ${isDark ? '#ffffff15' : '#00000010'};font-size:12px;color:${isDark ? '#94a3b8' : '#64748b'};font-family:system-ui,sans-serif;letter-spacing:0.02em;`;
-    linkBar.textContent = `🔗 ${url}`;
-    element.appendChild(linkBar);
-    
+
     try {
-      const { toPng } = await import('html-to-image');
-      
-      const dataUrl = await toPng(element, { 
-        backgroundColor: isDark ? '#110c1c' : '#ffffff',
-        style: {
-          borderRadius: '16px',
-          border: isDark ? '1px solid #4c2f77' : '1px solid #f3e8ff',
-          boxShadow: 'none',
-          padding: '24px',
-          margin: '0',
-          display: 'block',
-          color: isDark ? '#f5f3ff' : '#1e1b4b'
-        }
-      });
-      
-      const res = await fetch(dataUrl);
-      const blob = await res.blob();
-      
-      try {
-        const html = `<a href="${url}"><img src="${dataUrl}" alt="Drawing prompt thumbnail" /></a><p><a href="${url}">${url}</a></p>`;
-        await navigator.clipboard.write([
-          new ClipboardItem({
-            'text/plain': new Blob([url], { type: 'text/plain' }),
-            'text/html': new Blob([html], { type: 'text/html' }),
-            'image/png': blob
-          })
-        ]);
-        showButtonFeedback(`share-${id}`, '✓ Copied');
-      } catch (err) {
+      if (navigator.share) {
+        await navigator.share({
+          title: 'Drawing prompt suggestion',
+          text: 'Drawing prompt suggestion on mikeblocky.com',
+          url
+        });
+      } else {
         await navigator.clipboard.writeText(url);
-        const a = document.createElement('a');
-        a.href = dataUrl;
-        a.download = `draw-${id}.png`;
-        a.click();
-        showButtonFeedback(`share-${id}`, '✓ Link + image');
       }
+      showButtonFeedback(`share-${id}`, '✓ Link copied');
     } catch (e) {
-      console.error('Screenshot failed', e);
-      navigator.clipboard.writeText(url);
-      showButtonFeedback(`share-${id}`, '✓ Link only');
-    } finally {
-      if (actionsDiv) actionsDiv.style.visibility = '';
-      moreOverlays.forEach(el => el.style.display = '');
-      zoomOverlays.forEach(el => el.style.display = '');
-      linkBar.remove();
+      console.error('Share failed', e);
+      showButtonFeedback(`share-${id}`, 'Could not share');
     }
   }
 
@@ -591,7 +544,7 @@ export function DrawBoard({
                       const files = e.target.files
                       if (files) {
                         Array.from(files).forEach(file => {
-                          handleImageUpload(file, (url) => setImageUrls(prev => [...prev, url]))
+                          handleImageUpload(file, (url) => setImageUrls(prev => prev.length >= MAX_ATTACHMENT_COUNT ? prev : [...prev, url]))
                         })
                       }
                       e.target.value = ''
@@ -829,7 +782,7 @@ export function DrawBoard({
                                   const files = e.target.files
                                   if (files) {
                                     Array.from(files).forEach(file => {
-                                      handleImageUpload(file, (url) => setReplyImageUrls(prev => [...prev, url]))
+                                      handleImageUpload(file, (url) => setReplyImageUrls(prev => prev.length >= MAX_ATTACHMENT_COUNT ? prev : [...prev, url]))
                                     })
                                   }
                                   e.target.value = ''
@@ -893,7 +846,7 @@ export function DrawBoard({
                                 const files = e.target.files
                                 if (files) {
                                   Array.from(files).forEach(file => {
-                                    handleImageUpload(file, (url) => setFollowUpImageUrls(prev => [...prev, url]))
+                                    handleImageUpload(file, (url) => setFollowUpImageUrls(prev => prev.length >= MAX_ATTACHMENT_COUNT ? prev : [...prev, url]))
                                   })
                                 }
                                 e.target.value = ''
@@ -1023,12 +976,12 @@ function ThreadBubble({
   const isAdmin = message.role === 'admin'
   const indent = (Math.min(depth, 3) + 1) * 16
 
-  const handleImageUpload = (file: File, callback: (url: string) => void) => {
-    const reader = new FileReader()
-    reader.onloadend = () => {
-      callback(reader.result as string)
+  const handleImageUpload = async (file: File, callback: (url: string) => void) => {
+    try {
+      callback(await prepareImageForUpload(file))
+    } catch (error) {
+      console.error('Could not attach image', error)
     }
-    reader.readAsDataURL(file)
   }
 
   return (
@@ -1130,7 +1083,7 @@ function ThreadBubble({
                     const files = e.target.files
                     if (files) {
                       Array.from(files).forEach(file => {
-                        handleImageUpload(file, (url) => setEditImageUrls(prev => [...prev, url]))
+                        handleImageUpload(file, (url) => setEditImageUrls(prev => prev.length >= MAX_ATTACHMENT_COUNT ? prev : [...prev, url]))
                       })
                     }
                     e.target.value = ''

@@ -5,6 +5,7 @@ import { TALK_MESSAGES_TAG, getTalkMessages } from '@/lib/kv/talk-cache'
 import { notifyOwnerNewTalk } from '@/lib/notify/discord'
 import { getSubscribedTalkIds } from '@/lib/kv/push'
 import { getMessageCooldown, reserveMessageCooldown } from '@/lib/kv/cooldown'
+import { validateImageUrls } from '@/lib/images/attachment-limits'
 
 const MAX_BODY_LENGTH = 800
 
@@ -63,6 +64,10 @@ export async function POST(request: NextRequest) {
   const imageUrls = Array.isArray(data.imageUrls)
     ? data.imageUrls.filter((url: any) => typeof url === 'string')
     : undefined
+  const imageError = validateImageUrls(imageUrls)
+  if (imageError) {
+    return NextResponse.json({ error: imageError }, { status: 413 })
+  }
   const talk = buildTalkPayload({ author, body, imageUrl, imageUrls })
 
   await saveTalk(talk)
@@ -91,6 +96,10 @@ export async function PUT(request: NextRequest) {
   const cleanImageUrls = Array.isArray(imageUrls)
     ? imageUrls.filter((url: any) => typeof url === 'string')
     : undefined
+  const imageError = validateImageUrls(cleanImageUrls)
+  if (imageError) {
+    return NextResponse.json({ error: imageError }, { status: 413 })
+  }
 
   const updatedTalk = await import('@/lib/kv/talk').then(m => m.replyToTalk(id, reply, imageUrl, cleanImageUrls))
   
@@ -148,6 +157,10 @@ export async function PATCH(request: NextRequest) {
   const cleanImageUrls = Array.isArray(imageUrls)
     ? imageUrls.filter((url: any) => typeof url === 'string')
     : undefined
+  const imageError = validateImageUrls(cleanImageUrls)
+  if (imageError) {
+    return NextResponse.json({ error: imageError }, { status: 413 })
+  }
 
   if (messageId) {
     // Edit an existing message (requires passcode)

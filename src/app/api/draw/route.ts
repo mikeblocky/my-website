@@ -4,6 +4,7 @@ import { buildPromptPayload, savePrompt } from '@/lib/kv/draw'
 import { DRAW_PROMPTS_TAG, getDrawPrompts } from '@/lib/kv/draw-cache'
 import { notifyOwnerNewPrompt } from '@/lib/notify/discord'
 import { getMessageCooldown, reserveMessageCooldown } from '@/lib/kv/cooldown'
+import { validateImageUrls } from '@/lib/images/attachment-limits'
 
 const MAX_BODY_LENGTH = 800
 
@@ -58,6 +59,10 @@ export async function POST(request: NextRequest) {
   const imageUrls = Array.isArray(data.imageUrls)
     ? data.imageUrls.filter((url: any) => typeof url === 'string')
     : undefined
+  const imageError = validateImageUrls(imageUrls)
+  if (imageError) {
+    return NextResponse.json({ error: imageError }, { status: 413 })
+  }
   const prompt = buildPromptPayload({ author, body, character, media, imageUrl, imageUrls })
 
   await savePrompt(prompt)
@@ -86,6 +91,10 @@ export async function PUT(request: NextRequest) {
   const cleanImageUrls = Array.isArray(imageUrls)
     ? imageUrls.filter((url: any) => typeof url === 'string')
     : undefined
+  const imageError = validateImageUrls(cleanImageUrls)
+  if (imageError) {
+    return NextResponse.json({ error: imageError }, { status: 413 })
+  }
 
   const updatedPrompt = await import('@/lib/kv/draw').then(m => m.replyToPrompt(id, reply, imageUrl, cleanImageUrls))
   
@@ -109,6 +118,10 @@ export async function PATCH(request: NextRequest) {
   const cleanImageUrls = Array.isArray(imageUrls)
     ? imageUrls.filter((url: any) => typeof url === 'string')
     : undefined
+  const imageError = validateImageUrls(cleanImageUrls)
+  if (imageError) {
+    return NextResponse.json({ error: imageError }, { status: 413 })
+  }
 
   if (messageId) {
     // Edit an existing message (requires passcode)

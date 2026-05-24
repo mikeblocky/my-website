@@ -5,6 +5,8 @@ import { notFound } from "next/navigation"
 import { RedirectToBoard } from "@/components/ui/RedirectToBoard"
 import { IndividualPageFooter } from "@/components/layout/footer/IndividualPageFooter"
 
+const SITE_URL = 'https://www.mikeblocky.com'
+
 interface PageProps {
   params: Promise<{ id: string }>
 }
@@ -20,6 +22,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 
   const description = `"${prompt.body.slice(0, 150)}${prompt.body.length > 150 ? '...' : ''}" — Suggested by ${prompt.author || 'anonymous'}`
+  const imageUrl = `${SITE_URL}/draw/${id}/opengraph-image?t=${new Date(prompt.createdAt).getTime()}`
 
   return {
     title: `Prompt from ${prompt.author || 'anonymous'} | Drawing prompts`,
@@ -30,9 +33,10 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       type: 'article',
       images: [
         {
-          url: `/draw/${id}/opengraph-image?t=${new Date(prompt.createdAt).getTime()}`,
+          url: imageUrl,
           width: 1200,
           height: 630,
+          type: 'image/png',
           alt: 'Drawing prompt',
         }
       ]
@@ -41,7 +45,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       card: 'summary_large_image',
       title: `Drawing prompt suggestion`,
       description,
-      images: [`/draw/${id}/opengraph-image?t=${new Date(prompt.createdAt).getTime()}`],
+      images: [
+        {
+          url: imageUrl,
+          alt: 'Drawing prompt',
+        }
+      ],
     },
   }
 }

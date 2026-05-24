@@ -16,7 +16,10 @@ export const ImageGallery: React.FC<ImageGalleryProps> = ({ urls = [], theme = '
   // Filter out empty or invalid urls
   const cleanUrls = urls.filter(url => typeof url === 'string' && url.trim().length > 0);
 
-  useEffect(() => setMounted(true), []);
+  useEffect(() => {
+    const frame = window.requestAnimationFrame(() => setMounted(true));
+    return () => window.cancelAnimationFrame(frame);
+  }, []);
 
   const closeLightbox = useCallback(() => setActiveIdx(null), []);
   const showPrevious = useCallback(() => {
