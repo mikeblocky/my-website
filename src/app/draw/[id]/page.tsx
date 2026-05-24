@@ -22,14 +22,18 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 
   const description = `"${prompt.body.slice(0, 150)}${prompt.body.length > 150 ? '...' : ''}" — Suggested by ${prompt.author || 'anonymous'}`
-  const imageUrl = `${SITE_URL}/draw/${id}/opengraph-image?t=${new Date(prompt.createdAt).getTime()}`
+  const pageUrl = `${SITE_URL}/draw/${id}`
+  const imageUrl = `${SITE_URL}/draw/${id}/opengraph-image`
 
   return {
+    metadataBase: new URL(SITE_URL),
     title: `Prompt from ${prompt.author || 'anonymous'} | Drawing prompts`,
     description,
     openGraph: {
       title: `Drawing prompt suggestion`,
       description,
+      url: pageUrl,
+      siteName: 'mikeblocky.com',
       type: 'article',
       images: [
         {

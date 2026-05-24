@@ -9,7 +9,7 @@ import { StackVertical } from '@/components/layout/layout-stack/layout-stack'
 import TextHeading from '@/components/ui/text-heading/text-heading'
 import Text from '@/components/ui/text/text'
 import { Button } from '@/components/ui/primitives/button'
-import { ChevronLeft, ChevronRight, MessageSquareReply, Bell, CornerDownRight, Share2, Image as ImageIcon } from 'lucide-react'
+import { Camera, ChevronLeft, ChevronRight, MessageSquareReply, Bell, CornerDownRight, Share2, Image as ImageIcon } from 'lucide-react'
 import { sansFont, monoFont } from '@/styles/fonts/fonts'
 import { cn } from '@/lib/utils/utils'
 import { AnimatePresence, motion } from 'framer-motion'
@@ -440,6 +440,65 @@ export function TalkBoard({
     }
   }
 
+  async function snapAndCopy(id: string) {
+    const element = document.getElementById(`talk-${id}`);
+    if (!element) return;
+
+    const url = `${window.location.origin}/talk/${id}`;
+    const isDark = document.documentElement.classList.contains('dark');
+    const actionsDiv = element.querySelector('.talk-actions') as HTMLElement;
+    if (actionsDiv) actionsDiv.style.visibility = 'hidden';
+
+    const moreOverlays = element.querySelectorAll('.gallery-more-overlay') as NodeListOf<HTMLElement>;
+    const zoomOverlays = element.querySelectorAll('.gallery-zoom-overlay') as NodeListOf<HTMLElement>;
+    moreOverlays.forEach(el => el.style.display = 'none');
+    zoomOverlays.forEach(el => el.style.display = 'none');
+
+    const linkBar = document.createElement('div');
+    linkBar.style.cssText = `margin-top:12px;padding-top:10px;border-top:1px solid ${isDark ? '#ffffff15' : '#00000010'};font-size:12px;color:${isDark ? '#94a3b8' : '#64748b'};font-family:system-ui,sans-serif;letter-spacing:0.02em;`;
+    linkBar.textContent = `Link: ${url}`;
+    element.appendChild(linkBar);
+
+    try {
+      const { toPng } = await import('html-to-image');
+      const dataUrl = await toPng(element, {
+        backgroundColor: isDark ? '#1a1525' : '#ffffff',
+        style: {
+          borderRadius: '16px',
+          border: isDark ? '1px solid #3b2d5a' : '1px solid #e2e8f0',
+          boxShadow: 'none',
+          padding: '24px',
+          margin: '0',
+          display: 'block',
+          color: isDark ? '#f1f5f9' : '#0f172a'
+        }
+      });
+      const res = await fetch(dataUrl);
+      const blob = await res.blob();
+
+      try {
+        await navigator.clipboard.write([
+          new ClipboardItem({ 'image/png': blob })
+        ]);
+        showButtonFeedback(`snap-${id}`, '✓ Snapped');
+      } catch (err) {
+        const a = document.createElement('a');
+        a.href = dataUrl;
+        a.download = `talk-${id}.png`;
+        a.click();
+        showButtonFeedback(`snap-${id}`, '✓ Saved');
+      }
+    } catch (e) {
+      console.error('Snap failed', e);
+      showButtonFeedback(`snap-${id}`, 'Could not snap');
+    } finally {
+      if (actionsDiv) actionsDiv.style.visibility = '';
+      moreOverlays.forEach(el => el.style.display = '');
+      zoomOverlays.forEach(el => el.style.display = '');
+      linkBar.remove();
+    }
+  }
+
   return (
     <StackVertical gap="lg">
       {!singleMode && (
@@ -693,6 +752,13 @@ export function TalkBoard({
                       >
                         <Share2 size={14} />
                         {buttonFeedback[`share-${talk.id}`] || 'Share'}
+                      </button>
+                      <button
+                        onClick={() => snapAndCopy(talk.id)}
+                        className="flex items-center gap-1.5 rounded-full border border-border/60 bg-background px-3 py-1.5 text-xs font-medium text-slate-500 transition-colors hover:text-blue-600 dark:text-slate-400 dark:hover:text-blue-300"
+                      >
+                        <Camera size={14} />
+                        {buttonFeedback[`snap-${talk.id}`] || 'Snap'}
                       </button>
                       {canFollowUp && (
                         <button

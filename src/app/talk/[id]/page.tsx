@@ -22,14 +22,18 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 
   const description = `"${talk.body.slice(0, 150)}${talk.body.length > 150 ? '...' : ''}" — Shared by ${talk.author || 'anonymous'}`
-  const imageUrl = `${SITE_URL}/talk/${id}/opengraph-image?t=${new Date(talk.createdAt).getTime()}`
+  const pageUrl = `${SITE_URL}/talk/${id}`
+  const imageUrl = `${SITE_URL}/talk/${id}/opengraph-image`
 
   return {
+    metadataBase: new URL(SITE_URL),
     title: `Post from ${talk.author || 'anonymous'} | Talk`,
     description,
     openGraph: {
       title: `Talk board post`,
       description,
+      url: pageUrl,
+      siteName: 'mikeblocky.com',
       type: 'article',
       images: [
         {
