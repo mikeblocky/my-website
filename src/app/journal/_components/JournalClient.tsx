@@ -51,6 +51,15 @@ export function JournalClient({ posts }: JournalClientProps) {
 	const [currentlyPlaying, setCurrentlyPlaying] = useState<any | null>(null)
 	const [isLoading, setIsLoading] = useState(true)
 	const [spotifyStatus, setSpotifyStatus] = useState<'success' | 'error' | null>(null)
+	const [liveProgressMs, setLiveProgressMs] = useState<number>(0)
+
+	const formatDuration = (ms: number) => {
+		if (!ms) return '0:00'
+		const totalSeconds = Math.floor(ms / 1000)
+		const minutes = Math.floor(totalSeconds / 60)
+		const seconds = totalSeconds % 60
+		return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`
+	}
 
 	useEffect(() => {
 		if (typeof window !== 'undefined') {
@@ -64,8 +73,8 @@ export function JournalClient({ posts }: JournalClientProps) {
 			}
 		}
 
-		const fetchActivities = async () => {
-			setIsLoading(true)
+		const fetchActivities = async (showLoading = false) => {
+			if (showLoading) setIsLoading(true)
 			try {
 				const res = await fetch('/api/activity')
 				const data = await res.json()
@@ -76,12 +85,35 @@ export function JournalClient({ posts }: JournalClientProps) {
 			} catch (err) {
 				console.error('Error fetching activities:', err)
 			} finally {
-				setIsLoading(false)
+				if (showLoading) setIsLoading(false)
 			}
 		}
 
-		fetchActivities()
+		fetchActivities(true)
+		const interval = setInterval(() => fetchActivities(false), 5000)
+		return () => clearInterval(interval)
 	}, [])
+
+	useEffect(() => {
+		if (currentlyPlaying?.progressMs) {
+			setLiveProgressMs(currentlyPlaying.progressMs)
+		}
+	}, [currentlyPlaying?.id, currentlyPlaying?.progressMs])
+
+	useEffect(() => {
+		if (!currentlyPlaying || !currentlyPlaying.isPlaying) return
+
+		const progressInterval = setInterval(() => {
+			setLiveProgressMs((prev) => {
+				if (currentlyPlaying.durationMs && prev >= currentlyPlaying.durationMs) {
+					return currentlyPlaying.durationMs
+				}
+				return prev + 1000
+			})
+		}, 1000)
+
+		return () => clearInterval(progressInterval)
+	}, [currentlyPlaying])
 
 	const formatTime = (isoString: string) => {
 		try {
@@ -384,7 +416,24 @@ export function JournalClient({ posts }: JournalClientProps) {
 									<p className="text-[10px] text-muted-foreground italic truncate">
 										Album: {currentlyPlaying.album}
 									</p>
+
+									{/* Progress bar & Timer */}
+									{currentlyPlaying.durationMs && (
+										<div className="space-y-1 pt-1.5 max-w-md">
+											<div className="flex items-center justify-between text-[9px] font-mono text-muted-foreground select-none">
+												<span>{formatDuration(liveProgressMs)}</span>
+												<span>{formatDuration(currentlyPlaying.durationMs)}</span>
+											</div>
+											<div className="h-1.5 w-full bg-slate-200/50 dark:bg-slate-850/80 rounded-full overflow-hidden">
+												<div 
+													className="h-full bg-emerald-500 rounded-full shadow-[0_0_6px_rgba(16,185,129,0.4)] transition-all duration-1000 ease-linear"
+													style={{ width: `${Math.min(100, (liveProgressMs / currentlyPlaying.durationMs) * 100)}%` }}
+												/>
+											</div>
+										</div>
+									)}
 								</div>
+
 							</a>
 						)}
 

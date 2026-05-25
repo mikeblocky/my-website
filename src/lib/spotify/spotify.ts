@@ -13,6 +13,8 @@ export interface SpotifyTrack {
 	songUrl: string
 	timestamp: string // ISO string
 	isPlaying?: boolean
+	progressMs?: number
+	durationMs?: number
 }
 
 export function getRedirectUri(origin: string) {
@@ -185,10 +187,74 @@ export async function getCurrentlyPlaying(): Promise<SpotifyTrack | null> {
 			platform: 'spotify',
 			songUrl: track.external_urls?.spotify || '',
 			timestamp: new Date().toISOString(),
-			isPlaying: true
+			isPlaying: true,
+			progressMs: data.progress_ms,
+			durationMs: track.duration_ms
 		}
 	} catch (error) {
 		console.error('Error fetching Spotify currently playing:', error)
 		return null
+	}
+}
+
+export async function recordTrackPlay(track: SpotifyTrack, progressMs: number, durationMs: number) {
+	if (!progressMs || !durationMs) return
+
+	const progressPercent = progressMs / durationMs
+	// Threshold: min 30% of the song (in the 20% - 40% range requested by the user)
+	if (progressPercent < 0.3) {
+		return
+	}
+
+	try {
+		const redis = await getRedisClient()
+		
+		// Calculate play starting time to deduplicate Pauses/Resumes
+		const startTime = Date.now() - progressMs
+		// Bounded to 30 seconds interval
+		const roundTime = Math.floor(startTime / 30000) * 30000
+		const dedupeKey = `spotify:play:${track.id}:${roundTime}`
+
+		// Try to claim this play event
+		const isNewPlay = await redis.setIfNotExists(dedupeKey, '1')
+		if (isNewPlay) {
+			console.log(`[Spotify History] Recording new play for: ${track.song}`)
+			
+			const historyItem = {
+				id: `spotify-recorded-${track.id}-${Date.now()}`,
+				song: track.song,
+				artist: track.artist,
+				album: track.album,
+				artworkUrl: track.artworkUrl,
+				platform: 'spotify',
+				songUrl: track.songUrl,
+				timestamp: new Date().toISOString()
+			}
+
+			// Add to sorted set
+			await redis.zAdd('spotify:history', [{
+				score: Date.now(),
+				value: JSON.stringify(historyItem)
+			}])
+
+			// Keep only the last 50 items in the sorted set
+			const count = await redis.zCard('spotify:history')
+			if (count > 50) {
+				await redis.zRemRangeByRank('spotify:history', 0, count - 51)
+			}
+		}
+	} catch (error) {
+		console.error('Error recording track play in Redis:', error)
+	}
+}
+
+export async function getRecordedHistory(): Promise<SpotifyTrack[]> {
+	try {
+		const redis = await getRedisClient()
+		const rawItems = await redis.zRange('spotify:history', 0, -1, { REV: true })
+		return rawItems.map((raw: string) => JSON.parse(raw))
+	} catch (error) {
+		console.error('Error fetching recorded history:', error)
+		return []
 	}
 }
