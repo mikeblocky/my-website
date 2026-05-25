@@ -6,6 +6,9 @@ import { SectionPageHeader } from '@/components/layout/page-header/SectionPageHe
 import { getSearchablePosts } from '@/app/blog/page'
 import { JournalClient } from './_components/JournalClient'
 
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
+
 export const metadata: Metadata = {
 	title: 'Journal | mikeblocky.com',
 	description: 'Explore my essays, daily gratitude logs, and stationery setups.'
