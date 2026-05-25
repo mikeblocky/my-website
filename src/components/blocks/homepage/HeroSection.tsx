@@ -86,11 +86,11 @@ export function HeroSection() {
                         className="space-y-4"
                     >
                         <Text>
-                            Hi, I'm Mike. I'm a Vietnamese artist and a Japanese student, living between quiet drawings and long, wandering thoughts. This website is my small, personal corner of the internet—a slow space where I archive my illustrations, write down reflections, and slowly try to connect.
+                            Hi, I'm Mike. I'm a Vietnamese artist and a Japanese student, living between drawings and long, wandering thoughts. This website is my small, personal corner of the internet—a slow space where I archive my illustrations, write down reflections, and slowly try to connect.
                         </Text>
                         
                         <Text>
-                            Below you can find portals to explore the different sections of my digital archive. Each space is built to be simple and quiet.
+                            Below you can find portals to explore the different sections of my digital archive.
                         </Text>
  
                         {/* Flat Grid Portal Cards - borderless layout */}

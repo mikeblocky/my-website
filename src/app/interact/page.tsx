@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { Suspense } from 'react'
 import BaseContainer from '@/components/layout/container/base-container'
 import { StackVertical } from '@/components/layout/layout-stack/layout-stack'
 import { SectionFooter } from '@/components/layout/footer/SectionFooter'
@@ -16,11 +17,17 @@ export default function InteractPage() {
 			<StackVertical gap="lg">
 				<SectionPageHeader
 					title="Interact"
-					description="A place to connect and interact: share recommendations, leave suggestions, or browse my circle."
+					description="A place to connect and interact: share recommendations, leave suggestions, ask questions."
 					currentLabel="Interact"
 				/>
 
-				<InteractClient />
+				<Suspense fallback={
+					<div className="py-8 text-center text-sm text-muted-foreground">
+						Loading boards...
+					</div>
+				}>
+					<InteractClient />
+				</Suspense>
 			</StackVertical>
 
 			<SectionFooter showToTop={false} />

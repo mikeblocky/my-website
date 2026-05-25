@@ -783,6 +783,11 @@ export function DrawBoard({
                           Follow up
                         </button>
                       )}
+                      {canFollowUp && canReply && (
+                        <span className="text-xs text-muted-foreground self-center px-1 font-medium select-none pointer-events-none">
+                          or
+                        </span>
+                      )}
                       {canReply && (
                         <button
                           onClick={() => {
@@ -794,7 +799,7 @@ export function DrawBoard({
                           className="flex items-center gap-2 rounded-full border border-violet-200/60 bg-violet-50/70 hover:bg-violet-100/80 px-4.5 py-2.5 text-sm font-semibold text-violet-600 dark:border-violet-500/20 dark:bg-violet-500/10 dark:text-violet-400 dark:hover:border-violet-500/30 dark:hover:bg-violet-500/15 shadow-sm transition-all"
                         >
                           <MessageSquareReply size={15} />
-                          Reply
+                          Reply (Admin)
                         </button>
                       )}
                     </div>

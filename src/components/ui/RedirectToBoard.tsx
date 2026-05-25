@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect } from 'react'
+import Link from 'next/link'
 import { sansFont } from '@/styles/fonts/fonts'
 import { cn } from '@/lib/utils/utils'
 
@@ -10,13 +11,14 @@ interface RedirectToBoardProps {
 }
 
 export function RedirectToBoard({ id, type }: RedirectToBoardProps) {
+  const destination = type === 'talk' || type === 'question' 
+    ? `/interact?tab=guestbook#talk-${id}` 
+    : `/interact?tab=prompts#prompt-${id}`
+
   useEffect(() => {
     // Immediate client-side redirection to the main board with hash
-    const destination = type === 'talk' || type === 'question' 
-      ? `/talk#talk-${id}` 
-      : `/draw#prompt-${id}`
     window.location.replace(destination)
-  }, [id, type])
+  }, [destination])
 
   const accentColor = type === 'talk' || type === 'question' 
     ? 'text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/10 border-blue-100 dark:border-blue-900/20' 
@@ -27,7 +29,7 @@ export function RedirectToBoard({ id, type }: RedirectToBoardProps) {
   return (
     <div className="min-h-[60vh] flex flex-col items-center justify-center p-6 text-center">
       <div className={cn(
-        "rounded-2xl border p-8 max-w-sm w-full space-y-4 backdrop-blur-sm",
+        "rounded-2xl border p-8 max-w-sm w-full space-y-5 backdrop-blur-sm shadow-xl shadow-slate-100/50 dark:shadow-none bg-white dark:bg-slate-950/80",
         accentColor
       )}>
         {/* Loading Spinner */}
@@ -45,6 +47,21 @@ export function RedirectToBoard({ id, type }: RedirectToBoardProps) {
           <p className={cn(sansFont.className, "text-xs opacity-75")}>
             Locating your shared item...
           </p>
+        </div>
+
+        {/* Manual Press to Enter Link */}
+        <div className="pt-2">
+          <Link
+            href={destination}
+            className={cn(
+              "block w-full py-3 px-6 text-sm font-bold rounded-xl text-center transition-all duration-200 shadow-sm border border-transparent",
+              type === 'talk' || type === 'question'
+                ? "bg-blue-600 text-white hover:bg-blue-700 shadow-blue-500/10"
+                : "bg-violet-600 text-white hover:bg-violet-700 shadow-violet-500/10"
+            )}
+          >
+            Press to enter board
+          </Link>
         </div>
       </div>
     </div>

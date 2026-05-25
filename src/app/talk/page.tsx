@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation"
 
 export default function TalkPage() {
-    redirect('/interact')
+    redirect('/interact?tab=guestbook')
 }

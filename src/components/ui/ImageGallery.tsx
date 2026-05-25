@@ -319,8 +319,8 @@ export const ImageGallery: React.FC<ImageGalleryProps> = ({ urls = [], theme = '
     }
 
     // 3 or more images
-    const displayCount = Math.min(total, 3);
-    const hasMore = total > 3;
+    const displayCount = Math.min(total, 5);
+    const hasMore = total > 5;
 
     return (
       <div className="grid grid-cols-3 gap-3">
@@ -343,7 +343,7 @@ export const ImageGallery: React.FC<ImageGalleryProps> = ({ urls = [], theme = '
               {showOverlay ? (
                 <div className="gallery-more-overlay absolute inset-0 flex items-center justify-center bg-black/55 backdrop-blur-[1px] transition-all duration-300 hover:bg-black/45">
                   <span className="text-lg font-semibold text-white tracking-wide">
-                    +{total - 2}
+                    +...
                   </span>
                 </div>
               ) : (

@@ -21,7 +21,22 @@ export const buddingFriends: Friend[] = [
     },
     {
         username: '_azuace',
-        description: "A fellow fan of Kemutai Hanashi whom I first noticed on Tumblr. We’ve been talking a bit more lately and sharing thoughts on the server, bringing us a little closer. I really want to bridge that remaining gap and see this develop into an effortless, comfortable friendship."
+        description: "A fellow fan of Kemutai Hanashi whom I first noticed on Tumblr. We’ve been talking a bit more lately and sharing thoughts on the server, bringing us a little closer. Really, they are one of the most wonderful people I've ever met, and I'm so glad to connect with them—it's actually my first time getting to know someone in the nonbinary/aroace spectrum. Through them, I've seen so many things I didn't know before, alongside a shared love for art. I know how hard it must have been, and I'm truly happy that they came out and found acceptance. I hope that one day we can bridge the remaining gap and build a comfortable friendship."
+    }
+]
+
+export const growingFriends: Friend[] = [
+    {
+        username: 'thatyamakun',
+        description: "She's one of the most dedicated Witch Hat Atelier fans, and someone I genuinely appreciate. She was actually among the first to notice and support my Kemutai Hanashi work, which meant a lot to me. I hope we can slowly move past the creator-fan stage and build a real, comfortable connection over time."
+    },
+    {
+        username: 'goinghostie',
+        description: "A fellow fan of Hoshiai no Sora and other niche series. We crossed paths back in early 2025, and lately, we've been interacting more frequently through sharing fanart. I really value having them around in my circle, and I'm hoping we can make our chats feel even more casual and natural as we go."
+    },
+    {
+        username: 'octobersfilm',
+        description: "A wonderful writer whose outlook on art and life really resonates with me. She was actually one of the very few people I felt brave enough to reach out to first. I'd love to visit Indonesia someday and meet her in person, turning our online chats into a casual, warm conversation over coffee."
     }
 ]
 
@@ -35,16 +50,8 @@ export const upcomingFriends: Friend[] = [
         description: 'It was such a surprise to be recognized for my random Mika and Mukai drawings through him. We mainly connect through our art, but I’m eager to see what lies beyond that. Having a connection all the way in Sweden makes the world feel a little smaller and less lonely.'
     },
     {
-        username: 'octobersfilm',
-        description: 'A writer whose perspective on life and art resonates with me on a different level. She is one of the few people I’ve been brave enough to actively reach out to. I hope to visit Indonesia someday to meet her in person, to turn this digital connection into a casual, meaningful conversation over coffee.'
-    },
-    {
         username: 'lilatheduckk',
         description: 'I admire her thoughts and her fan fiction immensely. We connected after I translated an interview for her, but I sometimes worry that I’m the one doing all the leaning. I want to move toward a more organic, no-pressure friendship where we just exist in each other\'s worlds.'
-    },
-    {
-        username: 'thatyamakun',
-        description: 'One of the most dedicated Witch Hat Atelier fans and someone I genuinely like. She was one of the first to appreciate my Kemutai Hanashi work, and that meant the world to me. I want to push past the "fan" stage and build a real, effortless bond with her.'
     },
     {
         username: 'kuusand',
@@ -53,9 +60,5 @@ export const upcomingFriends: Friend[] = [
     {
         username: 'maomao_2605',
         description: 'A creator I’ve admired from afar for a long time. Her "nerdy" passion for Fruits Basket and Haikyuu is infectious. We haven’t officially talked yet, and she feels a bit like a distant star, but I’m determined to find the right moment to finally start a conversation.'
-    },
-    {
-        username: 'goinghostie',
-        description: 'A fellow fan of Hoshiai no Sora and other hidden gems. We crossed paths in early 2025, and lately, our interactions through fanart have felt more frequent. I really appreciate their presence, and I’m looking forward to making our connection feel easy and effortless.'
     }
 ]

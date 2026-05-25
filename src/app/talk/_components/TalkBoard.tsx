@@ -774,6 +774,11 @@ export function TalkBoard({
                           Follow up
                         </button>
                       )}
+                      {canFollowUp && canReply && (
+                        <span className="text-xs text-muted-foreground self-center px-1 font-medium select-none pointer-events-none">
+                          or
+                        </span>
+                      )}
                       {canReply && (
                         <button
                           onClick={() => {
@@ -785,7 +790,7 @@ export function TalkBoard({
                           className="flex items-center gap-2 rounded-full border border-blue-200/60 bg-blue-50/70 hover:bg-blue-100/80 px-4.5 py-2.5 text-sm font-semibold text-blue-600 dark:border-blue-500/20 dark:bg-blue-500/10 dark:text-blue-400 dark:hover:border-blue-500/30 dark:hover:bg-blue-500/15 shadow-sm transition-all"
                         >
                           <MessageSquareReply size={15} />
-                          Reply
+                          Reply (Admin)
                         </button>
                       )}
                     </div>

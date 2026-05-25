@@ -1,15 +1,33 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { cn } from '@/lib/utils/utils'
+import { useSearchParams } from 'next/navigation'
 import { TalkBoard } from '@/app/talk/_components/TalkBoard'
 import { DrawBoard } from '@/app/draw/_components/DrawBoard'
 
 type Tab = 'guestbook' | 'prompts'
 
 export function InteractClient() {
-	const [activeTab, setActiveTab] = useState<Tab>('guestbook')
+	const searchParams = useSearchParams()
+	const tabParam = searchParams.get('tab')
+	const [activeTab, setActiveTab] = useState<Tab>(tabParam === 'prompts' ? 'prompts' : 'guestbook')
+
+	useEffect(() => {
+		const tab = searchParams.get('tab')
+		if (tab === 'prompts') {
+			setActiveTab('prompts')
+		} else if (tab === 'guestbook') {
+			setActiveTab('guestbook')
+		} else if (typeof window !== 'undefined' && window.location.hash) {
+			if (window.location.hash.startsWith('#prompt-')) {
+				setActiveTab('prompts')
+			} else if (window.location.hash.startsWith('#talk-')) {
+				setActiveTab('guestbook')
+			}
+		}
+	}, [searchParams])
 
 	const tabs = [
 		{ id: 'guestbook' as Tab, label: 'Guestbook board' },

@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation"
 
 export default function DrawPage() {
-    redirect('/interact')
+    redirect('/interact?tab=prompts')
 }

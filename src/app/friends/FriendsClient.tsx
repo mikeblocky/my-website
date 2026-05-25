@@ -2,12 +2,12 @@
 
 import { useState } from 'react'
 import { cn } from '@/lib/utils/utils'
-import { developedFriends, buddingFriends, upcomingFriends, type Friend } from './_data/friends'
+import { developedFriends, buddingFriends, growingFriends, upcomingFriends, type Friend } from './_data/friends'
 import Image from 'next/image'
 import { sansFont } from '@/styles/fonts/fonts'
 import { StackVertical } from '@/components/layout/layout-stack/layout-stack'
 
-type FriendTab = 'developed' | 'budding' | 'upcoming'
+type FriendTab = 'developed' | 'budding' | 'growing' | 'upcoming'
 
 function FriendCard({ friend, tag }: { friend: Friend; tag: string }) {
 	return (
@@ -59,6 +59,7 @@ export function FriendsClient() {
 	const friendTabs = [
 		{ id: 'developed', label: 'Mutuals & close friends', count: developedFriends.length },
 		{ id: 'budding', label: 'Budding connections', count: buddingFriends.length },
+		{ id: 'growing', label: 'Growing bonds', count: growingFriends.length },
 		{ id: 'upcoming', label: 'Future plans to connect', count: upcomingFriends.length }
 	]
 
@@ -98,6 +99,10 @@ export function FriendsClient() {
 				) : activeFriendTab === 'budding' ? (
 					buddingFriends.map((friend) => (
 						<FriendCard key={friend.username} friend={friend} tag="Budding" />
+					))
+				) : activeFriendTab === 'growing' ? (
+					growingFriends.map((friend) => (
+						<FriendCard key={friend.username} friend={friend} tag="Growing" />
 					))
 				) : (
 					upcomingFriends.map((friend) => (
