@@ -1,17 +1,36 @@
 import { NextResponse } from 'next/server'
 import { musicActivities } from '@/app/journal/_data/activity'
-import { getRecentlyPlayed, getCurrentlyPlaying } from '@/lib/spotify/spotify'
+import { getRecentlyPlayed, getCurrentlyPlaying, getAccessToken } from '@/lib/spotify/spotify'
 
 export const dynamic = 'force-dynamic'
 
 export async function GET() {
+	const debugInfo: any = {
+		hasToken: false,
+		error: null
+	}
 	try {
+		const token = await getAccessToken()
+		debugInfo.hasToken = !!token
+
 		// Fetch data from Spotify
-		const currentlyPlaying = await getCurrentlyPlaying()
-		const spotifyRecent = await getRecentlyPlayed(30)
+		let currentlyPlaying = null
+		let spotifyRecent: any[] = []
+
+		if (token) {
+			try {
+				currentlyPlaying = await getCurrentlyPlaying()
+			} catch (e: any) {
+				debugInfo.currentlyPlayingError = e.message || String(e)
+			}
+			try {
+				spotifyRecent = await getRecentlyPlayed(30)
+			} catch (e: any) {
+				debugInfo.recentlyPlayedError = e.message || String(e)
+			}
+		}
 
 		// Merge static activities and Spotify activities
-		// We'll mark the source so the UI can optionally display it
 		const formattedSpotifyRecent = spotifyRecent.map(activity => ({
 			...activity,
 			source: 'spotify'
@@ -30,13 +49,16 @@ export async function GET() {
 		return NextResponse.json({
 			success: true,
 			currentlyPlaying,
-			activities: combined
+			activities: combined,
+			debug: debugInfo
 		})
-	} catch (err) {
+	} catch (err: any) {
 		console.error('Error fetching music activities:', err)
+		debugInfo.error = err.message || String(err)
 		return NextResponse.json({
 			success: false,
-			error: 'Internal server error'
+			error: 'Internal server error',
+			debug: debugInfo
 		}, { status: 500 })
 	}
 }

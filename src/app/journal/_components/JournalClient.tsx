@@ -386,7 +386,7 @@ export function JournalClient({ posts }: JournalClientProps) {
 						)}
 
 						{/* Promo block to connect Spotify if no currently playing is found */}
-						{!currentlyPlaying && activities.filter(a => a.source === 'spotify').length === 0 && (
+						{!isLoading && !currentlyPlaying && activities.filter(a => a.source === 'spotify').length === 0 && (
 							<div className="relative overflow-hidden p-5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-gradient-to-br from-white via-slate-50/50 to-slate-100/50 dark:from-slate-900 dark:via-slate-950/40 dark:to-slate-900/60 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-sm">
 								<div className="space-y-1 text-center sm:text-left">
 									<h4 className="font-bold text-sm text-slate-850 dark:text-slate-100 flex items-center justify-center sm:justify-start gap-2">
