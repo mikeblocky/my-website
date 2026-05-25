@@ -477,16 +477,11 @@ export function JournalClient({ posts }: JournalClientProps) {
 											onClick={(e) => {
 												e.preventDefault()
 												e.stopPropagation()
-												const trackId = currentlyPlaying.songUrl.split('/track/')[1]?.split('?')[0]
-												if (trackId) {
-													window.open(`spotify:track:${trackId}`, '_blank')
-												} else {
-													window.open(currentlyPlaying.songUrl, '_blank')
-												}
+												window.open(currentlyPlaying.songUrl, '_blank')
 											}}
 											className="px-3.5 py-1.5 text-[10px] font-bold rounded-full bg-emerald-500 hover:bg-emerald-600 active:bg-emerald-700 text-white shadow-md shadow-emerald-500/20 transition-all duration-200 flex items-center gap-1 cursor-pointer select-none"
 										>
-											<span>🎧</span> Listen Along
+											Listen along
 										</button>
 
 										{currentlyPlaying.previewUrl && (
