@@ -36,7 +36,7 @@ export default async function Image({ params }: { params: Promise<{ id: string }
     )
   }
 
-  const hasImage = !!prompt.imageUrl
+  const hasImage = !!prompt.imageUrl && !prompt.imageUrl.includes('image/webp')
 
   return new ImageResponse(
     (

@@ -36,7 +36,7 @@ export default async function Image({ params }: { params: Promise<{ id: string }
     )
   }
 
-  const hasImage = !!talk.imageUrl
+  const hasImage = !!talk.imageUrl && !talk.imageUrl.includes('image/webp')
 
   return new ImageResponse(
     (

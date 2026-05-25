@@ -54,10 +54,10 @@ export async function prepareImageForUpload(file: File) {
     canvas.height = height
     context.drawImage(image, 0, 0, width, height)
 
-    let blob = await canvasToBlob(canvas, 'image/webp', 0.82)
+    let blob = await canvasToBlob(canvas, 'image/jpeg', 0.82)
 
     if (blob.size > MAX_IMAGE_BYTES) {
-      blob = await canvasToBlob(canvas, 'image/webp', 0.68)
+      blob = await canvasToBlob(canvas, 'image/jpeg', 0.68)
     }
 
     if (blob.size > MAX_IMAGE_BYTES) {
@@ -71,7 +71,7 @@ export async function prepareImageForUpload(file: File) {
       smallCanvas.width = Math.max(1, Math.round(width * smallScale))
       smallCanvas.height = Math.max(1, Math.round(height * smallScale))
       smallContext.drawImage(canvas, 0, 0, smallCanvas.width, smallCanvas.height)
-      blob = await canvasToBlob(smallCanvas, 'image/webp', 0.66)
+      blob = await canvasToBlob(smallCanvas, 'image/jpeg', 0.66)
     }
 
     if (blob.size > MAX_IMAGE_BYTES) {
