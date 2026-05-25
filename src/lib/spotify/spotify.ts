@@ -115,7 +115,7 @@ export async function getRecentlyPlayed(limit = 20): Promise<SpotifyTrack[]> {
 			headers: {
 				Authorization: `Bearer ${accessToken}`
 			},
-			next: { revalidate: 60 } // cache for 1 minute
+			cache: 'no-store'
 		})
 
 		if (!response.ok) {
@@ -162,7 +162,7 @@ export async function getCurrentlyPlaying(): Promise<SpotifyTrack | null> {
 			headers: {
 				Authorization: `Bearer ${accessToken}`
 			},
-			next: { revalidate: 0 } // do not cache currently playing
+			cache: 'no-store'
 		})
 
 		if (response.status === 204 || response.status > 400) {
