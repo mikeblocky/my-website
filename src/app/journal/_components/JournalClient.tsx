@@ -344,19 +344,24 @@ export function JournalClient({ posts }: JournalClientProps) {
 
 						{/* Currently Playing Track */}
 						{currentlyPlaying && (
-							<div className="relative overflow-hidden p-5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-gradient-to-br from-white via-slate-50/50 to-slate-100/50 dark:from-slate-900 dark:via-slate-950/40 dark:to-slate-900/60 shadow-md flex flex-col sm:flex-row items-center gap-5">
+							<a
+								href={currentlyPlaying.songUrl}
+								target="_blank"
+								rel="noopener noreferrer"
+								className="block relative overflow-hidden p-5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-gradient-to-br from-white via-slate-50/50 to-slate-100/50 dark:from-slate-900 dark:via-slate-950/40 dark:to-slate-900/60 shadow-md hover:shadow-lg hover:border-slate-300 dark:hover:border-slate-700 transition-all duration-200 flex flex-col sm:flex-row items-center gap-5 cursor-pointer group"
+							>
 								<div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500/5 rounded-full blur-3xl -mr-20 -mt-20 pointer-events-none" />
 								
-								<div className="relative group w-24 h-24 flex-shrink-0">
+								<div className="relative w-24 h-24 flex-shrink-0">
 									<img
 										src={currentlyPlaying.artworkUrl}
 										alt={currentlyPlaying.album}
 										className="w-full h-full object-cover rounded-xl shadow-sm border border-slate-200/50 dark:border-slate-800/50 group-hover:scale-105 transition-all duration-300"
 									/>
 									<div className="absolute inset-0 bg-black/40 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-										<a href={currentlyPlaying.songUrl} target="_blank" rel="noopener noreferrer" className="p-2 rounded-full bg-emerald-500 text-white shadow-lg transform scale-90 group-hover:scale-100 transition-transform duration-300">
+										<div className="p-2 rounded-full bg-emerald-500 text-white shadow-lg transform scale-90 group-hover:scale-100 transition-transform duration-300">
 											<svg className="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.586 14.424c-.18.295-.565.387-.86.207-2.377-1.454-5.37-1.783-8.893-.982-.336.075-.668-.135-.744-.47-.077-.337.135-.668.47-.745 3.856-.88 7.15-.506 9.822 1.13.295.178.387.563.205.86zm1.224-2.72c-.226.367-.707.487-1.074.26-2.72-1.672-6.87-2.157-10.076-1.183-.412.125-.845-.107-.97-.52-.124-.412.108-.846.52-.97 3.668-1.112 8.248-.567 11.374 1.354.366.226.486.707.226 1.074zm.107-2.846C14.403 8.8 8.442 8.6 4.992 9.65c-.53.16-1.09-.14-1.25-.67-.16-.53.14-1.09.67-1.25 3.96-1.202 10.55-.974 14.61 1.44.477.284.63.9.347 1.378-.283.477-.9.63-1.377.347z"/></svg>
-										</a>
+										</div>
 									</div>
 								</div>
 
@@ -370,11 +375,9 @@ export function JournalClient({ posts }: JournalClientProps) {
 										</div>
 										<span>Now Playing</span>
 									</div>
-									<a href={currentlyPlaying.songUrl} target="_blank" rel="noopener noreferrer" className="block hover:underline truncate">
-										<h4 className="text-base font-extrabold text-slate-800 dark:text-slate-100 truncate">
-											{currentlyPlaying.song}
-										</h4>
-									</a>
+									<h4 className="text-base font-extrabold text-slate-800 dark:text-slate-100 group-hover:underline truncate">
+										{currentlyPlaying.song}
+									</h4>
 									<p className="text-xs font-semibold text-slate-600 dark:text-slate-350 truncate">
 										by {currentlyPlaying.artist}
 									</p>
@@ -382,8 +385,9 @@ export function JournalClient({ posts }: JournalClientProps) {
 										Album: {currentlyPlaying.album}
 									</p>
 								</div>
-							</div>
+							</a>
 						)}
+
 
 						{/* Promo block to connect Spotify if no currently playing is found */}
 						{!isLoading && !currentlyPlaying && activities.filter(a => a.source === 'spotify').length === 0 && (
