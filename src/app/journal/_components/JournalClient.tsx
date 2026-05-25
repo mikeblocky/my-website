@@ -52,6 +52,44 @@ export function JournalClient({ posts }: JournalClientProps) {
 	const [isLoading, setIsLoading] = useState(true)
 	const [spotifyStatus, setSpotifyStatus] = useState<'success' | 'error' | null>(null)
 	const [liveProgressMs, setLiveProgressMs] = useState<number>(0)
+	const [activePreviewId, setActivePreviewId] = useState<string | null>(null)
+	const [audio, setAudio] = useState<HTMLAudioElement | null>(null)
+
+	const togglePreview = (trackId: string, previewUrl: string, e: React.MouseEvent) => {
+		e.preventDefault()
+		e.stopPropagation()
+
+		if (!previewUrl) return
+
+		if (activePreviewId === trackId) {
+			audio?.pause()
+			setActivePreviewId(null)
+			return
+		}
+
+		if (audio) {
+			audio.pause()
+		}
+
+		const newAudio = new Audio(previewUrl)
+		newAudio.volume = 0.4
+		newAudio.play()
+		setAudio(newAudio)
+		setActivePreviewId(trackId)
+
+		newAudio.onended = () => {
+			setActivePreviewId(null)
+		}
+	}
+
+	useEffect(() => {
+		return () => {
+			if (audio) {
+				audio.pause()
+			}
+		}
+	}, [audio])
+
 
 	const formatDuration = (ms: number) => {
 		if (!ms) return '0:00'
@@ -419,7 +457,7 @@ export function JournalClient({ posts }: JournalClientProps) {
 
 									{/* Progress bar & Timer */}
 									{currentlyPlaying.durationMs && (
-										<div className="space-y-1 pt-1.5 max-w-md">
+										<div className="space-y-1.5 pt-1.5 max-w-md">
 											<div className="flex items-center justify-between text-[9px] font-mono text-muted-foreground select-none">
 												<span>{formatDuration(liveProgressMs)}</span>
 												<span>{formatDuration(currentlyPlaying.durationMs)}</span>
@@ -432,6 +470,43 @@ export function JournalClient({ posts }: JournalClientProps) {
 											</div>
 										</div>
 									)}
+
+									{/* Action buttons (Listen Along & Play Preview) */}
+									<div className="flex flex-wrap gap-2 pt-2.5">
+										<button
+											onClick={(e) => {
+												e.preventDefault()
+												e.stopPropagation()
+												const trackId = currentlyPlaying.songUrl.split('/track/')[1]?.split('?')[0]
+												if (trackId) {
+													window.open(`spotify:track:${trackId}`, '_blank')
+												} else {
+													window.open(currentlyPlaying.songUrl, '_blank')
+												}
+											}}
+											className="px-3.5 py-1.5 text-[10px] font-bold rounded-full bg-emerald-500 hover:bg-emerald-600 active:bg-emerald-700 text-white shadow-md shadow-emerald-500/20 transition-all duration-200 flex items-center gap-1 cursor-pointer select-none"
+										>
+											<span>🎧</span> Listen Along
+										</button>
+
+										{currentlyPlaying.previewUrl && (
+											<button
+												onClick={(e) => togglePreview(currentlyPlaying.id, currentlyPlaying.previewUrl, e)}
+												className={cn(
+													"px-3.5 py-1.5 text-[10px] font-bold rounded-full border transition-all duration-200 flex items-center gap-1 cursor-pointer select-none",
+													activePreviewId === currentlyPlaying.id
+														? "border-emerald-500 bg-emerald-500/10 text-emerald-550"
+														: "border-slate-300 dark:border-slate-800 hover:border-emerald-500 hover:text-emerald-500 text-slate-650 dark:text-slate-400"
+												)}
+											>
+												{activePreviewId === currentlyPlaying.id ? (
+													<><span>⏸</span> Pause Preview</>
+												) : (
+													<><span>▶</span> Play Preview</>
+												)}
+											</button>
+										)}
+									</div>
 								</div>
 
 							</a>
@@ -505,6 +580,25 @@ export function JournalClient({ posts }: JournalClientProps) {
 													</div>
 													
 													<div className="flex items-center gap-2.5 flex-shrink-0">
+														{item.previewUrl && (
+															<button
+																onClick={(e) => togglePreview(item.id, item.previewUrl, e)}
+																className={cn(
+																	"p-1.5 rounded-lg border flex items-center justify-center transition-all duration-200 cursor-pointer",
+																	activePreviewId === item.id
+																		? "bg-emerald-500/10 border-emerald-500/30 text-emerald-550 scale-105"
+																		: "bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-550 hover:border-emerald-500 hover:text-emerald-500 dark:hover:border-emerald-500/50"
+																)}
+																title={activePreviewId === item.id ? "Pause Preview" : "Play Preview"}
+															>
+																{activePreviewId === item.id ? (
+																	<span className="text-[10px] font-bold">⏸</span>
+																) : (
+																	<span className="text-[10px] font-bold">▶</span>
+																)}
+															</button>
+														)}
+
 														<span className="text-[10px] font-mono text-muted-foreground whitespace-nowrap">
 															{formatTime(item.timestamp)}
 														</span>

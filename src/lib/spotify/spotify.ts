@@ -15,6 +15,7 @@ export interface SpotifyTrack {
 	isPlaying?: boolean
 	progressMs?: number
 	durationMs?: number
+	previewUrl?: string
 }
 
 export function getRedirectUri(origin: string) {
@@ -142,7 +143,8 @@ export async function getRecentlyPlayed(limit = 20): Promise<SpotifyTrack[]> {
 				artworkUrl,
 				platform: 'spotify',
 				songUrl: track.external_urls?.spotify || '',
-				timestamp: item.played_at
+				timestamp: item.played_at,
+				previewUrl: track.preview_url || ''
 			}
 		})
 	} catch (error) {
@@ -189,7 +191,8 @@ export async function getCurrentlyPlaying(): Promise<SpotifyTrack | null> {
 			timestamp: new Date().toISOString(),
 			isPlaying: true,
 			progressMs: data.progress_ms,
-			durationMs: track.duration_ms
+			durationMs: track.duration_ms,
+			previewUrl: track.preview_url || ''
 		}
 	} catch (error) {
 		console.error('Error fetching Spotify currently playing:', error)
@@ -228,7 +231,8 @@ export async function recordTrackPlay(track: SpotifyTrack, progressMs: number, d
 				artworkUrl: track.artworkUrl,
 				platform: 'spotify',
 				songUrl: track.songUrl,
-				timestamp: new Date().toISOString()
+				timestamp: new Date().toISOString(),
+				previewUrl: track.previewUrl || ''
 			}
 
 			// Add to sorted set
