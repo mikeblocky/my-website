@@ -37,7 +37,7 @@ function stripMdxLine(line: string) {
         .trim()
 }
 
-function getSearchablePosts(): BlogPost[] {
+export function getSearchablePosts(): BlogPost[] {
     return blogPosts.map((post) => {
         const contentPath = path.join(process.cwd(), 'src', 'app', 'blog', 'posts', post.slug, 'content.mdx')
         const source = existsSync(contentPath)
@@ -62,16 +62,8 @@ function getSearchablePosts(): BlogPost[] {
     })
 }
 
-export default function BlogListing() {
-    const searchablePosts = getSearchablePosts()
+import { redirect } from "next/navigation"
 
-    return (
-        <BaseContainer size="md" paddingX="md" paddingY="lg">
-            <StackVertical gap="md">
-                <BlogHeader />
-                <BlogSearchPanel posts={searchablePosts} />
-            </StackVertical>
-            <SectionFooter showToTop={false} />
-        </BaseContainer>
-    )
+export default function BlogListing() {
+    redirect('/journal')
 }

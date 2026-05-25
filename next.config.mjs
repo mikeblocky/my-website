@@ -32,6 +32,35 @@ const nextConfig = {
       },
     ]
   },
+  async redirects() {
+    return [
+      {
+        source: '/blog',
+        destination: '/journal',
+        permanent: true,
+      },
+      {
+        source: '/diary',
+        destination: '/journal',
+        permanent: true,
+      },
+      {
+        source: '/stats',
+        destination: '/artworks',
+        permanent: true,
+      },
+      {
+        source: '/talk',
+        destination: '/interact',
+        permanent: true,
+      },
+      {
+        source: '/draw',
+        destination: '/interact',
+        permanent: true,
+      },
+    ]
+  },
 }
  
 const withMDX = createMDX({

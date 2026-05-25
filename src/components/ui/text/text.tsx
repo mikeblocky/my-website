@@ -39,13 +39,13 @@ const defaultSizes = {
 }
 
 const textSizes = {
-    xs: 'text-[14px] sm:text-[15px]',
-    sm: 'text-[15px] sm:text-[16px] md:text-[17px]',
-    md: 'text-[16px] sm:text-[17px] md:text-[18px]',
-    base: 'text-[18px] sm:text-[20px]',
-    lg: 'text-[20px] sm:text-[22px]',
-    xl: 'text-[22px] sm:text-[26px]',
-    '2xl': 'text-[26px] sm:text-[33px]',
+    xs: 'text-[14px] md:text-[16px]', // Large captions, metadata tags, dates (highly legible and prominent)
+    sm: 'text-[16px] md:text-[18px]', // Readable secondary copy, card descriptions, small details
+    md: 'text-[18px] md:text-[20px]', // Standard body reading text (bold, spacious, premium readability)
+    base: 'text-[20px] md:text-[22px]', // Featured body copy, large intro paragraphs
+    lg: 'text-[22px] md:text-[24px]', // Card subtitles, prominent subtitles
+    xl: 'text-[26px] md:text-[30px]', // Large descriptions, section headers
+    '2xl': 'text-[32px] md:text-[40px]', // Hero headers, massive counters, display stats
 }
 
 const fontWeights = {
@@ -63,7 +63,7 @@ const variants = {
     red: 'text-red-600 dark:text-red-400',
     orange: 'text-orange-600 dark:text-orange-400',
     muted: 'text-muted-foreground dark:text-gray-400',
-    caption: 'text-xs text-muted-foreground dark:text-gray-400'
+    caption: 'text-muted-foreground/80 dark:text-gray-400/80'
 }
 
 const alignments = {

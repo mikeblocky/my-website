@@ -3,24 +3,27 @@ import BaseContainer from '@/components/layout/container/base-container'
 import { StackVertical } from '@/components/layout/layout-stack/layout-stack'
 import { SectionFooter } from '@/components/layout/footer/SectionFooter'
 import { SectionPageHeader } from '@/components/layout/page-header/SectionPageHeader'
-import { FriendsClient } from './FriendsClient'
+import { getSearchablePosts } from '@/app/blog/page'
+import { JournalClient } from './_components/JournalClient'
 
 export const metadata: Metadata = {
-	title: 'Friends | mikeblocky.com',
-	description: 'A directory of creators, mutual friends, and connections built along the way.'
+	title: 'Journal | mikeblocky.com',
+	description: 'Explore my essays, daily gratitude logs, and stationery setups.'
 }
 
-export default function FriendsListPage() {
+export default async function JournalPage() {
+	const searchablePosts = getSearchablePosts()
+
 	return (
 		<BaseContainer size="md" paddingX="md" paddingY="lg">
 			<StackVertical gap="lg">
 				<SectionPageHeader
-					title="Friends"
-					description="A directory of wonderful people, creators, and mutual friends I've built connections with along the way."
-					currentLabel="Friends"
+					title="Journal"
+					description="A collection of my thoughts: long-form essays, tech reflections, and daily journal pages."
+					currentLabel="Journal"
 				/>
 
-				<FriendsClient />
+				<JournalClient posts={searchablePosts} />
 			</StackVertical>
 
 			<SectionFooter showToTop={false} />

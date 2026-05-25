@@ -502,7 +502,7 @@ export function TalkBoard({
   return (
     <StackVertical gap="lg">
       {!singleMode && (
-        <div className="rounded-2xl border border-blue-100 bg-blue-50/40 p-5 dark:border-blue-900/30 dark:bg-blue-900/10">
+        <div className="rounded-2xl bg-blue-50/30 dark:bg-blue-900/10 p-5 border-0 shadow-none">
           <div className="flex gap-4">
             <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-blue-100 text-blue-600 dark:bg-blue-500/20 dark:text-blue-400">
               <CornerDownRight size={22} />
@@ -527,7 +527,7 @@ export function TalkBoard({
 
       {!singleMode && (
         <form 
-          className="rounded-2xl border border-border/60 bg-background/90 transition-colors focus-within:border-blue-400 dark:focus-within:border-blue-500" 
+          className="rounded-2xl bg-slate-50 dark:bg-slate-900/60 transition-all duration-200 border-0 focus-within:bg-slate-100/50 dark:focus-within:bg-slate-900" 
           onSubmit={handleSubmit}
         >
           <div className="flex flex-col">
@@ -583,8 +583,8 @@ export function TalkBoard({
             )}
 
             {/* Bottom: Action Bar */}
-            <div className="flex items-center justify-between gap-4 border-t border-border/60 px-4 py-3">
-              <div className="flex items-center gap-4">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-t border-border/60 px-4 py-3.5 mt-2">
+              <div className="flex flex-wrap items-center gap-x-5 gap-y-3">
                 {pushSupported && (
                   <label className="flex items-center gap-2.5 cursor-pointer group/notify select-none">
                     <input
@@ -625,7 +625,7 @@ export function TalkBoard({
                 type="submit" 
                 size="sm"
                 disabled={!formState.body.trim() || isPending || isCooldownActive}
-                className="h-10 px-5 text-sm font-semibold"
+                className="w-full sm:w-auto h-11 px-6 text-sm font-semibold rounded-full"
                 title={isCooldownActive ? `You can send another message in ${cooldownLabel}` : undefined}
               >
                 {isCooldownActive ? cooldownLabel : 'Post message'}
@@ -676,7 +676,7 @@ export function TalkBoard({
                 <article 
                   id={`talk-${talk.id}`} 
                   key={talk.id} 
-                  className="group relative rounded-2xl border border-border/60 bg-background/80 p-6 transition-colors hover:border-blue-500/15 hover:bg-muted/10"
+                  className="group relative rounded-2xl bg-slate-50 dark:bg-slate-900/40 p-6 transition-all duration-200 hover:bg-slate-100/50 dark:hover:bg-slate-900/70 border-0 shadow-none"
                 >
                   <StackVertical gap="sm">
                     {/* Original talk */}
@@ -745,19 +745,19 @@ export function TalkBoard({
                     )}
 
                     {/* Action buttons */}
-                    <div className="talk-actions mt-1 flex justify-end gap-2 opacity-0 transition-opacity group-hover:opacity-100">
+                    <div className="talk-actions mt-4 flex flex-wrap gap-2.5 sm:justify-end opacity-100 transition-all">
                       <button
                         onClick={() => shareAndSnap(talk.id)}
-                        className="flex items-center gap-1.5 rounded-full border border-border/60 bg-background px-3 py-1.5 text-xs font-medium text-slate-500 transition-colors hover:text-blue-600 dark:text-slate-400 dark:hover:text-blue-300"
+                        className="flex items-center gap-2 rounded-full border border-slate-200 bg-slate-100/50 hover:bg-slate-200/50 dark:border-slate-800 dark:bg-slate-900/60 dark:hover:bg-slate-900 px-4.5 py-2.5 text-sm font-semibold text-slate-600 dark:text-slate-350 hover:text-blue-600 dark:hover:text-blue-400 hover:border-blue-300 dark:hover:border-blue-500/50 shadow-sm transition-all"
                       >
-                        <Share2 size={14} />
+                        <Share2 size={15} />
                         {buttonFeedback[`share-${talk.id}`] || 'Share'}
                       </button>
                       <button
                         onClick={() => snapAndCopy(talk.id)}
-                        className="flex items-center gap-1.5 rounded-full border border-border/60 bg-background px-3 py-1.5 text-xs font-medium text-slate-500 transition-colors hover:text-blue-600 dark:text-slate-400 dark:hover:text-blue-300"
+                        className="flex items-center gap-2 rounded-full border border-slate-200 bg-slate-100/50 hover:bg-slate-200/50 dark:border-slate-800 dark:bg-slate-900/60 dark:hover:bg-slate-900 px-4.5 py-2.5 text-sm font-semibold text-slate-600 dark:text-slate-350 hover:text-blue-600 dark:hover:text-blue-400 hover:border-blue-300 dark:hover:border-blue-500/50 shadow-sm transition-all"
                       >
-                        <Camera size={14} />
+                        <Camera size={15} />
                         {buttonFeedback[`snap-${talk.id}`] || 'Snap'}
                       </button>
                       {canFollowUp && (
@@ -768,9 +768,9 @@ export function TalkBoard({
                              setFollowUpImageUrls([])
                              setReplyingTo(null)
                           }}
-                          className="flex items-center gap-1.5 rounded-full border border-emerald-200/70 bg-emerald-50/70 px-3 py-1.5 text-xs font-medium text-emerald-600 transition-colors hover:border-emerald-300 hover:bg-emerald-50 dark:border-emerald-500/20 dark:bg-emerald-500/10 dark:text-emerald-400 dark:hover:border-emerald-500/30 dark:hover:bg-emerald-500/15"
+                          className="flex items-center gap-2 rounded-full border border-emerald-200/60 bg-emerald-50/70 hover:bg-emerald-100/80 px-4.5 py-2.5 text-sm font-semibold text-emerald-600 dark:border-emerald-500/20 dark:bg-emerald-500/10 dark:text-emerald-400 dark:hover:border-emerald-500/30 dark:hover:bg-emerald-500/15 shadow-sm transition-all"
                         >
-                          <CornerDownRight size={14} />
+                          <CornerDownRight size={15} />
                           Follow up
                         </button>
                       )}
@@ -782,9 +782,9 @@ export function TalkBoard({
                              setReplyImageUrls([])
                              setFollowingUp(null)
                           }}
-                          className="flex items-center gap-1.5 rounded-full border border-blue-200/70 bg-blue-50/70 px-3 py-1.5 text-xs font-medium text-blue-600 transition-colors hover:border-blue-300 hover:bg-blue-50 dark:border-blue-500/20 dark:bg-blue-500/10 dark:text-blue-400 dark:hover:border-blue-500/30 dark:hover:bg-blue-500/15"
+                          className="flex items-center gap-2 rounded-full border border-blue-200/60 bg-blue-50/70 hover:bg-blue-100/80 px-4.5 py-2.5 text-sm font-semibold text-blue-600 dark:border-blue-500/20 dark:bg-blue-500/10 dark:text-blue-400 dark:hover:border-blue-500/30 dark:hover:bg-blue-500/15 shadow-sm transition-all"
                         >
-                          <MessageSquareReply size={14} />
+                          <MessageSquareReply size={15} />
                           Reply
                         </button>
                       )}
@@ -1031,7 +1031,12 @@ function ThreadBubble({
   isPending: boolean;
 }) {
   const isAdmin = message.role === 'admin'
-  const indent = (Math.min(depth, 3) + 1) * 16
+  const indentClass = [
+    "ml-2 sm:ml-4",
+    "ml-3 sm:ml-8",
+    "ml-4 sm:ml-12",
+    "ml-5 sm:ml-16"
+  ][Math.min(depth, 3)];
 
   const handleImageUpload = async (file: File, callback: (url: string) => void) => {
     try {
@@ -1043,19 +1048,20 @@ function ThreadBubble({
 
   return (
     <div
-      style={{ marginLeft: isEditing ? '0px' : `${indent}px` }}
+      style={{ marginLeft: isEditing ? '0px' : undefined }}
       className={cn(
-        "group/bubble relative rounded-xl border p-4 transition-all duration-300",
+        "group/bubble relative rounded-xl transition-all duration-300 p-4 border-0 shadow-none",
+        indentClass,
         isAdmin
-          ? "border-blue-200/60 bg-blue-50/30 dark:border-blue-500/15 dark:bg-blue-500/5"
-          : "border-emerald-200/60 bg-emerald-50/30 dark:border-emerald-500/15 dark:bg-emerald-500/5",
-        isEditing && "border-blue-400 ring-4 ring-blue-500/5 dark:border-blue-400/50"
+          ? "bg-blue-50/45 dark:bg-blue-950/20 text-slate-800 dark:text-slate-200"
+          : "bg-emerald-50/45 dark:bg-emerald-950/20 text-slate-800 dark:text-slate-200",
+        isEditing && "ring-2 ring-blue-500/20"
       )}
     >
       {!isEditing && (
         <div 
           className={cn(
-            "absolute -left-4 top-[-16px] bottom-1/2 w-4 border-l-2 border-b-2 rounded-bl-lg pointer-events-none",
+            "hidden sm:block absolute -left-4 top-[-16px] bottom-1/2 w-4 border-l-2 border-b-2 rounded-bl-lg pointer-events-none",
             isAdmin 
               ? "border-blue-200/70 dark:border-blue-500/20" 
               : "border-emerald-200/70 dark:border-emerald-500/20"
@@ -1163,7 +1169,7 @@ function ThreadBubble({
         </div>
       ) : (
         <>
-          <div className={cn(sansFont.className, "text-sm text-slate-700 dark:text-slate-350 leading-relaxed break-words")}>
+          <div className={cn(sansFont.className, "text-sm text-slate-700 dark:text-slate-300 leading-relaxed break-words")}>
             <RichText text={message.body} theme="blue" />
           </div>
           <ImageGallery 

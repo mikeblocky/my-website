@@ -485,7 +485,7 @@ export function DrawBoard({
   return (
     <StackVertical gap="lg">
       {!singleMode && (
-        <div className="rounded-2xl border border-violet-100 bg-violet-50/40 p-5 dark:border-violet-950/30 dark:bg-violet-950/15">
+        <div className="rounded-2xl bg-violet-50/30 dark:bg-violet-900/10 p-5 border-0 shadow-none">
           <div className="flex gap-4">
             <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-violet-100 text-violet-600 dark:bg-violet-950/40 dark:text-violet-400">
               <Palette size={22} className="animate-pulse" />
@@ -510,7 +510,7 @@ export function DrawBoard({
 
       {!singleMode && (
         <form 
-          className="rounded-2xl border border-border/60 bg-background/90 transition-all focus-within:border-violet-400 dark:focus-within:border-violet-500 focus-within:ring-4 focus-within:ring-violet-500/5" 
+          className="rounded-2xl bg-slate-50 dark:bg-slate-900/60 transition-all duration-200 border-0 focus-within:bg-slate-100/50 dark:focus-within:bg-slate-900" 
           onSubmit={handleSubmit}
         >
           <div className="flex flex-col">
@@ -592,8 +592,8 @@ export function DrawBoard({
             )}
 
             {/* Bottom: Action Bar */}
-            <div className="flex items-center justify-between gap-4 border-t border-border/60 px-4 py-3">
-              <div className="flex items-center gap-4">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-t border-border/60 px-4 py-3.5 mt-2">
+              <div className="flex flex-wrap items-center gap-x-5 gap-y-3">
                 <label className="flex items-center gap-1.5 cursor-pointer text-slate-500 hover:text-violet-500 transition-colors select-none">
                   <input
                     type="file"
@@ -619,7 +619,7 @@ export function DrawBoard({
                 type="submit" 
                 size="sm"
                 disabled={!formState.body.trim() || isPending || isCooldownActive}
-                className="h-10 px-5 text-sm font-semibold bg-violet-600 hover:bg-violet-700 text-white dark:bg-violet-600 dark:hover:bg-violet-700"
+                className="w-full sm:w-auto h-11 px-6 text-sm font-semibold rounded-full bg-violet-600 hover:bg-violet-700 text-white dark:bg-violet-600 dark:hover:bg-violet-700 border-0"
                 title={isCooldownActive ? `You can send another prompt in ${cooldownLabel}` : undefined}
               >
                 {isCooldownActive ? cooldownLabel : 'Send prompt'}
@@ -670,7 +670,7 @@ export function DrawBoard({
                 <article 
                   id={`prompt-${prompt.id}`} 
                   key={prompt.id} 
-                  className="group relative rounded-2xl border border-border/60 bg-background/80 p-6 transition-all duration-300 hover:border-violet-500/15 hover:bg-muted/10 hover:shadow-lg hover:shadow-violet-500/[0.01]"
+                  className="group relative rounded-2xl bg-slate-50 dark:bg-slate-900/40 p-6 transition-all duration-200 hover:bg-slate-100/50 dark:hover:bg-slate-900/70 border-0 shadow-none"
                 >
                   <StackVertical gap="sm">
                     {/* Original prompt */}
@@ -754,19 +754,19 @@ export function DrawBoard({
                     )}
 
                     {/* Action buttons */}
-                    <div className="prompt-actions mt-1 flex justify-end gap-2 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                    <div className="prompt-actions mt-4 flex flex-wrap gap-2.5 sm:justify-end opacity-100 transition-all">
                       <button
                         onClick={() => shareAndSnap(prompt.id)}
-                        className="flex items-center gap-1.5 rounded-full border border-border/60 bg-background px-3 py-1.5 text-xs font-medium text-slate-500 transition-colors hover:text-violet-600 dark:text-slate-400 dark:hover:text-violet-300"
+                        className="flex items-center gap-2 rounded-full border border-slate-200 bg-slate-100/50 hover:bg-slate-200/50 dark:border-slate-800 dark:bg-slate-900/60 dark:hover:bg-slate-900 px-4.5 py-2.5 text-sm font-semibold text-slate-600 dark:text-slate-350 hover:text-violet-600 dark:hover:text-violet-400 hover:border-violet-300 dark:hover:border-violet-500/50 shadow-sm transition-all"
                       >
-                        <Share2 size={14} />
+                        <Share2 size={15} />
                         {buttonFeedback[`share-${prompt.id}`] || 'Share'}
                       </button>
                       <button
                         onClick={() => snapAndCopy(prompt.id)}
-                        className="flex items-center gap-1.5 rounded-full border border-border/60 bg-background px-3 py-1.5 text-xs font-medium text-slate-500 transition-colors hover:text-violet-600 dark:text-slate-400 dark:hover:text-violet-300"
+                        className="flex items-center gap-2 rounded-full border border-slate-200 bg-slate-100/50 hover:bg-slate-200/50 dark:border-slate-800 dark:bg-slate-900/60 dark:hover:bg-slate-900 px-4.5 py-2.5 text-sm font-semibold text-slate-600 dark:text-slate-350 hover:text-violet-600 dark:hover:text-violet-400 hover:border-violet-300 dark:hover:border-violet-500/50 shadow-sm transition-all"
                       >
-                        <Camera size={14} />
+                        <Camera size={15} />
                         {buttonFeedback[`snap-${prompt.id}`] || 'Snap'}
                       </button>
                       {canFollowUp && (
@@ -777,9 +777,9 @@ export function DrawBoard({
                              setFollowUpImageUrls([])
                              setReplyingTo(null)
                           }}
-                          className="flex items-center gap-1.5 rounded-full border border-emerald-200/70 bg-emerald-50/70 px-3 py-1.5 text-xs font-medium text-emerald-600 transition-colors hover:border-emerald-300 hover:bg-emerald-50 dark:border-emerald-500/20 dark:bg-emerald-500/10 dark:text-emerald-400 dark:hover:border-emerald-500/30 dark:hover:bg-emerald-500/15"
+                          className="flex items-center gap-2 rounded-full border border-emerald-200/60 bg-emerald-50/70 hover:bg-emerald-100/80 px-4.5 py-2.5 text-sm font-semibold text-emerald-600 dark:border-emerald-500/20 dark:bg-emerald-500/10 dark:text-emerald-400 dark:hover:border-emerald-500/30 dark:hover:bg-emerald-500/15 shadow-sm transition-all"
                         >
-                          <CornerDownRight size={14} />
+                          <CornerDownRight size={15} />
                           Follow up
                         </button>
                       )}
@@ -791,9 +791,9 @@ export function DrawBoard({
                              setReplyImageUrls([])
                              setFollowingUp(null)
                           }}
-                          className="flex items-center gap-1.5 rounded-full border border-violet-200/70 bg-violet-50/70 px-3 py-1.5 text-xs font-medium text-violet-600 transition-colors hover:border-violet-300 hover:bg-violet-50 dark:border-violet-500/20 dark:bg-violet-500/10 dark:text-violet-400 dark:hover:border-violet-500/30 dark:hover:bg-violet-500/15"
+                          className="flex items-center gap-2 rounded-full border border-violet-200/60 bg-violet-50/70 hover:bg-violet-100/80 px-4.5 py-2.5 text-sm font-semibold text-violet-600 dark:border-violet-500/20 dark:bg-violet-500/10 dark:text-violet-400 dark:hover:border-violet-500/30 dark:hover:bg-violet-500/15 shadow-sm transition-all"
                         >
-                          <MessageSquareReply size={14} />
+                          <MessageSquareReply size={15} />
                           Reply
                         </button>
                       )}
@@ -1040,7 +1040,12 @@ function ThreadBubble({
   isPending: boolean;
 }) {
   const isAdmin = message.role === 'admin'
-  const indent = (Math.min(depth, 3) + 1) * 16
+  const indentClass = [
+    "ml-2 sm:ml-4",
+    "ml-3 sm:ml-8",
+    "ml-4 sm:ml-12",
+    "ml-5 sm:ml-16"
+  ][Math.min(depth, 3)];
 
   const handleImageUpload = async (file: File, callback: (url: string) => void) => {
     try {
@@ -1052,19 +1057,20 @@ function ThreadBubble({
 
   return (
     <div
-      style={{ marginLeft: isEditing ? '0px' : `${indent}px` }}
+      style={{ marginLeft: isEditing ? '0px' : undefined }}
       className={cn(
-        "group/bubble relative rounded-xl border p-4 transition-all duration-300",
+        "group/bubble relative rounded-xl transition-all duration-300 p-4 border-0 shadow-none",
+        indentClass,
         isAdmin
-          ? "border-violet-200/60 bg-violet-50/30 dark:border-violet-500/15 dark:bg-violet-500/5"
-          : "border-emerald-200/60 bg-emerald-50/30 dark:border-emerald-500/15 dark:bg-emerald-500/5",
-        isEditing && "border-violet-400 ring-4 ring-violet-500/5 dark:border-violet-400/50"
+          ? "bg-violet-50/45 dark:bg-violet-950/20 text-slate-800 dark:text-slate-200"
+          : "bg-emerald-50/45 dark:bg-emerald-950/20 text-slate-800 dark:text-slate-200",
+        isEditing && "ring-2 ring-violet-500/20"
       )}
     >
       {!isEditing && (
         <div 
           className={cn(
-            "absolute -left-4 top-[-16px] bottom-1/2 w-4 border-l-2 border-b-2 rounded-bl-lg pointer-events-none",
+            "hidden sm:block absolute -left-4 top-[-16px] bottom-1/2 w-4 border-l-2 border-b-2 rounded-bl-lg pointer-events-none",
             isAdmin 
               ? "border-violet-200/70 dark:border-violet-500/20" 
               : "border-emerald-200/70 dark:border-emerald-500/20"
@@ -1172,7 +1178,7 @@ function ThreadBubble({
         </div>
       ) : (
         <>
-          <div className={cn(sansFont.className, "text-sm leading-relaxed text-slate-700 dark:text-slate-350 break-words")}>
+          <div className={cn(sansFont.className, "text-sm leading-relaxed text-slate-700 dark:text-slate-300 break-words")}>
             <RichText text={message.body} theme="violet" />
           </div>
           <ImageGallery 

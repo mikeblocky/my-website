@@ -5,6 +5,8 @@ import { imageSize } from 'image-size'
 export type ArtworkItem = {
 	src: string
 	isPortrait: boolean
+	width: number
+	height: number
 }
 
 export type ArtworkSectionConfig = {
@@ -38,7 +40,9 @@ export function getArtworkItems(folder: string): ArtworkItem[] {
 
 		return {
 			src: `/artworks/${folder}/${encodedFileName}`,
-			isPortrait
+			isPortrait,
+			width: dimensions.width ?? 800,
+			height: dimensions.height ?? 1000
 		}
 	})
 

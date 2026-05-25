@@ -34,14 +34,12 @@ export function Navbar() {
     const [isMenuOpen, setIsMenuOpen] = useState(false)
 
     const links = [
+        { href: '/', label: 'Home' },
         { href: '/about', label: 'About' },
-        { href: '/blog', label: 'Blog' },
-        { href: '/artworks', label: 'Artworks' },
-        { href: '/diary', label: 'Diary' },
-        { href: '/talk', label: 'Talk' },
-        { href: '/draw', label: 'Draw prompts' },
-        { href: '/friends', label: 'Friend list' },
-        { href: '/stats', label: 'Drawing stats' }
+        { href: '/artworks', label: 'Gallery' },
+        { href: '/journal', label: 'Journal' },
+        { href: '/friends', label: 'Friends' },
+        { href: '/interact', label: 'Interact' }
     ]
 
     // Close menu when clicking outside
@@ -126,10 +124,9 @@ export function Navbar() {
                                 className={cn(
                                     "absolute top-12 left-[-8px] z-[60]",
                                     "min-w-[200px] w-auto",
-                                    "bg-background/90 dark:bg-gray-950/90",
-                                    "backdrop-blur-md",
-                                    "rounded-xl border border-border/60",
-                                    "shadow-lg shadow-black/5",
+                                    "bg-white dark:bg-slate-900",
+                                    "rounded-lg border-2 border-slate-200 dark:border-slate-800",
+                                    "shadow-none",
                                     "overflow-hidden"
                                 )}
                             >
