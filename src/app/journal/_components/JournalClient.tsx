@@ -35,6 +35,8 @@ interface JournalClientProps {
 
 type Tab = 'essays' | 'notes' | 'utensils' | 'activity'
 
+const JOURNAL_CLIENT_VERSION = 'journal-client-2026-05-25-cache-bust-1'
+
 export function JournalClient({ posts }: JournalClientProps) {
 	const [activeTab, setActiveTab] = useState<Tab>('essays')
 	const monthGroups = getDaysByMonth()
@@ -197,7 +199,7 @@ export function JournalClient({ posts }: JournalClientProps) {
 	}
 
 	return (
-		<div className="space-y-8">
+		<div className="space-y-8" data-journal-client-version={JOURNAL_CLIENT_VERSION}>
 			{/* Sub-navigation Tabs - flat categories pill styles */}
 			<div className="flex flex-wrap gap-2 pb-1">
 				{tabs.map((tab) => (
