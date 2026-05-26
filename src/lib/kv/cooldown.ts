@@ -2,8 +2,8 @@ import { createHash } from 'crypto'
 import { NextRequest } from 'next/server'
 import { getRedisClient } from './client'
 
-export const MESSAGE_COOLDOWN_MINUTES = 333
-export const MESSAGE_COOLDOWN_MS = MESSAGE_COOLDOWN_MINUTES * 60 * 1000
+export const MESSAGE_COOLDOWN_SECONDS = 333
+export const MESSAGE_COOLDOWN_MS = MESSAGE_COOLDOWN_SECONDS * 1000
 
 export type CooldownScope = 'talk' | 'draw' | 'suggestion'
 

@@ -164,15 +164,79 @@ function extractExtraDetails(html: string, url: string) {
   return { episodes, chapters, author, releaseDate, rating }
 }
 
+async function resolveSearchToDirectUrl(urlStr: string): Promise<string> {
+  const isMalManga = urlStr.includes('myanimelist.net/manga.php')
+  const isMalAnime = urlStr.includes('myanimelist.net/anime.php')
+  const isImdb = urlStr.includes('imdb.com/find')
+  const isGoodreads = urlStr.includes('goodreads.com/search')
+  const isSteam = urlStr.includes('steampowered.com/search')
+  
+  if (!isMalManga && !isMalAnime && !isImdb && !isGoodreads && !isSteam) {
+    return urlStr
+  }
+  
+  try {
+    const response = await fetch(urlStr, {
+      headers: {
+        'User-Agent': 'mikeblocky.com suggestion reference resolver'
+      },
+      signal: AbortSignal.timeout(5000)
+    })
+    if (!response.ok) return urlStr
+    
+    const html = await response.text()
+    
+    if (isMalManga) {
+      const match = html.match(/href=["'](https:\/\/myanimelist\.net\/manga\/\d+\/[^"']+)["']/i)
+      if (match) return match[1]
+    }
+    
+    if (isMalAnime) {
+      const match = html.match(/href=["'](https:\/\/myanimelist\.net\/anime\/\d+\/[^"']+)["']/i)
+      if (match) return match[1]
+    }
+    
+    if (isImdb) {
+      const match = html.match(/href=["'](\/title\/tt\d+\/[^"']*)["']/i)
+      if (match) {
+        return `https://www.imdb.com${match[1]}`
+      }
+    }
+    
+    if (isGoodreads) {
+      const match = html.match(/href=["'](\/book\/show\/\d+[^"']*)["']/i)
+      if (match) {
+        return `https://www.goodreads.com${match[1]}`
+      }
+    }
+    
+    if (isSteam) {
+      const match = html.match(/href=["'](https:\/\/store\.steampowered\.com\/app\/\d+\/[^"']+)["']/i)
+      if (match) return match[1]
+    }
+  } catch (error) {
+    console.error('Failed to resolve search URL:', error)
+  }
+  
+  return urlStr
+}
+
 export async function GET(request: NextRequest) {
   const urlParam = request.nextUrl.searchParams.get('url')
   if (!urlParam) {
     return NextResponse.json({ error: 'Missing URL' }, { status: 400 })
   }
 
+  let resolvedUrlStr = urlParam
+  try {
+    resolvedUrlStr = await resolveSearchToDirectUrl(urlParam)
+  } catch (_error) {
+    // Fail silently and use original URL
+  }
+
   let url: URL
   try {
-    url = new URL(urlParam)
+    url = new URL(resolvedUrlStr)
   } catch (_error) {
     return NextResponse.json({ error: 'Invalid URL' }, { status: 400 })
   }
