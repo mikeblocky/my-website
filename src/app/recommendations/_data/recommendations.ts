@@ -182,7 +182,7 @@ export const recommendationGroups: Record<RecommendationTab, {
 				thought: 'I like the roughness in their music. It can sound fragile and messy at the same time, like the song is still deciding whether it wants to fall apart or push forward.',
 				links: [
 					{ label: 'Official site', url: 'https://www.lowertown.band/' },
-					{ label: 'Instagram', url: 'https://www.instagram.com/lowertown/' }
+					{ label: 'Instagram', url: 'https://www.instagram.com/lowrtown/' }
 				]
 			},
 			{

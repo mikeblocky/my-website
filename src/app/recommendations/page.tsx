@@ -3,16 +3,16 @@ import { SectionPageShell } from '@/components/layout/page-shell/SectionPageShel
 import { RecommendationsClient } from './_components/RecommendationsClient'
 
 export const metadata: Metadata = {
-  title: 'Recommendations | mikeblocky.com',
-  description: 'A personal list of favorite manga, anime, books, games, and music.'
+  title: 'Favorites | mikeblocky.com',
+  description: 'A personal list of favorite manga, anime, games, and music.'
 }
 
 export default function RecommendationsPage() {
   return (
     <SectionPageShell
-      title="Recommendations"
+      title="Favorites"
       description="A personal shelf of favorite media I keep returning to: manga, anime, books, games, and music."
-      currentLabel="Recommendations"
+      currentLabel="Favorites"
       footerColor="teal"
     >
       <RecommendationsClient />
