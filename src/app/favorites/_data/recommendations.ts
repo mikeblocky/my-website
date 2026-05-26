@@ -65,6 +65,20 @@ export const recommendationGroups: Record<RecommendationTab, {
 					{ label: 'Latest volume', url: 'https://www.kadokawa.co.jp/product/322407001875/' },
 					{ label: 'pixiv Comic', url: 'https://comic.pixiv.net/works/5306' }
 				]
+			},
+			{
+				title: 'Toilet-bound Hanako-kun',
+				creator: 'AidaIro',
+				category: 'manga',
+				medium: 'Manga',
+				status: 'Highly recommended',
+				imageUrl: '/recommendations/hanako-kun.jpg',
+				thought: 'I am completely captivated by the gorgeous, intricate art style that feels like a dark fairytale come to life. Underneath the playful rumors of school ghosts, there is a beautifully bittersweet and deeply emotional story about life, death, and human connection that stays with you long after reading.',
+				links: [
+					{ label: 'Official Japanese site', url: 'https://magazine.jp.square-enix.com/gfantasy/story/hanakokun/' },
+					{ label: 'Yen Press English site', url: 'https://yenpress.com/series/toilet-bound-hanako-kun' },
+					{ label: 'Creator X (Twitter)', url: 'https://x.com/aidairo2' }
+				]
 			}
 		],
 	},
@@ -119,6 +133,19 @@ export const recommendationGroups: Record<RecommendationTab, {
 				thought: 'The world is empty, but the show never feels empty to me. I like the little routines: eating, moving, talking, wondering. It makes the end of everything feel quiet, warm, and strangely full of traces people left behind.',
 				links: [
 					{ label: 'Official site', url: 'https://girls-last-tour.com/' }
+				]
+			},
+			{
+				title: 'Toilet-bound Hanako-kun',
+				creator: 'Lerche',
+				category: 'anime',
+				medium: 'Anime',
+				status: 'Recommended watch',
+				imageUrl: '/recommendations/hanako-kun.jpg',
+				thought: 'The anime does a stunning job translating AidaIro\'s distinct, vintage-inspired art style and bold line work into motion. The vibrant, warm-toned color palettes and whimsical yet eerie atmosphere create an incredibly unique viewing experience.',
+				links: [
+					{ label: 'Official TBS site', url: 'https://www.tbs.co.jp/anime/hanakokun/' },
+					{ label: 'Official Anime X', url: 'https://x.com/hanakokun_info' }
 				]
 			}
 		],
@@ -238,6 +265,20 @@ export const recommendationGroups: Record<RecommendationTab, {
 				links: [
 					{ label: 'KLEW', url: 'https://klew.jp/artists/kurayamisaka' },
 					{ label: 'Linktree', url: 'https://linktr.ee/kurayamisaka.band' }
+				]
+			},
+			{
+				title: 'Alex G',
+				creator: 'Alex G',
+				category: 'music',
+				medium: 'Solo Project',
+				status: 'All-time favorite',
+				imageUrl: '/recommendations/alex-g.jpg',
+				thought: 'His music has this raw, home-recorded intimacy that feels both deeply comforting and hauntingly nostalgic. He masterfully blends indie folk with experimental and lo-fi textures, creating melodies that are simple at first but reveal layered complexity the more you listen.',
+				links: [
+					{ label: 'Official site', url: 'https://sandyalexg.com' },
+					{ label: 'Bandcamp', url: 'https://sandy.bandcamp.com' },
+					{ label: 'Instagram', url: 'https://www.instagram.com/sandyalexg/' }
 				]
 			}
 		],
