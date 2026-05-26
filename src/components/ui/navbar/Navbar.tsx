@@ -39,6 +39,7 @@ export function Navbar() {
         { href: '/artworks', label: 'Gallery' },
         { href: '/journal', label: 'Journal' },
         { href: '/friends', label: 'Friends' },
+        { href: '/recommendations', label: 'Recommendations' },
         { href: '/interact', label: 'Interact' }
     ]
 
