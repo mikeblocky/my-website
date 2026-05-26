@@ -42,6 +42,8 @@ export function Navbar() {
         { href: '/interact', label: 'Interact' }
     ]
 
+    // Force Next.js dev server/HMR to bust the Navbar module cache: v2
+
     // Close menu when clicking outside
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {

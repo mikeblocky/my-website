@@ -502,30 +502,6 @@ export function TalkBoard({
   return (
     <StackVertical gap="lg">
       {!singleMode && (
-        <div className="rounded-2xl bg-blue-50/30 dark:bg-blue-900/10 p-5 border-0 shadow-none">
-          <div className="flex gap-4">
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-blue-100 text-blue-600 dark:bg-blue-500/20 dark:text-blue-400">
-              <CornerDownRight size={22} />
-            </div>
-            <div className="space-y-1">
-              <div className="flex items-center gap-2">
-                <h4 className={cn(sansFont.className, "text-sm font-bold text-blue-900 dark:text-blue-100")}>
-                  Threaded conversations
-                </h4>
-                <span className="rounded-full bg-blue-600 px-1.5 py-0.5 text-[9px] font-bold tracking-wider text-white">
-                  New
-                </span>
-              </div>
-              <p className={cn(sansFont.className, "text-xs text-blue-800/70 dark:text-blue-300/70 leading-relaxed")}>
-                You can now follow up on any discussion! Click the <b>Follow up</b> button to reply more!
-                Threads with active notifications show a <b><Bell size={10} className="inline mb-0.5" /> bell</b> icon.
-              </p>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {!singleMode && (
         <form 
           className="rounded-2xl bg-slate-50 dark:bg-slate-900/60 transition-all duration-200 border-0 focus-within:bg-slate-100/50 dark:focus-within:bg-slate-900" 
           onSubmit={handleSubmit}

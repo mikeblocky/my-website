@@ -485,30 +485,6 @@ export function DrawBoard({
   return (
     <StackVertical gap="lg">
       {!singleMode && (
-        <div className="rounded-2xl bg-violet-50/30 dark:bg-violet-900/10 p-5 border-0 shadow-none">
-          <div className="flex gap-4">
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-violet-100 text-violet-600 dark:bg-violet-950/40 dark:text-violet-400">
-              <Palette size={22} className="animate-pulse" />
-            </div>
-            <div className="space-y-1">
-              <div className="flex items-center gap-2">
-                <h4 className={cn(sansFont.className, "text-sm font-bold text-violet-900 dark:text-violet-100")}>
-                  Suggest a drawing!
-                </h4>
-                <span className="rounded-full bg-violet-600 px-1.5 py-0.5 text-[9px] font-bold tracking-wider text-white">
-                  Creative
-                </span>
-              </div>
-              <p className={cn(sansFont.className, "text-xs text-violet-800/70 dark:text-violet-300/70 leading-relaxed")}>
-                Looking for new inspiration! Suggest a drawing prompt, scene, or character idea below. 
-                I will respond to prompts by discussing or linking my completed sketches directly in the threads.
-              </p>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {!singleMode && (
         <form 
           className="rounded-2xl bg-slate-50 dark:bg-slate-900/60 transition-all duration-200 border-0 focus-within:bg-slate-100/50 dark:focus-within:bg-slate-900" 
           onSubmit={handleSubmit}

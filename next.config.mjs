@@ -59,19 +59,15 @@ const nextConfig = {
         destination: '/interact',
         permanent: true,
       },
+      {
+        source: '/suggestions',
+        destination: '/interact?tab=suggestions',
+        permanent: true,
+      },
     ]
   },
   async headers() {
-    return [
-      {
-        source: '/_next/static/:path*',
-        headers: [
-          {
-            key: 'Cache-Control',
-            value: 'public, max-age=31536000, immutable, no-transform',
-          },
-        ],
-      },
+    const headers = [
       {
         source: '/journal',
         headers: [
@@ -107,6 +103,20 @@ const nextConfig = {
         ],
       },
     ]
+
+    if (process.env.NODE_ENV === 'production') {
+      headers.unshift({
+        source: '/_next/static/:path*',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable, no-transform',
+          },
+        ],
+      })
+    }
+
+    return headers
   },
 }
  

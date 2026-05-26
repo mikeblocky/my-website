@@ -6,13 +6,16 @@ import { cn } from '@/lib/utils/utils'
 import { useSearchParams } from 'next/navigation'
 import { TalkBoard } from '@/app/talk/_components/TalkBoard'
 import { DrawBoard } from '@/app/draw/_components/DrawBoard'
+import { SuggestionsBoard } from '@/app/suggestions/_components/SuggestionsBoard'
 
-type Tab = 'guestbook' | 'prompts'
+type Tab = 'guestbook' | 'prompts' | 'suggestions'
 
 export function InteractClient() {
 	const searchParams = useSearchParams()
 	const tabParam = searchParams.get('tab')
-	const [activeTab, setActiveTab] = useState<Tab>(tabParam === 'prompts' ? 'prompts' : 'guestbook')
+	const [activeTab, setActiveTab] = useState<Tab>(
+		tabParam === 'prompts' ? 'prompts' : tabParam === 'suggestions' ? 'suggestions' : 'guestbook'
+	)
 
 	useEffect(() => {
 		const tab = searchParams.get('tab')
@@ -20,6 +23,8 @@ export function InteractClient() {
 			setActiveTab('prompts')
 		} else if (tab === 'guestbook') {
 			setActiveTab('guestbook')
+		} else if (tab === 'suggestions') {
+			setActiveTab('suggestions')
 		} else if (typeof window !== 'undefined' && window.location.hash) {
 			if (window.location.hash.startsWith('#prompt-')) {
 				setActiveTab('prompts')
@@ -31,7 +36,8 @@ export function InteractClient() {
 
 	const tabs = [
 		{ id: 'guestbook' as Tab, label: 'Guestbook board' },
-		{ id: 'prompts' as Tab, label: 'Drawing prompts' }
+		{ id: 'prompts' as Tab, label: 'Drawing prompts' },
+		{ id: 'suggestions' as Tab, label: 'Media suggestions' }
 	]
 
 	return (
@@ -64,27 +70,15 @@ export function InteractClient() {
 				transition={{ duration: 0.15 }}
 			>
 				{activeTab === 'guestbook' && (
-					<div className="space-y-4">
-						<div className="mb-4">
-							<h3 className="text-lg font-semibold text-slate-800 dark:text-slate-100">Guestbook board</h3>
-							<p className="text-sm text-muted-foreground leading-relaxed mt-1">
-								Share recommendations, ask questions, leave a kind message, or talk about anything!
-							</p>
-						</div>
-						<TalkBoard />
-					</div>
+					<TalkBoard />
 				)}
 
 				{activeTab === 'prompts' && (
-					<div className="space-y-4">
-						<div className="mb-4">
-							<h3 className="text-lg font-semibold text-slate-800 dark:text-slate-100">Drawing prompt suggestions</h3>
-							<p className="text-sm text-muted-foreground leading-relaxed mt-1">
-								Suggest a scene, setting, character, or concept you'd love to see drawn next.
-							</p>
-						</div>
-						<DrawBoard />
-					</div>
+					<DrawBoard />
+				)}
+
+				{activeTab === 'suggestions' && (
+					<SuggestionsBoard />
 				)}
 			</motion.div>
 		</div>

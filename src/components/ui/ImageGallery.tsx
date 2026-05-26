@@ -6,7 +6,7 @@ import { cn } from '@/lib/utils/utils';
 
 interface ImageGalleryProps {
   urls: string[];
-  theme?: 'blue' | 'violet';
+  theme?: 'blue' | 'violet' | 'teal' | 'amber';
 }
 
 // Flat Skeleton and smooth fade-in image wrapper to avoid layout shift

@@ -2,7 +2,6 @@ import './globals.css'
 import type { Metadata } from 'next'
 import { ThemeProvider } from '@/components/ui/theme/theme-provider'
 import { cn } from '@/lib/utils/utils'
-import Script from 'next/script'
 import { monoFont, sansFont, codeFont } from '@/styles/fonts/fonts'
 import { PageTransition } from '@/components/layout/page-transition/PageTransition'
 
@@ -49,45 +48,6 @@ export default function RootLayout({
       <body className={cn(
         "h-full bg-background transition-colors duration-300"
       )}>
-        <Script
-          id="chunk-load-recovery"
-          strategy="beforeInteractive"
-          dangerouslySetInnerHTML={{
-            __html: `
-(function () {
-  var reloadKey = 'mikeblocky-chunk-reload';
-  function getReloaded() {
-    try { return sessionStorage.getItem(reloadKey) === '1'; } catch (error) { return false; }
-  }
-  function setReloaded() {
-    try { sessionStorage.setItem(reloadKey, '1'); } catch (error) {}
-  }
-  function clearReloaded() {
-    try { sessionStorage.removeItem(reloadKey); } catch (error) {}
-  }
-  function isChunkLoadFailure(reason) {
-    var message = String((reason && (reason.message || reason.reason || reason.error)) || reason || '');
-    return message.indexOf('ChunkLoadError') !== -1 || /Loading chunk .* failed/i.test(message) || /Failed to load chunk/i.test(message);
-  }
-  function recover(reason) {
-    if (!isChunkLoadFailure(reason)) return;
-    if (getReloaded()) return;
-    setReloaded();
-    window.location.reload();
-  }
-  window.addEventListener('error', function (event) {
-    recover(event.error || event.message);
-  });
-  window.addEventListener('unhandledrejection', function (event) {
-    recover(event.reason);
-  });
-  window.addEventListener('load', function () {
-    clearReloaded();
-  });
-})();
-            `,
-          }}
-        />
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
