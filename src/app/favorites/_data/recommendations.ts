@@ -1,6 +1,6 @@
 import type { SuggestionCategory } from '@/app/suggestions/_types/suggestion'
 
-export type RecommendationTab = 'manga' | 'anime' | 'games' | 'music'
+export type RecommendationTab = 'manga' | 'anime' | 'films' | 'games' | 'music'
 
 export interface RecommendationLink {
 	label: string
@@ -119,6 +119,48 @@ export const recommendationGroups: Record<RecommendationTab, {
 				thought: 'The world is empty, but the show never feels empty to me. I like the little routines: eating, moving, talking, wondering. It makes the end of everything feel quiet, warm, and strangely full of traces people left behind.',
 				links: [
 					{ label: 'Official site', url: 'https://girls-last-tour.com/' }
+				]
+			}
+		],
+	},
+	films: {
+		label: 'Films',
+		tag: 'Watch',
+		items: [
+			{
+				title: 'Four Adventures of Reinette and Mirabelle',
+				creator: 'Eric Rohmer',
+				category: 'film',
+				medium: 'Film',
+				status: 'Quiet favorite',
+				imageUrl: '/recommendations/four-adventures.webp',
+				thought: 'I like how small this movie feels on purpose. It is just two people meeting, talking, misunderstanding each other, and noticing the world in different ways. The charm is in how light it seems until one little conversation stays with you.',
+				links: [
+					{ label: 'MUBI', url: 'https://mubi.com/en/us/films/four-adventures-of-reinette-and-mirabelle' }
+				]
+			},
+			{
+				title: 'Everything Everywhere All at Once',
+				creator: 'Daniels',
+				category: 'film',
+				medium: 'Film',
+				status: 'Favorite',
+				imageUrl: '/recommendations/eeaao.jpg',
+				thought: 'I love how messy and loud this is while still being so simple at the center. Under all the universes and jokes, it is really about being tired, loving badly, and still trying to choose kindness when everything feels impossible.',
+				links: [
+					{ label: 'A24', url: 'https://a24films.com/films/everything-everywhere-all-at-once' }
+				]
+			},
+			{
+				title: 'Perfect Days',
+				creator: 'Wim Wenders',
+				category: 'film',
+				medium: 'Film',
+				status: 'Quiet favorite',
+				imageUrl: '/recommendations/perfect-days.webp',
+				thought: 'This movie makes routine feel almost sacred. I like how it pays attention to small repeated things without pretending they solve loneliness. It just shows a life being lived carefully, with little flashes of beauty passing through it.',
+				links: [
+					{ label: 'Official site', url: 'https://www.perfectdays-movie.jp/en/' }
 				]
 			}
 		],
