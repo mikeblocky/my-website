@@ -15,6 +15,22 @@ export type SuggestionReference = {
   image?: string
   siteName?: string
   type?: string
+  episodes?: string
+  chapters?: string
+  author?: string
+  releaseDate?: string
+  rating?: string
+}
+
+export type SuggestionStatus = 'planning' | 'progressing' | 'completed' | 'dropped'
+
+export type SuggestionThreadMessage = {
+  id: string
+  role: 'asker' | 'admin'
+  body: string
+  createdAt: string
+  imageUrl?: string
+  imageUrls?: string[]
 }
 
 export type MediaSuggestion = {
@@ -28,4 +44,6 @@ export type MediaSuggestion = {
   createdAt: string
   imageUrl?: string
   imageUrls?: string[]
+  status?: SuggestionStatus
+  thread?: SuggestionThreadMessage[]
 }

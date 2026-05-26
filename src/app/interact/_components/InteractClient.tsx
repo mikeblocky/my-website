@@ -16,6 +16,9 @@ export function InteractClient() {
 	const [activeTab, setActiveTab] = useState<Tab>(
 		tabParam === 'prompts' ? 'prompts' : tabParam === 'suggestions' ? 'suggestions' : 'guestbook'
 	)
+	
+	const [passcode, setPasscode] = useState('')
+	const [isAdminMode, setIsAdminMode] = useState(false)
 
 	useEffect(() => {
 		const tab = searchParams.get('tab')
@@ -70,15 +73,30 @@ export function InteractClient() {
 				transition={{ duration: 0.15 }}
 			>
 				{activeTab === 'guestbook' && (
-					<TalkBoard />
+					<TalkBoard 
+						isAdminMode={isAdminMode} 
+						setIsAdminMode={setIsAdminMode} 
+						passcode={passcode} 
+						setPasscode={setPasscode} 
+					/>
 				)}
 
 				{activeTab === 'prompts' && (
-					<DrawBoard />
+					<DrawBoard 
+						isAdminMode={isAdminMode} 
+						setIsAdminMode={setIsAdminMode} 
+						passcode={passcode} 
+						setPasscode={setPasscode} 
+					/>
 				)}
 
 				{activeTab === 'suggestions' && (
-					<SuggestionsBoard />
+					<SuggestionsBoard 
+						isAdminMode={isAdminMode} 
+						setIsAdminMode={setIsAdminMode} 
+						passcode={passcode} 
+						setPasscode={setPasscode} 
+					/>
 				)}
 			</motion.div>
 		</div>

@@ -1,4 +1,4 @@
-import { MediaSuggestion } from '@/app/suggestions/_types/suggestion'
+import { MediaSuggestion, SuggestionStatus, SuggestionThreadMessage } from '@/app/suggestions/_types/suggestion'
 import { getRedisClient, suggestionsKey } from './client'
 
 const MAX_STORED_SUGGESTIONS = 250
@@ -23,7 +23,8 @@ export function buildSuggestionPayload(partial: {
     reference: partial.reference,
     createdAt: new Date().toISOString(),
     imageUrl: partial.imageUrl,
-    imageUrls: partial.imageUrls
+    imageUrls: partial.imageUrls,
+    thread: []
   }
 }
 
@@ -54,4 +55,186 @@ export async function fetchSuggestions(limit = 100): Promise<MediaSuggestion[]> 
       }
     })
     .filter(Boolean) as MediaSuggestion[]
+}
+
+export async function updateSuggestionStatus(
+  id: string,
+  status: SuggestionStatus
+): Promise<MediaSuggestion | null> {
+  const redis = await getRedisClient()
+  const raw = await redis.zRange(suggestionsKey, 0, -1)
+
+  let targetSuggestion: MediaSuggestion | null = null
+  let originalMember: string | null = null
+
+  for (const entry of raw) {
+    try {
+      const parsed = JSON.parse(entry) as MediaSuggestion
+      if (parsed.id === id) {
+        targetSuggestion = parsed
+        originalMember = entry
+        break
+      }
+    } catch (_error) {}
+  }
+
+  if (!targetSuggestion || !originalMember) return null
+
+  // Remove the old entry
+  await redis.zRem(suggestionsKey, originalMember)
+
+  // Update the status
+  targetSuggestion.status = status
+
+  // Add the new entry back with the same score (timestamp)
+  const score = new Date(targetSuggestion.createdAt).getTime()
+  await redis.zAdd(suggestionsKey, [{ score, value: JSON.stringify(targetSuggestion) }])
+
+  return targetSuggestion
+}
+
+export async function replyToSuggestion(
+  id: string,
+  replyBody: string,
+  imageUrl?: string,
+  imageUrls?: string[]
+): Promise<MediaSuggestion | null> {
+  const redis = await getRedisClient()
+  const rawAll = await redis.zRange(suggestionsKey, 0, -1)
+
+  let targetSuggestion: MediaSuggestion | null = null
+  let originalMember: string | null = null
+
+  for (const entry of rawAll) {
+    try {
+      const parsed = JSON.parse(entry) as MediaSuggestion
+      if (parsed.id === id) {
+        targetSuggestion = parsed
+        originalMember = entry
+        break
+      }
+    } catch (_error) {}
+  }
+
+  if (!targetSuggestion || !originalMember) return null
+
+  const now = new Date().toISOString()
+  const newMessage: SuggestionThreadMessage = {
+    id: Math.random().toString(36).substring(2, 11),
+    role: 'admin',
+    body: replyBody.trim(),
+    createdAt: now,
+    imageUrl,
+    imageUrls
+  }
+
+  const updatedSuggestion: MediaSuggestion = {
+    ...targetSuggestion,
+    thread: [...(targetSuggestion.thread || []), newMessage]
+  }
+
+  await redis.zRem(suggestionsKey, originalMember)
+  const score = new Date(targetSuggestion.createdAt).getTime()
+  await redis.zAdd(suggestionsKey, [{ score, value: JSON.stringify(updatedSuggestion) }])
+
+  return updatedSuggestion
+}
+
+export async function followUpSuggestion(
+  id: string,
+  followUpBody: string,
+  imageUrl?: string,
+  imageUrls?: string[]
+): Promise<MediaSuggestion | null> {
+  const redis = await getRedisClient()
+  const rawAll = await redis.zRange(suggestionsKey, 0, -1)
+
+  let targetSuggestion: MediaSuggestion | null = null
+  let originalMember: string | null = null
+
+  for (const entry of rawAll) {
+    try {
+      const parsed = JSON.parse(entry) as MediaSuggestion
+      if (parsed.id === id) {
+        targetSuggestion = parsed
+        originalMember = entry
+        break
+      }
+    } catch (_error) {}
+  }
+
+  if (!targetSuggestion || !originalMember) return null
+
+  // Must have at least one admin reply before a visitor can follow up (matching other boards)
+  const hasAdminReply = targetSuggestion.thread?.some(m => m.role === 'admin')
+  if (!hasAdminReply) return null
+
+  const newMessage: SuggestionThreadMessage = {
+    id: Math.random().toString(36).substring(2, 11),
+    role: 'asker',
+    body: followUpBody.trim(),
+    createdAt: new Date().toISOString(),
+    imageUrl,
+    imageUrls
+  }
+
+  const updatedSuggestion: MediaSuggestion = {
+    ...targetSuggestion,
+    thread: [...(targetSuggestion.thread || []), newMessage]
+  }
+
+  await redis.zRem(suggestionsKey, originalMember)
+  const score = new Date(targetSuggestion.createdAt).getTime()
+  await redis.zAdd(suggestionsKey, [{ score, value: JSON.stringify(updatedSuggestion) }])
+
+  return updatedSuggestion
+}
+
+export async function updateSuggestionThreadMessage(
+  suggestionId: string,
+  messageId: string,
+  newBody: string,
+  newImageUrl?: string,
+  newImageUrls?: string[]
+): Promise<MediaSuggestion | null> {
+  const redis = await getRedisClient()
+  const rawAll = await redis.zRange(suggestionsKey, 0, -1)
+
+  let targetSuggestion: MediaSuggestion | null = null
+  let originalMember: string | null = null
+
+  for (const entry of rawAll) {
+    try {
+      const parsed = JSON.parse(entry) as MediaSuggestion
+      if (parsed.id === suggestionId) {
+        targetSuggestion = parsed
+        originalMember = entry
+        break
+      }
+    } catch (_error) {}
+  }
+
+  if (!targetSuggestion || !targetSuggestion.thread || !originalMember) return null
+
+  const messageIndex = targetSuggestion.thread.findIndex(m => m.id === messageId)
+  if (messageIndex === -1) return null
+
+  const updatedThread = [...targetSuggestion.thread]
+  updatedThread[messageIndex] = {
+    ...updatedThread[messageIndex],
+    body: newBody.trim(),
+    imageUrl: newImageUrl !== undefined ? newImageUrl : updatedThread[messageIndex].imageUrl,
+    imageUrls: newImageUrls !== undefined ? newImageUrls : updatedThread[messageIndex].imageUrls
+  }
+
+  const updatedSuggestion: MediaSuggestion = {
+    ...targetSuggestion,
+    thread: updatedThread
+  }
+
+  await redis.zRem(suggestionsKey, originalMember)
+  const score = new Date(targetSuggestion.createdAt).getTime()
+  await redis.zAdd(suggestionsKey, [{ score, value: JSON.stringify(updatedSuggestion) }])
+
+  return updatedSuggestion
 }

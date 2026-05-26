@@ -27,6 +27,143 @@ function resolveMaybeRelativeUrl(value: string | undefined, baseUrl: string) {
   }
 }
 
+function parseJsonLd(html: string) {
+  try {
+    const matches = html.matchAll(/<script[^>]+type=["']application\/ld\+json["'][^>]*>([\s\S]*?)<\/script>/gi)
+    for (const match of matches) {
+      const content = match[1].trim()
+      if (!content) continue
+
+      const parsed = JSON.parse(content)
+      const items = Array.isArray(parsed) ? parsed : parsed['@graph'] ? parsed['@graph'] : [parsed]
+
+      for (const item of items) {
+        if (!item || typeof item !== 'object') continue
+
+        let author: string | undefined
+        if (item.author) {
+          const authObj = Array.isArray(item.author) ? item.author[0] : item.author
+          author = typeof authObj === 'string' ? authObj : authObj?.name
+        }
+
+        let rating: string | undefined
+        if (item.aggregateRating && typeof item.aggregateRating === 'object') {
+          rating = item.aggregateRating.ratingValue?.toString()
+        }
+
+        let chapters: string | undefined
+        if (item.numberOfPages) {
+          chapters = `${item.numberOfPages} pages`
+        }
+
+        let episodes: string | undefined
+        if (item.numberOfEpisodes) {
+          episodes = item.numberOfEpisodes.toString()
+        }
+
+        let releaseDate: string | undefined
+        if (item.datePublished || item.releaseDate) {
+          releaseDate = (item.datePublished || item.releaseDate)?.toString()
+        }
+
+        if (author || rating || chapters || episodes || releaseDate) {
+          return { author, rating, chapters, episodes, releaseDate }
+        }
+      }
+    }
+  } catch (_error) {
+    // Fail silently and use regex fallbacks
+  }
+  return null
+}
+
+function extractExtraDetails(html: string, url: string) {
+  const isMal = url.includes('myanimelist.net')
+  const isGoodreads = url.includes('goodreads.com')
+  const isSteam = url.includes('steampowered.com')
+  const isImdb = url.includes('imdb.com')
+  const isSpotify = url.includes('spotify.com')
+  const isYoutube = url.includes('youtube.com') || url.includes('youtu.be')
+
+  // Try JSON-LD parsing first
+  const jsonLd = parseJsonLd(html)
+
+  let episodes: string | undefined = jsonLd?.episodes
+  let chapters: string | undefined = jsonLd?.chapters
+  let author: string | undefined = jsonLd?.author
+  let releaseDate: string | undefined = jsonLd?.releaseDate
+  let rating: string | undefined = jsonLd?.rating
+
+  // 1. Rating / Score Fallbacks
+  if (!rating) {
+    const malRating = html.match(/<span[^>]*itemprop=["']ratingValue["'][^>]*>([^<]+)/i)?.[1] || html.match(/<div[^>]*class=["']score-label[^"']*["'][^>]*>([^<]+)/i)?.[1]
+    const imdbRating = html.match(/<span[^>]*class=["']AggregateRatingButton__RatingScore[^"']*["'][^>]*>([^<]+)/i)?.[1] || html.match(/<span[^>]*itemprop=["']ratingValue["'][^>]*>([^<]+)/i)?.[1]
+    const goodreadsRating = html.match(/<div[^>]*class=["']RatingStatistics__rating["'][^>]*>([^<]+)/i)?.[1] || html.match(/itemprop=["']ratingValue["'][^>]*>([^<]+)/i)?.[1]
+    const steamRating = html.match(/<span[^>]*class=["']nonresponsive_hidden responsive_reviewdesc["'][^>]*>([\s\S]*?)<\/span>/i)?.[1]?.trim().replace(/\s+/g, ' ')
+
+    rating = readMeta(html, 'books:rating:value') || readMeta(html, 'twitter:data1') || malRating || imdbRating || goodreadsRating || steamRating
+  }
+
+  if (rating) {
+    rating = rating.replace(/<[^>]+>/g, '').trim()
+    if (rating.length > 50) rating = rating.substring(0, 50)
+  }
+
+  // 2. Episodes / Chapters / Pages
+  if (!episodes && isMal) {
+    const epMatch = html.match(/<span[^>]*>Episodes:<\/span>\s*([^<\n\r]+)/i)
+    if (epMatch) episodes = epMatch[1].trim()
+  }
+
+  if (!chapters) {
+    if (isMal) {
+      const chMatch = html.match(/<span[^>]*>Chapters:<\/span>\s*([^<\n\r]+)/i)
+      if (chMatch) chapters = chMatch[1].trim()
+    } else if (isGoodreads) {
+      const pageMatch = html.match(/(\d+)\s*pages/i)
+      if (pageMatch) chapters = `${pageMatch[1]} pages`
+    }
+  }
+
+  // 3. Author / Creator / Channel
+  if (!author) {
+    const genericAuthor = readMeta(html, 'book:author') || readMeta(html, 'author') || readMeta(html, 'music:musician') || readMeta(html, 'twitter:data2')
+    const malAuthor = html.match(/<span[^>]*>Authors:<\/span>\s*<a[^>]*>([^<]+)/i)?.[1]
+    const steamDeveloper = html.match(/<div[^>]*id=["']developers_list["'][^>]*>([\s\S]*?)<\/a>/i)?.[1]?.replace(/<[^>]+>/g, '').trim()
+    const spotifyArtist = readMeta(html, 'music:musician') || html.match(/property=["']music:musician["'][^>]*content=["']([^"']*)["']/i)?.[1]
+
+    if (isSpotify && spotifyArtist) {
+      author = spotifyArtist.substring(spotifyArtist.lastIndexOf('/') + 1).replace(/-/g, ' ')
+    } else if (isYoutube) {
+      author = html.match(/<link[^>]*itemprop=["']name["'][^>]*content=["']([^"']*)["']/i)?.[1] || genericAuthor
+    } else {
+      author = malAuthor || steamDeveloper || genericAuthor
+    }
+  }
+
+  if (author) {
+    author = author.replace(/<[^>]+>/g, '').trim()
+    if (author.length > 60) author = author.substring(0, 60)
+  }
+
+  // 4. Release Date
+  if (!releaseDate) {
+    const malAired = html.match(/<span[^>]*>Aired:<\/span>\s*([^<\n\r]+)/i)
+    const malPublished = html.match(/<span[^>]*>Published:<\/span>\s*([^<\n\r]+)/i)
+    const steamRelease = html.match(/<div[^>]*class=["']date["'][^>]*>([^<]+)/i)?.[1] || html.match(/<div[^>]*class=["']grid_content grid_date["'][^>]*>([^<]+)/i)?.[1]
+    const genericRelease = readMeta(html, 'video:release_date') || readMeta(html, 'article:published_time') || readMeta(html, 'music:release_date') || html.match(/property=["']music:release_date["'][^>]*content=["']([^"']*)["']/i)?.[1]
+
+    releaseDate = (malAired?.[1] || malPublished?.[1] || steamRelease || genericRelease)?.trim()
+  }
+
+  if (releaseDate) {
+    releaseDate = releaseDate.replace(/<[^>]+>/g, '').trim()
+    if (releaseDate.length > 50) releaseDate = releaseDate.substring(0, 50)
+  }
+
+  return { episodes, chapters, author, releaseDate, rating }
+}
+
 export async function GET(request: NextRequest) {
   const urlParam = request.nextUrl.searchParams.get('url')
   if (!urlParam) {
@@ -68,6 +205,8 @@ export async function GET(request: NextRequest) {
     const siteName = readMeta(html, 'og:site_name') || url.hostname.replace(/^www\./, '')
     const type = readMeta(html, 'og:type')
 
+    const extra = extractExtraDetails(html, url.toString())
+
     return NextResponse.json({
       reference: {
         url: url.toString(),
@@ -75,7 +214,8 @@ export async function GET(request: NextRequest) {
         description,
         image,
         siteName,
-        type
+        type,
+        ...extra
       }
     })
   } catch (error) {

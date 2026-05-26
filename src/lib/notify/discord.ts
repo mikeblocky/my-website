@@ -14,7 +14,7 @@ export async function notifyOwnerNewTalk(author: string, body: string) {
     const truncatedBody = body.length > 300 ? body.slice(0, 300) + '...' : body
 
     const embed = {
-      title: '📬 New post on Talk board',
+      title: 'New post on Talk board',
       color: 0x2563eb, // blue-600
       fields: [
         {
@@ -71,7 +71,7 @@ export async function notifyOwnerNewPrompt(author: string, body: string) {
     const truncatedBody = body.length > 300 ? body.slice(0, 300) + '...' : body
 
     const embed = {
-      title: '🎨 New drawing prompt suggestion',
+      title: 'New drawing prompt suggestion',
       color: 0x8b5cf6, // violet-500
       fields: [
         {
@@ -129,7 +129,7 @@ export async function notifyOwnerNewSuggestion(author: string, title: string, no
     const truncatedBody = body.length > 300 ? body.slice(0, 300) + '...' : body
 
     const embed = {
-      title: '📚 New read/watch suggestion',
+      title: 'New read/watch suggestion',
       color: 0x0f766e,
       fields: [
         {
@@ -148,7 +148,7 @@ export async function notifyOwnerNewSuggestion(author: string, title: string, no
         },
       ],
       footer: {
-        text: 'mikeblocky.com/suggestions',
+        text: 'mikeblocky.com/interact?tab=suggestions',
       },
     }
 

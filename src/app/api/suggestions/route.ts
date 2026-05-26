@@ -1,6 +1,6 @@
 import { after, NextRequest, NextResponse } from 'next/server'
 import { revalidateTag } from 'next/cache'
-import { buildSuggestionPayload, saveSuggestion } from '@/lib/kv/suggestions'
+import { buildSuggestionPayload, saveSuggestion, updateSuggestionStatus, replyToSuggestion, followUpSuggestion, updateSuggestionThreadMessage } from '@/lib/kv/suggestions'
 import { SUGGESTIONS_TAG, getMediaSuggestions } from '@/lib/kv/suggestions-cache'
 import { getMessageCooldown, reserveMessageCooldown } from '@/lib/kv/cooldown'
 import { validateImageUrls } from '@/lib/images/attachment-limits'
@@ -115,4 +115,119 @@ export async function POST(request: NextRequest) {
   })
 
   return NextResponse.json({ suggestion, cooldown: reservation.cooldown }, { status: 201 })
+}
+
+export async function PUT(request: NextRequest) {
+  const data = await request.json().catch(() => null)
+  if (!data || typeof data.id !== 'string' || typeof data.reply !== 'string') {
+    return NextResponse.json({ error: 'Invalid payload' }, { status: 400 })
+  }
+
+  const { id, reply, passcode, imageUrl, imageUrls } = data
+
+  if (process.env.ADMIN_PASSCODE && passcode !== process.env.ADMIN_PASSCODE) {
+    return NextResponse.json({ error: 'Incorrect passcode' }, { status: 401 })
+  }
+
+  const cleanImageUrls = Array.isArray(imageUrls)
+    ? imageUrls.filter((url: any) => typeof url === 'string')
+    : undefined
+  const imageError = validateImageUrls(cleanImageUrls)
+  if (imageError) {
+    return NextResponse.json({ error: imageError }, { status: 413 })
+  }
+
+  const updated = await replyToSuggestion(id, reply, imageUrl, cleanImageUrls)
+  if (!updated) {
+    return NextResponse.json({ error: 'Suggestion not found' }, { status: 404 })
+  }
+
+  revalidateTag(SUGGESTIONS_TAG, 'max')
+
+  return NextResponse.json({ suggestion: updated }, { status: 200 })
+}
+
+export async function PATCH(request: NextRequest) {
+  const data = await request.json().catch(() => null)
+  if (!data || typeof data.id !== 'string') {
+    return NextResponse.json({ error: 'Invalid payload' }, { status: 400 })
+  }
+
+  const { id, status, body, messageId, passcode, imageUrl, imageUrls } = data
+
+  const cleanImageUrls = Array.isArray(imageUrls)
+    ? imageUrls.filter((url: any) => typeof url === 'string')
+    : undefined
+  const imageError = validateImageUrls(cleanImageUrls)
+  if (imageError) {
+    return NextResponse.json({ error: imageError }, { status: 413 })
+  }
+
+  // Case 1: Edit an existing comment/message (requires passcode)
+  if (messageId) {
+    if (process.env.ADMIN_PASSCODE && passcode !== process.env.ADMIN_PASSCODE) {
+      return NextResponse.json({ error: 'Incorrect passcode' }, { status: 401 })
+    }
+    if (typeof body !== 'string' || body.trim().length === 0) {
+      return NextResponse.json({ error: 'Content cannot be empty' }, { status: 400 })
+    }
+
+    const updated = await updateSuggestionThreadMessage(id, messageId, body, imageUrl, cleanImageUrls)
+    if (!updated) {
+      return NextResponse.json({ error: 'Message not found' }, { status: 404 })
+    }
+
+    revalidateTag(SUGGESTIONS_TAG, 'max')
+    return NextResponse.json({ suggestion: updated }, { status: 200 })
+  }
+
+  // Case 2: Status update (requires passcode)
+  if (status) {
+    if (process.env.ADMIN_PASSCODE && passcode !== process.env.ADMIN_PASSCODE) {
+      return NextResponse.json({ error: 'Incorrect passcode' }, { status: 401 })
+    }
+    const validStatuses = ['planning', 'progressing', 'completed', 'dropped']
+    if (!validStatuses.includes(status)) {
+      return NextResponse.json({ error: 'Invalid status' }, { status: 400 })
+    }
+
+    const updated = await updateSuggestionStatus(id, status as any)
+    if (!updated) {
+      return NextResponse.json({ error: 'Suggestion not found' }, { status: 404 })
+    }
+
+    revalidateTag(SUGGESTIONS_TAG, 'max')
+    return NextResponse.json({ suggestion: updated }, { status: 200 })
+  }
+
+  // Case 3: Visitor follow-up (no passcode needed, but suggestion must already have an admin reply)
+  if (body) {
+    const trimmedBody = body.trim()
+    if (trimmedBody.length === 0) {
+      return NextResponse.json({ error: 'Follow-up cannot be empty' }, { status: 400 })
+    }
+
+    const reservation = await reserveMessageCooldown('suggestion', request)
+    if (reservation.blocked) {
+      return NextResponse.json(
+        { error: 'Please wait before sending another message.', cooldown: reservation.cooldown },
+        {
+          status: 429,
+          headers: {
+            'Retry-After': Math.ceil(reservation.cooldown.remainingMs / 1000).toString()
+          }
+        }
+      )
+    }
+
+    const updated = await followUpSuggestion(id, trimmedBody, imageUrl, cleanImageUrls)
+    if (!updated) {
+      return NextResponse.json({ error: 'Suggestion not found or no admin reply yet' }, { status: 404 })
+    }
+
+    revalidateTag(SUGGESTIONS_TAG, 'max')
+    return NextResponse.json({ suggestion: updated, cooldown: reservation.cooldown }, { status: 200 })
+  }
+
+  return NextResponse.json({ error: 'Invalid operation' }, { status: 400 })
 }

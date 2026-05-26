@@ -9,7 +9,7 @@ import { StackVertical } from '@/components/layout/layout-stack/layout-stack'
 import TextHeading from '@/components/ui/text-heading/text-heading'
 import Text from '@/components/ui/text/text'
 import { Button } from '@/components/ui/primitives/button'
-import { Camera, ChevronLeft, ChevronRight, MessageSquareReply, Bell, CornerDownRight, Share2, Image as ImageIcon } from 'lucide-react'
+import { Camera, ChevronLeft, ChevronRight, MessageSquareReply, Bell, CornerDownRight, Share2, Image as ImageIcon, Lock, Unlock } from 'lucide-react'
 import { sansFont, monoFont } from '@/styles/fonts/fonts'
 import { cn } from '@/lib/utils/utils'
 import { AnimatePresence, motion } from 'framer-motion'
@@ -76,10 +76,18 @@ function lastThreadRole(t: TalkTopic): 'asker' | 'admin' | null {
 
 export function TalkBoard({ 
   initialTalks: incomingTalks = seededTalks,
-  singleMode = false
+  singleMode = false,
+  isAdminMode: parentIsAdminMode,
+  setIsAdminMode: parentSetIsAdminMode,
+  passcode: parentPasscode,
+  setPasscode: parentSetPasscode
 }: { 
   initialTalks?: TalkTopic[]
   singleMode?: boolean
+  isAdminMode?: boolean
+  setIsAdminMode?: (v: boolean) => void
+  passcode?: string
+  setPasscode?: (v: string) => void
 }) {
   const [formState, setFormState] = useState<FormState>({ author: '', body: '' })
   const [talks, setTalks] = useState<TalkTopic[]>(sortTalks(incomingTalks))
@@ -91,10 +99,20 @@ export function TalkBoard({
   // Pagination
   const [currentPage, setCurrentPage] = useState(1)
 
+  // Fallback states if not parent-controlled:
+  const [localPasscode, localSetPasscode] = useState('')
+  const [localIsAdminMode, localSetIsAdminMode] = useState(false)
+  const [showPasscodeInput, setShowPasscodeInput] = useState(false)
+
+  const passcode = parentPasscode !== undefined ? parentPasscode : localPasscode
+  const setPasscode = parentSetPasscode !== undefined ? parentSetPasscode : localSetPasscode
+  
+  const isAdminMode = parentIsAdminMode !== undefined ? parentIsAdminMode : localIsAdminMode
+  const setIsAdminMode = parentSetIsAdminMode !== undefined ? parentSetIsAdminMode : localSetIsAdminMode
+
   // Reply state (admin)
   const [replyingTo, setReplyingTo] = useState<string | null>(null)
   const [replyBody, setReplyBody] = useState('')
-  const [passcode, setPasscode] = useState('')
 
   // Follow-up state (visitor)
   const [followingUp, setFollowingUp] = useState<string | null>(null)
@@ -619,9 +637,67 @@ export function TalkBoard({
 
       <section className="space-y-6">
         <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 border-b border-border/60 pb-3 sm:flex-nowrap">
-          <TextHeading as="h3" weight="semibold" className="mt-0 mb-0 text-lg">
-            {singleMode ? "Post" : "Talk archive"}
-          </TextHeading>
+          <div className="flex items-center gap-2">
+            <TextHeading as="h3" weight="semibold" className="mt-0 mb-0 text-lg">
+              {singleMode ? "Post" : "Talk archive"}
+            </TextHeading>
+
+            {/* Elegant admin passcode lock toggle */}
+            <div className="flex items-center gap-1.5 ml-2">
+              <button
+                type="button"
+                onClick={() => {
+                  if (isAdminMode) {
+                    setIsAdminMode(false)
+                    setPasscode('')
+                  } else {
+                    setShowPasscodeInput(!showPasscodeInput)
+                  }
+                }}
+                className={cn(
+                  "rounded-full p-1.5 transition-colors duration-150 flex items-center justify-center hover:bg-slate-200/50 dark:hover:bg-slate-800/40 text-slate-400 hover:text-blue-650 dark:hover:text-blue-350",
+                  isAdminMode && "text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-500/10"
+                )}
+                title={isAdminMode ? "Disable Admin Mode" : "Enable Admin Mode"}
+              >
+                {isAdminMode ? <Unlock size={14} /> : <Lock size={14} />}
+              </button>
+
+              <AnimatePresence>
+                {showPasscodeInput && !isAdminMode && (
+                  <motion.div
+                    initial={{ width: 0, opacity: 0 }}
+                    animate={{ width: 90, opacity: 1 }}
+                    exit={{ width: 0, opacity: 0 }}
+                    className="overflow-hidden flex items-center"
+                  >
+                    <input
+                      type="password"
+                      value={passcode}
+                      onChange={(e) => {
+                        setPasscode(e.target.value)
+                        if (e.target.value.length >= 4) {
+                          setIsAdminMode(true)
+                          setShowPasscodeInput(false)
+                          showNotification('Admin Mode enabled. You can now reply and edit!')
+                        }
+                      }}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                          setIsAdminMode(true)
+                          setShowPasscodeInput(false)
+                          showNotification('Admin Mode enabled. You can now reply and edit!')
+                        }
+                      }}
+                      placeholder="Passcode"
+                      className="w-20 rounded-md border border-slate-200 bg-background px-2 py-0.5 text-[10px] text-slate-900 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-slate-800 dark:text-slate-100"
+                    />
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+          </div>
+
           <div className="flex shrink-0 items-center gap-3">
             {isRefreshing ? (
               <Text variant="muted" size="xs">
@@ -646,7 +722,7 @@ export function TalkBoard({
               const thread = talk.thread || []
               const lastRole = lastThreadRole(talk)
               const canFollowUp = lastRole === 'admin'
-              const canReply = true
+              const canReply = isAdminMode
 
               return (
                 <article 
@@ -1150,7 +1226,7 @@ function ThreadBubble({
         </div>
       ) : (
         <>
-          <div className={cn(sansFont.className, "text-sm text-slate-700 dark:text-slate-300 leading-relaxed break-words")}>
+          <div className={cn(sansFont.className, "text-base text-slate-700 dark:text-slate-300 leading-relaxed break-words")}>
             <RichText text={message.body} theme="blue" />
           </div>
           <ImageGallery 
