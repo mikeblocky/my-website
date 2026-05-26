@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { decodeHtmlEntities } from '@/lib/text/html-entities'
 
 const MAX_HTML_LENGTH = 600_000
 
@@ -9,12 +10,12 @@ function readMeta(html: string, key: string) {
   const reversedNamePattern = new RegExp(`<meta[^>]+content=["']([^"']*)["'][^>]+name=["']${key}["'][^>]*>`, 'i')
   const match = html.match(propertyPattern) || html.match(namePattern) || html.match(reversedPropertyPattern) || html.match(reversedNamePattern)
 
-  return match?.[1]?.replace(/\s+/g, ' ').trim()
+  return decodeHtmlEntities(match?.[1]?.replace(/\s+/g, ' ').trim())
 }
 
 function readTitle(html: string) {
   const match = html.match(/<title[^>]*>([^<]*)<\/title>/i)
-  return match?.[1]?.replace(/\s+/g, ' ').trim()
+  return decodeHtmlEntities(match?.[1]?.replace(/\s+/g, ' ').trim())
 }
 
 function resolveMaybeRelativeUrl(value: string | undefined, baseUrl: string) {
@@ -105,7 +106,7 @@ function extractExtraDetails(html: string, url: string) {
   }
 
   if (rating) {
-    rating = rating.replace(/<[^>]+>/g, '').trim()
+    rating = decodeHtmlEntities(rating.replace(/<[^>]+>/g, '').trim()) ?? ''
     if (rating.length > 50) rating = rating.substring(0, 50)
   }
 
@@ -142,7 +143,7 @@ function extractExtraDetails(html: string, url: string) {
   }
 
   if (author) {
-    author = author.replace(/<[^>]+>/g, '').trim()
+    author = decodeHtmlEntities(author.replace(/<[^>]+>/g, '').trim()) ?? ''
     if (author.length > 60) author = author.substring(0, 60)
   }
 
@@ -157,7 +158,7 @@ function extractExtraDetails(html: string, url: string) {
   }
 
   if (releaseDate) {
-    releaseDate = releaseDate.replace(/<[^>]+>/g, '').trim()
+    releaseDate = decodeHtmlEntities(releaseDate.replace(/<[^>]+>/g, '').trim()) ?? ''
     if (releaseDate.length > 50) releaseDate = releaseDate.substring(0, 50)
   }
 

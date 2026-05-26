@@ -1,5 +1,3 @@
-'use client'
-
 import { StackVertical } from "@/components/layout/layout-stack/layout-stack";
 import BaseContainer from "@/components/layout/container/base-container";
 import TextHeading from "@/components/ui/text-heading/text-heading";

@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { createPortal } from 'react-dom';
+import Image from 'next/image';
 import { X, ChevronLeft, ChevronRight, ZoomIn, ZoomOut } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { cn } from '@/lib/utils/utils';
@@ -27,15 +28,19 @@ const GalleryImage: React.FC<{
           </span>
         </div>
       )}
-      <img
+      <Image
         src={src}
         alt={alt}
+        fill
+        sizes="(max-width: 640px) 100vw, 420px"
+        unoptimized
         className={cn(
           className, 
           "transition-opacity duration-300 ease-out", 
           loaded ? "opacity-100" : "opacity-0"
         )}
         loading={loading}
+        decoding="async"
         onLoad={() => setLoaded(true)}
       />
     </div>
@@ -71,13 +76,12 @@ export const ImageGallery: React.FC<ImageGalleryProps> = ({ urls = [], theme = '
     setTranslateY(0);
   }, []);
 
-  // Reset lightbox loading & zoom indicator when navigating between images
-  useEffect(() => {
-    if (activeIdx !== null) {
-      setIsLightboxLoading(true);
-    }
+  const openLightbox = useCallback((idx: number) => {
+    setDirection(1);
+    setIsLightboxLoading(true);
     resetZoom();
-  }, [activeIdx, resetZoom]);
+    setActiveIdx(idx);
+  }, [resetZoom]);
 
   const closeLightbox = useCallback(() => {
     setActiveIdx(null);
@@ -88,17 +92,21 @@ export const ImageGallery: React.FC<ImageGalleryProps> = ({ urls = [], theme = '
     setActiveIdx((prev) => {
       if (prev === null) return prev;
       setDirection(-1);
+      setIsLightboxLoading(true);
+      resetZoom();
       return (prev - 1 + cleanUrls.length) % cleanUrls.length;
     });
-  }, [cleanUrls.length]);
+  }, [cleanUrls.length, resetZoom]);
 
   const showNext = useCallback(() => {
     setActiveIdx((prev) => {
       if (prev === null) return prev;
       setDirection(1);
+      setIsLightboxLoading(true);
+      resetZoom();
       return (prev + 1) % cleanUrls.length;
     });
-  }, [cleanUrls.length]);
+  }, [cleanUrls.length, resetZoom]);
 
   // Drag & Pan handlers
   const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -276,7 +284,7 @@ export const ImageGallery: React.FC<ImageGalleryProps> = ({ urls = [], theme = '
     if (total === 1) {
       return (
         <div 
-          onClick={() => { setDirection(1); setActiveIdx(0); }}
+          onClick={() => openLightbox(0)}
           className="group relative cursor-zoom-in overflow-hidden rounded-xl bg-slate-100/50 dark:bg-slate-900/60 hover:bg-slate-200/40 dark:hover:bg-slate-900/90 transition-all duration-300 max-h-[360px] flex items-center justify-center shadow-none border-0"
         >
           <GalleryImage 
@@ -299,7 +307,7 @@ export const ImageGallery: React.FC<ImageGalleryProps> = ({ urls = [], theme = '
           {cleanUrls.map((url, idx) => (
             <div 
               key={url}
-              onClick={() => { setDirection(1); setActiveIdx(idx); }}
+              onClick={() => openLightbox(idx)}
               className="group relative aspect-video cursor-zoom-in overflow-hidden rounded-xl bg-slate-100/50 dark:bg-slate-900/60 hover:bg-slate-200/40 dark:hover:bg-slate-900/90 transition-all duration-300 border-0 shadow-none"
             >
               <GalleryImage 
@@ -331,7 +339,7 @@ export const ImageGallery: React.FC<ImageGalleryProps> = ({ urls = [], theme = '
           return (
             <div 
               key={url}
-              onClick={() => { setDirection(1); setActiveIdx(idx); }}
+              onClick={() => openLightbox(idx)}
               className={`group relative ${idx === 0 ? 'col-span-2 aspect-video' : 'aspect-square'} cursor-zoom-in overflow-hidden rounded-xl bg-slate-100/50 dark:bg-slate-900/60 hover:bg-slate-200/40 dark:hover:bg-slate-900/90 transition-all duration-300 border-0 shadow-none`}
             >
               <GalleryImage 
@@ -442,8 +450,8 @@ export const ImageGallery: React.FC<ImageGalleryProps> = ({ urls = [], theme = '
 
               {/* Background adjacent prefetching for instant loads */}
               <div className="hidden" aria-hidden="true">
-                <img src={cleanUrls[(activeIdx + 1) % cleanUrls.length]} />
-                <img src={cleanUrls[(activeIdx - 1 + cleanUrls.length) % cleanUrls.length]} />
+                <Image src={cleanUrls[(activeIdx + 1) % cleanUrls.length]} alt="" width={1} height={1} unoptimized priority />
+                <Image src={cleanUrls[(activeIdx - 1 + cleanUrls.length) % cleanUrls.length]} alt="" width={1} height={1} unoptimized priority />
               </div>
 
               {/* Image container with direction-aware animation */}
@@ -486,9 +494,13 @@ export const ImageGallery: React.FC<ImageGalleryProps> = ({ urls = [], theme = '
                       }}
                       className="relative max-h-[86dvh] max-w-[90vw] flex items-center justify-center pointer-events-auto select-none"
                     >
-                      <img 
+                      <Image
                         src={cleanUrls[activeIdx]} 
                         alt={`Expanded Attachment ${activeIdx + 1}`} 
+                        width={1600}
+                        height={1200}
+                        unoptimized
+                        priority
                         className={cn(
                           "max-h-[86dvh] max-w-[90vw] h-auto w-auto object-contain pointer-events-none transition-opacity duration-300 ease-out shadow-none",
                           isLightboxLoading ? "opacity-0" : "opacity-100"

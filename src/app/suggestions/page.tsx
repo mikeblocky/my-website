@@ -1,8 +1,5 @@
 import type { Metadata } from 'next'
-import BaseContainer from '@/components/layout/container/base-container'
-import { SectionFooter } from '@/components/layout/footer/SectionFooter'
-import { StackVertical } from '@/components/layout/layout-stack/layout-stack'
-import { SectionPageHeader } from '@/components/layout/page-header/SectionPageHeader'
+import { SectionPageShell } from '@/components/layout/page-shell/SectionPageShell'
 import { SuggestionsBoard } from './_components/SuggestionsBoard'
 
 export const metadata: Metadata = {
@@ -12,18 +9,12 @@ export const metadata: Metadata = {
 
 export default function SuggestionsPage() {
   return (
-    <BaseContainer size="md" paddingX="md" paddingY="lg">
-      <StackVertical gap="lg">
-        <SectionPageHeader
-          title="Suggestions"
-          description="Suggest something I should read, watch, listen to, or try, with the best part I should look forward to."
-          currentLabel="Suggestions"
-        />
-
-        <SuggestionsBoard />
-      </StackVertical>
-
-      <SectionFooter showToTop={false} />
-    </BaseContainer>
+    <SectionPageShell
+      title="Suggestions"
+      description="Suggest something I should read, watch, listen to, or try, with the best part I should look forward to."
+      currentLabel="Suggestions"
+    >
+      <SuggestionsBoard />
+    </SectionPageShell>
   )
 }

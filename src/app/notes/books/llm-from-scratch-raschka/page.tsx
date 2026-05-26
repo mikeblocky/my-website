@@ -1,5 +1,3 @@
-'use client'
-
 import BaseContainer from "@/components/layout/container/base-container";
 import { DynamicBreadcrumb } from "@/components/ui/primitives/breadcrumb";
 import { IndividualPageFooter } from "@/components/layout/footer/IndividualPageFooter";

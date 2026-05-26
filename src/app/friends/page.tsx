@@ -1,9 +1,6 @@
 import type { Metadata } from 'next'
-import BaseContainer from '@/components/layout/container/base-container'
-import { StackVertical } from '@/components/layout/layout-stack/layout-stack'
-import { SectionFooter } from '@/components/layout/footer/SectionFooter'
-import { SectionPageHeader } from '@/components/layout/page-header/SectionPageHeader'
-import { FriendsClient } from './FriendsClient'
+import { SectionPageShell } from '@/components/layout/page-shell/SectionPageShell'
+import { FriendsClient } from './_components/FriendsClient'
 
 export const metadata: Metadata = {
 	title: 'Friends | mikeblocky.com',
@@ -12,18 +9,12 @@ export const metadata: Metadata = {
 
 export default function FriendsListPage() {
 	return (
-		<BaseContainer size="md" paddingX="md" paddingY="lg">
-			<StackVertical gap="lg">
-				<SectionPageHeader
-					title="Friends"
-					description="A directory of wonderful people, creators, and mutual friends I've built connections with along the way."
-					currentLabel="Friends"
-				/>
-
-				<FriendsClient />
-			</StackVertical>
-
-			<SectionFooter showToTop={false} />
-		</BaseContainer>
+		<SectionPageShell
+			title="Friends"
+			description="A directory of wonderful people, creators, and mutual friends I've built connections with along the way."
+			currentLabel="Friends"
+		>
+			<FriendsClient />
+		</SectionPageShell>
 	)
 }

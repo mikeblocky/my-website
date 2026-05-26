@@ -1,7 +1,6 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { motion } from 'framer-motion'
 import { cn } from '@/lib/utils/utils'
 import { BlogSearchPanel } from '@/app/blog/_components/BlogSearchPanel'
 import { getDaysByMonth } from '@/app/diary/daily-notes/_data/days'
@@ -10,6 +9,8 @@ import Link from 'next/link'
 import { monoFont } from '@/styles/fonts/fonts'
 import type { BlogPost } from '@/app/blog/_types/blog'
 import { Keyboard, MousePointer, Book, PenTool } from 'lucide-react'
+import { PillTabs } from '@/components/ui/tabs/PillTabs'
+import { SmoothPanel } from '@/components/ui/transition/SmoothPanel'
 
 const SpotifyIcon = () => (
 	<svg className="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24">
@@ -200,33 +201,16 @@ export function JournalClient({ posts }: JournalClientProps) {
 
 	return (
 		<div className="space-y-8" data-journal-client-version={JOURNAL_CLIENT_VERSION}>
-			{/* Sub-navigation Tabs - flat categories pill styles */}
-			<div className="flex flex-wrap gap-2 pb-1">
-				{tabs.map((tab) => (
-					<button
-						key={tab.id}
-						type="button"
-						onClick={() => setActiveTab(tab.id)}
-						className={cn(
-							"px-5 py-2.5 text-sm font-semibold rounded-full border transition-all duration-200 focus:outline-none whitespace-nowrap",
-							activeTab === tab.id
-								? "border-blue-500 bg-blue-500 text-white shadow-md shadow-blue-500/20"
-								: "border-slate-300 dark:border-slate-800 bg-transparent text-slate-600 dark:text-slate-400 hover:border-blue-300 dark:hover:border-blue-500/50 hover:text-blue-600 dark:hover:text-blue-300"
-						)}
-					>
-						{tab.label}
-					</button>
-				))}
-			</div>
+			<PillTabs
+				tabs={tabs}
+				activeTab={activeTab}
+				onTabChange={setActiveTab}
+				className="pb-1"
+				showCounts={false}
+			/>
 
 			{/* Tab Contents */}
-			<motion.div
-				key={activeTab}
-				initial={{ opacity: 0 }}
-				animate={{ opacity: 1 }}
-				exit={{ opacity: 0 }}
-				transition={{ duration: 0.15 }}
-			>
+			<SmoothPanel panelKey={activeTab}>
 				{activeTab === 'essays' && (
 					<div className="space-y-6">
 						<BlogSearchPanel posts={posts} />
@@ -621,7 +605,7 @@ export function JournalClient({ posts }: JournalClientProps) {
 						)}
 					</div>
 				)}
-			</motion.div>
+			</SmoothPanel>
 		</div>
 	)
 }

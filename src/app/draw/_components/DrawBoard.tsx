@@ -9,24 +9,18 @@ import { StackVertical } from '@/components/layout/layout-stack/layout-stack'
 import TextHeading from '@/components/ui/text-heading/text-heading'
 import Text from '@/components/ui/text/text'
 import { Button } from '@/components/ui/primitives/button'
-import { Camera, ChevronLeft, ChevronRight, MessageSquareReply, CornerDownRight, Share2, Palette, Bell, Image as ImageIcon, Lock, Unlock } from 'lucide-react'
+import { Camera, ChevronLeft, ChevronRight, MessageSquareReply, CornerDownRight, Share2, Palette, Bell } from 'lucide-react'
 import { sansFont, monoFont } from '@/styles/fonts/fonts'
 import { cn } from '@/lib/utils/utils'
-import { AnimatePresence, motion } from 'framer-motion'
 import { prepareImageForUpload } from '@/lib/images/prepare-upload'
 import { MAX_ATTACHMENT_COUNT } from '@/lib/images/attachment-limits'
+import { formatBoardDate as formatDate, sortByCreatedAt, type ApiCooldown } from '@/lib/boards/board-utils'
+import { useBoardCooldown, useButtonFeedback, useControlledState, useTimedMessage } from '@/lib/boards/board-hooks'
+import { AdminLockToggle } from '@/components/ui/admin/AdminLockToggle'
+import { AttachmentPreviewGrid } from '@/components/ui/attachments/AttachmentPreviewGrid'
+import { AttachmentUploadButton } from '@/components/ui/attachments/AttachmentUploadButton'
 
-const seededPrompts = [...initialPrompts].sort(
-  (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-)
-const dateFormatter = new Intl.DateTimeFormat('en', {
-  year: 'numeric',
-  month: 'short',
-  day: 'numeric',
-  hour: 'numeric',
-  minute: '2-digit',
-  timeZone: 'Asia/Bangkok'
-})
+const seededPrompts = sortByCreatedAt(initialPrompts)
 
 type FormState = {
   author: string
@@ -34,38 +28,6 @@ type FormState = {
 }
 
 const ITEMS_PER_PAGE = 5
-
-type ApiCooldown = {
-  expiresAt: string | null
-  remainingMs: number
-}
-
-function sortPrompts(items: DrawPrompt[]) {
-  return items.slice().sort(
-    (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-  )
-}
-
-function formatDate(iso: string) {
-  try {
-    return dateFormatter.format(new Date(iso))
-  } catch (error) {
-    return iso
-  }
-}
-
-function formatCooldown(ms: number) {
-  const totalSeconds = Math.max(0, Math.ceil(ms / 1000))
-  const hours = Math.floor(totalSeconds / 3600)
-  const minutes = Math.floor((totalSeconds % 3600) / 60)
-  const seconds = totalSeconds % 60
-
-  if (hours > 0) {
-    return `${hours}h ${minutes.toString().padStart(2, '0')}m ${seconds.toString().padStart(2, '0')}s`
-  }
-
-  return `${minutes}m ${seconds.toString().padStart(2, '0')}s`
-}
 
 /** Determine what the last message role is in the thread */
 function lastThreadRole(p: DrawPrompt): 'asker' | 'admin' | null {
@@ -91,7 +53,7 @@ export function DrawBoard({
   const [formState, setFormState] = useState<FormState>({ author: '', body: '' })
   const [character, setCharacter] = useState('')
   const [media, setMedia] = useState('')
-  const [prompts, setPrompts] = useState<DrawPrompt[]>(sortPrompts(initialPrompts))
+  const [prompts, setPrompts] = useState<DrawPrompt[]>(sortByCreatedAt(initialPrompts))
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(initialPrompts.length === 0)
   const [isRefreshing, setIsRefreshing] = useState(initialPrompts.length > 0)
@@ -101,15 +63,10 @@ export function DrawBoard({
   const [currentPage, setCurrentPage] = useState(1)
 
   // Fallback states if not parent-controlled:
-  const [localPasscode, localSetPasscode] = useState('')
-  const [localIsAdminMode, localSetIsAdminMode] = useState(false)
   const [showPasscodeInput, setShowPasscodeInput] = useState(false)
 
-  const passcode = parentPasscode !== undefined ? parentPasscode : localPasscode
-  const setPasscode = parentSetPasscode !== undefined ? parentSetPasscode : localSetPasscode
-  
-  const isAdminMode = parentIsAdminMode !== undefined ? parentIsAdminMode : localIsAdminMode
-  const setIsAdminMode = parentSetIsAdminMode !== undefined ? parentSetIsAdminMode : localSetIsAdminMode
+  const [passcode, setPasscode] = useControlledState(parentPasscode, parentSetPasscode, '')
+  const [isAdminMode, setIsAdminMode] = useControlledState(parentIsAdminMode, parentSetIsAdminMode, false)
 
   // Reply state (admin)
   const [replyingTo, setReplyingTo] = useState<string | null>(null)
@@ -120,7 +77,7 @@ export function DrawBoard({
   const [followUpBody, setFollowUpBody] = useState('')
 
   // Toast Notification State
-  const [notification, setNotification] = useState<string | null>(null)
+  const { message: notification, showMessage: showNotification, clearMessage: clearNotification } = useTimedMessage()
 
   // Edit state
   const [editingMessageId, setEditingMessageId] = useState<string | null>(null)
@@ -133,41 +90,8 @@ export function DrawBoard({
   const [editImageUrls, setEditImageUrls] = useState<string[]>([])
 
   // Inline button feedback state
-  const [buttonFeedback, setButtonFeedback] = useState<Record<string, string>>({})
-  const [cooldownExpiresAt, setCooldownExpiresAt] = useState<string | null>(null)
-  const [cooldownRemainingMs, setCooldownRemainingMs] = useState(0)
-
-  const isCooldownActive = cooldownRemainingMs > 0
-  const cooldownLabel = formatCooldown(cooldownRemainingMs)
-
-  function applyCooldown(cooldown?: ApiCooldown | null) {
-    if (!cooldown?.expiresAt || cooldown.remainingMs <= 0) {
-      setCooldownExpiresAt(null)
-      setCooldownRemainingMs(0)
-      return
-    }
-
-    setCooldownExpiresAt(cooldown.expiresAt)
-    setCooldownRemainingMs(cooldown.remainingMs)
-  }
-
-  function showButtonFeedback(key: string, msg: string) {
-    setButtonFeedback(prev => ({ ...prev, [key]: msg }))
-    setTimeout(() => {
-      setButtonFeedback(prev => {
-        const next = { ...prev }
-        if (next[key] === msg) delete next[key]
-        return next
-      })
-    }, 2000)
-  }
-
-  function showNotification(msg: string) {
-    setNotification(msg)
-    setTimeout(() => {
-      setNotification((current) => current === msg ? null : current)
-    }, 4000)
-  }
+  const { feedback: buttonFeedback, showFeedback: showButtonFeedback } = useButtonFeedback()
+  const { isCooldownActive, cooldownLabel, applyCooldown } = useBoardCooldown()
 
   const handleImageUpload = async (file: File, callback: (url: string) => void) => {
     try {
@@ -176,22 +100,6 @@ export function DrawBoard({
       showNotification(error instanceof Error ? error.message : 'Could not attach image.')
     }
   }
-
-  useEffect(() => {
-    if (!cooldownExpiresAt) return
-
-    const tick = () => {
-      const remaining = Math.max(0, new Date(cooldownExpiresAt).getTime() - Date.now())
-      setCooldownRemainingMs(remaining)
-      if (remaining === 0) {
-        setCooldownExpiresAt(null)
-      }
-    }
-
-    tick()
-    const interval = window.setInterval(tick, 1000)
-    return () => window.clearInterval(interval)
-  }, [cooldownExpiresAt])
 
   useEffect(() => {
     const controller = new AbortController()
@@ -212,7 +120,7 @@ export function DrawBoard({
 
         const payload = (await response.json()) as { prompts?: DrawPrompt[], cooldown?: ApiCooldown }
         if (!cancelled && Array.isArray(payload.prompts)) {
-          setPrompts(sortPrompts(payload.prompts))
+          setPrompts(sortByCreatedAt(payload.prompts))
           applyCooldown(payload.cooldown)
         }
       } catch (error) {
@@ -238,7 +146,7 @@ export function DrawBoard({
       cancelled = true
       controller.abort()
     }
-  }, [singleMode])
+  }, [applyCooldown, showNotification, singleMode])
 
   useEffect(() => {
     if (typeof window !== 'undefined' && window.location.hash) {
@@ -567,46 +475,25 @@ export function DrawBoard({
             </div>
 
             {/* Attachment thumbnails */}
-            {imageUrls.length > 0 && (
-              <div className="flex flex-wrap gap-2.5 px-4 pb-3">
-                {imageUrls.map((url, idx) => (
-                  <div key={idx} className="relative group/thumb rounded-xl overflow-hidden border border-gray-200/80 dark:border-gray-800/80 bg-gray-50/50 dark:bg-gray-900/50 p-1">
-                    <img src={url} alt="Attachment thumbnail" className="rounded-lg h-16 w-24 object-cover" />
-                    <button 
-                      type="button" 
-                      onClick={() => setImageUrls(prev => prev.filter((_, i) => i !== idx))}
-                      className="absolute top-1.5 right-1.5 bg-rose-500 hover:bg-rose-600 text-white rounded-full p-1 text-[9px] leading-none shadow-md cursor-pointer transition-colors"
-                      title="Remove image"
-                    >
-                      ✕
-                    </button>
-                  </div>
-                ))}
-              </div>
-            )}
+            <AttachmentPreviewGrid
+              urls={imageUrls}
+              onRemove={(index) => setImageUrls(prev => prev.filter((_, itemIndex) => itemIndex !== index))}
+              className="px-4 pb-3"
+            />
 
             {/* Bottom: Action Bar */}
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-t border-border/60 px-4 py-3.5 mt-2">
               <div className="flex flex-wrap items-center gap-x-5 gap-y-3">
-                <label className="flex items-center gap-1.5 cursor-pointer text-slate-500 hover:text-violet-500 transition-colors select-none">
-                  <input
-                    type="file"
-                    accept="image/*"
-                    multiple
-                    onChange={(e) => {
-                      const files = e.target.files
-                      if (files) {
-                        Array.from(files).forEach(file => {
-                          handleImageUpload(file, (url) => setImageUrls(prev => prev.length >= MAX_ATTACHMENT_COUNT ? prev : [...prev, url]))
-                        })
-                      }
-                      e.target.value = ''
-                    }}
-                    className="hidden"
-                  />
-                  <ImageIcon size={14} />
-                  <span className={cn(sansFont.className, "text-sm font-medium")}>Add images</span>
-                </label>
+                <AttachmentUploadButton
+                  onFiles={(files) => files.forEach(file => {
+                    handleImageUpload(file, (url) => setImageUrls(prev => prev.length >= MAX_ATTACHMENT_COUNT ? prev : [...prev, url]))
+                  })}
+                  iconSize={14}
+                  className={cn(sansFont.className, 'gap-1.5 text-sm font-medium')}
+                  accent="violet"
+                >
+                  Add images
+                </AttachmentUploadButton>
               </div>
               
               <Button 
@@ -636,60 +523,16 @@ export function DrawBoard({
               {singleMode ? "Drawing prompt" : "Drawing prompts"}
             </TextHeading>
 
-            {/* Elegant admin passcode lock toggle */}
-            <div className="flex items-center gap-1.5 ml-2">
-              <button
-                type="button"
-                onClick={() => {
-                  if (isAdminMode) {
-                    setIsAdminMode(false)
-                    setPasscode('')
-                  } else {
-                    setShowPasscodeInput(!showPasscodeInput)
-                  }
-                }}
-                className={cn(
-                  "rounded-full p-1.5 transition-colors duration-150 flex items-center justify-center hover:bg-slate-200/50 dark:hover:bg-slate-800/40 text-slate-400 hover:text-violet-650 dark:hover:text-violet-350",
-                  isAdminMode && "text-violet-600 dark:text-violet-400 bg-violet-50 dark:bg-violet-500/10"
-                )}
-                title={isAdminMode ? "Disable Admin Mode" : "Enable Admin Mode"}
-              >
-                {isAdminMode ? <Unlock size={14} /> : <Lock size={14} />}
-              </button>
-
-              <AnimatePresence>
-                {showPasscodeInput && !isAdminMode && (
-                  <motion.div
-                    initial={{ width: 0, opacity: 0 }}
-                    animate={{ width: 90, opacity: 1 }}
-                    exit={{ width: 0, opacity: 0 }}
-                    className="overflow-hidden flex items-center"
-                  >
-                    <input
-                      type="password"
-                      value={passcode}
-                      onChange={(e) => {
-                        setPasscode(e.target.value)
-                        if (e.target.value.length >= 4) {
-                          setIsAdminMode(true)
-                          setShowPasscodeInput(false)
-                          showNotification('Admin Mode enabled. You can now reply and edit!')
-                        }
-                      }}
-                      onKeyDown={(e) => {
-                        if (e.key === 'Enter') {
-                          setIsAdminMode(true)
-                          setShowPasscodeInput(false)
-                          showNotification('Admin Mode enabled. You can now reply and edit!')
-                        }
-                      }}
-                      placeholder="Passcode"
-                      className="w-20 rounded-md border border-slate-200 bg-background px-2 py-0.5 text-[10px] text-slate-900 focus:outline-none focus:ring-1 focus:ring-violet-500 dark:border-slate-800 dark:text-slate-100"
-                    />
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
+            <AdminLockToggle
+              isAdminMode={isAdminMode}
+              setIsAdminMode={setIsAdminMode}
+              passcode={passcode}
+              setPasscode={setPasscode}
+              showPasscodeInput={showPasscodeInput}
+              setShowPasscodeInput={setShowPasscodeInput}
+              onEnabled={() => showNotification('Admin Mode enabled. You can now reply and edit!')}
+              accent="violet"
+            />
           </div>
 
           <div className="flex shrink-0 items-center gap-3">
@@ -871,22 +714,13 @@ export function DrawBoard({
                           className={cn(sansFont.className, "min-h-[44px] w-full resize-none overflow-hidden rounded-xl border border-border bg-background px-4 py-3 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-violet-300 dark:text-slate-100")}
                         />
                         {/* image thumbnails */}
-                        {replyImageUrls.length > 0 && (
-                          <div className="flex flex-wrap gap-2 mt-2.5">
-                            {replyImageUrls.map((url, idx) => (
-                              <div key={idx} className="relative group/thumb border border-border bg-muted/40 p-0.5 rounded-lg">
-                                <img src={url} alt="Reply attachment" className="rounded max-h-16 w-24 object-cover" />
-                                <button 
-                                  type="button" 
-                                  onClick={() => setReplyImageUrls(prev => prev.filter((_, i) => i !== idx))} 
-                                  className="absolute top-1 right-1 bg-rose-500 hover:bg-rose-600 text-white rounded-full p-1 text-[8px] leading-none transition-colors cursor-pointer"
-                                >
-                                  ✕
-                                </button>
-                              </div>
-                            ))}
-                          </div>
-                        )}
+                        <AttachmentPreviewGrid
+                          urls={replyImageUrls}
+                          onRemove={(index) => setReplyImageUrls(prev => prev.filter((_, itemIndex) => itemIndex !== index))}
+                          alt="Reply attachment"
+                          className="mt-2.5"
+                          compact
+                        />
                         <div className="mt-2 flex justify-between items-center gap-2">
                           <div className="flex items-center gap-3">
                             <input 
@@ -896,25 +730,12 @@ export function DrawBoard({
                               placeholder="Passcode"
                               className="w-24 rounded-full border border-border bg-background px-3 py-1.5 text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-violet-300 dark:text-slate-100"
                             />
-                            <label className="flex items-center gap-1 cursor-pointer text-slate-500 hover:text-violet-500 text-xs font-semibold select-none">
-                              <input 
-                                type="file" 
-                                accept="image/*" 
-                                multiple
-                                onChange={e => {
-                                  const files = e.target.files
-                                  if (files) {
-                                    Array.from(files).forEach(file => {
-                                      handleImageUpload(file, (url) => setReplyImageUrls(prev => prev.length >= MAX_ATTACHMENT_COUNT ? prev : [...prev, url]))
-                                    })
-                                  }
-                                  e.target.value = ''
-                                }} 
-                                className="hidden" 
-                              />
-                              <ImageIcon size={12} />
-                              Attach images
-                            </label>
+                            <AttachmentUploadButton
+                              onFiles={(files) => files.forEach(file => {
+                                handleImageUpload(file, (url) => setReplyImageUrls(prev => prev.length >= MAX_ATTACHMENT_COUNT ? prev : [...prev, url]))
+                              })}
+                              accent="violet"
+                            />
                           </div>
                           <div className="flex gap-2">
                             <Button variant="ghost" size="sm" onClick={() => setReplyingTo(null)} className="text-xs h-8">
@@ -943,42 +764,20 @@ export function DrawBoard({
                           className={cn(sansFont.className, "min-h-[44px] w-full resize-none overflow-hidden rounded-xl border border-emerald-200 bg-background px-4 py-3 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-300 dark:border-emerald-500/30 dark:text-slate-100")}
                         />
                         {/* image thumbnails */}
-                        {followUpImageUrls.length > 0 && (
-                          <div className="flex flex-wrap gap-2 mt-2.5">
-                            {followUpImageUrls.map((url, idx) => (
-                              <div key={idx} className="relative group/thumb border border-border bg-muted/40 p-0.5 rounded-lg animate-in zoom-in-95">
-                                <img src={url} alt="Followup attachment" className="rounded max-h-16 w-24 object-cover" />
-                                <button 
-                                  type="button" 
-                                  onClick={() => setFollowUpImageUrls(prev => prev.filter((_, i) => i !== idx))} 
-                                  className="absolute top-1 right-1 bg-rose-500 hover:bg-rose-600 text-white rounded-full p-1 text-[8px] leading-none transition-colors cursor-pointer"
-                                >
-                                  ✕
-                                </button>
-                              </div>
-                            ))}
-                          </div>
-                        )}
+                        <AttachmentPreviewGrid
+                          urls={followUpImageUrls}
+                          onRemove={(index) => setFollowUpImageUrls(prev => prev.filter((_, itemIndex) => itemIndex !== index))}
+                          alt="Follow-up attachment"
+                          className="mt-2.5"
+                          compact
+                        />
                         <div className="mt-2 flex justify-between items-center gap-2">
-                          <label className="flex items-center gap-1 cursor-pointer text-slate-500 hover:text-emerald-500 text-xs font-semibold select-none">
-                            <input 
-                              type="file" 
-                              accept="image/*" 
-                              multiple
-                              onChange={e => {
-                                const files = e.target.files
-                                if (files) {
-                                  Array.from(files).forEach(file => {
-                                    handleImageUpload(file, (url) => setFollowUpImageUrls(prev => prev.length >= MAX_ATTACHMENT_COUNT ? prev : [...prev, url]))
-                                  })
-                                }
-                                e.target.value = ''
-                              }} 
-                              className="hidden" 
-                            />
-                            <ImageIcon size={12} />
-                            Attach images
-                          </label>
+                          <AttachmentUploadButton
+                            onFiles={(files) => files.forEach(file => {
+                              handleImageUpload(file, (url) => setFollowUpImageUrls(prev => prev.length >= MAX_ATTACHMENT_COUNT ? prev : [...prev, url]))
+                            })}
+                            accent="emerald"
+                          />
                           <div className="flex gap-2">
                             <Button variant="ghost" size="sm" onClick={() => setFollowingUp(null)} className="text-xs h-8">
                               Cancel
@@ -1037,27 +836,20 @@ export function DrawBoard({
         )}
       </section>
 
-      <AnimatePresence>
-        {notification && (
-          <motion.div
-            initial={{ opacity: 0, y: 50, scale: 0.95, x: '-50%' }}
-            animate={{ opacity: 1, y: 0, scale: 1, x: '-50%' }}
-            exit={{ opacity: 0, y: 20, scale: 0.95, x: '-50%' }}
-            className="fixed bottom-6 left-1/2 -translate-x-1/2 md:left-auto md:right-6 md:translate-x-0 z-50 flex items-center gap-2 rounded-xl border border-violet-200 bg-white/95 backdrop-blur-sm pl-4 pr-1.5 py-1.5 shadow-sm dark:border-violet-500/30 dark:bg-[#1a1525] w-[calc(100%-2rem)] md:w-auto max-w-sm"
-          >
+      {notification && (
+          <div className="fixed bottom-6 left-1/2 z-50 flex w-[calc(100%-2rem)] max-w-sm -translate-x-1/2 items-center gap-2 rounded-xl border border-violet-200 bg-white/95 py-1.5 pl-4 pr-1.5 shadow-sm backdrop-blur-sm motion-safe:animate-in motion-safe:fade-in-0 motion-safe:slide-in-from-bottom-3 motion-safe:zoom-in-95 motion-safe:duration-200 md:left-auto md:right-6 md:w-auto md:translate-x-0 dark:border-violet-500/30 dark:bg-[#1a1525]">
             <div className="h-2 w-2 rounded-full bg-violet-600 dark:bg-violet-400 shrink-0" />
             <span className={cn(sansFont.className, "text-sm text-slate-800 dark:text-slate-200 truncate")}>
               {notification}
             </span>
             <button
-              onClick={() => setNotification(null)}
+              onClick={clearNotification}
               className={cn(monoFont.className, "ml-auto rounded-lg border border-violet-100 bg-violet-50/50 px-2 py-0.5 text-xs text-violet-600 hover:bg-violet-100 dark:border-violet-850 dark:bg-violet-900/30 dark:text-violet-300 dark:hover:bg-violet-900/50")}
             >
               close
             </button>
-          </motion.div>
+          </div>
         )}
-      </AnimatePresence>
     </StackVertical>
   )
 }
@@ -1178,22 +970,13 @@ function ThreadBubble({
             autoFocus
             className={cn(sansFont.className, "min-h-[100px] w-full resize-none overflow-hidden rounded-lg border border-violet-200 bg-background px-4 py-3 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-violet-300 dark:border-violet-500/30 dark:text-slate-100")}
           />
-          {editImageUrls.length > 0 && (
-            <div className="flex flex-wrap gap-2 mt-2.5">
-              {editImageUrls.map((url, idx) => (
-                <div key={idx} className="relative group/thumb border border-border bg-muted/40 p-0.5 rounded-lg animate-in zoom-in-95">
-                  <img src={url} alt="Edit attachment" className="rounded max-h-16 w-24 object-cover" />
-                  <button 
-                    type="button" 
-                    onClick={() => setEditImageUrls(prev => prev.filter((_, i) => i !== idx))} 
-                    className="absolute top-1 right-1 bg-rose-500 hover:bg-rose-600 text-white rounded-full p-1 text-[8px] leading-none transition-colors cursor-pointer"
-                  >
-                    ✕
-                  </button>
-                </div>
-              ))}
-            </div>
-          )}
+          <AttachmentPreviewGrid
+            urls={editImageUrls}
+            onRemove={(index) => setEditImageUrls(prev => prev.filter((_, itemIndex) => itemIndex !== index))}
+            alt="Edit attachment"
+            className="mt-2.5"
+            compact
+          />
           <div className="flex justify-between items-center gap-2">
             <div className="flex items-center gap-3">
               <input 
@@ -1203,25 +986,12 @@ function ThreadBubble({
                 placeholder="Passcode"
                 className="w-24 rounded-full border border-border bg-background px-3 py-1.5 text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-violet-300 dark:text-slate-100"
               />
-              <label className="flex items-center gap-1 cursor-pointer text-slate-500 hover:text-violet-500 text-xs font-semibold select-none">
-                <input 
-                  type="file" 
-                  accept="image/*" 
-                  multiple
-                  onChange={e => {
-                    const files = e.target.files
-                    if (files) {
-                      Array.from(files).forEach(file => {
-                        handleImageUpload(file, (url) => setEditImageUrls(prev => prev.length >= MAX_ATTACHMENT_COUNT ? prev : [...prev, url]))
-                      })
-                    }
-                    e.target.value = ''
-                  }} 
-                  className="hidden" 
-                />
-                <ImageIcon size={12} />
-                Attach images
-              </label>
+              <AttachmentUploadButton
+                onFiles={(files) => files.forEach(file => {
+                  handleImageUpload(file, (url) => setEditImageUrls(prev => prev.length >= MAX_ATTACHMENT_COUNT ? prev : [...prev, url]))
+                })}
+                accent="violet"
+              />
             </div>
             <div className="flex gap-2">
               <Button variant="ghost" size="sm" onClick={onCancel} className="text-xs h-8">

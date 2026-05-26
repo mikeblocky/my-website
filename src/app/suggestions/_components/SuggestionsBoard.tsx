@@ -1,7 +1,8 @@
 'use client'
 
-import { FormEvent, useEffect, useMemo, useState, useTransition } from 'react'
-import { BookOpen, Camera, ChevronLeft, ChevronRight, ExternalLink, Link as LinkIcon, Loader2, ChevronDown, Info, Star, Lock, Unlock, Calendar, User, Share2, CornerDownRight, MessageSquareReply, Image as ImageIcon } from 'lucide-react'
+import { FormEvent, useCallback, useEffect, useMemo, useState, useTransition } from 'react'
+import Image from 'next/image'
+import { BookOpen, Camera, ChevronLeft, ChevronRight, ExternalLink, Link as LinkIcon, Loader2, ChevronDown, Info, Star, Calendar, User, Share2, CornerDownRight, MessageSquareReply } from 'lucide-react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { Button } from '@/components/ui/primitives/button'
 import { ImageGallery } from '@/components/ui/ImageGallery'
@@ -13,6 +14,12 @@ import { cn } from '@/lib/utils/utils'
 import { sansFont, monoFont } from '@/styles/fonts/fonts'
 import { prepareImageForUpload } from '@/lib/images/prepare-upload'
 import { MAX_ATTACHMENT_COUNT } from '@/lib/images/attachment-limits'
+import { formatBoardDate as formatDate, sortByCreatedAt, type ApiCooldown } from '@/lib/boards/board-utils'
+import { useBoardCooldown, useButtonFeedback, useControlledState, useTimedMessage } from '@/lib/boards/board-hooks'
+import { decodeHtmlEntities } from '@/lib/text/html-entities'
+import { AdminLockToggle } from '@/components/ui/admin/AdminLockToggle'
+import { AttachmentPreviewGrid } from '@/components/ui/attachments/AttachmentPreviewGrid'
+import { AttachmentUploadButton } from '@/components/ui/attachments/AttachmentUploadButton'
 import { initialSuggestions } from '../_data/suggestions'
 import { getAutomaticReference } from '../_utils/reference'
 import type { MediaSuggestion, SuggestionCategory, SuggestionReference, SuggestionStatus } from '../_types/suggestion'
@@ -29,20 +36,6 @@ const categories: Array<{ value: SuggestionCategory; label: string }> = [
   { value: 'other', label: 'Other' }
 ]
 
-const dateFormatter = new Intl.DateTimeFormat('en', {
-  year: 'numeric',
-  month: 'short',
-  day: 'numeric',
-  hour: 'numeric',
-  minute: '2-digit',
-  timeZone: 'Asia/Bangkok'
-})
-
-type ApiCooldown = {
-  expiresAt: string | null
-  remainingMs: number
-}
-
 type FormState = {
   author: string
   title: string
@@ -52,36 +45,7 @@ type FormState = {
   bestPart: string
 }
 
-const seededSuggestions = [...initialSuggestions].sort(
-  (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-)
-
-function sortSuggestions(items: MediaSuggestion[]) {
-  return items.slice().sort(
-    (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-  )
-}
-
-function formatDate(iso: string) {
-  try {
-    return dateFormatter.format(new Date(iso))
-  } catch (_error) {
-    return iso
-  }
-}
-
-function formatCooldown(ms: number) {
-  const totalSeconds = Math.max(0, Math.ceil(ms / 1000))
-  const hours = Math.floor(totalSeconds / 3600)
-  const minutes = Math.floor((totalSeconds % 3600) / 60)
-  const seconds = totalSeconds % 60
-
-  if (hours > 0) {
-    return `${hours}h ${minutes.toString().padStart(2, '0')}m ${seconds.toString().padStart(2, '0')}s`
-  }
-
-  return `${minutes}m ${seconds.toString().padStart(2, '0')}s`
-}
+const seededSuggestions = sortByCreatedAt(initialSuggestions)
 
 function getStatusConfig(status: SuggestionStatus | undefined, category: SuggestionCategory) {
   if (!status) return null
@@ -136,7 +100,7 @@ export function SuggestionsBoard({
     note: '',
     bestPart: ''
   })
-  const [suggestions, setSuggestions] = useState<MediaSuggestion[]>(sortSuggestions(initialItems))
+  const [suggestions, setSuggestions] = useState<MediaSuggestion[]>(sortByCreatedAt(initialItems))
   const [reference, setReference] = useState<SuggestionReference | undefined>()
   const [imageUrls, setImageUrls] = useState<string[]>([])
   const [currentPage, setCurrentPage] = useState(1)
@@ -145,21 +109,16 @@ export function SuggestionsBoard({
   const [isPending, startTransition] = useTransition()
   const [isReferenceLoading, setIsReferenceLoading] = useState(false)
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
-  const [notification, setNotification] = useState<string | null>(null)
-  const [cooldownExpiresAt, setCooldownExpiresAt] = useState<string | null>(null)
-  const [cooldownRemainingMs, setCooldownRemainingMs] = useState(0)
+  const { message: notification, showMessage: showNotification, clearMessage: clearNotification } = useTimedMessage()
+  const { isCooldownActive, cooldownLabel, applyCooldown } = useBoardCooldown()
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
 
   // Fallback states if not parent-controlled:
-  const [localPasscode, localSetPasscode] = useState('')
-  const [localIsAdminMode, localSetIsAdminMode] = useState(false)
   const [showPasscodeInput, setShowPasscodeInput] = useState(false)
   const [activeStatusDropdown, setActiveStatusDropdown] = useState<string | null>(null)
 
-  const passcode = parentPasscode !== undefined ? parentPasscode : localPasscode
-  const setPasscode = parentSetPasscode !== undefined ? parentSetPasscode : localSetPasscode
-  const isAdminMode = parentIsAdminMode !== undefined ? parentIsAdminMode : localIsAdminMode
-  const setIsAdminMode = parentSetIsAdminMode !== undefined ? parentSetIsAdminMode : localSetIsAdminMode
+  const [passcode, setPasscode] = useControlledState(parentPasscode, parentSetPasscode, '')
+  const [isAdminMode, setIsAdminMode] = useControlledState(parentIsAdminMode, parentSetIsAdminMode, false)
 
   // Threading / Comments States
   const [replyingTo, setReplyingTo] = useState<string | null>(null)
@@ -175,9 +134,7 @@ export function SuggestionsBoard({
   const [editImageUrls, setEditImageUrls] = useState<string[]>([])
   
   // Share & Snap Feedback state
-  const [buttonFeedback, setButtonFeedback] = useState<Record<string, string>>({})
-
-  const isCooldownActive = cooldownRemainingMs > 0
+  const { feedback: buttonFeedback, showFeedback: showButtonFeedback } = useButtonFeedback()
 
   // Close category dropdown when clicking outside
   useEffect(() => {
@@ -205,31 +162,11 @@ export function SuggestionsBoard({
     return () => document.removeEventListener('click', handleClickOutside)
   }, [activeStatusDropdown])
 
-  const cooldownLabel = formatCooldown(cooldownRemainingMs)
-
   const autoReference = useMemo(() => {
     const title = formState.title.trim()
     if (!title || formState.referenceUrl.trim() || reference) return null
     return getAutomaticReference(title, formState.category)
   }, [formState.title, formState.category, formState.referenceUrl, reference])
-
-  function applyCooldown(cooldown?: ApiCooldown | null) {
-    if (!cooldown?.expiresAt || cooldown.remainingMs <= 0) {
-      setCooldownExpiresAt(null)
-      setCooldownRemainingMs(0)
-      return
-    }
-
-    setCooldownExpiresAt(cooldown.expiresAt)
-    setCooldownRemainingMs(cooldown.remainingMs)
-  }
-
-  function showNotification(message: string) {
-    setNotification(message)
-    setTimeout(() => {
-      setNotification((current) => current === message ? null : current)
-    }, 4000)
-  }
 
   async function handleImageUpload(file: File) {
     try {
@@ -240,7 +177,7 @@ export function SuggestionsBoard({
     }
   }
 
-  async function loadReferenceForUrl(url: string) {
+  const loadReferenceForUrl = useCallback(async (url: string) => {
     if (!url) return
 
     setIsReferenceLoading(true)
@@ -253,8 +190,8 @@ export function SuggestionsBoard({
       }
 
       setReference(payload.reference)
-      if (!formState.title.trim() && payload.reference.title) {
-        setFormState(prev => ({ ...prev, title: payload.reference?.title || prev.title }))
+      if (payload.reference.title) {
+        setFormState(prev => prev.title.trim() ? prev : { ...prev, title: payload.reference?.title || prev.title })
       }
       showNotification('Reference details loaded.')
     } catch (error) {
@@ -263,7 +200,7 @@ export function SuggestionsBoard({
     } finally {
       setIsReferenceLoading(false)
     }
-  }
+  }, [showNotification])
 
   async function loadReference() {
     const url = formState.referenceUrl.trim()
@@ -311,7 +248,7 @@ export function SuggestionsBoard({
     }, 600)
 
     return () => clearTimeout(timer)
-  }, [formState.referenceUrl, formState.category])
+  }, [formState.referenceUrl, formState.category, loadReferenceForUrl])
 
   async function handleStatusChange(id: string, newStatus: SuggestionStatus) {
     try {
@@ -337,22 +274,6 @@ export function SuggestionsBoard({
   }
 
   useEffect(() => {
-    if (!cooldownExpiresAt) return
-
-    const tick = () => {
-      const remaining = Math.max(0, new Date(cooldownExpiresAt).getTime() - Date.now())
-      setCooldownRemainingMs(remaining)
-      if (remaining === 0) {
-        setCooldownExpiresAt(null)
-      }
-    }
-
-    tick()
-    const interval = window.setInterval(tick, 1000)
-    return () => window.clearInterval(interval)
-  }, [cooldownExpiresAt])
-
-  useEffect(() => {
     const controller = new AbortController()
     let cancelled = false
 
@@ -365,7 +286,7 @@ export function SuggestionsBoard({
 
         const payload = (await response.json()) as { suggestions?: MediaSuggestion[]; cooldown?: ApiCooldown }
         if (!cancelled && Array.isArray(payload.suggestions)) {
-          setSuggestions(sortSuggestions(payload.suggestions))
+          setSuggestions(sortByCreatedAt(payload.suggestions))
           applyCooldown(payload.cooldown)
         }
       } catch (error) {
@@ -387,7 +308,7 @@ export function SuggestionsBoard({
       cancelled = true
       controller.abort()
     }
-  }, [])
+  }, [applyCooldown, showNotification])
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -431,17 +352,6 @@ export function SuggestionsBoard({
         setErrorMessage(error instanceof Error ? error.message : 'Unable to send your suggestion.')
       }
     })
-  }
-
-  function showButtonFeedback(key: string, message: string) {
-    setButtonFeedback(prev => ({ ...prev, [key]: message }))
-    setTimeout(() => {
-      setButtonFeedback(prev => {
-        const next = { ...prev }
-        delete next[key]
-        return next
-      })
-    }, 2000)
   }
 
   async function shareAndSnap(id: string) {
@@ -767,41 +677,21 @@ export function SuggestionsBoard({
           className={cn(sansFont.className, "min-h-[120px] w-full resize-none bg-transparent px-4 py-3 text-sm text-slate-800 placeholder:text-muted-foreground/60 focus:outline-none dark:text-slate-100")}
         />
 
-        {imageUrls.length > 0 && (
-          <div className="flex flex-wrap gap-2 border-t border-border/60 px-4 py-3">
-            {imageUrls.map((url, index) => (
-              <div key={url} className="relative rounded-lg border border-border bg-muted/40 p-0.5">
-                <img src={url} alt="Suggestion attachment" className="h-16 w-24 rounded object-cover" />
-                <button
-                  type="button"
-                  onClick={() => setImageUrls(prev => prev.filter((_, itemIndex) => itemIndex !== index))}
-                  className="absolute right-1 top-1 rounded-full bg-rose-500 px-1.5 py-0.5 text-[9px] font-bold leading-none text-white hover:bg-rose-600"
-                >
-                  x
-                </button>
-              </div>
-            ))}
-          </div>
-        )}
+        <AttachmentPreviewGrid
+          urls={imageUrls}
+          onRemove={(index) => setImageUrls(prev => prev.filter((_, itemIndex) => itemIndex !== index))}
+          alt="Suggestion attachment"
+          className={imageUrls.length > 0 ? 'border-t border-border/60 px-4 py-3' : undefined}
+          compact
+        />
 
         <div className="flex flex-col gap-3 border-t border-border/60 px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
-          <label className="flex cursor-pointer items-center gap-2 text-xs font-semibold text-slate-500 hover:text-teal-600 dark:hover:text-teal-300">
-            <input
-              type="file"
-              accept="image/*"
-              multiple
-              className="hidden"
-              onChange={(event) => {
-                const files = event.target.files
-                if (files) {
-                  Array.from(files).forEach(file => handleImageUpload(file))
-                }
-                event.target.value = ''
-              }}
-            />
-            <Camera size={14} />
-            Attach images
-          </label>
+          <AttachmentUploadButton
+            onFiles={(files) => files.forEach(file => handleImageUpload(file))}
+            iconSize={14}
+            className="gap-2"
+            accent="teal"
+          />
 
           <div className="flex items-center gap-3">
             {errorMessage && (
@@ -826,61 +716,16 @@ export function SuggestionsBoard({
               Suggestion archive
             </TextHeading>
 
-            {/* Elegant admin passcode lock toggle */}
-            <div className="flex items-center gap-1.5 ml-2">
-              <button
-                type="button"
-                onClick={() => {
-                  if (isAdminMode) {
-                    setIsAdminMode(false)
-                    setPasscode('')
-                  } else {
-                    setShowPasscodeInput(!showPasscodeInput)
-                  }
-                }}
-                className={cn(
-                  "rounded-full p-1.5 transition-colors duration-150 flex items-center justify-center hover:bg-slate-200/50 dark:hover:bg-slate-800/40 text-slate-400 hover:text-teal-650 dark:hover:text-teal-350",
-                  isAdminMode && "text-teal-600 dark:text-teal-400 bg-teal-50 dark:bg-teal-950/20"
-                )}
-                title={isAdminMode ? "Disable Admin Mode" : "Enable Admin Mode"}
-              >
-                {isAdminMode ? <Unlock size={14} /> : <Lock size={14} />}
-              </button>
-
-              <AnimatePresence>
-                {showPasscodeInput && !isAdminMode && (
-                  <motion.div
-                    initial={{ width: 0, opacity: 0 }}
-                    animate={{ width: 90, opacity: 1 }}
-                    exit={{ width: 0, opacity: 0 }}
-                    className="overflow-hidden flex items-center"
-                  >
-                    <input
-                      type="password"
-                      value={passcode}
-                      onChange={(e) => {
-                        setPasscode(e.target.value)
-                        // Auto lock check
-                        if (e.target.value.length >= 4) {
-                          setIsAdminMode(true)
-                          setShowPasscodeInput(false)
-                          showNotification('Admin Mode enabled. You can now toggle suggestion status levels!')
-                        }
-                      }}
-                      onKeyDown={(e) => {
-                        if (e.key === 'Enter') {
-                          setIsAdminMode(true)
-                          setShowPasscodeInput(false)
-                          showNotification('Admin Mode enabled. You can now toggle suggestion status levels!')
-                        }
-                      }}
-                      placeholder="Passcode"
-                      className="w-20 rounded-md border border-slate-200 bg-background px-2 py-0.5 text-[10px] text-slate-900 focus:outline-none focus:ring-1 focus:ring-teal-500 dark:border-slate-800 dark:text-slate-100"
-                    />
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
+            <AdminLockToggle
+              isAdminMode={isAdminMode}
+              setIsAdminMode={setIsAdminMode}
+              passcode={passcode}
+              setPasscode={setPasscode}
+              showPasscodeInput={showPasscodeInput}
+              setShowPasscodeInput={setShowPasscodeInput}
+              onEnabled={() => showNotification('Admin Mode enabled. You can now toggle suggestion status levels!')}
+              accent="teal"
+            />
           </div>
 
           <div className="flex shrink-0 items-center gap-3">
@@ -914,21 +759,28 @@ export function SuggestionsBoard({
               cardBgStyles = "bg-rose-50/30 dark:bg-rose-950/10 border border-rose-100/30 dark:border-rose-900/15 hover:bg-rose-50/40 dark:hover:bg-rose-950/15"
             }
 
+            const hasCardImage = !!suggestion.reference?.image
+
             return (
               <article
                 id={`suggestion-${suggestion.id}`}
                 key={suggestion.id}
-                className={cn("group relative rounded-2xl p-6 transition-all duration-200 shadow-none text-left", cardBgStyles)}
+                className={cn(
+                  "group relative rounded-2xl transition-all duration-200 shadow-none text-left overflow-hidden flex flex-col sm:flex-row items-stretch",
+                  cardBgStyles,
+                  hasCardImage ? "p-0" : "p-6"
+                )}
               >
-                <div className="flex flex-col gap-4 sm:flex-row">
-                  {suggestion.reference?.image && (
+                {hasCardImage && (
+                  <div className="relative w-full h-48 sm:h-auto sm:w-36 shrink-0 bg-slate-100 dark:bg-slate-900 border-b sm:border-b-0 sm:border-r border-slate-200/20 dark:border-slate-800/20">
                     <img
-                      src={suggestion.reference.image}
+                      src={suggestion.reference?.image}
                       alt=""
-                      className="h-32 w-full rounded-xl object-cover sm:w-28"
+                      className="w-full h-full object-cover object-center"
                     />
-                  )}
-                  <div className="min-w-0 flex-1 space-y-3">
+                  </div>
+                )}
+                <div className={cn("min-w-0 flex-1 space-y-3", hasCardImage ? "p-6" : "")}>
                     <div className="space-y-1">
                       <div className="flex flex-wrap items-center gap-2">
                         <span className="rounded-full bg-teal-50 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-teal-700 dark:bg-teal-950/40 dark:text-teal-300">
@@ -1135,47 +987,24 @@ export function SuggestionsBoard({
                             "min-h-[100px] w-full resize-none overflow-hidden rounded-xl border border-blue-200 bg-background px-4 py-3 text-base text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-300 dark:border-blue-500/30 dark:text-slate-100"
                           )}
                         />
-                        {replyImageUrls.length > 0 && (
-                          <div className="flex flex-wrap gap-2 mt-2">
-                            {replyImageUrls.map((url, idx) => (
-                              <div key={idx} className="relative group/thumb border border-border bg-muted/40 p-0.5 rounded-lg">
-                                <img src={url} alt="Attachment thumbnail" className="rounded max-h-16 w-24 object-cover" />
-                                <button
-                                  type="button"
-                                  onClick={() => setReplyImageUrls(prev => prev.filter((_, i) => i !== idx))}
-                                  className="absolute top-1 right-1 bg-rose-500 hover:bg-rose-600 text-white rounded-full p-1 text-[8px] leading-none transition-colors"
-                                >
-                                  ✕
-                                </button>
-                              </div>
-                            ))}
-                          </div>
-                        )}
+                        <AttachmentPreviewGrid
+                          urls={replyImageUrls}
+                          onRemove={(index) => setReplyImageUrls(prev => prev.filter((_, itemIndex) => itemIndex !== index))}
+                          className="mt-2"
+                          compact
+                        />
                         <div className="flex justify-between items-center gap-2 mt-3.5">
-                          <label className="flex items-center gap-1 cursor-pointer text-slate-500 hover:text-blue-500 text-xs font-semibold select-none">
-                            <input
-                              type="file"
-                              accept="image/*"
-                              multiple
-                              onChange={async (e) => {
-                                const files = e.target.files
-                                if (files) {
-                                  for (const file of Array.from(files)) {
-                                    try {
-                                      const url = await prepareImageForUpload(file)
-                                      setReplyImageUrls(prev => prev.length >= MAX_ATTACHMENT_COUNT ? prev : [...prev, url])
-                                    } catch (err) {
-                                      console.error(err)
-                                    }
-                                  }
-                                }
-                                e.target.value = ''
-                              }}
-                              className="hidden"
-                            />
-                            <ImageIcon size={12} />
-                            Attach images
-                          </label>
+                          <AttachmentUploadButton
+                            onFiles={(files) => files.forEach(async (file) => {
+                              try {
+                                const url = await prepareImageForUpload(file)
+                                setReplyImageUrls(prev => prev.length >= MAX_ATTACHMENT_COUNT ? prev : [...prev, url])
+                              } catch (err) {
+                                console.error(err)
+                              }
+                            })}
+                            accent="blue"
+                          />
                           <div className="flex gap-2">
                             <Button
                               variant="ghost"
@@ -1220,47 +1049,24 @@ export function SuggestionsBoard({
                             "min-h-[100px] w-full resize-none overflow-hidden rounded-xl border border-emerald-200 bg-background px-4 py-3 text-base text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-300 dark:border-emerald-500/30 dark:text-slate-100"
                           )}
                         />
-                        {followUpImageUrls.length > 0 && (
-                          <div className="flex flex-wrap gap-2 mt-2">
-                            {followUpImageUrls.map((url, idx) => (
-                              <div key={idx} className="relative group/thumb border border-border bg-muted/40 p-0.5 rounded-lg">
-                                <img src={url} alt="Attachment thumbnail" className="rounded max-h-16 w-24 object-cover" />
-                                <button
-                                  type="button"
-                                  onClick={() => setFollowUpImageUrls(prev => prev.filter((_, i) => i !== idx))}
-                                  className="absolute top-1 right-1 bg-rose-500 hover:bg-rose-600 text-white rounded-full p-1 text-[8px] leading-none transition-colors"
-                                >
-                                  ✕
-                                </button>
-                              </div>
-                            ))}
-                          </div>
-                        )}
+                        <AttachmentPreviewGrid
+                          urls={followUpImageUrls}
+                          onRemove={(index) => setFollowUpImageUrls(prev => prev.filter((_, itemIndex) => itemIndex !== index))}
+                          className="mt-2"
+                          compact
+                        />
                         <div className="flex justify-between items-center gap-2 mt-3.5">
-                          <label className="flex items-center gap-1 cursor-pointer text-slate-500 hover:text-emerald-500 text-xs font-semibold select-none">
-                            <input
-                              type="file"
-                              accept="image/*"
-                              multiple
-                              onChange={async (e) => {
-                                const files = e.target.files
-                                if (files) {
-                                  for (const file of Array.from(files)) {
-                                    try {
-                                      const url = await prepareImageForUpload(file)
-                                      setFollowUpImageUrls(prev => prev.length >= MAX_ATTACHMENT_COUNT ? prev : [...prev, url])
-                                    } catch (err) {
-                                      console.error(err)
-                                    }
-                                  }
-                                }
-                                e.target.value = ''
-                              }}
-                              className="hidden"
-                            />
-                            <ImageIcon size={12} />
-                            Attach images
-                          </label>
+                          <AttachmentUploadButton
+                            onFiles={(files) => files.forEach(async (file) => {
+                              try {
+                                const url = await prepareImageForUpload(file)
+                                setFollowUpImageUrls(prev => prev.length >= MAX_ATTACHMENT_COUNT ? prev : [...prev, url])
+                              } catch (err) {
+                                console.error(err)
+                              }
+                            })}
+                            accent="emerald"
+                          />
                           <div className="flex gap-2">
                             <Button
                               variant="ghost"
@@ -1289,7 +1095,6 @@ export function SuggestionsBoard({
                       </div>
                     )}
                   </div>
-                </div>
               </article>
             )
           })}
@@ -1333,7 +1138,7 @@ export function SuggestionsBoard({
               {notification}
             </span>
             <button
-              onClick={() => setNotification(null)}
+              onClick={clearNotification}
               className={cn(monoFont.className, "ml-auto rounded-lg border border-teal-100 bg-teal-50/50 px-2 py-0.5 text-xs text-teal-700 hover:bg-teal-100 dark:border-teal-500/20 dark:bg-teal-900/30 dark:text-teal-300 dark:hover:bg-teal-900/50")}
             >
               close
@@ -1347,23 +1152,40 @@ export function SuggestionsBoard({
 
 function ReferencePreview({ reference, compact = false }: { reference: SuggestionReference; compact?: boolean }) {
   const hasMeta = reference.author || reference.releaseDate || reference.episodes || reference.chapters || reference.rating
+  const title = decodeHtmlEntities(reference.title)
+  const description = decodeHtmlEntities(reference.description)
+  const author = decodeHtmlEntities(reference.author)
+  const releaseDate = decodeHtmlEntities(reference.releaseDate)
+  const rating = decodeHtmlEntities(reference.rating)
+  const siteName = decodeHtmlEntities(reference.siteName)
+
+  const hasImage = !!reference.image
 
   return (
     <div className={cn(
-      "flex flex-col sm:flex-row min-w-0 gap-4 rounded-xl bg-teal-50/45 p-4 dark:bg-teal-950/10 border border-teal-100/40 dark:border-teal-950/20",
-      compact && "bg-slate-100/40 dark:bg-slate-900/50 p-3 sm:p-4 border-0"
+      "flex min-w-0 items-stretch rounded-xl bg-teal-50/45 dark:bg-teal-950/10 border border-teal-100/40 dark:border-teal-950/20 overflow-hidden",
+      compact && "bg-slate-100/40 dark:bg-slate-900/50 border-0",
+      hasImage ? "p-0 gap-0" : (compact ? "p-3 sm:p-4 gap-4" : "p-4 gap-4")
     )}>
-      {reference.image && (
-        <img
-          src={reference.image}
-          alt=""
-          className={cn(
-            "h-28 w-full shrink-0 rounded-lg object-cover sm:w-20 sm:h-20 shadow-sm border border-slate-200/40 dark:border-slate-800/40",
-            compact && "h-20 w-16 sm:w-16"
-          )}
-        />
+      {hasImage && (
+        <div className={cn(
+          "relative shrink-0 bg-slate-100 dark:bg-slate-900 border-r border-slate-200/20 dark:border-slate-800/20",
+          compact ? "w-20 sm:w-24" : "w-24 sm:w-32"
+        )}>
+          <Image
+            src={reference.image!}
+            alt=""
+            fill
+            unoptimized
+            sizes={compact ? "96px" : "128px"}
+            className="object-cover object-center"
+          />
+        </div>
       )}
-      <div className="min-w-0 flex-1 space-y-2">
+      <div className={cn(
+        "min-w-0 flex-1 space-y-2",
+        hasImage && (compact ? "p-3 sm:p-4" : "p-4")
+      )}>
         <div className="flex min-w-0 items-center justify-between gap-2">
           <div className="flex min-w-0 items-center gap-1.5">
             <LinkIcon size={12} className="shrink-0 text-teal-600 dark:text-teal-400" />
@@ -1374,7 +1196,7 @@ function ReferencePreview({ reference, compact = false }: { reference: Suggestio
                 rel="noreferrer"
                 className="inline-flex min-w-0 items-center gap-1 text-[11px] font-bold uppercase tracking-wider text-teal-700 hover:underline dark:text-teal-300"
               >
-                <span className="truncate">{reference.siteName || 'Link'}</span>
+                <span className="truncate">{siteName || 'Link'}</span>
                 <ExternalLink size={10} className="shrink-0" />
               </a>
             ) : (
@@ -1382,34 +1204,34 @@ function ReferencePreview({ reference, compact = false }: { reference: Suggestio
             )}
           </div>
 
-          {reference.rating && (
+          {rating && (
             <div className="flex items-center gap-1 rounded bg-amber-500/10 px-1.5 py-0.5 text-[10px] font-bold text-amber-700 dark:text-amber-300 border border-amber-500/20">
               <Star size={10} className="fill-amber-500 text-amber-600 dark:text-amber-400" />
-              <span>{reference.rating}</span>
+              <span>{rating}</span>
             </div>
           )}
         </div>
 
         <div className="space-y-1">
-          {reference.title && (
+          {title && (
             <p className="line-clamp-2 text-sm font-bold text-slate-800 dark:text-slate-100">
-              {reference.title}
+              {title}
             </p>
           )}
 
           {/* Metadata Badges Row */}
           {hasMeta && (
             <div className="flex flex-wrap gap-x-3 gap-y-1.5 text-[11px] font-medium text-slate-500 dark:text-slate-400 pt-0.5">
-              {reference.author && (
+              {author && (
                 <span className="flex items-center gap-1">
                   <User size={11} className="text-teal-600/70" />
-                  <span className="truncate max-w-[120px]" title={reference.author}>{reference.author}</span>
+                  <span className="truncate max-w-[120px]" title={author}>{author}</span>
                 </span>
               )}
-              {reference.releaseDate && (
+              {releaseDate && (
                 <span className="flex items-center gap-1">
                   <Calendar size={11} className="text-teal-600/70" />
-                  <span>{reference.releaseDate}</span>
+                  <span>{releaseDate}</span>
                 </span>
               )}
               {reference.episodes && (
@@ -1425,9 +1247,9 @@ function ReferencePreview({ reference, compact = false }: { reference: Suggestio
             </div>
           )}
 
-          {reference.description && (
+          {description && (
             <p className="line-clamp-2 text-xs leading-relaxed text-muted-foreground pt-0.5">
-              {reference.description}
+              {description}
             </p>
           )}
         </div>
@@ -1435,6 +1257,7 @@ function ReferencePreview({ reference, compact = false }: { reference: Suggestio
     </div>
   )
 }
+
 
 /** A single thread message rendered as a layered bubble */
 function ThreadBubble({ 
@@ -1552,22 +1375,13 @@ function ThreadBubble({
             autoFocus
             className={cn(sansFont.className, "min-h-[100px] w-full resize-none overflow-hidden rounded-lg border border-blue-200 bg-background px-4 py-3 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-300 dark:border-blue-500/30 dark:text-slate-100")}
           />
-          {editImageUrls.length > 0 && (
-            <div className="flex flex-wrap gap-2 mt-2.5">
-              {editImageUrls.map((url, idx) => (
-                <div key={idx} className="relative group/thumb border border-border bg-muted/40 p-0.5 rounded-lg animate-in zoom-in-95">
-                  <img src={url} alt="Edit attachment" className="rounded max-h-16 w-24 object-cover" />
-                  <button 
-                    type="button" 
-                    onClick={() => setEditImageUrls(prev => prev.filter((_, i) => i !== idx))} 
-                    className="absolute top-1 right-1 bg-rose-500 hover:bg-rose-600 text-white rounded-full p-1 text-[8px] leading-none transition-colors cursor-pointer"
-                  >
-                    ✕
-                  </button>
-                </div>
-              ))}
-            </div>
-          )}
+          <AttachmentPreviewGrid
+            urls={editImageUrls}
+            onRemove={(index) => setEditImageUrls(prev => prev.filter((_, itemIndex) => itemIndex !== index))}
+            alt="Edit attachment"
+            className="mt-2.5"
+            compact
+          />
           <div className="flex justify-between items-center gap-2">
             <div className="flex items-center gap-3">
               <input 
@@ -1577,25 +1391,12 @@ function ThreadBubble({
                 placeholder="Passcode"
                 className="w-24 rounded-full border border-border bg-background px-3 py-1.5 text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-300 dark:text-slate-100"
               />
-              <label className="flex items-center gap-1 cursor-pointer text-slate-500 hover:text-blue-500 text-xs font-semibold select-none">
-                <input 
-                  type="file" 
-                  accept="image/*" 
-                  multiple
-                  onChange={e => {
-                    const files = e.target.files
-                    if (files) {
-                      Array.from(files).forEach(file => {
-                        handleImageUpload(file, (url) => setEditImageUrls(prev => prev.length >= MAX_ATTACHMENT_COUNT ? prev : [...prev, url]))
-                      })
-                    }
-                    e.target.value = ''
-                  }} 
-                  className="hidden" 
-                />
-                <ImageIcon size={12} />
-                Attach images
-              </label>
+              <AttachmentUploadButton
+                onFiles={(files) => files.forEach(file => {
+                  handleImageUpload(file, (url) => setEditImageUrls(prev => prev.length >= MAX_ATTACHMENT_COUNT ? prev : [...prev, url]))
+                })}
+                accent="blue"
+              />
             </div>
             <div className="flex gap-2">
               <Button variant="ghost" size="sm" onClick={onCancel} className="text-xs h-8">
