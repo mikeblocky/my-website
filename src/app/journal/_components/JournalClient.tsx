@@ -10,6 +10,7 @@ import { monoFont } from '@/styles/fonts/fonts'
 import type { BlogPost } from '@/app/blog/_types/blog'
 import { Keyboard, MousePointer, Book, PenTool } from 'lucide-react'
 import { PillTabs } from '@/components/ui/tabs/PillTabs'
+import { useUrlPersistedTab } from '@/components/ui/tabs/useUrlPersistedTab'
 import { SmoothPanel } from '@/components/ui/transition/SmoothPanel'
 
 const SpotifyIcon = () => (
@@ -38,8 +39,12 @@ type Tab = 'essays' | 'notes' | 'utensils' | 'activity'
 
 const JOURNAL_CLIENT_VERSION = 'journal-client-2026-05-25-cache-bust-1'
 
+function isJournalTab(value: string): value is Tab {
+	return value === 'essays' || value === 'notes' || value === 'utensils' || value === 'activity'
+}
+
 export function JournalClient({ posts }: JournalClientProps) {
-	const [activeTab, setActiveTab] = useState<Tab>('essays')
+	const [activeTab, setActiveTab] = useUrlPersistedTab<Tab>('mikeblocky:journal-tab', 'essays', isJournalTab)
 	const monthGroups = getDaysByMonth()
 	const mostRecentMonth = monthGroups[0]?.month
 

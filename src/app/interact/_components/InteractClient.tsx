@@ -1,9 +1,10 @@
 'use client'
 
-import { useState, useSyncExternalStore } from 'react'
+import { useCallback, useState, useSyncExternalStore } from 'react'
 import dynamic from 'next/dynamic'
-import { useSearchParams } from 'next/navigation'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { PillTabs } from '@/components/ui/tabs/PillTabs'
+import { usePersistedTab } from '@/components/ui/tabs/usePersistedTab'
 import { LoadingSurface } from '@/components/ui/loading/LoadingSurface'
 import { SmoothPanel } from '@/components/ui/transition/SmoothPanel'
 
@@ -67,11 +68,15 @@ function getServerHash() {
 }
 
 export function InteractClient() {
+	const router = useRouter()
+	const pathname = usePathname()
 	const searchParams = useSearchParams()
 	const tabParam = searchParams.get('tab')
 	const hash = useSyncExternalStore(subscribeToHashChange, getCurrentHash, getServerHash)
+	const isInteractTab = useCallback((value: string): value is Tab => getTabFromParam(value) !== null, [])
+	const [storedTab, setStoredTab] = usePersistedTab<Tab>('mikeblocky:interact-tab', 'guestbook', isInteractTab)
 	const [selectedTab, setSelectedTab] = useState<Tab | null>(null)
-	const activeTab = selectedTab ?? getTabFromParam(tabParam) ?? getTabFromHash(hash) ?? 'guestbook'
+	const activeTab = selectedTab ?? getTabFromParam(tabParam) ?? getTabFromHash(hash) ?? storedTab
 	
 	const [passcode, setPasscode] = useState('')
 	const [isAdminMode, setIsAdminMode] = useState(false)
@@ -87,7 +92,13 @@ export function InteractClient() {
 			<PillTabs
 				tabs={tabs}
 				activeTab={activeTab}
-				onTabChange={setSelectedTab}
+				onTabChange={(tab) => {
+					setSelectedTab(tab)
+					setStoredTab(tab)
+					const params = new URLSearchParams(searchParams.toString())
+					params.set('tab', tab)
+					router.replace(`${pathname}?${params.toString()}`, { scroll: false })
+				}}
 				className="pb-1"
 				showCounts={false}
 			/>

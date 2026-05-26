@@ -2,7 +2,7 @@
 
 import { FormEvent, useEffect, useState, useTransition, useMemo } from 'react'
 import { initialTalks } from '../_data/talks'
-import { TalkTopic, ThreadMessage } from '../_types/talk'
+import { TalkTopic } from '../_types/talk'
 import { RichText } from '@/components/ui/RichText'
 import { ImageGallery } from '@/components/ui/ImageGallery'
 import { StackVertical } from '@/components/layout/layout-stack/layout-stack'
@@ -20,6 +20,8 @@ import { useBoardCooldown, useButtonFeedback, useControlledState, useTimedMessag
 import { AdminLockToggle } from '@/components/ui/admin/AdminLockToggle'
 import { AttachmentPreviewGrid } from '@/components/ui/attachments/AttachmentPreviewGrid'
 import { AttachmentUploadButton } from '@/components/ui/attachments/AttachmentUploadButton'
+import { BoardThreadBubble } from '@/components/ui/boards/BoardThreadBubble'
+import { snapTalkCard } from './talk-snap'
 
 const seededTalks = sortByCreatedAt(initialTalks)
 
@@ -367,61 +369,13 @@ export function TalkBoard({
   }
 
   async function snapAndCopy(id: string) {
-    const element = document.getElementById(`talk-${id}`);
-    if (!element) return;
-
-    const url = `${window.location.origin}/talk/${id}`;
-    const isDark = document.documentElement.classList.contains('dark');
-    const actionsDiv = element.querySelector('.talk-actions') as HTMLElement;
-    if (actionsDiv) actionsDiv.style.visibility = 'hidden';
-
-    const moreOverlays = element.querySelectorAll('.gallery-more-overlay') as NodeListOf<HTMLElement>;
-    const zoomOverlays = element.querySelectorAll('.gallery-zoom-overlay') as NodeListOf<HTMLElement>;
-    moreOverlays.forEach(el => el.style.display = 'none');
-    zoomOverlays.forEach(el => el.style.display = 'none');
-
-    const linkBar = document.createElement('div');
-    linkBar.style.cssText = `margin-top:12px;padding-top:10px;border-top:1px solid ${isDark ? '#ffffff15' : '#00000010'};font-size:12px;color:${isDark ? '#94a3b8' : '#64748b'};font-family:system-ui,sans-serif;letter-spacing:0.02em;`;
-    linkBar.textContent = `Link: ${url}`;
-    element.appendChild(linkBar);
-
     try {
-      const { toPng } = await import('html-to-image');
-      const dataUrl = await toPng(element, {
-        backgroundColor: isDark ? '#1a1525' : '#ffffff',
-        style: {
-          borderRadius: '16px',
-          border: isDark ? '1px solid #3b2d5a' : '1px solid #e2e8f0',
-          boxShadow: 'none',
-          padding: '24px',
-          margin: '0',
-          display: 'block',
-          color: isDark ? '#f1f5f9' : '#0f172a'
-        }
-      });
-      const res = await fetch(dataUrl);
-      const blob = await res.blob();
-
-      try {
-        await navigator.clipboard.write([
-          new ClipboardItem({ 'image/png': blob })
-        ]);
-        showButtonFeedback(`snap-${id}`, '✓ Snapped');
-      } catch (err) {
-        const a = document.createElement('a');
-        a.href = dataUrl;
-        a.download = `talk-${id}.png`;
-        a.click();
-        showButtonFeedback(`snap-${id}`, '✓ Saved');
-      }
+      const result = await snapTalkCard(id)
+      if (result === 'snapped') showButtonFeedback(`snap-${id}`, '✓ Snapped')
+      if (result === 'saved') showButtonFeedback(`snap-${id}`, '✓ Saved')
     } catch (e) {
-      console.error('Snap failed', e);
-      showButtonFeedback(`snap-${id}`, 'Could not snap');
-    } finally {
-      if (actionsDiv) actionsDiv.style.visibility = '';
-      moreOverlays.forEach(el => el.style.display = '');
-      zoomOverlays.forEach(el => el.style.display = '');
-      linkBar.remove();
+      console.error('Snap failed', e)
+      showButtonFeedback(`snap-${id}`, 'Could not snap')
     }
   }
 
@@ -607,12 +561,13 @@ export function TalkBoard({
                     {thread.length > 0 && (
                       <div className="mt-2 space-y-3">
                         {thread.map((msg, i) => (
-                          <ThreadBubble 
+                          <BoardThreadBubble
                             key={msg.id} 
                             message={msg} 
                             depth={i} 
                             author={talk.author}
                             talkId={talk.id}
+                            theme="blue"
                             isEditing={editingMessageId === msg.id}
                             editBody={editBody}
                             setEditBody={setEditBody}
@@ -839,169 +794,5 @@ export function TalkBoard({
           </div>
         )}
     </StackVertical>
-  )
-}
-
-/** A single thread message rendered as a layered bubble */
-function ThreadBubble({ 
-  message, 
-  depth, 
-  author,
-  talkId,
-  isEditing,
-  editBody,
-  setEditBody,
-  editImageUrls,
-  setEditImageUrls,
-  onEditClick,
-  onCancel,
-  onSave,
-  passcode,
-  setPasscode,
-  isPending
-}: { 
-  message: ThreadMessage; 
-  depth: number; 
-  author?: string;
-  talkId: string;
-  isEditing: boolean;
-  editBody: string;
-  setEditBody: (v: string) => void;
-  editImageUrls: string[];
-  setEditImageUrls: React.Dispatch<React.SetStateAction<string[]>>;
-  onEditClick: () => void;
-  onCancel: () => void;
-  onSave: () => void;
-  passcode: string;
-  setPasscode: (v: string) => void;
-  isPending: boolean;
-}) {
-  const isAdmin = message.role === 'admin'
-  const indentClass = [
-    "ml-2 sm:ml-4",
-    "ml-3 sm:ml-8",
-    "ml-4 sm:ml-12",
-    "ml-5 sm:ml-16"
-  ][Math.min(depth, 3)];
-
-  const handleImageUpload = async (file: File, callback: (url: string) => void) => {
-    try {
-      callback(await prepareImageForUpload(file))
-    } catch (error) {
-      console.error('Could not attach image', error)
-    }
-  }
-
-  return (
-    <div
-      style={{ marginLeft: isEditing ? '0px' : undefined }}
-      className={cn(
-        "group/bubble relative rounded-xl transition-all duration-300 p-4 border-0 shadow-none",
-        indentClass,
-        isAdmin
-          ? "bg-blue-50/45 dark:bg-blue-950/20 text-slate-800 dark:text-slate-200"
-          : "bg-emerald-50/45 dark:bg-emerald-950/20 text-slate-800 dark:text-slate-200",
-        isEditing && "ring-2 ring-blue-500/20"
-      )}
-    >
-      {!isEditing && (
-        <div 
-          className={cn(
-            "hidden sm:block absolute -left-4 top-[-16px] bottom-1/2 w-4 border-l-2 border-b-2 rounded-bl-lg pointer-events-none",
-            isAdmin 
-              ? "border-blue-200/70 dark:border-blue-500/20" 
-              : "border-emerald-200/70 dark:border-emerald-500/20"
-          )}
-        />
-      )}
-      <div className="flex items-center gap-2 mb-1.5 overflow-hidden">
-        <CornerDownRight size={12} className={isAdmin ? "text-blue-400" : "text-emerald-400"} />
-        <span className={cn(
-          sansFont.className,
-          "text-xs font-bold",
-          isAdmin ? "text-blue-600 dark:text-blue-400" : "text-emerald-600 dark:text-emerald-400"
-        )}>
-          {isAdmin ? 'Response' : (author || 'anonymous')}
-        </span>
-        
-        <div className="ml-auto flex items-center gap-2">
-          <span className={cn(
-            sansFont.className, 
-            "text-[11px] text-muted-foreground whitespace-nowrap transition-transform duration-300",
-            isAdmin && !isEditing && "group-hover/bubble:-translate-x-1"
-          )}>
-            {formatDate(message.createdAt)}
-          </span>
-          {isAdmin && !isEditing && (
-            <div className="w-0 overflow-hidden opacity-0 group-hover/bubble:w-8 group-hover/bubble:opacity-100 transition-all duration-300">
-              <button 
-                onClick={onEditClick}
-                className="text-[10px] font-bold uppercase tracking-wider text-blue-500 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
-              >
-                Edit
-              </button>
-            </div>
-          )}
-        </div>
-      </div>
-      
-      {isEditing ? (
-        <div className="space-y-3">
-          <textarea
-            value={editBody}
-            onChange={(e) => setEditBody(e.target.value)}
-            onInput={(e) => {
-              e.currentTarget.style.height = 'auto';
-              e.currentTarget.style.height = `${e.currentTarget.scrollHeight}px`;
-            }}
-            rows={Math.max(3, message.body.split('\n').length)}
-            autoFocus
-            className={cn(sansFont.className, "min-h-[100px] w-full resize-none overflow-hidden rounded-lg border border-blue-200 bg-background px-4 py-3 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-300 dark:border-blue-500/30 dark:text-slate-100")}
-          />
-          <AttachmentPreviewGrid
-            urls={editImageUrls}
-            onRemove={(index) => setEditImageUrls(prev => prev.filter((_, itemIndex) => itemIndex !== index))}
-            alt="Edit attachment"
-            className="mt-2.5"
-            compact
-          />
-          <div className="flex justify-between items-center gap-2">
-            <div className="flex items-center gap-3">
-              <input 
-                type="password"
-                value={passcode}
-                onChange={e => setPasscode(e.target.value)}
-                placeholder="Passcode"
-                className="w-24 rounded-full border border-border bg-background px-3 py-1.5 text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-300 dark:text-slate-100"
-              />
-              <AttachmentUploadButton
-                onFiles={(files) => files.forEach(file => {
-                  handleImageUpload(file, (url) => setEditImageUrls(prev => prev.length >= MAX_ATTACHMENT_COUNT ? prev : [...prev, url]))
-                })}
-                accent="blue"
-              />
-            </div>
-            <div className="flex gap-2">
-              <Button variant="ghost" size="sm" onClick={onCancel} className="text-xs h-8">
-                Cancel
-              </Button>
-              <Button size="sm" disabled={isPending || !editBody.trim()} onClick={onSave} className="h-8 rounded-full px-4 text-xs">
-                Save
-              </Button>
-            </div>
-          </div>
-        </div>
-      ) : (
-        <>
-          <div className={cn(sansFont.className, "text-base text-slate-700 dark:text-slate-300 leading-relaxed break-words")}>
-            <RichText text={message.body} theme="blue" />
-          </div>
-          <ImageGallery 
-            urls={message.imageUrls?.length ? message.imageUrls : (message.imageUrl ? [message.imageUrl] : [])} 
-            theme="blue"
-          />
-        </>
-      )}
-    </div>
   )
 }

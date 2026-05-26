@@ -1,11 +1,11 @@
 'use client'
 
-import { useState } from 'react'
 import dynamic from 'next/dynamic'
 import { ArtworksGallery } from './ArtworksGallery'
 import { StatItem } from "@/lib/stats/types"
 import { ArtworkItem } from '../_data/artworks'
 import { PillTabs } from '@/components/ui/tabs/PillTabs'
+import { useUrlPersistedTab } from '@/components/ui/tabs/useUrlPersistedTab'
 import { SmoothPanel } from '@/components/ui/transition/SmoothPanel'
 import { LoadingSurface } from '@/components/ui/loading/LoadingSurface'
 
@@ -26,8 +26,12 @@ interface GalleryClientProps {
 
 type Tab = 'illustrations' | 'stats'
 
+function isGalleryTab(value: string): value is Tab {
+	return value === 'illustrations' || value === 'stats'
+}
+
 export function GalleryClient({ sections, statsData }: GalleryClientProps) {
-	const [activeTab, setActiveTab] = useState<Tab>('illustrations')
+	const [activeTab, setActiveTab] = useUrlPersistedTab<Tab>('mikeblocky:artworks-tab', 'illustrations', isGalleryTab)
 
 	const tabs = [
 		{ id: 'illustrations' as Tab, label: 'Illustrations' },

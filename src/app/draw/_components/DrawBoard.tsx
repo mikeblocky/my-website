@@ -2,7 +2,7 @@
 
 import { FormEvent, useEffect, useState, useTransition, useMemo } from 'react'
 import { initialPrompts } from '../_data/prompts'
-import { DrawPrompt, DrawThreadMessage } from '../_types/draw'
+import { DrawPrompt } from '../_types/draw'
 import { RichText } from '@/components/ui/RichText'
 import { ImageGallery } from '@/components/ui/ImageGallery'
 import { StackVertical } from '@/components/layout/layout-stack/layout-stack'
@@ -19,6 +19,7 @@ import { useBoardCooldown, useButtonFeedback, useControlledState, useTimedMessag
 import { AdminLockToggle } from '@/components/ui/admin/AdminLockToggle'
 import { AttachmentPreviewGrid } from '@/components/ui/attachments/AttachmentPreviewGrid'
 import { AttachmentUploadButton } from '@/components/ui/attachments/AttachmentUploadButton'
+import { BoardThreadBubble } from '@/components/ui/boards/BoardThreadBubble'
 
 const seededPrompts = sortByCreatedAt(initialPrompts)
 
@@ -617,12 +618,13 @@ export function DrawBoard({
                     {thread.length > 0 && (
                       <div className="mt-2 space-y-3">
                         {thread.map((msg, i) => (
-                          <ThreadBubble 
+                          <BoardThreadBubble
                             key={msg.id} 
                             message={msg} 
                             depth={i} 
                             author={prompt.author}
                             promptId={prompt.id}
+                            theme="violet"
                             isEditing={editingMessageId === msg.id}
                             editBody={editBody}
                             setEditBody={setEditBody}
@@ -851,169 +853,5 @@ export function DrawBoard({
           </div>
         )}
     </StackVertical>
-  )
-}
-
-/** A single thread message rendered as a layered bubble */
-function ThreadBubble({ 
-  message, 
-  depth, 
-  author,
-  promptId,
-  isEditing,
-  editBody,
-  setEditBody,
-  editImageUrls,
-  setEditImageUrls,
-  onEditClick,
-  onCancel,
-  onSave,
-  passcode,
-  setPasscode,
-  isPending
-}: { 
-  message: DrawThreadMessage; 
-  depth: number; 
-  author?: string;
-  promptId: string;
-  isEditing: boolean;
-  editBody: string;
-  setEditBody: (v: string) => void;
-  editImageUrls: string[];
-  setEditImageUrls: React.Dispatch<React.SetStateAction<string[]>>;
-  onEditClick: () => void;
-  onCancel: () => void;
-  onSave: () => void;
-  passcode: string;
-  setPasscode: (v: string) => void;
-  isPending: boolean;
-}) {
-  const isAdmin = message.role === 'admin'
-  const indentClass = [
-    "ml-2 sm:ml-4",
-    "ml-3 sm:ml-8",
-    "ml-4 sm:ml-12",
-    "ml-5 sm:ml-16"
-  ][Math.min(depth, 3)];
-
-  const handleImageUpload = async (file: File, callback: (url: string) => void) => {
-    try {
-      callback(await prepareImageForUpload(file))
-    } catch (error) {
-      console.error('Could not attach image', error)
-    }
-  }
-
-  return (
-    <div
-      style={{ marginLeft: isEditing ? '0px' : undefined }}
-      className={cn(
-        "group/bubble relative rounded-xl transition-all duration-300 p-4 border-0 shadow-none",
-        indentClass,
-        isAdmin
-          ? "bg-violet-50/45 dark:bg-violet-950/20 text-slate-800 dark:text-slate-200"
-          : "bg-emerald-50/45 dark:bg-emerald-950/20 text-slate-800 dark:text-slate-200",
-        isEditing && "ring-2 ring-violet-500/20"
-      )}
-    >
-      {!isEditing && (
-        <div 
-          className={cn(
-            "hidden sm:block absolute -left-4 top-[-16px] bottom-1/2 w-4 border-l-2 border-b-2 rounded-bl-lg pointer-events-none",
-            isAdmin 
-              ? "border-violet-200/70 dark:border-violet-500/20" 
-              : "border-emerald-200/70 dark:border-emerald-500/20"
-          )}
-        />
-      )}
-      <div className="flex items-center gap-2 mb-1.5 overflow-hidden">
-        <CornerDownRight size={12} className={isAdmin ? "text-violet-400" : "text-emerald-400"} />
-        <span className={cn(
-          sansFont.className,
-          "text-xs font-bold",
-          isAdmin ? "text-violet-600 dark:text-violet-400" : "text-emerald-600 dark:text-emerald-400"
-        )}>
-          {isAdmin ? 'Response' : (author || 'anonymous')}
-        </span>
-        
-        <div className="ml-auto flex items-center gap-2">
-          <span className={cn(
-            sansFont.className, 
-            "text-[11px] text-muted-foreground whitespace-nowrap transition-transform duration-300",
-            isAdmin && !isEditing && "group-hover/bubble:-translate-x-1"
-          )}>
-            {formatDate(message.createdAt)}
-          </span>
-          {isAdmin && !isEditing && (
-            <div className="w-0 overflow-hidden opacity-0 group-hover/bubble:w-8 group-hover/bubble:opacity-100 transition-all duration-300">
-              <button 
-                onClick={onEditClick}
-                className="text-[10px] font-bold uppercase tracking-wider text-violet-500 hover:text-violet-700 dark:text-violet-400 dark:hover:text-violet-300"
-              >
-                Edit
-              </button>
-            </div>
-          )}
-        </div>
-      </div>
-      
-      {isEditing ? (
-        <div className="space-y-3">
-          <textarea
-            value={editBody}
-            onChange={(e) => setEditBody(e.target.value)}
-            onInput={(e) => {
-              e.currentTarget.style.height = 'auto';
-              e.currentTarget.style.height = `${e.currentTarget.scrollHeight}px`;
-            }}
-            rows={Math.max(3, message.body.split('\n').length)}
-            autoFocus
-            className={cn(sansFont.className, "min-h-[100px] w-full resize-none overflow-hidden rounded-lg border border-violet-200 bg-background px-4 py-3 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-violet-300 dark:border-violet-500/30 dark:text-slate-100")}
-          />
-          <AttachmentPreviewGrid
-            urls={editImageUrls}
-            onRemove={(index) => setEditImageUrls(prev => prev.filter((_, itemIndex) => itemIndex !== index))}
-            alt="Edit attachment"
-            className="mt-2.5"
-            compact
-          />
-          <div className="flex justify-between items-center gap-2">
-            <div className="flex items-center gap-3">
-              <input 
-                type="password"
-                value={passcode}
-                onChange={e => setPasscode(e.target.value)}
-                placeholder="Passcode"
-                className="w-24 rounded-full border border-border bg-background px-3 py-1.5 text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-violet-300 dark:text-slate-100"
-              />
-              <AttachmentUploadButton
-                onFiles={(files) => files.forEach(file => {
-                  handleImageUpload(file, (url) => setEditImageUrls(prev => prev.length >= MAX_ATTACHMENT_COUNT ? prev : [...prev, url]))
-                })}
-                accent="violet"
-              />
-            </div>
-            <div className="flex gap-2">
-              <Button variant="ghost" size="sm" onClick={onCancel} className="text-xs h-8">
-                Cancel
-              </Button>
-              <Button size="sm" disabled={isPending || !editBody.trim()} onClick={onSave} className="h-8 rounded-full px-4 text-xs bg-violet-600 hover:bg-violet-700 text-white">
-                Save
-              </Button>
-            </div>
-          </div>
-        </div>
-      ) : (
-        <>
-          <div className={cn(sansFont.className, "text-base leading-relaxed text-slate-700 dark:text-slate-300 break-words")}>
-            <RichText text={message.body} theme="violet" />
-          </div>
-          <ImageGallery 
-            urls={message.imageUrls?.length ? message.imageUrls : (message.imageUrl ? [message.imageUrl] : [])} 
-            theme="violet"
-          />
-        </>
-      )}
-    </div>
   )
 }

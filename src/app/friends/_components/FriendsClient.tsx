@@ -1,7 +1,8 @@
 'use client'
 
-import { useMemo, useState } from 'react'
+import { useMemo } from 'react'
 import { PillTabs } from '@/components/ui/tabs/PillTabs'
+import { useUrlPersistedTab } from '@/components/ui/tabs/useUrlPersistedTab'
 import { buddingFriends, developedFriends, growingFriends, upcomingFriends } from '../_data/friends'
 import { FriendCard } from './FriendCard'
 
@@ -30,8 +31,12 @@ const friendGroups = {
 	},
 } satisfies Record<FriendTab, { label: string; tag: string; friends: typeof developedFriends }>
 
+function isFriendTab(value: string): value is FriendTab {
+	return value in friendGroups
+}
+
 export function FriendsClient() {
-	const [activeFriendTab, setActiveFriendTab] = useState<FriendTab>('developed')
+	const [activeFriendTab, setActiveFriendTab] = useUrlPersistedTab<FriendTab>('mikeblocky:friends-tab', 'developed', isFriendTab)
 	const activeGroup = friendGroups[activeFriendTab]
 	const friendTabs = useMemo(() => (
 		Object.entries(friendGroups).map(([id, group]) => ({
