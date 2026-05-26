@@ -266,7 +266,19 @@ export function SuggestionsBoard({
   }
 
   async function loadReference() {
-    loadReferenceForUrl(formState.referenceUrl.trim())
+    const url = formState.referenceUrl.trim()
+    if (!url) return
+
+    let formattedUrl = url
+    if (!/^https?:\/\//i.test(url)) {
+      if (url.includes('.') && !url.includes(' ')) {
+        formattedUrl = `https://${url}`
+      } else {
+        const autoRef = getAutomaticReference(url, formState.category)
+        formattedUrl = autoRef.url
+      }
+    }
+    loadReferenceForUrl(formattedUrl)
   }
 
   // Debounced automatic URL reference fetching
@@ -277,19 +289,29 @@ export function SuggestionsBoard({
       return
     }
 
+    let formattedUrl = url
+    if (!/^https?:\/\//i.test(url)) {
+      if (url.includes('.') && !url.includes(' ')) {
+        formattedUrl = `https://${url}`
+      } else {
+        const autoRef = getAutomaticReference(url, formState.category)
+        formattedUrl = autoRef.url
+      }
+    }
+
     // Basic URL validation
     try {
-      new URL(url)
+      new URL(formattedUrl)
     } catch (_error) {
       return
     }
 
     const timer = setTimeout(() => {
-      loadReferenceForUrl(url)
+      loadReferenceForUrl(formattedUrl)
     }, 600)
 
     return () => clearTimeout(timer)
-  }, [formState.referenceUrl])
+  }, [formState.referenceUrl, formState.category])
 
   async function handleStatusChange(id: string, newStatus: SuggestionStatus) {
     try {
