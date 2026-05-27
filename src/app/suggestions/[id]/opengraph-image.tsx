@@ -38,6 +38,7 @@ export default async function Image({ params }: { params: Promise<{ id: string }
   }
 
   const body = suggestion.note || suggestion.bestPart || suggestion.reference?.description || suggestion.title
+  const categoryLabel = suggestion.category.charAt(0).toUpperCase() + suggestion.category.slice(1)
 
   return new ImageResponse(
     <BoardOgCard
@@ -45,7 +46,7 @@ export default async function Image({ params }: { params: Promise<{ id: string }
       accentSoft="#ccfbf1"
       border="#99f6e4"
       footer="mikeblocky.com/suggestions"
-      label={`${suggestion.category.toUpperCase()} from ${suggestion.author || 'anonymous'}`}
+      label={`${categoryLabel} from ${suggestion.author || 'anonymous'}`}
       title={suggestion.title}
       body={body}
       date={new Date(suggestion.createdAt).toLocaleDateString('en-US', {

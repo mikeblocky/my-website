@@ -64,8 +64,7 @@ export function BoardOgCard({
               color: accent,
               fontSize: '24px',
               fontWeight: 800,
-              textTransform: 'uppercase',
-              letterSpacing: '0.05em',
+              letterSpacing: '-0.01em',
             }}
           >
             {label}
