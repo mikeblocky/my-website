@@ -90,7 +90,6 @@ export function BoardOgCard({
               flexDirection: 'column',
               flex: 1,
               paddingRight: hasImage ? '48px' : '0px',
-              justifyContent: 'center',
             }}
           >
             {/* Conditional Title (only if present) */}
