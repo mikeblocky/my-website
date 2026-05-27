@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { sansFont } from '@/styles/fonts/fonts'
 import { cn } from '@/lib/utils/utils'
@@ -11,6 +12,7 @@ interface RedirectToBoardProps {
 }
 
 export function RedirectToBoard({ id, type }: RedirectToBoardProps) {
+  const router = useRouter()
   const destination = type === 'suggestion'
     ? `/interact?tab=suggestions#suggestion-${id}`
     : type === 'talk' || type === 'question'
@@ -18,9 +20,9 @@ export function RedirectToBoard({ id, type }: RedirectToBoardProps) {
       : `/interact?tab=prompts#prompt-${id}`
 
   useEffect(() => {
-    // Immediate client-side redirection to the main board with hash
-    window.location.replace(destination)
-  }, [destination])
+    // Perform instant, high-performance client-side transition to the main board
+    router.replace(destination)
+  }, [router, destination])
 
   const isTalk = type === 'talk' || type === 'question'
   const isSuggestion = type === 'suggestion'
