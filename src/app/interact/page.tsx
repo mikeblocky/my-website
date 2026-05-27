@@ -8,6 +8,7 @@ export const metadata: Metadata = {
 	description: 'Connect with me: leave a message in the guestbook, suggest drawing prompts, or view my social circle.'
 }
 
+// Cache-buster comment to force a fresh chunk hash and bypass stale local browser caches on other devices
 export default function InteractPage() {
 	return (
 		<SectionPageShell
