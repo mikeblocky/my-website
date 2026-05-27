@@ -27,6 +27,7 @@ export function BoardOgCard({
   imageUrl,
 }: BoardOgCardProps) {
   const hasImage = !!imageUrl && !imageUrl.includes('image/webp')
+  const hasTitle = !!title && title.trim().length > 0
 
   return (
     <div
@@ -50,34 +51,38 @@ export function BoardOgCard({
           borderRadius: '32px',
           padding: '50px 60px',
           boxSizing: 'border-box',
-          justifyContent: 'space-between',
         }}
       >
+        {/* Top: Pill Badge */}
         <div style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
           <div
             style={{
-              padding: '10px 28px',
+              padding: '8px 26px',
               borderRadius: '999px',
               background: accentSoft,
               border: `2px solid ${border}`,
-              color: footer,
-              fontSize: '26px',
-              fontWeight: 'bold',
+              color: accent,
+              fontSize: '24px',
+              fontWeight: 800,
+              textTransform: 'uppercase',
+              letterSpacing: '0.05em',
             }}
           >
             {label}
           </div>
         </div>
 
+        {/* Middle Content: Title and Body */}
         <div
           style={{
             display: 'flex',
             flexDirection: 'row',
-            flex: 1,
             alignItems: 'center',
             justifyContent: 'space-between',
-            margin: '20px 0',
+            marginTop: '36px',
+            marginBottom: '36px',
             width: '100%',
+            flex: 1,
           }}
         >
           <div
@@ -85,34 +90,44 @@ export function BoardOgCard({
               display: 'flex',
               flexDirection: 'column',
               flex: 1,
-              paddingRight: hasImage ? '40px' : '0px',
+              paddingRight: hasImage ? '48px' : '0px',
+              justifyContent: 'center',
             }}
           >
+            {/* Conditional Title (only if present) */}
+            {hasTitle && (
+              <div
+                style={{
+                  display: 'flex',
+                  fontSize: '36px',
+                  fontWeight: 800,
+                  color: '#0f172a',
+                  lineHeight: 1.35,
+                  letterSpacing: '-0.02em',
+                  marginBottom: '28px', // Space between title and quote body!
+                }}
+              >
+                {title}
+              </div>
+            )}
+
+            {/* Quote Body */}
             <div
               style={{
                 display: 'flex',
-                fontSize: '32px',
-                fontWeight: 800,
-                color: '#0f172a',
-                lineHeight: 1.2,
-                marginBottom: '20px',
-              }}
-            >
-              {title}
-            </div>
-            <div
-              style={{
-                display: 'flex',
-                fontSize: hasImage ? '34px' : '46px',
-                fontWeight: 700,
+                fontSize: hasImage ? '34px' : '44px',
+                fontWeight: 500, // Modern medium font-weight looks much neater than blocky heavy bold!
                 color: '#334155',
-                lineHeight: 1.35,
+                lineHeight: 1.5, // Generous line height makes text very clean and easy to look at
+                fontStyle: 'italic', // Italics for quotes look extremely elegant and premium!
+                letterSpacing: '-0.015em',
               }}
             >
               &ldquo;{body.length > 170 ? `${body.slice(0, 170)}...` : body}&rdquo;
             </div>
           </div>
 
+          {/* Optional Right-side Image */}
           {hasImage && (
             <div
               style={{
@@ -123,6 +138,7 @@ export function BoardOgCard({
                 overflow: 'hidden',
                 border: `6px solid ${border}`,
                 flexShrink: 0,
+                boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.05)',
               }}
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -139,6 +155,7 @@ export function BoardOgCard({
           )}
         </div>
 
+        {/* Bottom: Footer */}
         <div
           style={{
             display: 'flex',
@@ -147,12 +164,13 @@ export function BoardOgCard({
             width: '100%',
             borderTop: '2px solid #f1f5f9',
             paddingTop: '25px',
+            marginTop: 'auto',
           }}
         >
-          <div style={{ fontSize: '26px', fontWeight: 'bold', color: accent }}>
+          <div style={{ fontSize: '26px', fontWeight: 800, color: accent, letterSpacing: '-0.01em' }}>
             {footer}
           </div>
-          <div style={{ fontSize: '26px', color: '#94a3b8' }}>
+          <div style={{ fontSize: '24px', fontWeight: 600, color: '#94a3b8' }}>
             {date}
           </div>
         </div>

@@ -43,7 +43,7 @@ export default async function Image({ params }: { params: Promise<{ id: string }
       border="#bfdbfe"
       footer="mikeblocky.com/talk"
       label={`Post from ${talk.author || 'anonymous'}`}
-      title="Talk board post"
+      title=""
       body={talk.body}
       date={new Date(talk.createdAt).toLocaleDateString('en-US', {
         month: 'long',
