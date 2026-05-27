@@ -1,5 +1,6 @@
 'use client'
 
+// Cache-buster comment to force a fresh SuggestionsBoard chunk build hash across client devices
 import { FormEvent, useCallback, useEffect, useMemo, useState, useTransition } from 'react'
 import { BookOpen, ChevronLeft, ChevronRight, Link as LinkIcon, Loader2, ChevronDown, Info } from 'lucide-react'
 import { AnimatePresence, motion } from 'framer-motion'

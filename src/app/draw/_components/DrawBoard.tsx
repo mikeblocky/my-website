@@ -1,5 +1,6 @@
 'use client'
 
+// Cache-buster comment to force a fresh DrawBoard chunk build hash across client devices
 import { FormEvent, useEffect, useState, useTransition, useMemo } from 'react'
 import { initialPrompts } from '../_data/prompts'
 import { DrawPrompt } from '../_types/draw'

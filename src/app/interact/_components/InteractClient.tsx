@@ -1,5 +1,6 @@
 'use client'
 
+// Cache-buster comment to force a fresh client-side chunk build hash across devices
 import { useCallback, useState, useSyncExternalStore } from 'react'
 import dynamic from 'next/dynamic'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'

@@ -1,5 +1,6 @@
 'use client'
 
+// Cache-buster comment to force a fresh TalkBoard chunk build hash across client devices
 import { FormEvent, useEffect, useState, useTransition, useMemo } from 'react'
 import { initialTalks } from '../_data/talks'
 import { TalkTopic } from '../_types/talk'
