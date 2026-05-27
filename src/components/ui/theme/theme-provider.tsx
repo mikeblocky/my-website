@@ -22,8 +22,15 @@ export function ThemeProvider({ children, ...props }: ThemeProviderProps) {
             // Limit reload frequency to once every 10 seconds to prevent infinite reload loops
             if (!lastReload || now - parseInt(lastReload, 10) > 10000) {
                 sessionStorage.setItem(reloadKey, now.toString())
-                console.warn('Chunk load error or static chunk fetch failure detected. Reloading page...')
-                window.location.reload()
+                console.warn('Chunk load error or static chunk fetch failure detected. Reloading with cache buster...')
+                
+                try {
+                    const url = new URL(window.location.href)
+                    url.searchParams.set('_cb', now.toString())
+                    window.location.replace(url.toString())
+                } catch (e) {
+                    window.location.reload()
+                }
             }
         }
 
