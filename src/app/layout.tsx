@@ -33,6 +33,7 @@ export const metadata: Metadata = {
   }
 }
 
+
 export default function RootLayout({
   children,
 }: {
@@ -45,6 +46,53 @@ export default function RootLayout({
       sansFont.variable,
       codeFont.variable
     )} suppressHydrationWarning>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                var reloadKey = 'chunk-load-reload-attempted';
+                function triggerReload() {
+                  var lastReload = sessionStorage.getItem(reloadKey);
+                  var now = Date.now();
+                  if (!lastReload || now - parseInt(lastReload, 10) > 10000) {
+                    sessionStorage.setItem(reloadKey, now.toString());
+                    try {
+                      var url = new URL(window.location.href);
+                      url.searchParams.set('_cb', now.toString());
+                      window.location.replace(url.toString());
+                    } catch (e) {
+                      window.location.reload();
+                    }
+                  }
+                }
+                window.addEventListener('error', function(event) {
+                  var target = event.target;
+                  if (target && target.tagName === 'SCRIPT') {
+                    var src = target.src || '';
+                    if (src.indexOf('/_next/static/chunks/') !== -1) {
+                      triggerReload();
+                    }
+                  }
+                  var msg = event.message || '';
+                  var stack = (event.error && event.error.stack) || '';
+                  if (msg.indexOf('ChunkLoadError') !== -1 || /loading chunk/i.test(msg) || stack.indexOf('ChunkLoadError') !== -1 || /loading chunk/i.test(stack)) {
+                    triggerReload();
+                  }
+                }, true);
+                window.addEventListener('unhandledrejection', function(event) {
+                  var reason = event.reason;
+                  var msg = (reason && reason.message) || '';
+                  var stack = (reason && reason.stack) || '';
+                  if (msg.indexOf('ChunkLoadError') !== -1 || /loading chunk/i.test(msg) || stack.indexOf('ChunkLoadError') !== -1 || /loading chunk/i.test(stack)) {
+                    triggerReload();
+                  }
+                });
+              })();
+            `
+          }}
+        />
+      </head>
       <body className={cn(
         "h-full bg-background transition-colors duration-300"
       )}>
