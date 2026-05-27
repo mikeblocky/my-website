@@ -17,8 +17,15 @@ const GalleryImage: React.FC<{
   className?: string; 
   loading?: "lazy" | "eager";
   fill?: boolean;
-}> = ({ src, alt, className, loading = "lazy", fill = true }) => {
+}> = ({ src, alt, className, loading = "eager", fill = true }) => {
   const [loaded, setLoaded] = useState(false);
+  const imgRef = useRef<HTMLImageElement>(null);
+
+  useEffect(() => {
+    if (imgRef.current && imgRef.current.complete) {
+      setLoaded(true);
+    }
+  }, [src]);
 
   if (!fill) {
     return (
@@ -34,6 +41,7 @@ const GalleryImage: React.FC<{
           </div>
         )}
         <img
+          ref={imgRef}
           src={src}
           alt={alt}
           className={cn(
@@ -61,6 +69,7 @@ const GalleryImage: React.FC<{
         </div>
       )}
       <Image
+        ref={imgRef}
         src={src}
         alt={alt}
         fill
