@@ -263,6 +263,29 @@ export function SuggestionsBoard({
     }
   }, [applyCooldown, showNotification])
 
+  useEffect(() => {
+    if (typeof window === 'undefined' || !window.location.hash.startsWith('#suggestion-')) {
+      return
+    }
+
+    const id = window.location.hash.replace('#suggestion-', '')
+    const index = suggestions.findIndex(suggestion => suggestion.id === id)
+    if (index === -1) return
+
+    setCurrentPage(Math.ceil((index + 1) / ITEMS_PER_PAGE))
+
+    setTimeout(() => {
+      const element = document.getElementById(`suggestion-${id}`)
+      if (!element) return
+
+      element.scrollIntoView({ behavior: 'smooth', block: 'center' })
+      element.classList.add('ring-4', 'ring-teal-500/30', 'border-teal-500')
+      setTimeout(() => {
+        element.classList.remove('ring-4', 'ring-teal-500/30', 'border-teal-500')
+      }, 4000)
+    }, 600)
+  }, [suggestions])
+
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
     const title = formState.title.trim()

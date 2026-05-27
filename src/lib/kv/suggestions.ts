@@ -57,6 +57,20 @@ export async function fetchSuggestions(limit = 100): Promise<MediaSuggestion[]> 
     .filter(Boolean) as MediaSuggestion[]
 }
 
+export async function getSuggestionById(id: string): Promise<MediaSuggestion | null> {
+  const redis = await getRedisClient()
+  const raw = await redis.zRange(suggestionsKey, 0, -1)
+
+  for (const entry of raw) {
+    try {
+      const parsed = JSON.parse(entry) as MediaSuggestion
+      if (parsed.id === id) return parsed
+    } catch (_error) {}
+  }
+
+  return null
+}
+
 export async function updateSuggestionStatus(
   id: string,
   status: SuggestionStatus
@@ -164,10 +178,6 @@ export async function followUpSuggestion(
   }
 
   if (!targetSuggestion || !originalMember) return null
-
-  // Must have at least one admin reply before a visitor can follow up (matching other boards)
-  const hasAdminReply = targetSuggestion.thread?.some(m => m.role === 'admin')
-  if (!hasAdminReply) return null
 
   const newMessage: SuggestionThreadMessage = {
     id: Math.random().toString(36).substring(2, 11),

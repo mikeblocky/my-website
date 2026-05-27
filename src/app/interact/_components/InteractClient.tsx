@@ -51,6 +51,10 @@ function getTabFromHash(hash: string): Tab | null {
 		return 'guestbook'
 	}
 
+	if (hash.startsWith('#suggestion-')) {
+		return 'suggestions'
+	}
+
 	return null
 }
 

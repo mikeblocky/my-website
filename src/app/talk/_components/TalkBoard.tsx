@@ -32,12 +32,6 @@ type FormState = {
 
 const ITEMS_PER_PAGE = 5
 
-/** Determine what the last message role is in the thread */
-function lastThreadRole(t: TalkTopic): 'asker' | 'admin' | null {
-  if (!t.thread || t.thread.length === 0) return null
-  return t.thread[t.thread.length - 1].role
-}
-
 export function TalkBoard({ 
   initialTalks: incomingTalks = seededTalks,
   singleMode = false,
@@ -516,8 +510,7 @@ export function TalkBoard({
           ) : (
             paginatedTalks.map((talk: TalkTopic) => {
               const thread = talk.thread || []
-              const lastRole = lastThreadRole(talk)
-              const canFollowUp = lastRole === 'admin'
+              const canFollowUp = true
               const canReply = isAdminMode
 
               return (

@@ -409,69 +409,75 @@ export function JournalClient({ posts }: JournalClientProps) {
 								href={currentlyPlaying.songUrl}
 								target="_blank"
 								rel="noopener noreferrer"
-								className="block relative overflow-hidden p-5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-gradient-to-br from-white via-slate-50/50 to-slate-100/50 dark:from-slate-900 dark:via-slate-950/40 dark:to-slate-900/60 shadow-md hover:shadow-lg hover:border-slate-300 dark:hover:border-slate-700 transition-all duration-200 flex flex-col sm:flex-row items-center gap-5 cursor-pointer group"
+								className="block relative overflow-hidden p-6 rounded-3xl border border-slate-200/80 dark:border-slate-800/80 bg-white/70 dark:bg-slate-950/70 backdrop-blur-md shadow-[0_8px_30px_rgba(0,0,0,0.04)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.15)] hover:shadow-[0_20px_40px_rgba(16,185,129,0.08)] hover:border-emerald-500/30 dark:hover:border-emerald-500/20 hover:-translate-y-0.5 transition-all duration-300 flex flex-col sm:flex-row items-center gap-6 cursor-pointer group"
 							>
-								<div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500/5 rounded-full blur-3xl -mr-20 -mt-20 pointer-events-none" />
+								{/* Premium Dynamic Radial Glow */}
+								<div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500/10 rounded-full blur-3xl -mr-20 -mt-20 pointer-events-none group-hover:bg-emerald-500/15 transition-colors duration-500" />
 								
-								<div className="relative w-24 h-24 flex-shrink-0">
+								{/* Artwork Album Container */}
+								<div className="relative w-28 h-28 flex-shrink-0 rounded-2xl overflow-hidden shadow-[0_12px_24px_rgba(0,0,0,0.12)] dark:shadow-[0_12px_24px_rgba(0,0,0,0.3)] group-hover:shadow-[0_16px_32px_rgba(16,185,129,0.25)] transition-all duration-300">
 									<img
 										src={currentlyPlaying.artworkUrl}
 										alt={currentlyPlaying.album}
-										className="w-full h-full object-cover rounded-xl shadow-sm border border-slate-200/50 dark:border-slate-800/50 group-hover:scale-105 transition-all duration-300"
+										className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
 									/>
-									<div className="absolute inset-0 bg-black/40 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-										<div className="p-2 rounded-full bg-emerald-500 text-white shadow-lg transform scale-90 group-hover:scale-100 transition-transform duration-300">
+									<div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+										<div className="p-2.5 rounded-full bg-emerald-500 text-white shadow-lg transform scale-90 group-hover:scale-100 transition-transform duration-300">
 											<svg className="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.586 14.424c-.18.295-.565.387-.86.207-2.377-1.454-5.37-1.783-8.893-.982-.336.075-.668-.135-.744-.47-.077-.337.135-.668.47-.745 3.856-.88 7.15-.506 9.822 1.13.295.178.387.563.205.86zm1.224-2.72c-.226.367-.707.487-1.074.26-2.72-1.672-6.87-2.157-10.076-1.183-.412.125-.845-.107-.97-.52-.124-.412.108-.846.52-.97 3.668-1.112 8.248-.567 11.374 1.354.366.226.486.707.226 1.074zm.107-2.846C14.403 8.8 8.442 8.6 4.992 9.65c-.53.16-1.09-.14-1.25-.67-.16-.53.14-1.09.67-1.25 3.96-1.202 10.55-.974 14.61 1.44.477.284.63.9.347 1.378-.283.477-.9.63-1.377.347z"/></svg>
 										</div>
 									</div>
 								</div>
 
-								<div className="flex-grow space-y-1 text-center sm:text-left min-w-0 w-full">
-									<div className="flex items-center justify-center sm:justify-start gap-2 text-[10px] font-bold text-emerald-500 uppercase tracking-widest">
-										<div className="flex items-end gap-[3px] h-3 w-4">
-											<span className="w-[2.5px] bg-emerald-500 rounded-full animate-music-bar-1 h-3" />
-											<span className="w-[2.5px] bg-emerald-500 rounded-full animate-music-bar-2 h-1.5" />
-											<span className="w-[2.5px] bg-emerald-500 rounded-full animate-music-bar-3 h-2" />
-											<span className="w-[2.5px] bg-emerald-500 rounded-full animate-music-bar-4 h-1" />
+								{/* Details Panel */}
+								<div className="flex-grow space-y-1.5 text-center sm:text-left min-w-0 w-full relative">
+									{/* Premium Status Badge */}
+									<div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-[10px] font-bold uppercase tracking-wider select-none">
+										<div className="flex items-end gap-[2px] h-2.5 w-3.5 pb-0.5">
+											<span className="w-[2px] bg-emerald-500 rounded-full animate-music-bar-1 h-2.5" />
+											<span className="w-[2px] bg-emerald-500 rounded-full animate-music-bar-2 h-1" />
+											<span className="w-[2px] bg-emerald-500 rounded-full animate-music-bar-3 h-1.5" />
+											<span className="w-[2px] bg-emerald-500 rounded-full animate-music-bar-4 h-0.5" />
 										</div>
 										<span>Now Playing</span>
 									</div>
-									<h4 className="text-base font-extrabold text-slate-800 dark:text-slate-100 group-hover:underline truncate">
+
+									<h4 className="text-lg font-extrabold text-slate-850 dark:text-slate-100 group-hover:text-emerald-500 dark:group-hover:text-emerald-450 transition-colors truncate">
 										{currentlyPlaying.song}
 									</h4>
-									<p className="text-xs font-semibold text-slate-600 dark:text-slate-350 truncate">
+									<p className="text-xs font-bold text-slate-650 dark:text-slate-300 truncate">
 										by {currentlyPlaying.artist}
 									</p>
-									<p className="text-[10px] text-muted-foreground italic truncate">
+									<p className="text-[10px] font-semibold text-muted-foreground italic truncate">
 										Album: {currentlyPlaying.album}
 									</p>
 
-									{/* Progress bar & Timer */}
+									{/* Sleek Progress Bar */}
 									{currentlyPlaying.durationMs && (
-										<div className="space-y-1.5 pt-1.5 max-w-md">
-											<div className="flex items-center justify-between text-[9px] font-mono text-muted-foreground select-none">
+										<div className="space-y-1 pt-1 max-w-md">
+											<div className="flex items-center justify-between text-[9px] font-bold font-mono text-muted-foreground select-none">
 												<span>{formatDuration(liveProgressMs)}</span>
 												<span>{formatDuration(currentlyPlaying.durationMs)}</span>
 											</div>
-											<div className="h-1.5 w-full bg-slate-200/50 dark:bg-slate-850/80 rounded-full overflow-hidden">
+											<div className="h-1.5 w-full bg-slate-250/50 dark:bg-slate-800/80 rounded-full overflow-hidden">
 												<div 
-													className="h-full bg-emerald-500 rounded-full shadow-[0_0_6px_rgba(16,185,129,0.4)] transition-all duration-1000 ease-linear"
+													className="h-full bg-gradient-to-r from-emerald-400 to-emerald-500 rounded-full shadow-[0_0_8px_rgba(16,185,129,0.5)] transition-all duration-1000 ease-linear"
 													style={{ width: `${Math.min(100, (liveProgressMs / currentlyPlaying.durationMs) * 100)}%` }}
 												/>
 											</div>
 										</div>
 									)}
 
-									{/* Action buttons (Listen Along & Play Preview) */}
-									<div className="flex flex-wrap gap-2 pt-2.5">
+									{/* Action Bar */}
+									<div className="flex flex-wrap gap-2.5 pt-3 justify-center sm:justify-start">
 										<button
 											onClick={(e) => {
 												e.preventDefault()
 												e.stopPropagation()
 												window.open(currentlyPlaying.songUrl, '_blank')
 											}}
-											className="px-3.5 py-1.5 text-[10px] font-bold rounded-full bg-emerald-500 hover:bg-emerald-600 active:bg-emerald-700 text-white shadow-md shadow-emerald-500/20 transition-all duration-200 flex items-center gap-1 cursor-pointer select-none"
+											className="px-4.5 py-2 text-[10px] font-bold rounded-full bg-emerald-500 hover:bg-emerald-600 active:bg-emerald-700 text-white shadow-[0_4px_14px_rgba(16,185,129,0.35)] hover:shadow-[0_6px_20px_rgba(16,185,129,0.5)] transition-all duration-200 flex items-center gap-1.5 cursor-pointer select-none"
 										>
+											<svg className="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.586 14.424c-.18.295-.565.387-.86.207-2.377-1.454-5.37-1.783-8.893-.982-.336.075-.668-.135-.744-.47-.077-.337.135-.668.47-.745 3.856-.88 7.15-.506 9.822 1.13.295.178.387.563.205.86zm1.224-2.72c-.226.367-.707.487-1.074.26-2.72-1.672-6.87-2.157-10.076-1.183-.412.125-.845-.107-.97-.52-.124-.412.108-.846.52-.97 3.668-1.112 8.248-.567 11.374 1.354.366.226.486.707.226 1.074zm.107-2.846C14.403 8.8 8.442 8.6 4.992 9.65c-.53.16-1.09-.14-1.25-.67-.16-.53.14-1.09.67-1.25 3.96-1.202 10.55-.974 14.61 1.44.477.284.63.9.347 1.378-.283.477-.9.63-1.377.347z"/></svg>
 											Listen along
 										</button>
 
@@ -479,10 +485,10 @@ export function JournalClient({ posts }: JournalClientProps) {
 											<button
 												onClick={(e) => togglePreview(currentlyPlaying.id, currentlyPlaying.previewUrl, e)}
 												className={cn(
-													"px-3.5 py-1.5 text-[10px] font-bold rounded-full border transition-all duration-200 flex items-center gap-1 cursor-pointer select-none",
+													"px-4.5 py-2 text-[10px] font-bold rounded-full border transition-all duration-200 flex items-center gap-1.5 cursor-pointer select-none",
 													activePreviewId === currentlyPlaying.id
-														? "border-emerald-500 bg-emerald-500/10 text-emerald-550"
-														: "border-slate-300 dark:border-slate-800 hover:border-emerald-500 hover:text-emerald-500 text-slate-650 dark:text-slate-400"
+														? "border-emerald-500 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-bold"
+														: "border-slate-300 dark:border-slate-800 hover:border-emerald-500 hover:text-emerald-500 text-slate-700 dark:text-slate-300"
 												)}
 											>
 												{activePreviewId === currentlyPlaying.id ? (
@@ -494,7 +500,6 @@ export function JournalClient({ posts }: JournalClientProps) {
 										)}
 									</div>
 								</div>
-
 							</a>
 						)}
 

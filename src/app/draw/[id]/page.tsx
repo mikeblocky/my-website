@@ -22,8 +22,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 
   const description = `"${prompt.body.slice(0, 150)}${prompt.body.length > 150 ? '...' : ''}" — Suggested by ${prompt.author || 'anonymous'}`
-  const pageUrl = `${SITE_URL}/draw/${id}`
-  const imageUrl = `${SITE_URL}/draw/${id}/opengraph-image`
+  const pageUrl = `/draw/${id}`
+  const imageUrl = `/draw/${id}/opengraph-image`
 
   return {
     metadataBase: new URL(SITE_URL),

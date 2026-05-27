@@ -7,24 +7,31 @@ import { cn } from '@/lib/utils/utils'
 
 interface RedirectToBoardProps {
   id: string
-  type: 'talk' | 'question' | 'prompt'
+  type: 'talk' | 'question' | 'prompt' | 'suggestion'
 }
 
 export function RedirectToBoard({ id, type }: RedirectToBoardProps) {
-  const destination = type === 'talk' || type === 'question' 
-    ? `/interact?tab=guestbook#talk-${id}` 
-    : `/interact?tab=prompts#prompt-${id}`
+  const destination = type === 'suggestion'
+    ? `/interact?tab=suggestions#suggestion-${id}`
+    : type === 'talk' || type === 'question'
+      ? `/interact?tab=guestbook#talk-${id}`
+      : `/interact?tab=prompts#prompt-${id}`
 
   useEffect(() => {
     // Immediate client-side redirection to the main board with hash
     window.location.replace(destination)
   }, [destination])
 
-  const accentColor = type === 'talk' || type === 'question' 
-    ? 'text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/10 border-blue-100 dark:border-blue-900/20' 
-    : 'text-violet-600 dark:text-violet-400 bg-violet-50 dark:bg-violet-900/10 border-violet-100 dark:border-violet-900/20'
+  const isTalk = type === 'talk' || type === 'question'
+  const isSuggestion = type === 'suggestion'
+  const accentColor = isSuggestion
+    ? 'text-teal-600 dark:text-teal-400 bg-teal-50 dark:bg-teal-900/10 border-teal-100 dark:border-teal-900/20'
+    : isTalk
+      ? 'text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/10 border-blue-100 dark:border-blue-900/20'
+      : 'text-violet-600 dark:text-violet-400 bg-violet-50 dark:bg-violet-900/10 border-violet-100 dark:border-violet-900/20'
 
-  const loaderColor = type === 'talk' || type === 'question' ? 'border-blue-500' : 'border-violet-500'
+  const loaderColor = isSuggestion ? 'border-teal-500' : isTalk ? 'border-blue-500' : 'border-violet-500'
+  const boardLabel = isSuggestion ? 'Media suggestions' : isTalk ? 'Talk board' : 'Draw prompts'
 
   return (
     <div className="min-h-[60vh] flex flex-col items-center justify-center p-6 text-center">
@@ -42,7 +49,7 @@ export function RedirectToBoard({ id, type }: RedirectToBoardProps) {
         
         <div className="space-y-1">
           <h3 className={cn(sansFont.className, "text-sm font-bold")}>
-            Entering {type === 'talk' || type === 'question' ? 'Talk board' : 'Draw prompts'}
+            Entering {boardLabel}
           </h3>
           <p className={cn(sansFont.className, "text-xs opacity-75")}>
             Locating your shared item...
@@ -55,9 +62,11 @@ export function RedirectToBoard({ id, type }: RedirectToBoardProps) {
             href={destination}
             className={cn(
               "block w-full py-3 px-6 text-sm font-bold rounded-xl text-center transition-all duration-200 shadow-sm border border-transparent",
-              type === 'talk' || type === 'question'
-                ? "bg-blue-600 text-white hover:bg-blue-700 shadow-blue-500/10"
-                : "bg-violet-600 text-white hover:bg-violet-700 shadow-violet-500/10"
+              isSuggestion
+                ? "bg-teal-600 text-white hover:bg-teal-700 shadow-teal-500/10"
+                : isTalk
+                  ? "bg-blue-600 text-white hover:bg-blue-700 shadow-blue-500/10"
+                  : "bg-violet-600 text-white hover:bg-violet-700 shadow-violet-500/10"
             )}
           >
             Press to enter board

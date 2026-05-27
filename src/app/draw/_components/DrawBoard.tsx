@@ -30,12 +30,6 @@ type FormState = {
 
 const ITEMS_PER_PAGE = 5
 
-/** Determine what the last message role is in the thread */
-function lastThreadRole(p: DrawPrompt): 'asker' | 'admin' | null {
-  if (!p.thread || p.thread.length === 0) return null
-  return p.thread[p.thread.length - 1].role
-}
-
 export function DrawBoard({ 
   initialPrompts = seededPrompts,
   singleMode = false,
@@ -558,8 +552,7 @@ export function DrawBoard({
           ) : (
             paginatedPrompts.map((prompt: DrawPrompt) => {
               const thread = prompt.thread || []
-              const lastRole = lastThreadRole(prompt)
-              const canFollowUp = lastRole === 'admin'
+              const canFollowUp = true
               const canReply = isAdminMode
 
               return (

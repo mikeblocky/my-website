@@ -1,10 +1,11 @@
 import { ImageResponse } from 'next/og'
-import { getPromptById } from '@/lib/kv/draw'
 import { BoardOgCard, boardOgSize } from '@/components/og/BoardOgCard'
+import { getHighQualitySuggestionImageUrl } from '../_components/suggestion-image-url'
+import { getSuggestionById } from '@/lib/kv/suggestions'
 
 export const runtime = 'nodejs'
 
-export const alt = 'Drawing prompt'
+export const alt = 'Media suggestion'
 export const size = {
   ...boardOgSize,
 }
@@ -13,9 +14,9 @@ export const contentType = 'image/png'
 
 export default async function Image({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
-  const prompt = await getPromptById(id)
+  const suggestion = await getSuggestionById(id)
 
-  if (!prompt) {
+  if (!suggestion) {
     return new ImageResponse(
       (
         <div
@@ -29,28 +30,30 @@ export default async function Image({ params }: { params: Promise<{ id: string }
             justifyContent: 'center',
           }}
         >
-          Prompt not found
+          Suggestion not found
         </div>
       ),
       { ...size }
     )
   }
 
+  const body = suggestion.note || suggestion.bestPart || suggestion.reference?.description || suggestion.title
+
   return new ImageResponse(
     <BoardOgCard
-      accent="#8b5cf6"
-      accentSoft="#f3e8ff"
-      border="#ddd6fe"
-      footer="mikeblocky.com/draw"
-      label={`Suggestion from ${prompt.author || 'anonymous'}`}
-      title={[prompt.character, prompt.media].filter(Boolean).join(' · ') || 'Drawing prompt suggestion'}
-      body={prompt.body}
-      date={new Date(prompt.createdAt).toLocaleDateString('en-US', {
+      accent="#14b8a6"
+      accentSoft="#ccfbf1"
+      border="#99f6e4"
+      footer="mikeblocky.com/suggestions"
+      label={`${suggestion.category.toUpperCase()} from ${suggestion.author || 'anonymous'}`}
+      title={suggestion.title}
+      body={body}
+      date={new Date(suggestion.createdAt).toLocaleDateString('en-US', {
         month: 'long',
         day: 'numeric',
         year: 'numeric',
       })}
-      imageUrl={prompt.imageUrl}
+      imageUrl={getHighQualitySuggestionImageUrl(suggestion.reference?.image || suggestion.imageUrl)}
     />,
     {
       ...size,

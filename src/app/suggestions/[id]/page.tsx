@@ -1,9 +1,9 @@
 import BaseContainer from "@/components/layout/container/base-container"
-import { Metadata } from "next"
-import { getTalkById } from "@/lib/kv/talk"
-import { notFound } from "next/navigation"
-import { RedirectToBoard } from "@/components/ui/RedirectToBoard"
 import { IndividualPageFooter } from "@/components/layout/footer/IndividualPageFooter"
+import { RedirectToBoard } from "@/components/ui/RedirectToBoard"
+import { getSuggestionById } from "@/lib/kv/suggestions"
+import { Metadata } from "next"
+import { notFound } from "next/navigation"
 
 const SITE_URL = 'https://www.mikeblocky.com'
 
@@ -13,24 +13,25 @@ interface PageProps {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { id } = await params
-  const talk = await getTalkById(id)
+  const suggestion = await getSuggestionById(id)
 
-  if (!talk) {
+  if (!suggestion) {
     return {
-      title: "Post Not Found | Talk",
+      title: "Suggestion not found | Media suggestions",
     }
   }
 
-  const description = `"${talk.body.slice(0, 150)}${talk.body.length > 150 ? '...' : ''}" — Shared by ${talk.author || 'anonymous'}`
-  const pageUrl = `/talk/${id}`
-  const imageUrl = `/talk/${id}/opengraph-image`
+  const body = suggestion.note || suggestion.bestPart || suggestion.reference?.description || suggestion.title
+  const description = `"${body.slice(0, 150)}${body.length > 150 ? '...' : ''}" - Suggested by ${suggestion.author || 'anonymous'}`
+  const pageUrl = `/suggestions/${id}`
+  const imageUrl = `/suggestions/${id}/opengraph-image`
 
   return {
     metadataBase: new URL(SITE_URL),
-    title: `Post from ${talk.author || 'anonymous'} | Talk`,
+    title: `${suggestion.title} | Media suggestions`,
     description,
     openGraph: {
-      title: `Talk board post`,
+      title: suggestion.title,
       description,
       url: pageUrl,
       siteName: 'mikeblocky.com',
@@ -41,36 +42,36 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
           width: 1200,
           height: 630,
           type: 'image/png',
-          alt: 'Talk board post',
+          alt: suggestion.title,
         }
       ]
     },
     twitter: {
       card: 'summary_large_image',
-      title: `Talk board post`,
+      title: suggestion.title,
       description,
       images: [
         {
           url: imageUrl,
-          alt: 'Talk board post',
+          alt: suggestion.title,
         }
       ],
     },
   }
 }
 
-export default async function TalkTopicPage({ params }: PageProps) {
+export default async function SuggestionPage({ params }: PageProps) {
   const { id } = await params
-  const talk = await getTalkById(id)
+  const suggestion = await getSuggestionById(id)
 
-  if (!talk) {
+  if (!suggestion) {
     notFound()
   }
 
   return (
     <BaseContainer size="md" paddingX="md" paddingY="lg">
-      <RedirectToBoard id={id} type="talk" />
-      
+      <RedirectToBoard id={id} type="suggestion" />
+
       <IndividualPageFooter
         showParentPage={false}
         spacing="compact"

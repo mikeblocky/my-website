@@ -138,10 +138,10 @@ export function BoardThreadBubble({
             {formatDate(message.createdAt)}
           </span>
           {isAdmin && !isEditing && (
-            <div className="w-0 overflow-hidden opacity-0 group-hover/bubble:w-8 group-hover/bubble:opacity-100 transition-all duration-300">
+            <div className="w-0 overflow-hidden opacity-0 group-hover/bubble:w-12 group-hover/bubble:opacity-100 transition-all duration-300 flex items-center justify-end">
               <button
                 onClick={onEditClick}
-                className={cn('text-[10px] font-bold uppercase tracking-wider', classes.editButton)}
+                className={cn('text-[10px] font-bold uppercase tracking-wider whitespace-nowrap', classes.editButton)}
               >
                 Edit
               </button>

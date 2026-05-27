@@ -141,7 +141,7 @@ export async function PATCH(request: NextRequest) {
     revalidateTag(DRAW_PROMPTS_TAG, 'max')
     return NextResponse.json({ prompt: updatedPrompt }, { status: 200 })
   } else {
-    // Visitor follow-up — no passcode needed, but the prompt must already have an admin reply
+    // Visitor follow-up — no passcode needed
     if (typeof body !== 'string') {
       return NextResponse.json({ error: 'Invalid payload' }, { status: 400 })
     }
@@ -171,7 +171,7 @@ export async function PATCH(request: NextRequest) {
     const updatedPrompt = await followUpPrompt(id, trimmedBody, imageUrl, cleanImageUrls)
 
     if (!updatedPrompt) {
-      return NextResponse.json({ error: 'Prompt not found or no admin reply yet' }, { status: 404 })
+      return NextResponse.json({ error: 'Prompt not found' }, { status: 404 })
     }
     revalidateTag(DRAW_PROMPTS_TAG, 'max')
 

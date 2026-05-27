@@ -200,7 +200,7 @@ export async function PATCH(request: NextRequest) {
     return NextResponse.json({ suggestion: updated }, { status: 200 })
   }
 
-  // Case 3: Visitor follow-up (no passcode needed, but suggestion must already have an admin reply)
+  // Case 3: Visitor follow-up (no passcode needed)
   if (body) {
     const trimmedBody = body.trim()
     if (trimmedBody.length === 0) {
@@ -222,7 +222,7 @@ export async function PATCH(request: NextRequest) {
 
     const updated = await followUpSuggestion(id, trimmedBody, imageUrl, cleanImageUrls)
     if (!updated) {
-      return NextResponse.json({ error: 'Suggestion not found or no admin reply yet' }, { status: 404 })
+      return NextResponse.json({ error: 'Suggestion not found' }, { status: 404 })
     }
 
     revalidateTag(SUGGESTIONS_TAG, 'max')

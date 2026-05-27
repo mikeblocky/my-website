@@ -15,12 +15,44 @@ const GalleryImage: React.FC<{
   src: string; 
   alt: string; 
   className?: string; 
-  loading?: "lazy" | "eager" 
-}> = ({ src, alt, className, loading = "lazy" }) => {
+  loading?: "lazy" | "eager";
+  fill?: boolean;
+}> = ({ src, alt, className, loading = "lazy", fill = true }) => {
   const [loaded, setLoaded] = useState(false);
 
+  if (!fill) {
+    return (
+      <div className={cn(
+        "relative w-full overflow-hidden rounded-xl flex items-center justify-center min-h-[140px] transition-colors duration-300",
+        loaded ? "bg-transparent" : "bg-slate-100 dark:bg-slate-900/60"
+      )}>
+        {!loaded && (
+          <div className="absolute inset-0 bg-slate-200 dark:bg-slate-800 animate-pulse flex items-center justify-center">
+            <span className="text-[10px] font-semibold text-muted-foreground uppercase tracking-widest font-mono">
+              loading...
+            </span>
+          </div>
+        )}
+        <img
+          src={src}
+          alt={alt}
+          className={cn(
+            className, 
+            "transition-opacity duration-300 ease-out", 
+            loaded ? "opacity-100" : "opacity-0"
+          )}
+          loading={loading}
+          onLoad={() => setLoaded(true)}
+        />
+      </div>
+    );
+  }
+
   return (
-    <div className="relative w-full h-full bg-slate-100 dark:bg-slate-900/60 overflow-hidden min-h-[140px] flex items-center justify-center">
+    <div className={cn(
+      "relative w-full h-full overflow-hidden min-h-[140px] flex items-center justify-center transition-colors duration-300",
+      loaded ? "bg-transparent" : "bg-slate-100 dark:bg-slate-900/60"
+    )}>
       {!loaded && (
         <div className="absolute inset-0 bg-slate-200 dark:bg-slate-800 animate-pulse flex items-center justify-center">
           <span className="text-[10px] font-semibold text-muted-foreground uppercase tracking-widest font-mono">
@@ -285,14 +317,15 @@ export const ImageGallery: React.FC<ImageGalleryProps> = ({ urls = [], theme = '
       return (
         <div 
           onClick={() => openLightbox(0)}
-          className="group relative cursor-zoom-in overflow-hidden rounded-xl bg-slate-100/50 dark:bg-slate-900/60 hover:bg-slate-200/40 dark:hover:bg-slate-900/90 transition-all duration-300 max-h-[360px] flex items-center justify-center shadow-none border-0"
+          className="group relative cursor-zoom-in overflow-hidden rounded-xl transition-all duration-300 flex items-center justify-center shadow-none border-0 w-full"
         >
           <GalleryImage 
             src={cleanUrls[0]} 
             alt="Attachment" 
-            className="w-full max-h-[356px] object-cover transition-transform duration-500 group-hover:scale-[1.01]"
+            fill={false}
+            className="w-full h-auto max-h-[550px] object-contain rounded-xl transition-transform duration-500 group-hover:scale-[1.01]"
           />
-          <div className="gallery-zoom-overlay absolute inset-0 bg-black/0 transition-colors duration-300 group-hover:bg-black/5 flex items-center justify-center">
+          <div className="gallery-zoom-overlay absolute inset-0 bg-black/0 transition-colors duration-300 group-hover:bg-black/5 flex items-center justify-center pointer-events-none">
             <span className="opacity-0 scale-95 group-hover:opacity-100 group-hover:scale-100 transition-all duration-300 p-2.5 rounded-lg bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-gray-700 dark:text-gray-300 shadow-none">
               <ZoomIn className="h-5 w-5" />
             </span>
@@ -301,37 +334,13 @@ export const ImageGallery: React.FC<ImageGalleryProps> = ({ urls = [], theme = '
       );
     }
 
-    if (total === 2) {
-      return (
-        <div className="grid grid-cols-2 gap-3.5">
-          {cleanUrls.map((url, idx) => (
-            <div 
-              key={url}
-              onClick={() => openLightbox(idx)}
-              className="group relative aspect-video cursor-zoom-in overflow-hidden rounded-xl bg-slate-100/50 dark:bg-slate-900/60 hover:bg-slate-200/40 dark:hover:bg-slate-900/90 transition-all duration-300 border-0 shadow-none"
-            >
-              <GalleryImage 
-                src={url} 
-                alt={`Attachment ${idx + 1}`} 
-                className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.02]"
-              />
-              <div className="gallery-zoom-overlay absolute inset-0 bg-black/0 transition-colors duration-300 group-hover:bg-black/5 flex items-center justify-center">
-                <span className="opacity-0 scale-95 group-hover:opacity-100 group-hover:scale-100 transition-all duration-300 p-2 rounded-lg bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-gray-700 dark:text-gray-300 shadow-none">
-                  <ZoomIn className="h-4.5 w-4.5" />
-                </span>
-              </div>
-            </div>
-          ))}
-        </div>
-      );
-    }
-
-    // 3 or more images
+    // For 2 or more images, we use a CSS Columns layout (Masonry) which fits them perfectly!
+    const colClass = total === 2 ? 'columns-2 gap-3.5' : 'columns-2 sm:columns-3 gap-3';
     const displayCount = Math.min(total, 5);
     const hasMore = total > 5;
 
     return (
-      <div className="grid grid-cols-3 gap-3">
+      <div className={cn(colClass, "w-full [column-fill:balance]")}>
         {cleanUrls.slice(0, displayCount).map((url, idx) => {
           const isLastSlot = idx === displayCount - 1;
           const showOverlay = isLastSlot && hasMore;
@@ -340,12 +349,13 @@ export const ImageGallery: React.FC<ImageGalleryProps> = ({ urls = [], theme = '
             <div 
               key={url}
               onClick={() => openLightbox(idx)}
-              className={`group relative ${idx === 0 ? 'col-span-2 aspect-video' : 'aspect-square'} cursor-zoom-in overflow-hidden rounded-xl bg-slate-100/50 dark:bg-slate-900/60 hover:bg-slate-200/40 dark:hover:bg-slate-900/90 transition-all duration-300 border-0 shadow-none`}
+              className="group relative break-inside-avoid mb-3.5 cursor-zoom-in overflow-hidden rounded-xl transition-all duration-300 border-0 shadow-none"
             >
               <GalleryImage 
                 src={url} 
                 alt={`Attachment ${idx + 1}`} 
-                className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.02]"
+                fill={false}
+                className="w-full h-auto rounded-xl transition-transform duration-500 group-hover:scale-[1.02]"
               />
               
               {showOverlay ? (
@@ -355,7 +365,7 @@ export const ImageGallery: React.FC<ImageGalleryProps> = ({ urls = [], theme = '
                   </span>
                 </div>
               ) : (
-                <div className="gallery-zoom-overlay absolute inset-0 bg-black/0 transition-colors duration-300 group-hover:bg-black/5 flex items-center justify-center">
+                <div className="gallery-zoom-overlay absolute inset-0 bg-black/0 transition-colors duration-300 group-hover:bg-black/5 flex items-center justify-center pointer-events-none">
                   <span className="opacity-0 scale-95 group-hover:opacity-100 group-hover:scale-100 transition-all duration-300 p-2 rounded-lg bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-gray-700 dark:text-gray-300 shadow-none">
                     <ZoomIn className="h-4.5 w-4.5" />
                   </span>

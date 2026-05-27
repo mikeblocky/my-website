@@ -122,10 +122,6 @@ export async function followUpTalk(id: string, followUpBody: string, imageUrl?: 
   const target = talks.find(t => t.id === id)
   if (!target) return null
   
-  // Must have at least one admin reply before the visitor can follow up
-  const hasAdminReply = target.thread?.some(m => m.role === 'admin')
-  if (!hasAdminReply) return null
-
   const rawAll = await redis.zRange(talkMessagesKey, 0, -1)
   const rawMember = rawAll.find((entry: string) => {
     try { return JSON.parse(entry).id === id } catch { return false }

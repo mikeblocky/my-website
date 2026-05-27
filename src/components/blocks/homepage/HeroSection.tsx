@@ -98,7 +98,7 @@ export function HeroSection() {
                             <PortalCard 
                                 href="/about"
                                 title="About me"
-                                description="Read my full personal story, study journey from Computer Science to Japanese literature, and favorite inspirations."
+                                description="Read my full personal story, study journey, and favorite inspirations."
                                 icon={<User className="w-5 h-5 text-blue-600 dark:text-blue-400" />}
                                 colorClass=""
                                 iconBgClass="bg-blue-100 dark:bg-blue-950 text-blue-600 dark:text-blue-400"
@@ -106,7 +106,7 @@ export function HeroSection() {
                             <PortalCard 
                                 href="/artworks"
                                 title="Gallery"
-                                description="Browse collections of my quiet, soft illustrations, and view the theme distribution stats."
+                                description="Browse collections of my illustrations, and view the theme distribution stats."
                                 icon={<Palette className="w-5 h-5 text-violet-600 dark:text-violet-400" />}
                                 colorClass=""
                                 iconBgClass="bg-violet-100 dark:bg-violet-950 text-violet-600 dark:text-violet-400"
@@ -114,7 +114,7 @@ export function HeroSection() {
                             <PortalCard 
                                 href="/journal"
                                 title="Journal"
-                                description="Explore deep essays, daily gratitude logs, and details on my journaling tools and utensils."
+                                description="Explore my blogs, diaries, and details on my journaling tools and utensils."
                                 icon={<BookOpen className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />}
                                 colorClass=""
                                 iconBgClass="bg-emerald-100 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-400"
@@ -122,7 +122,7 @@ export function HeroSection() {
                             <PortalCard 
                                 href="/interact"
                                 title="Interact"
-                                description="Leave a note in the guestbook or suggest new drawing prompts for my next sketch."
+                                description="Leave a note in the guestbook, suggest new things, or suggest new drawing prompts for my next sketch."
                                 icon={<MessageSquare className="w-5 h-5 text-amber-600 dark:text-amber-400" />}
                                 colorClass=""
                                 iconBgClass="bg-amber-100 dark:bg-amber-950 text-amber-600 dark:text-amber-400"
