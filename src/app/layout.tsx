@@ -51,21 +51,59 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{
             __html: `
               (function() {
-                var reloadKey = 'chunk-load-reload-attempted';
+                var reloadKey = 'chunk-load-recovery-attempted';
+                var reloadWindowMs = 30000;
+
+                function clearRuntimeCaches() {
+                  var tasks = [];
+
+                  if ('caches' in window) {
+                    tasks.push(
+                      caches.keys()
+                        .then(function(keys) {
+                          return Promise.all(keys.map(function(key) {
+                            return caches.delete(key);
+                          }));
+                        })
+                        .catch(function() {})
+                    );
+                  }
+
+                  if ('serviceWorker' in navigator) {
+                    tasks.push(
+                      navigator.serviceWorker.getRegistrations()
+                        .then(function(registrations) {
+                          return Promise.all(registrations.map(function(registration) {
+                            return registration.unregister();
+                          }));
+                        })
+                        .catch(function() {})
+                    );
+                  }
+
+                  return Promise.all(tasks);
+                }
+
+                function reloadWithoutCache() {
+                  var now = Date.now();
+                  try {
+                    var url = new URL(window.location.href);
+                    url.searchParams.set('__chunk_recovery', now.toString());
+                    window.location.replace(url.toString());
+                  } catch (e) {
+                    window.location.reload();
+                  }
+                }
+
                 function triggerReload() {
                   var lastReload = sessionStorage.getItem(reloadKey);
                   var now = Date.now();
-                  if (!lastReload || now - parseInt(lastReload, 10) > 10000) {
+                  if (!lastReload || now - parseInt(lastReload, 10) > reloadWindowMs) {
                     sessionStorage.setItem(reloadKey, now.toString());
-                    try {
-                      var url = new URL(window.location.href);
-                      url.searchParams.set('_cb', now.toString());
-                      window.location.replace(url.toString());
-                    } catch (e) {
-                      window.location.reload();
-                    }
+                    clearRuntimeCaches().then(reloadWithoutCache, reloadWithoutCache);
                   }
                 }
+
                 window.addEventListener('error', function(event) {
                   var target = event.target;
                   if (target && target.tagName === 'SCRIPT') {
