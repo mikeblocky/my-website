@@ -9,7 +9,7 @@ import { usePersistedTab } from '@/components/ui/tabs/usePersistedTab'
 import { LoadingSurface } from '@/components/ui/loading/LoadingSurface'
 import { SmoothPanel } from '@/components/ui/transition/SmoothPanel'
 
-type Tab = 'guestbook' | 'prompts' | 'suggestions'
+type Tab = 'guestbook' | 'prompts' | 'suggestions' | 'sketchbook'
 
 interface SharedBoardProps {
 	isAdminMode: boolean
@@ -34,9 +34,13 @@ const SuggestionsBoard = dynamic<SharedBoardProps>(
 	() => import('@/app/suggestions/_components/SuggestionsBoard').then((mod) => mod.SuggestionsBoard),
 	{ loading: () => boardLoader }
 )
+const SketchbookBoard = dynamic<SharedBoardProps>(
+	() => import('@/app/sketchbook/_components/SketchbookBoard').then((mod) => mod.SketchbookBoard),
+	{ loading: () => boardLoader }
+)
 
 function getTabFromParam(tab: string | null): Tab | null {
-	if (tab === 'prompts' || tab === 'guestbook' || tab === 'suggestions') {
+	if (tab === 'prompts' || tab === 'guestbook' || tab === 'suggestions' || tab === 'sketchbook') {
 		return tab
 	}
 
@@ -54,6 +58,10 @@ function getTabFromHash(hash: string): Tab | null {
 
 	if (hash.startsWith('#suggestion-')) {
 		return 'suggestions'
+	}
+
+	if (hash.startsWith('#drawing-')) {
+		return 'sketchbook'
 	}
 
 	return null
@@ -89,7 +97,8 @@ export function InteractClient() {
 	const tabs = [
 		{ id: 'guestbook' as Tab, label: 'Guestbook board' },
 		{ id: 'prompts' as Tab, label: 'Drawing prompts' },
-		{ id: 'suggestions' as Tab, label: 'Media suggestions' }
+		{ id: 'suggestions' as Tab, label: 'Media suggestions' },
+		{ id: 'sketchbook' as Tab, label: 'Sketchbook' }
 	]
 
 	return (
@@ -129,6 +138,15 @@ export function InteractClient() {
 
 				{activeTab === 'suggestions' && (
 					<SuggestionsBoard 
+						isAdminMode={isAdminMode} 
+						setIsAdminMode={setIsAdminMode} 
+						passcode={passcode} 
+						setPasscode={setPasscode} 
+					/>
+				)}
+
+				{activeTab === 'sketchbook' && (
+					<SketchbookBoard 
 						isAdminMode={isAdminMode} 
 						setIsAdminMode={setIsAdminMode} 
 						passcode={passcode} 

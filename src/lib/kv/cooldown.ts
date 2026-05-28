@@ -5,7 +5,7 @@ import { getRedisClient } from './client'
 export const MESSAGE_COOLDOWN_SECONDS = 333
 export const MESSAGE_COOLDOWN_MS = MESSAGE_COOLDOWN_SECONDS * 1000
 
-export type CooldownScope = 'talk' | 'draw' | 'suggestion'
+export type CooldownScope = 'talk' | 'draw' | 'suggestion' | 'sketchbook'
 
 export type CooldownState = {
   expiresAt: string | null
