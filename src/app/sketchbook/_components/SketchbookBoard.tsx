@@ -858,7 +858,7 @@ export function SketchbookBoard({
             <Text variant="muted" size="sm">No drawings found. Be the first to draw on the canvas!</Text>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          <div className="columns-1 sm:columns-2 md:columns-3 lg:columns-4 gap-5 space-y-5">
             {drawings.map((drawing) => {
               const hasLiked = likedList.includes(drawing.id)
               
@@ -866,35 +866,33 @@ export function SketchbookBoard({
                 <div
                   key={drawing.id}
                   id={`drawing-${drawing.id}`}
-                  className="group relative flex flex-col justify-between rounded-2xl border border-slate-200/60 bg-slate-50/50 dark:border-slate-800/40 dark:bg-slate-900/35 overflow-hidden transition-all duration-200 hover:shadow-lg hover:border-violet-300 dark:hover:border-violet-850 hover:bg-slate-100/50 dark:hover:bg-slate-900/60 cursor-default shadow-sm animate-in fade-in-50 duration-200"
+                  className="break-inside-avoid rounded-2xl border border-slate-200/60 bg-slate-50/50 dark:border-slate-800/40 dark:bg-slate-900/35 overflow-hidden transition-all duration-200 hover:shadow-lg hover:border-violet-300 dark:hover:border-violet-850 hover:bg-slate-100/50 dark:hover:bg-slate-900/60 cursor-default shadow-sm animate-in fade-in-50 duration-200"
                 >
-                  <div>
-                    {/* Drawing Image container utilizing shared ImageGallery for premium lightbox zoom & pan */}
-                    <div className="relative aspect-square w-full bg-white flex items-center justify-center overflow-hidden border-b border-slate-200/50 dark:border-slate-850" onClick={e => e.stopPropagation()}>
-                      <ImageGallery urls={[drawing.imageUrl]} theme="violet" />
+                  {/* Drawing Image — full natural size, no aspect-square crop */}
+                  <div className="relative w-full bg-white overflow-hidden border-b border-slate-200/50 dark:border-slate-850" onClick={e => e.stopPropagation()}>
+                    <ImageGallery urls={[drawing.imageUrl]} theme="violet" />
+                  </div>
+
+                  {/* Author and Caption contents */}
+                  <div className="p-3.5 space-y-2">
+                    <div className="flex flex-wrap items-center justify-between gap-2">
+                      <span className={cn(sansFont.className, "text-xs font-bold text-violet-600 bg-violet-50 border border-violet-100/70 rounded-full px-2.5 py-0.5 dark:text-violet-400 dark:bg-violet-950/20 dark:border-violet-900/40")}>
+                        {drawing.author}
+                      </span>
+                      <span className="text-[10px] text-muted-foreground font-mono">
+                        {formatDate(drawing.createdAt).split(',')[0]}
+                      </span>
                     </div>
 
-                    {/* Author and Caption contents */}
-                    <div className="p-4 space-y-2">
-                      <div className="flex flex-wrap items-center justify-between gap-2">
-                        <span className={cn(sansFont.className, "text-xs font-bold text-violet-600 bg-violet-50 border border-violet-100/70 rounded-full px-2.5 py-0.5 dark:text-violet-400 dark:bg-violet-950/20 dark:border-violet-900/40")}>
-                          🎨 {drawing.author}
-                        </span>
-                        <span className="text-[10px] text-muted-foreground font-mono">
-                          {formatDate(drawing.createdAt).split(',')[0]}
-                        </span>
-                      </div>
-
-                      {drawing.body && (
-                        <p className="text-sm font-medium text-slate-700 dark:text-slate-350 line-clamp-3 leading-relaxed break-words pt-1">
-                          {drawing.body}
-                        </p>
-                      )}
-                    </div>
+                    {drawing.body && (
+                      <p className="text-sm font-medium text-slate-700 dark:text-slate-350 leading-relaxed break-words pt-0.5">
+                        {drawing.body}
+                      </p>
+                    )}
                   </div>
 
                   {/* Reaction Likes & Thread bubbles & Control bar */}
-                  <div className="p-4 pt-0">
+                  <div className="px-3.5 pb-3.5">
                     {/* Render mini replies thread (Admin replies) */}
                     {drawing.thread && drawing.thread.length > 0 && (
                       <div className="mb-3 space-y-2 border-t border-slate-200/45 dark:border-slate-800/45 pt-3">
