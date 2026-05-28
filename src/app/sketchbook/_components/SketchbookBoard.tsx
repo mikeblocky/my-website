@@ -49,8 +49,18 @@ export function SketchbookBoard({
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
   const tempCanvasRef = useRef<HTMLCanvasElement | null>(null)
   const [brushColor, setBrushColor] = useState('#1e293b')
-  const [brushSize, setBrushSize] = useState(5)
+  const [pencilSize, setPencilSize] = useState(5)
+  const [eraserSize, setEraserSize] = useState(15)
   const [isDrawingTool, setIsDrawingTool] = useState<'pencil' | 'eraser'>('pencil')
+
+  const brushSize = isDrawingTool === 'eraser' ? eraserSize : pencilSize
+  const setBrushSize = (val: number) => {
+    if (isDrawingTool === 'eraser') {
+      setEraserSize(val)
+    } else {
+      setPencilSize(val)
+    }
+  }
 
   // History stack for Undo / Redo
   const historyRef = useRef<string[]>([])
@@ -225,7 +235,7 @@ export function SketchbookBoard({
     }
   }
 
-  // Global Keyboard Shortcuts for Undo (Ctrl+Z) and Redo (Ctrl+Y / Ctrl+Shift+Z)
+  // Global Keyboard Shortcuts for Undo (Ctrl+Z), Redo (Ctrl+Y), Brush (B), and Eraser (E)
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       const activeEl = document.activeElement
@@ -238,12 +248,21 @@ export function SketchbookBoard({
         ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'y') ||
         ((e.metaKey || e.ctrlKey) && e.shiftKey && e.key.toLowerCase() === 'z')
 
+      const isBrush = !e.metaKey && !e.ctrlKey && !e.altKey && e.key.toLowerCase() === 'b'
+      const isEraser = !e.metaKey && !e.ctrlKey && !e.altKey && e.key.toLowerCase() === 'e'
+
       if (isUndo) {
         e.preventDefault()
         handleUndo()
       } else if (isRedo) {
         e.preventDefault()
         handleRedo()
+      } else if (isBrush) {
+        e.preventDefault()
+        setIsDrawingTool('pencil')
+      } else if (isEraser) {
+        e.preventDefault()
+        setIsDrawingTool('eraser')
       }
     }
 
@@ -251,7 +270,7 @@ export function SketchbookBoard({
     return () => {
       window.removeEventListener('keydown', handleKeyDown)
     }
-  }, [handleUndo, handleRedo])
+  }, [handleUndo, handleRedo, setIsDrawingTool])
 
   // Helper to draw a full smooth stroke onto a given 2D context
   const drawStroke = (ctx: CanvasRenderingContext2D, points: { x: number; y: number }[]) => {
@@ -648,7 +667,7 @@ export function SketchbookBoard({
               </div>
 
               {/* Brush Thickness Slider & Dot Preview (Compact, Sleek, vertically stacked/rotated) */}
-              <div className="flex flex-col items-center gap-3 bg-slate-200/30 dark:bg-slate-800/30 px-2 py-2 rounded-xl border border-slate-300/10 dark:border-slate-700/10 w-full">
+              <div className="flex flex-col items-center gap-2 bg-slate-200/30 dark:bg-slate-800/30 px-1.5 py-2 rounded-xl border border-slate-300/10 dark:border-slate-700/10 w-full">
                 <input
                   type="range"
                   min="1"
@@ -668,6 +687,20 @@ export function SketchbookBoard({
                     }}
                   />
                 </div>
+                <input
+                  type="number"
+                  min="1"
+                  max="100"
+                  value={brushSize}
+                  onChange={(e) => {
+                    const val = parseInt(e.target.value)
+                    if (!isNaN(val)) {
+                      setBrushSize(Math.max(1, Math.min(val, 100)))
+                    }
+                  }}
+                  className="w-9 h-6 text-center text-[10px] font-bold bg-white dark:bg-slate-850 border border-slate-200 dark:border-slate-700 rounded-md text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-1 focus:ring-violet-500 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none shrink-0"
+                  title="Type custom size (1-100)"
+                />
               </div>
             </div>
 
