@@ -8,7 +8,7 @@ import { cn } from '@/lib/utils/utils'
 
 interface RedirectToBoardProps {
   id: string
-  type: 'talk' | 'question' | 'prompt' | 'suggestion'
+  type: 'talk' | 'question' | 'prompt' | 'suggestion' | 'sketchbook'
 }
 
 export function RedirectToBoard({ id, type }: RedirectToBoardProps) {
@@ -17,7 +17,9 @@ export function RedirectToBoard({ id, type }: RedirectToBoardProps) {
     ? `/interact?tab=suggestions#suggestion-${id}`
     : type === 'talk' || type === 'question'
       ? `/interact?tab=guestbook#talk-${id}`
-      : `/interact?tab=prompts#prompt-${id}`
+      : type === 'sketchbook'
+        ? `/interact?tab=sketchbook#drawing-${id}`
+        : `/interact?tab=prompts#prompt-${id}`
 
   useEffect(() => {
     // Perform instant, high-performance client-side transition to the main board
@@ -26,6 +28,7 @@ export function RedirectToBoard({ id, type }: RedirectToBoardProps) {
 
   const isTalk = type === 'talk' || type === 'question'
   const isSuggestion = type === 'suggestion'
+  const isSketchbook = type === 'sketchbook'
   const accentColor = isSuggestion
     ? 'text-teal-600 dark:text-teal-400 bg-teal-50 dark:bg-teal-900/10 border-teal-100 dark:border-teal-900/20'
     : isTalk
@@ -33,7 +36,13 @@ export function RedirectToBoard({ id, type }: RedirectToBoardProps) {
       : 'text-violet-600 dark:text-violet-400 bg-violet-50 dark:bg-violet-900/10 border-violet-100 dark:border-violet-900/20'
 
   const loaderColor = isSuggestion ? 'border-teal-500' : isTalk ? 'border-blue-500' : 'border-violet-500'
-  const boardLabel = isSuggestion ? 'Media suggestions' : isTalk ? 'Talk board' : 'Draw prompts'
+  const boardLabel = isSuggestion 
+    ? 'Media suggestions' 
+    : isTalk 
+      ? 'Talk board' 
+      : isSketchbook 
+        ? 'Sketchbook board' 
+        : 'Draw prompts'
 
   return (
     <div className="min-h-[60vh] flex flex-col items-center justify-center p-6 text-center">

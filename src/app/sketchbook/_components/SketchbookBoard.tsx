@@ -12,6 +12,7 @@ import { Button } from '@/components/ui/primitives/button'
 import TextHeading from '@/components/ui/text-heading/text-heading'
 import Text from '@/components/ui/text/text'
 import { StackVertical } from '@/components/layout/layout-stack/layout-stack'
+import { ImageGallery } from '@/components/ui/ImageGallery'
 
 const MAX_BODY_LENGTH = 300
 
@@ -71,9 +72,6 @@ export function SketchbookBoard({
   // Like track local storage list
   const [likedList, setLikedList] = useState<string[]>([])
 
-  // Modal zoom
-  const [zoomDrawing, setZoomDrawing] = useState<SketchbookDrawing | null>(null)
-
   const { message: notification, showMessage: showNotification } = useTimedMessage()
   const { feedback: buttonFeedback, showFeedback: showButtonFeedback } = useButtonFeedback()
   const { isCooldownActive, cooldownLabel, applyCooldown } = useBoardCooldown()
@@ -112,6 +110,7 @@ export function SketchbookBoard({
   // Canvas context setups
   const isDrawingRef = useRef(false)
   const lastPosRef = useRef({ x: 0, y: 0 })
+  const pointsRef = useRef<{ x: number; y: number }[]>([])
 
   // Coordinate normalizer for mouse / touch
   const getCoordinates = (e: any, canvas: HTMLCanvasElement) => {
@@ -233,19 +232,16 @@ export function SketchbookBoard({
 
     isDrawingRef.current = true
     lastPosRef.current = coords
+    pointsRef.current = [coords]
 
     const ctx = canvas.getContext('2d')
     if (!ctx) return
-    ctx.beginPath()
-    ctx.moveTo(coords.x, coords.y)
     
-    // Draw a single dot on click
-    ctx.lineTo(coords.x, coords.y)
-    ctx.strokeStyle = isDrawingTool === 'eraser' ? '#ffffff' : brushColor
-    ctx.lineWidth = brushSize
-    ctx.lineCap = 'round'
-    ctx.lineJoin = 'round'
-    ctx.stroke()
+    // Draw a single solid dot instantly on tap/click to avoid missing rapid touch inputs
+    ctx.beginPath()
+    ctx.arc(coords.x, coords.y, brushSize / 2, 0, Math.PI * 2)
+    ctx.fillStyle = isDrawingTool === 'eraser' ? '#ffffff' : brushColor
+    ctx.fill()
   }
 
   const draw = (e: any) => {
@@ -257,17 +253,40 @@ export function SketchbookBoard({
     const coords = getCoordinates(e, canvas)
     if (!coords) return
 
+    pointsRef.current.push(coords)
+    const points = pointsRef.current
+    const len = points.length
+
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
-    ctx.beginPath()
-    ctx.moveTo(lastPosRef.current.x, lastPosRef.current.y)
-    ctx.lineTo(coords.x, coords.y)
-    ctx.strokeStyle = isDrawingTool === 'eraser' ? '#ffffff' : brushColor
-    ctx.lineWidth = brushSize
-    ctx.lineCap = 'round'
-    ctx.lineJoin = 'round'
-    ctx.stroke()
+    if (len > 1) {
+      ctx.beginPath()
+      const p1 = points[len - 2]
+      const p2 = points[len - 1]
+
+      if (len === 2) {
+        // Line fallback for the very first step of the stroke
+        ctx.moveTo(p1.x, p1.y)
+        ctx.lineTo(p2.x, p2.y)
+      } else {
+        // High fidelity quadratic curve smoothing through intermediate midpoints
+        const p0 = points[len - 3]
+        const mid1X = (p0.x + p1.x) / 2
+        const mid1Y = (p0.y + p1.y) / 2
+        const mid2X = (p1.x + p2.x) / 2
+        const mid2Y = (p1.y + p2.y) / 2
+
+        ctx.moveTo(mid1X, mid1Y)
+        ctx.quadraticCurveTo(p1.x, p1.y, mid2X, mid2Y)
+      }
+
+      ctx.strokeStyle = isDrawingTool === 'eraser' ? '#ffffff' : brushColor
+      ctx.lineWidth = brushSize
+      ctx.lineCap = 'round'
+      ctx.lineJoin = 'round'
+      ctx.stroke()
+    }
 
     lastPosRef.current = coords
   }
@@ -275,6 +294,7 @@ export function SketchbookBoard({
   const stopDrawing = () => {
     if (isDrawingRef.current) {
       isDrawingRef.current = false
+      pointsRef.current = []
       saveStateToHistory()
     }
   }
@@ -392,7 +412,6 @@ export function SketchbookBoard({
       if (response.ok) {
         setDrawings(prev => prev.filter(d => d.id !== id))
         showNotification('Drawing deleted.')
-        if (zoomDrawing?.id === id) setZoomDrawing(null)
       } else {
         showNotification('Failed to delete drawing.')
       }
@@ -656,7 +675,7 @@ export function SketchbookBoard({
               <Text variant="muted" size="xs">Refreshing...</Text>
             ) : null}
             <Text variant="muted" size="sm" className="whitespace-nowrap">
-              {drawings.length} drawings collected
+              {drawings.length} masterpieces collected
             </Text>
           </div>
         </div>
@@ -679,24 +698,12 @@ export function SketchbookBoard({
                 <div
                   key={drawing.id}
                   id={`drawing-${drawing.id}`}
-                  onClick={() => setZoomDrawing(drawing)}
-                  className="group relative flex flex-col justify-between rounded-2xl border border-slate-200/60 bg-slate-50/50 dark:border-slate-800/40 dark:bg-slate-900/35 overflow-hidden transition-all duration-200 hover:shadow-lg hover:border-violet-300 dark:hover:border-violet-850 hover:bg-slate-100/50 dark:hover:bg-slate-900/60 cursor-pointer shadow-sm"
+                  className="group relative flex flex-col justify-between rounded-2xl border border-slate-200/60 bg-slate-50/50 dark:border-slate-800/40 dark:bg-slate-900/35 overflow-hidden transition-all duration-200 hover:shadow-lg hover:border-violet-300 dark:hover:border-violet-850 hover:bg-slate-100/50 dark:hover:bg-slate-900/60 cursor-default shadow-sm animate-in fade-in-50 duration-200"
                 >
                   <div>
-                    {/* Drawing Image container */}
-                    <div className="relative aspect-square w-full bg-white flex items-center justify-center overflow-hidden border-b border-slate-200/50 dark:border-slate-850">
-                      <img
-                        src={drawing.imageUrl}
-                        alt={`Drawing by ${drawing.author}`}
-                        className="w-full h-full object-cover transition-transform duration-200 group-hover:scale-[1.02]"
-                        loading="lazy"
-                      />
-                      {/* Dark Overlay Zoom icon on hover */}
-                      <div className="absolute inset-0 bg-black/3 opacity-0 group-hover:opacity-100 transition-opacity duration-150 flex items-center justify-center">
-                        <span className="p-2.5 rounded-full bg-black/40 text-white backdrop-blur-sm shadow-md">
-                          <Eye size={18} />
-                        </span>
-                      </div>
+                    {/* Drawing Image container utilizing shared ImageGallery for premium lightbox zoom & pan */}
+                    <div className="relative aspect-square w-full bg-white flex items-center justify-center overflow-hidden border-b border-slate-200/50 dark:border-slate-850" onClick={e => e.stopPropagation()}>
+                      <ImageGallery urls={[drawing.imageUrl]} theme="violet" />
                     </div>
 
                     {/* Author and Caption contents */}
@@ -761,6 +768,15 @@ export function SketchbookBoard({
                         >
                           <Share2 size={13} />
                         </button>
+                        
+                        <button
+                          type="button"
+                          onClick={(e) => handleDownloadDrawing(drawing.imageUrl, drawing.id, e)}
+                          className="flex items-center justify-center p-1 rounded-full border border-slate-200 bg-background text-slate-500 hover:text-violet-600 dark:border-slate-800 dark:text-slate-400 dark:hover:text-violet-400 shadow-sm"
+                          title="Download"
+                        >
+                          <Download size={13} />
+                        </button>
                       </div>
 
                       {/* Admin moderation controls (only shown when admin mode is turned on) */}
@@ -780,7 +796,7 @@ export function SketchbookBoard({
                           <button
                             type="button"
                             onClick={(e) => handleDeleteDrawing(drawing.id, e)}
-                            className="p-1 rounded-full border border-red-250 bg-red-50 text-red-600 hover:bg-red-100 dark:border-red-900/40 dark:bg-red-950/20 dark:text-red-400 shadow-sm"
+                            className="p-1 rounded-full border border-red-250 bg-red-50 text-red-650 hover:bg-red-100 dark:border-red-900/40 dark:bg-red-950/20 dark:text-red-400 shadow-sm"
                             title="Delete Masterpiece"
                           >
                             <Trash2 size={13} />
@@ -825,133 +841,6 @@ export function SketchbookBoard({
           </div>
         )}
       </div>
-
-      {/* Immersive Glassmorphism Zoom Modal Overlay */}
-      {zoomDrawing && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4 animate-fade-in"
-          onClick={() => setZoomDrawing(null)}
-        >
-          {/* Modal card wrapper */}
-          <div
-            className="relative bg-slate-50 dark:bg-slate-900 border border-slate-200/50 dark:border-slate-800 rounded-3xl max-w-2xl w-full max-h-[90vh] flex flex-col overflow-hidden shadow-2xl motion-safe:animate-in motion-safe:zoom-in-95"
-            onClick={(e) => e.stopPropagation()}
-          >
-            {/* Upper Action Bar / Info bar */}
-            <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200/50 dark:border-slate-800">
-              <div className="flex items-center gap-3">
-                <span className={cn(sansFont.className, "text-sm font-bold text-violet-600 bg-violet-50 border border-violet-100/70 rounded-full px-3 py-1 dark:text-violet-400 dark:bg-violet-950/20 dark:border-violet-900/40")}>
-                  🎨 {zoomDrawing.author}
-                </span>
-                <span className="text-xs text-muted-foreground font-mono">
-                  {formatDate(zoomDrawing.createdAt)}
-                </span>
-              </div>
-
-              {/* Close Button */}
-              <button
-                type="button"
-                onClick={() => setZoomDrawing(null)}
-                className="p-1.5 rounded-full hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-500 dark:text-slate-400 transition-colors"
-              >
-                <X size={18} />
-              </button>
-            </div>
-
-            {/* Modal drawing canvas image view */}
-            <div className="flex-1 overflow-y-auto p-6 space-y-6 flex flex-col">
-              <div className="bg-white rounded-2xl aspect-square w-full border border-slate-200 dark:border-slate-800 overflow-hidden flex items-center justify-center shadow-inner">
-                <img
-                  src={zoomDrawing.imageUrl}
-                  alt={`Full size drawing by ${zoomDrawing.author}`}
-                  className="max-h-full max-w-full object-contain"
-                />
-              </div>
-
-              {/* Caption description */}
-              {zoomDrawing.body && (
-                <div className="bg-slate-100/55 dark:bg-slate-950/15 p-4 rounded-2xl border border-slate-200/30 dark:border-slate-850">
-                  <p className="text-base font-medium text-slate-800 dark:text-slate-200 leading-relaxed break-words">
-                    {zoomDrawing.body}
-                  </p>
-                </div>
-              )}
-
-              {/* Mini thread Replies in zoom overlay */}
-              {zoomDrawing.thread && zoomDrawing.thread.length > 0 && (
-                <div className="space-y-3 pt-2">
-                  <h4 className="text-xs font-bold text-muted-foreground uppercase tracking-wider">Board Thread replies</h4>
-                  {zoomDrawing.thread.map((reply) => (
-                    <div key={reply.id} className="flex gap-3 items-start bg-slate-100 dark:bg-slate-850/60 p-3.5 rounded-2xl border border-slate-200/20 dark:border-slate-800/10">
-                      <CornerDownRight size={15} className="text-violet-500 shrink-0 mt-0.5" />
-                      <div className="space-y-1">
-                        <span className="text-sm font-semibold text-violet-600 dark:text-violet-400">mikeblocky (Admin)</span>
-                        <p className="text-sm text-slate-700 dark:text-slate-350 break-words leading-relaxed">{reply.body}</p>
-                        <span className="text-[10px] text-muted-foreground font-mono block pt-1">
-                          {formatDate(reply.createdAt)}
-                        </span>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-
-            {/* Bottom Utilities bar */}
-            <div className="px-6 py-4 bg-slate-100 dark:bg-slate-900 border-t border-slate-200/50 dark:border-slate-800/80 flex items-center justify-between gap-4">
-              <div className="flex items-center gap-2">
-                <button
-                  type="button"
-                  onClick={(e) => handleLike(zoomDrawing.id, e)}
-                  className={cn(
-                    "flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold border transition-all duration-150 shadow-sm",
-                    likedList.includes(zoomDrawing.id)
-                      ? "bg-red-50 border-red-200 text-red-500 dark:bg-red-950/20 dark:border-red-900/30"
-                      : "bg-background border-slate-200 text-slate-500 hover:text-red-500 dark:border-slate-800 dark:text-slate-400 dark:hover:text-red-400 hover:border-red-200 dark:hover:border-red-950/30"
-                  )}
-                >
-                  <Heart size={14} className={cn(likedList.includes(zoomDrawing.id) && "fill-red-500")} />
-                  <span>{zoomDrawing.likes || 0} Likes</span>
-                </button>
-              </div>
-
-              <div className="flex items-center gap-2">
-                {/* Download */}
-                <button
-                  type="button"
-                  onClick={(e) => handleDownloadDrawing(zoomDrawing.imageUrl, zoomDrawing.id, e)}
-                  className="flex items-center gap-2 rounded-full border border-slate-200 bg-background hover:bg-slate-100 text-slate-600 dark:border-slate-850 dark:hover:bg-slate-800 dark:text-slate-300 px-4 py-2 text-sm font-semibold transition-all shadow-sm"
-                  title="Download image"
-                >
-                  <Download size={14} /> Download
-                </button>
-
-                {/* Share Link */}
-                <button
-                  type="button"
-                  onClick={(e) => handleShareDrawing(zoomDrawing.id, e)}
-                  className="flex items-center gap-2 rounded-full border border-slate-200 bg-background hover:bg-slate-100 text-slate-600 dark:border-slate-850 dark:hover:bg-slate-800 dark:text-slate-300 px-4 py-2 text-sm font-semibold transition-all shadow-sm"
-                >
-                  <Share2 size={14} />
-                  <span>{buttonFeedback[`share-${zoomDrawing.id}`] || 'Copy Link'}</span>
-                </button>
-
-                {/* Admin moderation controls inside modal */}
-                {isAdminMode && (
-                  <button
-                    type="button"
-                    onClick={(e) => handleDeleteDrawing(zoomDrawing.id, e)}
-                    className="flex items-center justify-center p-2 rounded-full border border-red-250 bg-red-50 text-red-650 hover:bg-red-100 dark:border-red-900/40 dark:bg-red-950/20 dark:text-red-400 shadow-sm"
-                    title="Delete Masterpiece"
-                  >
-                    <Trash2 size={14} />
-                  </button>
-                )}
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
     </StackVertical>
   )
 }

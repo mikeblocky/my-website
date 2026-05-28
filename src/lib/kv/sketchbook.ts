@@ -168,3 +168,8 @@ export async function updateThreadMessage(
   
   return updatedDrawing
 }
+
+export async function getDrawingById(id: string): Promise<SketchbookDrawing | null> {
+  const drawings = await fetchDrawings(MAX_STORED_DRAWINGS)
+  return drawings.find(d => d.id === id) || null
+}
