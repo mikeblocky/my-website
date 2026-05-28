@@ -1,7 +1,8 @@
 'use client'
 
 import { FormEvent, useEffect, useRef, useState, useTransition, useMemo } from 'react'
-import { Palette, Share2, Heart, Trash2, MessageSquareReply, Eye, Download, X, CornerDownRight, Bell, Undo2, Redo2, Eraser, Pencil, Trash } from 'lucide-react'
+import { Palette, Share2, Heart, Trash2, MessageSquareReply, Eye, Download, X, CornerDownRight, Bell, Undo2, Redo2, Eraser, Pencil, Trash, Camera } from 'lucide-react'
+import { snapSketchbookCard } from './sketchbook-snap'
 import { sansFont } from '@/styles/fonts/fonts'
 import { cn } from '@/lib/utils/utils'
 import { formatBoardDate as formatDate, type ApiCooldown } from '@/lib/boards/board-utils'
@@ -530,16 +531,44 @@ export function SketchbookBoard({
   }
 
   // Share Drawing Clipboard copy
-  const handleShareDrawing = (id: string, e: React.MouseEvent) => {
+  const handleShareDrawing = async (id: string, e: React.MouseEvent) => {
     e.stopPropagation()
-    const url = `${window.location.origin}/sketchbook#drawing-${id}`
-    navigator.clipboard.writeText(url)
-      .then(() => {
-        showButtonFeedback(`share-${id}`, 'Copied!')
-      })
-      .catch(() => {
-        showButtonFeedback(`share-${id}`, 'Failed to share')
-      })
+    const url = `${window.location.origin}/sketchbook/${id}`
+    
+    try {
+      if (typeof navigator !== 'undefined' && navigator.share) {
+        await navigator.share({
+          title: 'Sketchbook drawing',
+          text: 'Collaborative sketchbook drawing on mikeblocky.com',
+          url
+        })
+      } else {
+        await navigator.clipboard.writeText(url)
+      }
+      showButtonFeedback(`share-${id}`, 'Copied!')
+      showNotification('Link copied to clipboard!')
+    } catch (err) {
+      console.error('Share failed', err)
+      showButtonFeedback(`share-${id}`, 'Failed')
+    }
+  }
+
+  // Snap and copy drawing card to clipboard
+  const handleSnapDrawing = async (id: string, e: React.MouseEvent) => {
+    e.stopPropagation()
+    try {
+      const result = await snapSketchbookCard(id)
+      if (result === 'snapped') {
+        showButtonFeedback(`snap-${id}`, 'Snapped!')
+        showNotification('Masterpiece card copied to clipboard!')
+      } else if (result === 'saved') {
+        showButtonFeedback(`snap-${id}`, 'Saved!')
+        showNotification('Masterpiece card saved as image!')
+      }
+    } catch (err) {
+      console.error('Snap failed', err)
+      showButtonFeedback(`snap-${id}`, 'Failed')
+    }
   }
 
   // Download Drawing file trigger
@@ -881,9 +910,9 @@ export function SketchbookBoard({
                       </div>
                     )}
 
-                    {/* Utility actions: Like / Share / Download / Moderation */}
+                    {/* Utility actions: Like / Share / Snap / Download / Moderation */}
                     <div className="flex items-center justify-between border-t border-slate-200/35 dark:border-slate-800/35 pt-3">
-                      <div className="flex items-center gap-1.5">
+                      <div className="drawing-actions flex items-center gap-1.5">
                         <button
                           type="button"
                           onClick={(e) => handleLike(drawing.id, e)}
@@ -902,16 +931,25 @@ export function SketchbookBoard({
                         <button
                           type="button"
                           onClick={(e) => handleShareDrawing(drawing.id, e)}
-                          className="flex items-center justify-center p-1 rounded-full border border-slate-200 bg-background text-slate-500 hover:text-violet-600 dark:border-slate-800 dark:text-slate-400 dark:hover:text-violet-400 shadow-sm"
-                          title="Share"
+                          className="flex items-center justify-center p-1 rounded-full border border-slate-200 bg-background text-slate-500 hover:text-violet-600 dark:border-slate-800 dark:text-slate-400 dark:hover:text-violet-400 shadow-sm transition-all"
+                          title={buttonFeedback[`share-${drawing.id}`] || "Share link"}
                         >
                           <Share2 size={13} />
+                        </button>
+
+                        <button
+                          type="button"
+                          onClick={(e) => handleSnapDrawing(drawing.id, e)}
+                          className="flex items-center justify-center p-1 rounded-full border border-slate-200 bg-background text-slate-500 hover:text-violet-600 dark:border-slate-800 dark:text-slate-400 dark:hover:text-violet-400 shadow-sm transition-all"
+                          title={buttonFeedback[`snap-${drawing.id}`] || "Snap card to clipboard"}
+                        >
+                          <Camera size={13} />
                         </button>
                         
                         <button
                           type="button"
                           onClick={(e) => handleDownloadDrawing(drawing.imageUrl, drawing.id, e)}
-                          className="flex items-center justify-center p-1 rounded-full border border-slate-200 bg-background text-slate-500 hover:text-violet-600 dark:border-slate-800 dark:text-slate-400 dark:hover:text-violet-400 shadow-sm"
+                          className="flex items-center justify-center p-1 rounded-full border border-slate-200 bg-background text-slate-500 hover:text-violet-600 dark:border-slate-800 dark:text-slate-400 dark:hover:text-violet-400 shadow-sm transition-all"
                           title="Download"
                         >
                           <Download size={13} />
