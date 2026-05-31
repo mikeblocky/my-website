@@ -20,19 +20,19 @@ function QuickLink({ href, title, description }: QuickLinkProps) {
                 className={cn(
                     "flex items-center justify-between",
                     "p-4 rounded-lg",
-                    "bg-transparent hover:bg-blue-500/5",
+                    "bg-transparent hover:bg-pink-500/5",
                     "transition-colors duration-200"
                 )}
             >
                 <div>
-                    <h3 className="font-medium text-lg group-hover:text-blue-500 transition-colors">
+                    <h3 className="font-medium text-lg group-hover:pride-text transition-colors">
                         {title}
                     </h3>
                     <p className="text-sm text-muted-foreground">
                         {description}
                     </p>
                 </div>
-                <ArrowRight className="w-5 h-5 text-muted-foreground group-hover:text-blue-500 transition-colors" />
+                <ArrowRight className="w-5 h-5 text-muted-foreground group-hover:pride-text transition-colors" />
             </motion.div>
         </Link>
     )

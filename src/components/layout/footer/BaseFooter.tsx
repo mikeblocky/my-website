@@ -2,7 +2,7 @@
 
 import { cn } from '@/lib/utils/utils'
 import { monoFont } from '@/styles/fonts/fonts'
-import { Bird, GitFork, Mail } from 'lucide-react'
+import { Bird, GitFork, Heart, Mail } from 'lucide-react'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 
@@ -45,14 +45,12 @@ export function BaseFooter({
                 <div className={cn(
                     "absolute inset-0 w-full",
                     "h-[1px]",
-                    "bg-gradient-to-r",
+                    "bg-gradient-to-r pride-gradient-line opacity-80",
                     color === 'blue' && [
-                        "from-transparent via-blue-500/30 to-transparent",
-                        "dark:via-blue-400/30"
+                        "dark:opacity-90"
                     ],
 
                     color === 'green' && [
-                        "from-transparent via-green-500/30 to-transparent",
                         "dark:via-green-400/30"
                     ]
                 )} />
@@ -64,6 +62,11 @@ export function BaseFooter({
                 "flex flex-col items-center gap-4 sm:gap-6",
                 "text-sm text-muted-foreground/60"
             )}>
+                <div className="pride-badge px-3 py-1.5 text-[11px]">
+                    <Heart className="h-3 w-3 text-pink-500 dark:text-pink-300" />
+                    pride month is a month to celebrate love, diversity, and the community!
+                </div>
+
                 {/* Navigation Links - First Row */}
                 {navigationLinks && (showToTop || showSectionName) && (
                     <div className="flex flex-wrap items-center justify-center gap-x-3">
@@ -93,11 +96,11 @@ export function BaseFooter({
                                             href={link.href}
                                             target={link.href.startsWith('mailto:') ? undefined : '_blank'}
                                             className={cn(
-                                                "block text-blue-400/80 hover:text-blue-400",
+                                                "block pride-text",
                                                 "transition-all duration-200",
                                                 "-m-2 p-2",
-                                                "hover:bg-blue-400/10 rounded-md",
-                                                "hover:shadow-md hover:shadow-blue-500/5"
+                                                "hover:bg-pink-400/10 rounded-md",
+                                                "hover:shadow-md hover:shadow-pink-500/5"
                                             )}
                                         >
                                             {link.icon}
@@ -110,7 +113,7 @@ export function BaseFooter({
                         {/* Copyright */}
                         {showCopyright && (
                             <motion.span 
-                                className="text-[10px] sm:text-xs text-blue-400"
+                                className="pride-text text-[10px] sm:text-xs"
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}
                                 transition={{ delay: 0.4 }}

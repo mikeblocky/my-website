@@ -22,7 +22,7 @@ export function SectionLinkItem({
             href={href}
             className={cn(
                 "group block rounded-xl border border-border/50 bg-background/70 px-4 py-4 transition-all duration-200",
-                "hover:border-blue-500/30 hover:bg-muted/30",
+                "pride-outline-hover hover:bg-muted/30",
                 className
             )}
         >
@@ -31,7 +31,7 @@ export function SectionLinkItem({
                     <TextHeading
                         as="h4"
                         weight="medium"
-                        className="mb-0 mt-0 transition-colors duration-200 group-hover:text-blue-500"
+                        className="mb-0 mt-0 transition-colors duration-200 group-hover:pride-text"
                     >
                         {title}
                     </TextHeading>
@@ -41,7 +41,7 @@ export function SectionLinkItem({
                         </Text>
                     ) : null}
                 </div>
-                <ChevronRight className="mt-1 size-4 shrink-0 text-muted-foreground transition-colors duration-200 group-hover:text-blue-500" />
+                <ChevronRight className="mt-1 size-4 shrink-0 text-muted-foreground transition-colors duration-200 group-hover:pride-text" />
             </div>
         </Link>
     )

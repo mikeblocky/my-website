@@ -20,7 +20,7 @@ function NavLink({ href, children, onClick }: NavLinkProps) {
             onClick={onClick}
             className={cn(
                 "block w-full",
-                "text-sm text-muted-foreground hover:text-blue-500",
+                "pride-nav-link text-sm text-muted-foreground",
                 "transition-colors duration-200",
                 monoFont.className
             )}
@@ -67,7 +67,7 @@ export function Navbar() {
                         key={link.href}
                         whileHover={{ y: -1 }}
                         transition={{ duration: 0.2 }}
-                        className="relative after:absolute after:bottom-[-2px] after:left-0 after:h-[1px] after:w-0 after:bg-blue-500 after:transition-all after:duration-200 after:content-[''] hover:after:w-full"
+                        className="relative after:absolute after:bottom-[-2px] after:left-0 after:h-[1px] after:w-0 after:pride-gradient-line after:transition-all after:duration-200 after:content-[''] hover:after:w-full"
                     >
                         <NavLink href={link.href}>
                             {link.label}
@@ -89,8 +89,8 @@ export function Navbar() {
                         "w-9 h-9",
                         "rounded-lg border border-transparent text-muted-foreground",
                         "transition-all duration-300",
-                        isMenuOpen && "border-blue-500/20 bg-blue-500/10 text-blue-500",
-                        "hover:text-blue-500"
+                        isMenuOpen && "border-pink-400/20 bg-pink-400/10 text-pink-500 dark:text-pink-300",
+                        "hover:text-pink-500 dark:hover:text-pink-300"
                     )}
                     aria-label={isMenuOpen ? "Close menu" : "Open menu"}
                 >
@@ -152,7 +152,7 @@ export function Navbar() {
                                                     monoFont.className,
                                                     "block px-4 py-2.5",
                                                     "text-sm text-muted-foreground",
-                                                    "hover:bg-blue-500/10 hover:text-blue-500",
+                                                    "hover:bg-pink-500/10 hover:text-pink-500 dark:hover:text-pink-300",
                                                     "transition-colors duration-200"
                                                 )}
                                             >

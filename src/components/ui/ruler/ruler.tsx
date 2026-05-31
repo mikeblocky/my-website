@@ -21,7 +21,7 @@ const weights = {
 const colors = {
     default: 'border-border',
     muted: 'border-muted',
-    blue: 'border-blue-300',
+    blue: 'border-pink-300/70',
     gray: 'border-gray-300',
     white: 'border-white',
     colorless: 'border-transparent'

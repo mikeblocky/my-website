@@ -13,18 +13,21 @@ interface FooterLinkProps {
 }
 
 export function FooterLink({ href, children, color = 'blue', external, icon }: FooterLinkProps) {
+    const isPrideAccent = color === 'blue'
+
     return (
         <Link 
             href={href}
             className={cn(
                 "flex items-center",
                 "gap-1 sm:gap-2",
-                `text-${color}-500 hover:text-${color}-400`,
+                isPrideAccent ? "pride-text" : `text-${color}-500 hover:text-${color}-400`,
                 "text-[11px] sm:text-sm font-medium",
                 "transition-all duration-200 ease-in-out",
                 "hover:translate-y-[-1px]",
                 "relative after:content-[''] after:absolute after:w-0 after:h-[1px]",
-                `after:bg-${color}-400 after:left-0 after:bottom-[-2px]`,
+                isPrideAccent ? "after:pride-gradient-line" : `after:bg-${color}-400`,
+                "after:left-0 after:bottom-[-2px]",
                 "after:transition-all after:duration-200",
                 "hover:after:w-full"
             )}

@@ -27,22 +27,22 @@ function PortalCard({ href, title, description, icon, colorClass, iconBgClass }:
                 whileHover={{ y: -2 }}
                 transition={{ duration: 0.15 }}
                 className={cn(
-                    "flex flex-col h-full p-5 rounded-xl bg-slate-50/70 dark:bg-slate-900/60 hover:bg-slate-100/70 dark:hover:bg-slate-900/90 transition-all duration-200 border-0",
+                    "pride-soft-card flex flex-col h-full p-5 rounded-xl bg-slate-50/70 dark:bg-slate-900/60 hover:bg-slate-100/70 dark:hover:bg-slate-900/90 transition-all duration-200 border-0",
                     colorClass
                 )}
             >
                 <div className="flex items-center gap-3 mb-3">
-                    <div className={cn("p-2 rounded-lg transition-colors duration-200", iconBgClass)}>
+                    <div className={cn("relative z-10 p-2 rounded-lg transition-colors duration-200", iconBgClass)}>
                         {icon}
                     </div>
-                    <h3 className="font-bold text-base text-slate-800 dark:text-slate-100">
+                    <h3 className="relative z-10 font-bold text-base text-slate-800 dark:text-slate-100">
                         {title}
                     </h3>
                 </div>
-                <p className="text-xs text-muted-foreground leading-relaxed flex-1 mb-4">
+                <p className="relative z-10 text-xs text-muted-foreground leading-relaxed flex-1 mb-4">
                     {description}
                 </p>
-                <div className="flex items-center gap-1 text-xs font-semibold text-blue-500 group-hover:text-blue-600 dark:group-hover:text-blue-400">
+                <div className="relative z-10 flex items-center gap-1 text-xs font-semibold pride-text transition-colors duration-200 group-hover:text-pink-500 dark:group-hover:text-pink-300">
                     Explore section <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-1 duration-200" />
                 </div>
             </motion.div>
@@ -63,7 +63,7 @@ export function HeroSection() {
                     <motion.div
                         animate={{ y: [0, -6, 0] }}
                         transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-                        className="w-10 h-10 sm:w-12 sm:h-12"
+                        className="pride-icon-glow w-10 h-10 sm:w-12 sm:h-12"
                     >
                         <Image src="/icon.svg" alt="mikeblocky" width={48} height={48} className="h-full w-full" priority />
                     </motion.div>
@@ -74,7 +74,7 @@ export function HeroSection() {
                         transition={{ delay: 0.2 }}
                         className="relative"
                     >
-                        <TextHeading as="h1" className="font-bold text-2xl sm:text-3xl md:text-4xl lg:text-5xl">
+                        <TextHeading as="h1" className="pride-gradient-text font-bold text-transparent text-2xl sm:text-3xl md:text-4xl lg:text-5xl">
                             mikeblocky.com
                         </TextHeading>
                     </motion.div>
@@ -151,6 +151,7 @@ export function HeroSection() {
                 className="mt-8 -mb-8"
             >
                 <div className="relative w-full aspect-[4/3] sm:aspect-[2/1] md:aspect-[21/9] rounded-lg overflow-hidden border-0">
+                    <div className="pride-gradient-line absolute inset-x-0 top-0 z-10 h-1 opacity-70" />
                     <Image
                         className="object-cover"
                         fill

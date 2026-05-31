@@ -10,11 +10,11 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          "bg-blue-500 text-white border border-blue-500 hover:bg-blue-600 dark:bg-blue-600 dark:border-blue-600 dark:hover:bg-blue-700 shadow-sm",
+          "pride-button border shadow-sm",
         destructive:
           "bg-destructive text-destructive-foreground hover:bg-destructive/90 shadow-sm",
         outline:
-          "border border-slate-300 bg-transparent text-slate-600 hover:border-blue-300 hover:text-blue-600 dark:text-slate-400 dark:border-slate-800 dark:hover:border-blue-500/50 dark:hover:text-blue-300",
+          "pride-outline-hover border border-slate-300 bg-transparent text-slate-600 dark:text-slate-400 dark:border-slate-800",
         secondary:
           "bg-secondary text-secondary-foreground hover:bg-secondary/80",
         ghost: "hover:bg-accent hover:text-accent-foreground",

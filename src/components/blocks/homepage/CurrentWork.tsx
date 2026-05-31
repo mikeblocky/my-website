@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { BookOpen, Palette, PenTool, Sparkles } from 'lucide-react'
+import { BookOpen, Heart, Palette, PenTool, Sparkles } from 'lucide-react'
 import { StackVertical } from '@/components/layout/layout-stack/layout-stack'
 import Text from '@/components/ui/text/text'
 import TextHeading from '@/components/ui/text-heading/text-heading'
@@ -20,15 +20,15 @@ function WorkItem({ icon, text, delay, hyperlink, hyperlinkText, endText }: Work
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay, duration: 0.5 }}
-            className="flex items-center gap-3"
+            className="group flex items-center gap-3"
         >
-            <div className="text-blue-500">
+            <div className="pride-text transition-colors duration-200 group-hover:text-pink-500 dark:group-hover:text-pink-300">
                 {icon}
             </div>
             <Text variant="muted" size="sm">
                 {text}
                 {hyperlink && hyperlinkText && (
-                    <Link href={hyperlink} className="text-blue-500 hover:underline">
+                    <Link href={hyperlink} className="pride-text hover:underline">
                         {hyperlinkText}
                     </Link>
                 )}
@@ -57,6 +57,10 @@ export function CurrentWork() {
         {
             icon: <Sparkles className="w-4 h-4" />,
             text: "Working on this site slowly, turning it into a place where I can share things and hopefully connect with people."
+        },
+        {
+            icon: <Heart className="w-4 h-4" />,
+            text: "Keeping a few Pride Month colors around the site this June, soft enough to still feel like home."
         }
     ]
 

@@ -9,7 +9,10 @@ export function HomepageSocials() {
         <div>
             <TextHeading as="h2" weight="bold">Socials</TextHeading>
             <Text>
-                I always accept any emails about works and personal stuffs, just email me at <Link href="mailto:mibeblocky@gmail.com" className="text-blue-500 hover:underline">mibeblocky@gmail.com</Link> or message via <Link href="https://x.com/mikeblocky" className="text-blue-500 hover:underline">Twitter</Link>.
+                I always accept any emails about works and personal stuffs, just email me at <Link href="mailto:mibeblocky@gmail.com" className="pride-text hover:underline">mibeblocky@gmail.com</Link> or message via <Link href="https://x.com/mikeblocky" className="pride-text hover:underline">Twitter</Link>.
+            </Text>
+            <Text variant="muted" size="sm" className="mt-3">
+                For Pride Month, kind messages, queer art, favorite songs, and tiny internet hellos are especially welcome.
             </Text>
         </div>
 

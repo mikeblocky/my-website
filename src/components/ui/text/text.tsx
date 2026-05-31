@@ -57,7 +57,7 @@ const fontWeights = {
 
 const variants = {
     default: 'text-foreground dark:text-white',
-    blue: 'text-blue-600 dark:text-blue-400',
+    blue: 'pride-text',
     sky: 'text-sky-600 dark:text-sky-400',
     green: 'text-green-600 dark:text-green-400',
     red: 'text-red-600 dark:text-red-400',

@@ -15,7 +15,7 @@ export function LoadingSurface({ label = 'Loading...', className }: LoadingSurfa
 			)}
 		>
 			<div className="mx-auto mb-3 h-1.5 w-24 overflow-hidden rounded-full bg-slate-200 dark:bg-slate-800">
-				<div className="h-full w-1/2 rounded-full bg-blue-500/70 motion-safe:animate-pulse" />
+				<div className="pride-gradient-line h-full w-1/2 rounded-full motion-safe:animate-pulse" />
 			</div>
 			{label}
 		</div>

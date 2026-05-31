@@ -71,6 +71,183 @@
   }
   body {
     @apply bg-background text-foreground transition-colors duration-300;
+    background-image:
+      radial-gradient(circle at 12% 0%, hsl(350 85% 70% / 0.08), transparent 24rem),
+      radial-gradient(circle at 50% -8%, hsl(52 92% 70% / 0.08), transparent 22rem),
+      radial-gradient(circle at 88% 0%, hsl(206 88% 72% / 0.08), transparent 24rem);
+    background-attachment: fixed;
+  }
+}
+
+::selection {
+  background: hsl(326 78% 72% / 0.28);
+  color: hsl(var(--foreground));
+}
+
+@layer utilities {
+  .pride-gradient-text {
+    background-image: linear-gradient(90deg, #e25566, #f59e0b, #22c55e, #3b82f6, #a855f7, #e25566);
+    background-size: 220% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+  }
+
+  .pride-gradient-line {
+    background-image: linear-gradient(90deg, #e25566, #f59e0b, #22c55e, #3b82f6, #a855f7);
+  }
+
+  .pride-nav-link:hover,
+  .pride-nav-link:focus-visible {
+    color: transparent;
+    background-image: linear-gradient(90deg, #e25566, #f59e0b, #22c55e, #3b82f6, #a855f7);
+    background-size: 220% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+  }
+
+  .pride-soft-card {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .pride-soft-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0;
+    background:
+      linear-gradient(115deg, hsl(350 85% 70% / 0.09), transparent 28%),
+      linear-gradient(145deg, transparent 42%, hsl(210 88% 72% / 0.08), transparent 70%);
+    transition: opacity 220ms ease;
+  }
+
+  .pride-soft-card:hover::before,
+  .pride-soft-card:focus-within::before {
+    opacity: 1;
+  }
+
+  .pride-icon-glow {
+    filter: drop-shadow(0 0 10px hsl(326 78% 72% / 0.22));
+  }
+
+  .pride-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    width: fit-content;
+    border-radius: 9999px;
+    border: 1px solid hsl(326 78% 72% / 0.24);
+    background:
+      linear-gradient(hsl(var(--background) / 0.82), hsl(var(--background) / 0.82)) padding-box,
+      linear-gradient(90deg, #e25566, #f59e0b, #22c55e, #3b82f6, #a855f7) border-box;
+    color: hsl(var(--muted-foreground));
+    box-shadow: 0 8px 24px hsl(326 78% 72% / 0.08);
+  }
+
+  .pride-badge-dot {
+    width: 0.4rem;
+    height: 0.4rem;
+    border-radius: 9999px;
+    background-image: linear-gradient(135deg, #e25566, #f59e0b, #22c55e, #3b82f6, #a855f7);
+  }
+
+  .pride-button {
+    border-color: transparent;
+    color: white;
+    background-image: linear-gradient(100deg, #e25566, #f59e0b, #22c55e, #3b82f6, #a855f7);
+    background-size: 180% 100%;
+    box-shadow: 0 8px 20px hsl(326 78% 56% / 0.12);
+  }
+
+  .pride-button:hover {
+    background-position: 100% 50%;
+    box-shadow: 0 10px 24px hsl(210 88% 56% / 0.14);
+  }
+
+  .pride-outline-hover:hover,
+  .pride-outline-hover:focus-visible {
+    border-color: hsl(326 78% 72% / 0.55);
+    color: hsl(326 72% 52%);
+    box-shadow: 0 0 0 3px hsl(326 78% 72% / 0.1);
+  }
+
+  .dark .pride-outline-hover:hover,
+  .dark .pride-outline-hover:focus-visible {
+    color: hsl(326 78% 82%);
+    border-color: hsl(326 78% 72% / 0.35);
+  }
+
+  .pride-ring:focus-visible {
+    --tw-ring-color: hsl(326 78% 72% / 0.4);
+  }
+
+  .pride-text {
+    color: hsl(326 72% 52%);
+  }
+
+  .dark .pride-text {
+    color: hsl(326 78% 78%);
+  }
+
+  .pride-link-hover:hover,
+  .pride-link-hover:focus-visible {
+    color: hsl(326 72% 52%);
+  }
+
+  .dark .pride-link-hover:hover,
+  .dark .pride-link-hover:focus-visible {
+    color: hsl(326 78% 78%);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .pride-gradient-text {
+    animation: pride-shift 9s ease-in-out infinite;
+  }
+
+  .pride-gradient-line {
+    background-size: 180% 100%;
+    animation: pride-shift 7s ease-in-out infinite;
+  }
+
+  .pride-icon-glow {
+    animation: pride-glow 5s ease-in-out infinite;
+  }
+
+  .pride-badge-dot {
+    animation: pride-dot 5s ease-in-out infinite;
+  }
+
+  .pride-button {
+    transition: background-position 240ms ease, box-shadow 240ms ease, transform 200ms ease;
+  }
+}
+
+@keyframes pride-shift {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+@keyframes pride-glow {
+  0%, 100% {
+    filter: drop-shadow(0 0 8px hsl(326 78% 72% / 0.18));
+  }
+  50% {
+    filter: drop-shadow(0 0 14px hsl(210 88% 72% / 0.26));
+  }
+}
+
+@keyframes pride-dot {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.25);
   }
 }
 
