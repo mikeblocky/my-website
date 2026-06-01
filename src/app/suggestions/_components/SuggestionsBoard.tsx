@@ -475,7 +475,7 @@ export function SuggestionsBoard({
   return (
     <StackVertical gap="lg">
       <form
-        className="rounded-2xl bg-slate-50 transition-all duration-200 focus-within:bg-slate-100/50 dark:bg-slate-900/60 dark:focus-within:bg-slate-900"
+        className="rounded-2xl bg-slate-50 transition-all duration-200 focus-within:bg-slate-100/50 dark:bg-slate-900/60 dark:focus-within:bg-slate-900 pride-focus-within-glow"
         onSubmit={handleSubmit}
       >
         <div className="grid grid-cols-1 border-b border-border/60 sm:grid-cols-[1fr_150px]">

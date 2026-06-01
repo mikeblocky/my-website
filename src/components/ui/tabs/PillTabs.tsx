@@ -46,8 +46,8 @@ export function PillTabs<TId extends string>({
 							<span className={cn(
 								'rounded-full px-2 py-0.5 text-xs font-bold',
 								isActive
-									? 'bg-white/20 text-white'
-									: 'bg-slate-200 text-slate-600 dark:bg-slate-800 dark:text-slate-300'
+									? 'bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-200'
+									: 'bg-slate-50 text-slate-500 dark:bg-slate-900/50 dark:text-slate-400'
 							)}>
 								{tab.count}
 							</span>

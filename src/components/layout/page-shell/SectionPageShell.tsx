@@ -4,7 +4,7 @@ import { SectionFooter } from '@/components/layout/footer/SectionFooter'
 import { StackVertical } from '@/components/layout/layout-stack/layout-stack'
 import { SectionPageHeader } from '@/components/layout/page-header/SectionPageHeader'
 
-type ContainerSize = 'sm' | 'md' | 'lg' | 'xl' | 'full'
+type ContainerSize = 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl' | 'full'
 type StackGap = 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl'
 
 interface SectionPageShellProps {

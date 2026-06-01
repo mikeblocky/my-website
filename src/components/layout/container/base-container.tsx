@@ -2,7 +2,7 @@ import { cn } from '@/lib/utils/utils'
 
 interface BaseContainerProps {
     children: React.ReactNode;
-    size?: 'sm' | 'md' | 'lg' | 'xl' | 'full';
+    size?: 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl' | 'full';
     paddingX?: 'none' | 'sm' | 'md' | 'lg';
     paddingY?: 'none' | 'sm' | 'md' | 'lg' | 'xl';
     center?: boolean;
@@ -14,6 +14,8 @@ const sizes = {
     md: 'max-w-3xl',
     lg: 'max-w-4xl',
     xl: 'max-w-5xl',
+    '2xl': 'max-w-7xl',
+    '3xl': 'max-w-[1440px]',
     full: 'max-w-full'
 }
 

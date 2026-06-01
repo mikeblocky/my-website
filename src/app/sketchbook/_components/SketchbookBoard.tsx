@@ -603,7 +603,7 @@ export function SketchbookBoard({
       {/* Simplified Editor Workspace Form (no redundant outer nested cards or titles) */}
       <form 
         onSubmit={handleSubmit} 
-        className="rounded-2xl bg-slate-50 dark:bg-slate-900/60 transition-all duration-200 border-0 focus-within:bg-slate-100/50 dark:focus-within:bg-slate-900 flex flex-col"
+        className="rounded-2xl bg-slate-50 dark:bg-slate-900/60 transition-all duration-200 focus-within:bg-slate-100/50 dark:focus-within:bg-slate-900 flex flex-col pride-focus-within-glow"
       >
         {/* Top Alias input field (matches TalkBoard) */}
         <div className="border-b border-border/60 px-4 py-3">

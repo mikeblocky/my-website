@@ -408,7 +408,7 @@ export function DrawBoard({
     <StackVertical gap="lg">
       {!singleMode && (
         <form 
-          className="rounded-2xl bg-slate-50 dark:bg-slate-900/60 transition-all duration-200 border-0 focus-within:bg-slate-100/50 dark:focus-within:bg-slate-900" 
+          className="rounded-2xl bg-slate-50 dark:bg-slate-900/60 transition-all duration-200 focus-within:bg-slate-100/50 dark:focus-within:bg-slate-900 pride-focus-within-glow" 
           onSubmit={handleSubmit}
         >
           <div className="flex flex-col">
