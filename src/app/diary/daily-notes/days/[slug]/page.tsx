@@ -1,13 +1,13 @@
 import { notFound } from 'next/navigation'
 import { buildSocialMetadata } from '@/lib/metadata/social'
 import { DailyNoteMdxPage } from '../../_components/DailyNoteMdxPage'
-import { getDayBySlug, days } from '../../_data/days'
+import { getDayBySlug, allDailyNoteEntries } from '../../_data/days'
 
 type Params = Promise<{ slug: string }>
 export const dynamicParams = false
 
 export async function generateStaticParams() {
-    return days.map((day) => ({
+    return allDailyNoteEntries.map((day) => ({
         slug: day.slug,
     }))
 }

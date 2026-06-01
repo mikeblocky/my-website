@@ -11,6 +11,16 @@ interface MonthGroup {
 	days: Day[];
 }
 
+const readingSeries: Day[] = [
+	{
+		title: "Witch Hat Atelier's reading",
+		slug: 'witch-hat-atelier-reading',
+		href: '/diary/daily-notes/days/witch-hat-atelier-reading',
+		description: 'Temporary reading notes for Witch Hat Atelier chapters and opinions so far.',
+		date: new Date('2026-06-01T00:00:00.000Z')
+	},
+]
+
 const days: Day[] = [
 	{
 		title: 'April 26, 2026',
@@ -45,7 +55,9 @@ export function getDaysByMonth(): MonthGroup[] {
 }
 
 export function getDayBySlug(slug: string) {
-	return days.find((day) => day.slug === slug)
+	return [...readingSeries, ...days].find((day) => day.slug === slug)
 }
 
-export { days };
+export const allDailyNoteEntries = [...readingSeries, ...days]
+
+export { days, readingSeries };

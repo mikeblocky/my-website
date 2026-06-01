@@ -63,6 +63,16 @@ export function SketchbookBoard({
     }
   }
 
+  // Local text state for the size input so users can freely type without fighting the controlled value
+  const [sizeInputText, setSizeInputText] = useState(String(brushSize))
+  const sizeInputFocused = useRef(false)
+  // Sync external changes (slider, tool switch) into the text field when not focused
+  useEffect(() => {
+    if (!sizeInputFocused.current) {
+      setSizeInputText(String(brushSize))
+    }
+  }, [brushSize])
+
   // History stack for Undo / Redo
   const historyRef = useRef<string[]>([])
   const historyIndexRef = useRef<number>(-1)
@@ -703,7 +713,7 @@ export function SketchbookBoard({
                   max="40"
                   value={brushSize}
                   onChange={(e) => setBrushSize(parseInt(e.target.value))}
-                  className="w-full md:[writing-mode:vertical-lr] md:[direction:rtl] h-1.5 md:h-24 md:w-1.5 accent-violet-600 cursor-pointer bg-slate-200 dark:bg-slate-850 rounded-full my-1"
+                    className="w-full md:[writing-mode:vertical-lr] md:[direction:rtl] h-1.5 md:h-24 md:w-1.5 accent-violet-600 cursor-pointer bg-slate-200 dark:bg-slate-800 rounded-full my-1"
                   title={`Brush size: ${brushSize}px`}
                 />
                 <div className="w-7 h-7 rounded-full bg-white dark:bg-slate-800 flex items-center justify-center border border-slate-200 dark:border-slate-700 shadow-sm shrink-0">
@@ -717,17 +727,36 @@ export function SketchbookBoard({
                   />
                 </div>
                 <input
-                  type="number"
+                  type="text"
+                  inputMode="numeric"
                   min="1"
                   max="100"
-                  value={brushSize}
+                  value={sizeInputText}
+                  onFocus={() => {
+                    sizeInputFocused.current = true
+                    setSizeInputText(String(brushSize))
+                  }}
                   onChange={(e) => {
-                    const val = parseInt(e.target.value)
-                    if (!isNaN(val)) {
-                      setBrushSize(Math.max(1, Math.min(val, 100)))
+                    const raw = e.target.value.replace(/[^0-9]/g, '')
+                    setSizeInputText(raw)
+                  }}
+                  onBlur={() => {
+                    sizeInputFocused.current = false
+                    const val = parseInt(sizeInputText)
+                    if (!isNaN(val) && val >= 1) {
+                      const nextSize = Math.max(1, Math.min(val, 100))
+                      setBrushSize(nextSize)
+                      setSizeInputText(String(nextSize))
+                    } else {
+                      setSizeInputText(String(brushSize))
                     }
                   }}
-                  className="w-9 h-6 text-center text-[10px] font-bold bg-white dark:bg-slate-850 border border-slate-200 dark:border-slate-700 rounded-md text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-1 focus:ring-violet-500 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none shrink-0"
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      (e.target as HTMLInputElement).blur()
+                    }
+                  }}
+                  className="w-9 h-6 text-center text-[10px] font-bold bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-md text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-1 focus:ring-violet-500 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none shrink-0"
                   title="Type custom size (1-100)"
                 />
               </div>
@@ -818,24 +847,26 @@ export function SketchbookBoard({
         </div>
       </form>
 
-      {/* Grid Design Gallery Header */}
-      <div className="space-y-6">
-        <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 border-b border-slate-200/50 dark:border-slate-800/50 pb-4">
-          <div className="flex items-center gap-2">
-            <TextHeading as="h3" weight="semibold" className="mt-0 mb-0 text-lg">
-              Collaborative masterpieces
-            </TextHeading>
+      {/* Gallery */}
+      <div className="space-y-5">
+        <div className="flex flex-wrap items-end justify-between gap-x-6 gap-y-2 border-b border-slate-200/60 pb-4 dark:border-slate-800/60">
+          <div className="min-w-0 space-y-1.5">
+            <div className="flex flex-wrap items-center gap-2">
+              <TextHeading as="h3" weight="semibold" className="mt-0 mb-0 text-lg leading-tight">
+                Collaborative masterpieces
+              </TextHeading>
 
-            <AdminLockToggle
-              isAdminMode={isAdminMode}
-              setIsAdminMode={setIsAdminMode}
-              passcode={passcode}
-              setPasscode={setPasscode}
-              showPasscodeInput={showPasscodeInput}
-              setShowPasscodeInput={setShowPasscodeInput}
-              onEnabled={() => showNotification('Admin Mode active. Moderation unlocked!')}
-              accent="violet"
-            />
+              <AdminLockToggle
+                isAdminMode={isAdminMode}
+                setIsAdminMode={setIsAdminMode}
+                passcode={passcode}
+                setPasscode={setPasscode}
+                showPasscodeInput={showPasscodeInput}
+                setShowPasscodeInput={setShowPasscodeInput}
+                onEnabled={() => showNotification('Admin Mode active. Moderation unlocked!')}
+                accent="violet"
+              />
+            </div>
           </div>
 
           <div className="flex shrink-0 items-center gap-3">
@@ -858,7 +889,7 @@ export function SketchbookBoard({
             <Text variant="muted" size="sm">No drawings found. Be the first to draw on the canvas!</Text>
           </div>
         ) : (
-          <div className="columns-1 sm:columns-2 md:columns-3 lg:columns-4 gap-5 space-y-5">
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {drawings.map((drawing) => {
               const hasLiked = likedList.includes(drawing.id)
               
@@ -866,38 +897,38 @@ export function SketchbookBoard({
                 <div
                   key={drawing.id}
                   id={`drawing-${drawing.id}`}
-                  className="break-inside-avoid rounded-2xl border border-slate-200/60 bg-slate-50/50 dark:border-slate-800/40 dark:bg-slate-900/35 overflow-hidden transition-all duration-200 hover:shadow-lg hover:border-violet-300 dark:hover:border-violet-850 hover:bg-slate-100/50 dark:hover:bg-slate-900/60 cursor-default shadow-sm animate-in fade-in-50 duration-200"
+                  className="group flex min-w-0 flex-col overflow-hidden rounded-[1.25rem] border border-slate-200/75 bg-white shadow-sm shadow-slate-200/60 transition-all duration-200 hover:-translate-y-0.5 hover:border-violet-200 hover:shadow-lg hover:shadow-violet-100/50 dark:border-slate-800/80 dark:bg-slate-950/45 dark:shadow-none dark:hover:border-violet-900/60 animate-in fade-in-50"
                 >
                   {/* Drawing Image — full natural size, no aspect-square crop */}
-                  <div className="relative w-full bg-white overflow-hidden border-b border-slate-200/50 dark:border-slate-850" onClick={e => e.stopPropagation()}>
+                  <div className="relative w-full overflow-hidden border-b border-slate-200/60 bg-white dark:border-slate-800" onClick={e => e.stopPropagation()}>
                     <ImageGallery urls={[drawing.imageUrl]} theme="violet" />
                   </div>
 
                   {/* Author and Caption contents */}
-                  <div className="p-3.5 space-y-2">
+                  <div className="space-y-3 p-4">
                     <div className="flex flex-wrap items-center justify-between gap-2">
-                      <span className={cn(sansFont.className, "text-xs font-bold text-violet-600 bg-violet-50 border border-violet-100/70 rounded-full px-2.5 py-0.5 dark:text-violet-400 dark:bg-violet-950/20 dark:border-violet-900/40")}>
+                      <span className={cn(sansFont.className, "max-w-full truncate text-xs font-bold text-violet-700 bg-violet-50 border border-violet-100/80 rounded-full px-2.5 py-1 dark:text-violet-300 dark:bg-violet-950/25 dark:border-violet-900/40")}>
                         {drawing.author}
                       </span>
-                      <span className="text-[10px] text-muted-foreground font-mono">
+                      <span className="text-[11px] font-medium text-muted-foreground">
                         {formatDate(drawing.createdAt).split(',')[0]}
                       </span>
                     </div>
 
                     {drawing.body && (
-                      <p className="text-sm font-medium text-slate-700 dark:text-slate-350 leading-relaxed break-words pt-0.5">
+                      <p className="text-sm font-medium text-slate-700 dark:text-slate-300 leading-relaxed break-words">
                         {drawing.body}
                       </p>
                     )}
                   </div>
 
                   {/* Reaction Likes & Thread bubbles & Control bar */}
-                  <div className="px-3.5 pb-3.5">
+                  <div className="mt-auto px-4 pb-4">
                     {/* Render mini replies thread (Admin replies) */}
                     {drawing.thread && drawing.thread.length > 0 && (
                       <div className="mb-3 space-y-2 border-t border-slate-200/45 dark:border-slate-800/45 pt-3">
                         {drawing.thread.map((reply) => (
-                          <div key={reply.id} className="flex gap-2 items-start text-xs bg-slate-100 dark:bg-slate-850 p-2.5 rounded-xl border border-slate-200/20 dark:border-slate-700/10">
+                          <div key={reply.id} className="flex gap-2 items-start rounded-2xl border border-slate-200/60 bg-slate-50 p-3 text-xs dark:border-slate-800/70 dark:bg-slate-900/60">
                             <CornerDownRight size={13} className="text-violet-500 shrink-0 mt-0.5" />
                             <div className="space-y-1">
                               <span className="font-semibold text-violet-600 dark:text-violet-400">mikeblocky</span>
@@ -909,7 +940,7 @@ export function SketchbookBoard({
                     )}
 
                     {/* Utility actions: Like / Share / Snap / Download / Moderation */}
-                    <div className="flex items-center justify-between border-t border-slate-200/35 dark:border-slate-800/35 pt-3">
+                    <div className="flex items-center justify-between gap-3 border-t border-slate-200/45 pt-3 dark:border-slate-800/60">
                       <div className="drawing-actions flex items-center gap-1.5">
                         <button
                           type="button"
@@ -929,7 +960,7 @@ export function SketchbookBoard({
                         <button
                           type="button"
                           onClick={(e) => handleShareDrawing(drawing.id, e)}
-                          className="flex items-center justify-center p-1 rounded-full border border-slate-200 bg-background text-slate-500 hover:text-violet-600 dark:border-slate-800 dark:text-slate-400 dark:hover:text-violet-400 shadow-sm transition-all"
+                            className="flex h-7 w-7 items-center justify-center rounded-full border border-slate-200 bg-background text-slate-500 shadow-sm transition-all hover:border-violet-200 hover:text-violet-600 dark:border-slate-800 dark:text-slate-400 dark:hover:border-violet-900/50 dark:hover:text-violet-400"
                           title={buttonFeedback[`share-${drawing.id}`] || "Share link"}
                         >
                           <Share2 size={13} />
@@ -938,7 +969,7 @@ export function SketchbookBoard({
                         <button
                           type="button"
                           onClick={(e) => handleSnapDrawing(drawing.id, e)}
-                          className="flex items-center justify-center p-1 rounded-full border border-slate-200 bg-background text-slate-500 hover:text-violet-600 dark:border-slate-800 dark:text-slate-400 dark:hover:text-violet-400 shadow-sm transition-all"
+                            className="flex h-7 w-7 items-center justify-center rounded-full border border-slate-200 bg-background text-slate-500 shadow-sm transition-all hover:border-violet-200 hover:text-violet-600 dark:border-slate-800 dark:text-slate-400 dark:hover:border-violet-900/50 dark:hover:text-violet-400"
                           title={buttonFeedback[`snap-${drawing.id}`] || "Snap card to clipboard"}
                         >
                           <Camera size={13} />
@@ -947,7 +978,7 @@ export function SketchbookBoard({
                         <button
                           type="button"
                           onClick={(e) => handleDownloadDrawing(drawing.imageUrl, drawing.id, e)}
-                          className="flex items-center justify-center p-1 rounded-full border border-slate-200 bg-background text-slate-500 hover:text-violet-600 dark:border-slate-800 dark:text-slate-400 dark:hover:text-violet-400 shadow-sm transition-all"
+                            className="flex h-7 w-7 items-center justify-center rounded-full border border-slate-200 bg-background text-slate-500 shadow-sm transition-all hover:border-violet-200 hover:text-violet-600 dark:border-slate-800 dark:text-slate-400 dark:hover:border-violet-900/50 dark:hover:text-violet-400"
                           title="Download"
                         >
                           <Download size={13} />
@@ -963,7 +994,7 @@ export function SketchbookBoard({
                               setReplyingTo(replyingTo === drawing.id ? null : drawing.id)
                               setReplyBody('')
                             }}
-                            className="p-1 rounded-full border border-violet-200 bg-violet-50 text-violet-600 hover:bg-violet-100 dark:border-violet-900/40 dark:bg-violet-950/20 dark:text-violet-400 shadow-sm"
+                            className="flex h-7 w-7 items-center justify-center rounded-full border border-violet-200 bg-violet-50 text-violet-600 shadow-sm hover:bg-violet-100 dark:border-violet-900/40 dark:bg-violet-950/20 dark:text-violet-400"
                             title="Reply to drawing"
                           >
                             <MessageSquareReply size={13} />
@@ -971,7 +1002,7 @@ export function SketchbookBoard({
                           <button
                             type="button"
                             onClick={(e) => handleDeleteDrawing(drawing.id, e)}
-                            className="p-1 rounded-full border border-red-250 bg-red-50 text-red-650 hover:bg-red-100 dark:border-red-900/40 dark:bg-red-950/20 dark:text-red-400 shadow-sm"
+                            className="flex h-7 w-7 items-center justify-center rounded-full border border-red-200 bg-red-50 text-red-600 shadow-sm hover:bg-red-100 dark:border-red-900/40 dark:bg-red-950/20 dark:text-red-400"
                             title="Delete Masterpiece"
                           >
                             <Trash2 size={13} />
@@ -982,7 +1013,7 @@ export function SketchbookBoard({
 
                     {/* Admin inline reply form in gallery card */}
                     {replyingTo === drawing.id && isAdminMode && (
-                      <div className="mt-3 border-t border-slate-250/20 pt-3 flex flex-col gap-2" onClick={e => e.stopPropagation()}>
+                      <div className="mt-3 flex flex-col gap-2 border-t border-slate-200/60 pt-3 dark:border-slate-800/60" onClick={e => e.stopPropagation()}>
                         <textarea
                           placeholder="Mike, write feedback..."
                           value={replyBody}

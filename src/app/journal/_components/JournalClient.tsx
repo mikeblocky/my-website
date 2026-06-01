@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { cn } from '@/lib/utils/utils'
 import { BlogSearchPanel } from '@/app/blog/_components/BlogSearchPanel'
-import { getDaysByMonth } from '@/app/diary/daily-notes/_data/days'
+import { getDaysByMonth, readingSeries } from '@/app/diary/daily-notes/_data/days'
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion/accordion"
 import Link from 'next/link'
 import { monoFont } from '@/styles/fonts/fonts'
@@ -230,6 +230,40 @@ export function JournalClient({ posts }: JournalClientProps) {
 								Short entries, gratitude notes, and snapshots of what I document and learn each day.
 							</p>
 						</div>
+
+						{readingSeries.length > 0 && (
+							<section className="space-y-3">
+								<h4 className={cn(
+									monoFont.className,
+									"relative tracking-wider text-sm text-foreground dark:text-white font-semibold"
+								)}>
+									Reading notes
+								</h4>
+								<div className="pl-2">
+									<div className="flex flex-col">
+										{readingSeries.map((note) => (
+											<div key={note.href} className="group relative border-l-2 border-slate-200 dark:border-slate-800">
+												<Link
+													href={note.href}
+													className={cn(
+														monoFont.className,
+														"block py-2 pl-4 -ml-[2px]",
+														"text-xs sm:text-sm",
+														"text-slate-600 dark:text-slate-400",
+														"border-l-2 border-transparent",
+														"hover:border-blue-500 dark:hover:border-blue-400",
+														"hover:text-blue-600 dark:hover:text-blue-400",
+														"transition-all duration-150"
+													)}
+												>
+													{note.title}
+												</Link>
+											</div>
+										))}
+									</div>
+								</div>
+							</section>
+						)}
 						
 						{monthGroups.length > 0 ? (
 							<Accordion type="single" defaultValue={mostRecentMonth} className="space-y-4">
