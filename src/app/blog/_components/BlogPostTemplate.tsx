@@ -1,5 +1,6 @@
 'use client'
 
+import { useEffect, useRef, useState } from 'react'
 import { cn } from '@/lib/utils/utils'
 import BaseContainer from '@/components/layout/container/base-container'
 import { StackVertical } from '@/components/layout/layout-stack/layout-stack'
@@ -11,6 +12,7 @@ interface BlogPostTemplateProps {
     title: string
     date: string
     readingTime: string
+    slug?: string
     themes?: string[]
     children: React.ReactNode
     className?: string
@@ -26,6 +28,7 @@ export function BlogPostTemplate({
     title,
     date,
     readingTime,
+    slug,
     themes = [],
     children,
     className,
@@ -36,6 +39,36 @@ export function BlogPostTemplate({
     rightRail,
     articleShellClassName,
 }: BlogPostTemplateProps) {
+    const [readCount, setReadCount] = useState<number | null>(null)
+    const hasRecordedReadRef = useRef(false)
+
+    useEffect(() => {
+        if (!slug || hasRecordedReadRef.current) return
+
+        hasRecordedReadRef.current = true
+
+        const recordRead = async () => {
+            try {
+                const response = await fetch('/api/blog/read-count', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ slug }),
+                })
+                const data = await response.json()
+
+                if (response.ok && typeof data.count === 'number') {
+                    setReadCount(data.count)
+                }
+            } catch (error) {
+                console.error('Could not record blog read count:', error)
+            }
+        }
+
+        recordRead()
+    }, [slug])
+
     return (
         <div className="relative w-full">
             <BaseContainer size={containerSize} paddingX="md" paddingY="lg">
@@ -52,6 +85,14 @@ export function BlogPostTemplate({
                             <Text variant="muted" size="sm">
                                 {date} | {readingTime}
                             </Text>
+                            {readCount !== null && (
+                                <>
+                                    <span className="text-muted-foreground/30">•</span>
+                                    <Text variant="muted" size="sm">
+                                        {readCount.toLocaleString()} reads
+                                    </Text>
+                                </>
+                            )}
                             {themes.map((theme) => (
                                 <div key={theme} className="flex items-center gap-2">
                                     <span className="text-muted-foreground/30">•</span>
@@ -61,6 +102,7 @@ export function BlogPostTemplate({
                                 </div>
                             ))}
                         </div>
+
                     </ContentPageHeader>
 
                     {aside || rightRail ? (
@@ -83,7 +125,10 @@ export function BlogPostTemplate({
                                         </div>
                                     )}
 
-                                    <div className={cn("prose max-w-none pb-24 pt-2 xl:pb-0 dark:prose-invert", className)}>
+                                    <div 
+                                        id="blog-content-body" 
+                                        className={cn("prose max-w-none pb-24 pt-2 xl:pb-0 dark:prose-invert relative", className)}
+                                    >
                                         {children}
                                     </div>
                                 </article>
@@ -91,11 +136,15 @@ export function BlogPostTemplate({
                             </div>
                     ) : (
                         <article id={articleId}>
-                            <div className={cn("prose max-w-none pt-2 dark:prose-invert", className)}>
+                            <div 
+                                id="blog-content-body" 
+                                className={cn("prose max-w-none pt-2 dark:prose-invert relative", className)}
+                            >
                                 {children}
                             </div>
                         </article>
                     )}
+
                 </StackVertical>
             </BaseContainer>
 

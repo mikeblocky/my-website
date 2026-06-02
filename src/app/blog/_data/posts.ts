@@ -2,6 +2,18 @@ import { BlogPost } from "../_types/blog"
 
 export const blogPosts: BlogPost[] = [
     {
+        id: 22,
+        title: "The day we walked",
+        description: "Some days arrive quietly and leave without a trace. Others linger long after they have passed, carried by the wind, hidden in distant memories, or reflected in the changing colors of the sky.",
+        date: "June 2nd, 2026",
+        publishedAt: "2026-06-02T00:00:00.000Z",
+        readingTime: "5 min read",
+        slug: "the-day-we-walked",
+        themes: ["Kemutai Hanashi", "Fanfiction"],
+        imageFormat: "jpg",
+        contentClassName: "prose-p:italic prose-p:text-slate-700 dark:prose-p:text-slate-300"
+    },
+    {
         id: 21,
         title: "[Archive] Let's talk about Kemutai Hanashi, everything about \"normality\"",
         description: "After all, everyone wants to be normal, right?",

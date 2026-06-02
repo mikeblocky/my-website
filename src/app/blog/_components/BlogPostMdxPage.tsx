@@ -50,6 +50,7 @@ export function BlogPostMdxPage({
             title={post.title}
             date={post.date}
             readingTime={post.readingTime}
+            slug={post.slug}
             themes={post.themes}
             className={post.contentClassName}
             articleId="content"
