@@ -2,7 +2,7 @@
 
 import { cn } from '@/lib/utils/utils'
 import { monoFont } from '@/styles/fonts/fonts'
-import { Bird, GitFork, Heart, Mail } from 'lucide-react'
+import { Bird, GitFork, Mail } from 'lucide-react'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 
@@ -62,10 +62,6 @@ export function BaseFooter({
                 "flex flex-col items-center gap-4 sm:gap-6",
                 "text-sm text-muted-foreground/60"
             )}>
-                <div className="pride-badge px-3 py-1.5 text-[11px]">
-                    <Heart className="h-3 w-3 text-pink-500 dark:text-pink-300" />
-                    pride month is a month to celebrate love, diversity, and the community!
-                </div>
 
                 {/* Navigation Links - First Row */}
                 {navigationLinks && (showToTop || showSectionName) && (

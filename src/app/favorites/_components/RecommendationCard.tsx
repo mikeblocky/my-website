@@ -1,4 +1,3 @@
-import { ExternalLink } from 'lucide-react'
 import { StackVertical } from '@/components/layout/layout-stack/layout-stack'
 import { cn } from '@/lib/utils/utils'
 import { monoFont, sansFont } from '@/styles/fonts/fonts'
@@ -9,10 +8,20 @@ interface RecommendationCardProps {
 }
 
 export function RecommendationCard({ item }: RecommendationCardProps) {
+	const isTopThumbnail = item.category === 'anime' || item.category === 'film' || item.category === 'game' || item.category === 'music'
+
 	return (
-		<article className="group overflow-hidden rounded-xl bg-slate-50 shadow-none transition-colors duration-150 hover:bg-slate-100/70 dark:bg-slate-900/60 dark:hover:bg-slate-900/80">
+		<article className={cn(
+			"group overflow-hidden rounded-md border border-slate-200/60 dark:border-slate-800/60 bg-slate-50/50 dark:bg-slate-900/30 hover:bg-slate-100/40 dark:hover:bg-slate-900/50 transition-colors duration-150 shadow-none flex flex-col h-full",
+			!isTopThumbnail && "sm:flex-row min-h-[220px]"
+		)}>
 			{item.imageUrl && (
-				<div className="relative h-48 w-full bg-white sm:h-64 dark:bg-slate-950">
+				<div className={cn(
+					"relative bg-white dark:bg-slate-950 shrink-0 border-slate-200/60 dark:border-slate-800/60",
+					isTopThumbnail
+						? "h-48 sm:h-64 w-full border-b"
+						: "h-48 w-full sm:h-auto sm:w-48 md:w-64 border-b sm:border-b-0 sm:border-r"
+				)}>
 					<img
 						src={item.imageUrl}
 						alt=""
@@ -22,10 +31,10 @@ export function RecommendationCard({ item }: RecommendationCardProps) {
 				</div>
 			)}
 
-			<div className="p-5 sm:p-6">
+			<div className="p-5 sm:p-6 flex flex-col justify-between flex-1">
 				<StackVertical gap="sm" className="min-w-0">
 					{!item.imageUrl && (
-						<div className="relative aspect-[3/4] w-full shrink-0 overflow-hidden rounded-lg bg-white text-lg font-black text-blue-700 dark:bg-slate-950 dark:text-blue-300">
+						<div className="relative aspect-[3/4] w-full shrink-0 overflow-hidden rounded-md bg-white text-lg font-black text-slate-700 dark:bg-slate-950 dark:text-slate-300 border border-slate-200/50 dark:border-slate-850/50">
 							<div className="flex h-full w-full items-center justify-center">
 								{item.medium.slice(0, 1)}
 							</div>
@@ -33,8 +42,8 @@ export function RecommendationCard({ item }: RecommendationCardProps) {
 					)}
 
 					<div className="flex flex-wrap items-center gap-2">
-						<span className={cn(sansFont.className, 'rounded-md border border-blue-200/50 bg-blue-50 px-2 py-0.5 text-xs font-semibold text-blue-700 dark:border-blue-800/40 dark:bg-blue-950/40 dark:text-blue-300')}>
-							{item.medium}
+						<span className={cn(monoFont.className, 'text-[10px] tracking-wider pride-text')}>
+							{item.medium.toLowerCase()}
 						</span>
 					</div>
 
@@ -52,17 +61,16 @@ export function RecommendationCard({ item }: RecommendationCardProps) {
 					</p>
 
 					{item.links.length > 0 && (
-						<div className="flex flex-wrap gap-2 pt-1">
+						<div className="flex flex-wrap gap-3 pt-1">
 							{item.links.map((link) => (
 								<a
 									key={link.url}
 									href={link.url}
 									target="_blank"
 									rel="noopener noreferrer"
-									className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-white px-3 py-1.5 text-xs font-bold text-blue-600 transition-colors hover:border-blue-200 hover:text-blue-800 dark:border-slate-800 dark:bg-slate-950/40 dark:text-blue-400 dark:hover:border-blue-500/40 dark:hover:text-blue-300"
+									className={cn(monoFont.className, 'inline-flex items-center gap-1 text-[11px] text-muted-foreground hover:pride-text transition-colors duration-150')}
 								>
-									{link.label}
-									<ExternalLink size={13} />
+									{link.label.toLowerCase()} →
 								</a>
 							))}
 						</div>
@@ -72,3 +80,4 @@ export function RecommendationCard({ item }: RecommendationCardProps) {
 		</article>
 	)
 }
+

@@ -8,7 +8,7 @@ import Text from "@/components/ui/text/text"
 import type { BlogPost } from "../_types/blog"
 import { ChevronLeft, ChevronRight, X } from "lucide-react"
 import { cn } from "@/lib/utils/utils"
-import { sansFont } from "@/styles/fonts/fonts"
+import { sansFont, monoFont } from "@/styles/fonts/fonts"
 
 interface BlogSearchPanelProps {
     posts: BlogPost[]
@@ -110,11 +110,11 @@ export function BlogSearchPanel({ posts }: BlogSearchPanelProps) {
             {/* Search Input */}
             <div className="w-full">
                 <div
-                    className="relative w-full overflow-hidden rounded-xl border border-border/60 bg-background/40"
+                    className="relative w-full overflow-hidden rounded-sm border border-slate-200/60 dark:border-slate-800/60 bg-background/40"
                 >
                     <motion.div
                         aria-hidden="true"
-                        className="pointer-events-none absolute inset-0 rounded-xl border border-blue-500"
+                        className="pointer-events-none absolute inset-0 rounded-sm border border-[hsl(var(--pride-glow-val))]/80"
                         animate={{
                             opacity: isFocused ? 1 : 0,
                             scale: isFocused ? 1 : 0.985,
@@ -151,7 +151,7 @@ export function BlogSearchPanel({ posts }: BlogSearchPanelProps) {
                                 animate={{ opacity: 1, x: 0, scale: 1 }}
                                 exit={{ opacity: 0, x: 10, scale: 0.92 }}
                                 transition={{ type: "spring", stiffness: 260, damping: 20 }}
-                                className="absolute right-3 top-1/2 -translate-y-1/2 rounded-md p-1 text-blue-600 transition-colors hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
+                                className="absolute right-3 top-1/2 -translate-y-1/2 rounded-sm p-1 text-slate-400 hover:text-slate-700 dark:text-slate-500 dark:hover:text-slate-200 transition-colors"
                                 aria-label="Clear search"
                             >
                                 <X className="h-5 w-5" />
@@ -169,13 +169,15 @@ export function BlogSearchPanel({ posts }: BlogSearchPanelProps) {
                                 setSelectedTheme(theme)
                                 setCurrentPage(1)
                             }}
-                            className={`px-3 py-1.5 text-xs font-medium rounded-full transition-all duration-200 border ${
+                            className={cn(
+                                monoFont.className,
+                                "px-3 py-1.5 text-[10px] tracking-wider rounded-sm transition-all duration-150 border",
                                 selectedTheme === theme
-                                    ? 'bg-blue-500 text-white border-blue-500 shadow-md shadow-blue-500/20'
-                                    : 'bg-transparent text-slate-600 border-slate-300 hover:border-blue-300 hover:text-blue-600 dark:text-slate-400 dark:border-slate-700 dark:hover:border-blue-500/50 dark:hover:text-blue-300'
-                            }`}
+                                    ? "bg-[hsl(var(--pride-glow-val))]/10 text-[hsl(var(--pride-glow-val))] border-[hsl(var(--pride-glow-val))]/40"
+                                    : "bg-transparent text-slate-500 border-slate-200 hover:border-slate-350 hover:text-slate-800 dark:text-slate-400 dark:border-slate-800 dark:hover:border-slate-700 dark:hover:text-slate-200"
+                            )}
                         >
-                            {theme}
+                            {theme.toLowerCase()}
                         </button>
                     ))}
                 </div>
@@ -214,7 +216,7 @@ export function BlogSearchPanel({ posts }: BlogSearchPanelProps) {
                             animate={{ opacity: 1 }}
                             exit={{ opacity: 0 }}
                             transition={{ duration: 0.2 }}
-                            className="rounded-lg border border-blue-300/30 bg-blue-50/50 p-6 text-center dark:border-blue-500/30 dark:bg-blue-900/20"
+                            className="rounded-sm border border-slate-200/60 bg-slate-50/50 p-6 text-center dark:border-slate-800/60 dark:bg-slate-900/30 shadow-none"
                         >
                             <TextHeadingMessage term={trimmedQuery || selectedTheme} />
                         </motion.div>
@@ -228,7 +230,7 @@ export function BlogSearchPanel({ posts }: BlogSearchPanelProps) {
                     <button
                         onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
                         disabled={safeCurrentPage === 1}
-                        className="p-2 rounded-lg text-slate-500 hover:bg-slate-100 disabled:opacity-50 disabled:hover:bg-transparent dark:text-slate-400 dark:hover:bg-slate-800 transition-colors"
+                        className="p-2 rounded-sm text-slate-500 hover:bg-slate-100/60 disabled:opacity-50 disabled:hover:bg-transparent dark:text-slate-400 dark:hover:bg-slate-800/40 transition-colors"
                         aria-label="Previous page"
                     >
                         <ChevronLeft className="w-5 h-5" />
@@ -239,11 +241,12 @@ export function BlogSearchPanel({ posts }: BlogSearchPanelProps) {
                             <button
                                 key={i}
                                 onClick={() => setCurrentPage(i + 1)}
-                                className={`w-8 h-8 rounded-lg text-sm font-medium transition-colors ${
+                                className={cn(
+                                    "w-7 h-7 rounded-sm text-xs font-semibold transition-colors",
                                     safeCurrentPage === i + 1
-                                        ? 'bg-blue-500 text-white'
-                                        : 'text-slate-600 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800'
-                                }`}
+                                        ? "bg-[hsl(var(--pride-glow-val))]/15 border border-[hsl(var(--pride-glow-val))]/40 text-[hsl(var(--pride-glow-val))]"
+                                        : "text-slate-500 hover:bg-slate-100/60 dark:text-slate-400 dark:hover:bg-slate-800/40"
+                                )}
                             >
                                 {i + 1}
                             </button>
@@ -253,7 +256,7 @@ export function BlogSearchPanel({ posts }: BlogSearchPanelProps) {
                     <button
                         onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
                         disabled={safeCurrentPage === totalPages}
-                        className="p-2 rounded-lg text-slate-500 hover:bg-slate-100 disabled:opacity-50 disabled:hover:bg-transparent dark:text-slate-400 dark:hover:bg-slate-800 transition-colors"
+                        className="p-2 rounded-sm text-slate-500 hover:bg-slate-100/60 disabled:opacity-50 disabled:hover:bg-transparent dark:text-slate-400 dark:hover:bg-slate-800/40 transition-colors"
                         aria-label="Next page"
                     >
                         <ChevronRight className="w-5 h-5" />
@@ -268,7 +271,7 @@ function TextHeadingMessage({ term }: { term: string }) {
     return (
         <Text variant="muted" size="sm">
             No stories match "
-            <span className="text-blue-700 dark:text-blue-200">{term}</span>
+            <span className="pride-text font-semibold">{term}</span>
             " just yet - try a different keyword or theme.
         </Text>
     )

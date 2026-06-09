@@ -16,6 +16,7 @@ interface ContentPageHeaderProps {
     children?: React.ReactNode
     className?: string
     titleClassName?: string
+    showPrideBadge?: boolean
 }
 
 export function ContentPageHeader({
@@ -24,6 +25,7 @@ export function ContentPageHeader({
     children,
     className,
     titleClassName,
+    showPrideBadge = true,
 }: ContentPageHeaderProps) {
     return (
         <StackVertical gap="md" className={className}>
@@ -33,10 +35,12 @@ export function ContentPageHeader({
             </div>
 
             <div className="max-w-3xl space-y-2">
-                <span className="pride-badge px-2.5 py-1 text-[11px] font-medium">
-                    <span className="pride-badge-dot" />
-                    Happy Pride Month!
-                </span>
+                {showPrideBadge && (
+                    <span className="pride-badge px-2.5 py-1 text-[11px] font-medium">
+                        <span className="pride-badge-dot" />
+                        Happy Pride Month!
+                    </span>
+                )}
                 <TextHeading as="h1" weight="bold" className={cn("mt-0", titleClassName)}>
                     {title}
                 </TextHeading>

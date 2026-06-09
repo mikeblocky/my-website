@@ -9,46 +9,7 @@ import { StackVertical } from '@/components/layout/layout-stack/layout-stack'
 import Link from 'next/link'
 import Image from 'next/image'
 import imageCover from '../../../../public/image-cover.png'
-import { User, Palette, BookOpen, MessageSquare, ArrowRight, Users } from 'lucide-react'
-
-interface PortalCardProps {
-    href: string;
-    title: string;
-    description: string;
-    icon: React.ReactNode;
-    colorClass: string;
-    iconBgClass: string;
-}
-
-function PortalCard({ href, title, description, icon, colorClass, iconBgClass }: PortalCardProps) {
-    return (
-        <Link href={href} className="group block h-full">
-            <motion.div
-                whileHover={{ y: -2 }}
-                transition={{ duration: 0.15 }}
-                className={cn(
-                    "pride-soft-card flex flex-col h-full p-5 rounded-xl bg-slate-50/70 dark:bg-slate-900/60 hover:bg-slate-100/70 dark:hover:bg-slate-900/90 transition-all duration-200 border-0",
-                    colorClass
-                )}
-            >
-                <div className="flex items-center gap-3 mb-3">
-                    <div className={cn("relative z-10 p-2 rounded-lg transition-colors duration-200", iconBgClass)}>
-                        {icon}
-                    </div>
-                    <h3 className="relative z-10 font-bold text-base text-slate-800 dark:text-slate-100">
-                        {title}
-                    </h3>
-                </div>
-                <p className="relative z-10 text-xs text-muted-foreground leading-relaxed flex-1 mb-4">
-                    {description}
-                </p>
-                <div className="relative z-10 flex items-center gap-1 text-xs font-semibold pride-text transition-colors duration-200 group-hover:text-pink-500 dark:group-hover:text-pink-300">
-                    Explore section <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-1 duration-200" />
-                </div>
-            </motion.div>
-        </Link>
-    )
-}
+import { User, Palette, BookOpen, MessageSquare, ArrowRight, Users, Book } from 'lucide-react'
 
 export function HeroSection() {
     return (
@@ -74,7 +35,7 @@ export function HeroSection() {
                         transition={{ delay: 0.2 }}
                         className="relative"
                     >
-                        <TextHeading as="h1" className="pride-gradient-text font-bold text-transparent text-2xl sm:text-3xl md:text-4xl lg:text-5xl">
+                        <TextHeading as="h1" className="font-bold text-slate-900 dark:text-white text-2xl sm:text-3xl md:text-4xl lg:text-5xl">
                             mikeblocky.com
                         </TextHeading>
                     </motion.div>
@@ -88,57 +49,72 @@ export function HeroSection() {
                         <Text>
                             Hi, I'm Mike. I'm a Vietnamese artist and a Japanese student, living between drawings and long, wandering thoughts. This website is my small, personal corner of the internet—a slow space where I archive my illustrations, write down reflections, and slowly try to connect.
                         </Text>
-                        
-                        <Text>
-                            Below you can find portals to explore the different sections of my digital archive.
-                        </Text>
- 
-                        {/* Flat Grid Portal Cards - borderless layout */}
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4">
-                            <PortalCard 
-                                href="/about"
-                                title="About me"
-                                description="Read my full personal story, study journey, and favorite inspirations."
-                                icon={<User className="w-5 h-5 text-blue-600 dark:text-blue-400" />}
-                                colorClass=""
-                                iconBgClass="bg-blue-100 dark:bg-blue-950 text-blue-600 dark:text-blue-400"
-                            />
-                            <PortalCard 
-                                href="/artworks"
-                                title="Gallery"
-                                description="Browse collections of my illustrations, and view the theme distribution stats."
-                                icon={<Palette className="w-5 h-5 text-violet-600 dark:text-violet-400" />}
-                                colorClass=""
-                                iconBgClass="bg-violet-100 dark:bg-violet-950 text-violet-600 dark:text-violet-400"
-                            />
-                            <PortalCard 
-                                href="/journal"
-                                title="Journal"
-                                description="Explore my blogs, diaries, and details on my journaling tools and utensils."
-                                icon={<BookOpen className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />}
-                                colorClass=""
-                                iconBgClass="bg-emerald-100 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-400"
-                            />
-                            <PortalCard 
-                                href="/interact"
-                                title="Interact"
-                                description="Leave a note in the guestbook, suggest new things, or suggest new drawing prompts for my next sketch."
-                                icon={<MessageSquare className="w-5 h-5 text-amber-600 dark:text-amber-400" />}
-                                colorClass=""
-                                iconBgClass="bg-amber-100 dark:bg-amber-950 text-amber-600 dark:text-amber-400"
-                            />
-                        </div>
- 
-                        {/* Full Width Friends Card */}
-                        <div className="pt-2">
-                            <PortalCard 
-                                href="/friends"
-                                title="Friends"
-                                description="Explore my social circle—mutual connections, close friends, and creative developers I've built bonds with."
-                                icon={<Users className="w-5 h-5 text-rose-600 dark:text-rose-400" />}
-                                colorClass=""
-                                iconBgClass="bg-rose-100 dark:bg-rose-950 text-rose-600 dark:text-rose-400"
-                            />
+
+                        {/* Typographic Archive Portals List */}
+                        <div className="divide-y divide-slate-100 dark:divide-slate-900/50 pt-6">
+                            {[
+                                {
+                                    href: "/about",
+                                    label: "about me",
+                                    desc: "personal story, studies & inspirations",
+                                    icon: <User className="w-4 h-4 text-muted-foreground/70 group-hover:pride-text transition-colors duration-200" strokeWidth={1.5} />
+                                },
+                                {
+                                    href: "/artworks",
+                                    label: "gallery",
+                                    desc: "collections of illustrations & stats",
+                                    icon: <Palette className="w-4 h-4 text-muted-foreground/70 group-hover:pride-text transition-colors duration-200" strokeWidth={1.5} />
+                                },
+                                {
+                                    href: "/zine",
+                                    label: "zine",
+                                    desc: "collected works as page-turning books",
+                                    icon: <Book className="w-4 h-4 text-muted-foreground/70 group-hover:pride-text transition-colors duration-200" strokeWidth={1.5} />
+                                },
+                                {
+                                    href: "/journal",
+                                    label: "journal",
+                                    desc: "essays, daily logs & journaling tools",
+                                    icon: <BookOpen className="w-4 h-4 text-muted-foreground/70 group-hover:pride-text transition-colors duration-200" strokeWidth={1.5} />
+                                },
+                                {
+                                    href: "/friends",
+                                    label: "friends",
+                                    desc: "mutual connections & creative links",
+                                    icon: <Users className="w-4 h-4 text-muted-foreground/70 group-hover:pride-text transition-colors duration-200" strokeWidth={1.5} />
+                                },
+                                {
+                                    href: "/interact",
+                                    label: "interact",
+                                    desc: "guestbook & drawing prompt suggests",
+                                    icon: <MessageSquare className="w-4 h-4 text-muted-foreground/70 group-hover:pride-text transition-colors duration-200" strokeWidth={1.5} />
+                                }
+                            ].map((portal) => (
+                                <Link 
+                                    key={portal.href} 
+                                    href={portal.href}
+                                    className="group flex items-center justify-between py-3.5 transition-all duration-300 ease-[cubic-bezier(0.32,0.72,0,1)]"
+                                >
+                                    <div className="flex items-center gap-4 min-w-0">
+                                        <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-slate-50 dark:bg-slate-900/60 flex items-center justify-center border border-slate-100 dark:border-slate-900/50 group-hover:border-pink-500/20 dark:group-hover:border-pink-500/10 transition-colors duration-300">
+                                            {portal.icon}
+                                        </div>
+                                        <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-4 min-w-0">
+                                            <span className={cn(
+                                                monoFont.className,
+                                                "text-sm font-semibold tracking-wide text-slate-800 dark:text-slate-200 group-hover:pride-text transition-colors duration-200"
+                                            )}>
+                                                {portal.label}
+                                            </span>
+                                            <span className="hidden sm:inline text-slate-300 dark:text-slate-800">—</span>
+                                            <span className="text-xs text-muted-foreground truncate group-hover:text-slate-600 dark:group-hover:text-slate-400 transition-colors duration-200">
+                                                {portal.desc}
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <ArrowRight className="w-4 h-4 text-muted-foreground/50 transition-all duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] group-hover:translate-x-1 group-hover:-translate-y-0.5 group-hover:pride-text" strokeWidth={1.5} />
+                                </Link>
+                            ))}
                         </div>
                     </motion.div>
                 </StackVertical>

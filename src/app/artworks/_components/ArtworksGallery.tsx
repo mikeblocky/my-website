@@ -268,20 +268,17 @@ export function ArtworksGallery({
 		enter: (currentDirection: 1 | -1) => ({
 			opacity: 0,
 			x: currentDirection * 28,
-			scale: 0.985,
-			filter: 'blur(6px)'
+			scale: 0.985
 		}),
 		center: {
 			opacity: 1,
 			x: 0,
-			scale: 1,
-			filter: 'blur(0px)'
+			scale: 1
 		},
 		exit: (currentDirection: 1 | -1) => ({
 			opacity: 0,
 			x: currentDirection * -28,
-			scale: 0.985,
-			filter: 'blur(6px)'
+			scale: 0.985
 		})
 	}
 
@@ -313,7 +310,7 @@ export function ArtworksGallery({
 									}}
 									style={{ aspectRatio: `${aspectRatio}` }}
 									className={cn(
-										'group mb-4 block w-full break-inside-avoid overflow-hidden rounded-xl bg-slate-50 dark:bg-slate-900/60 focus:outline-none focus:ring-2 focus:ring-blue-500/40 relative border-0 shadow-none hover:bg-slate-100/50 dark:hover:bg-slate-900/80',
+										'group mb-4 block w-full break-inside-avoid overflow-hidden rounded-md bg-slate-50 dark:bg-slate-900/60 focus:outline-none focus:ring-2 focus:ring-[hsl(var(--pride-glow-val))]/40 relative border border-slate-200/60 dark:border-slate-800/60 shadow-none hover:bg-slate-100/50 dark:hover:bg-slate-900/80',
 										cardClassName
 									)}
 								>
@@ -356,7 +353,7 @@ export function ArtworksGallery({
 							exit={{ opacity: 0 }}
 							transition={{ duration: 0.2, ease: 'easeOut' }}
 							className={cn(
-								'fixed inset-0 z-[99999] flex items-center justify-center bg-black/95',
+								'fixed inset-0 z-50 flex items-center justify-center bg-black/95',
 								lightboxBackdropClassName
 							)}
 							onClick={closeLightbox}
@@ -365,12 +362,12 @@ export function ArtworksGallery({
 							<button
 								type="button"
 								aria-label="Close lightbox backdrop"
-								className="absolute inset-0 z-[100]"
+								className="absolute inset-0 z-10"
 								onClick={scale === 1 ? closeLightbox : undefined}
 							/>
 
 							{/* Toolbar Panel (Zoom status + controls) */}
-							<div className="absolute top-4 right-4 sm:top-6 sm:right-6 z-[120] flex items-center gap-2">
+							<div className="absolute top-4 right-4 sm:top-6 sm:right-6 z-30 flex items-center gap-2">
 								{/* Zoom level label */}
 								{scale > 1 && (
 									<span className="text-[10px] sm:text-xs text-white/60 font-semibold uppercase tracking-widest font-mono mr-2 bg-black/40 px-2.5 py-1.5 rounded border border-white/5 pointer-events-none">
@@ -382,7 +379,7 @@ export function ArtworksGallery({
 								<button
 									type="button"
 									aria-label={scale > 1 ? "Zoom Out" : "Zoom In"}
-									className="rounded-lg bg-black/40 text-white p-2.5 hover:bg-black/60 transition-colors border border-white/10"
+									className="rounded-md bg-black/40 text-white p-2.5 hover:bg-black/60 transition-colors border border-white/10"
 									onClick={(e) => {
 										e.stopPropagation()
 										toggleZoomButton()
@@ -395,7 +392,7 @@ export function ArtworksGallery({
 								<button
 									type="button"
 									aria-label="Close"
-									className="rounded-lg bg-black/40 text-white p-2.5 hover:bg-black/60 transition-colors border border-white/10"
+									className="rounded-md bg-black/40 text-white p-2.5 hover:bg-black/60 transition-colors border border-white/10"
 									onClick={closeLightbox}
 								>
 									<X size={20} />
@@ -407,7 +404,7 @@ export function ArtworksGallery({
 								<button
 									type="button"
 									aria-label="Previous artwork"
-									className="absolute top-1/2 left-4 sm:left-6 -translate-y-1/2 z-[120] rounded-lg bg-black/40 text-white p-2.5 hover:bg-black/60 transition-colors border border-white/10"
+									className="absolute top-1/2 left-4 sm:left-6 -translate-y-1/2 z-30 rounded-md bg-black/40 text-white p-2.5 hover:bg-black/60 transition-colors border border-white/10"
 									onClick={(event) => {
 										event.stopPropagation()
 										showPrevious()
@@ -422,7 +419,7 @@ export function ArtworksGallery({
 								<button
 									type="button"
 									aria-label="Next artwork"
-									className="absolute top-1/2 right-4 sm:right-6 -translate-y-1/2 z-[120] rounded-lg bg-black/40 text-white p-2.5 hover:bg-black/60 transition-colors border border-white/10"
+									className="absolute top-1/2 right-4 sm:right-6 -translate-y-1/2 z-30 rounded-md bg-black/40 text-white p-2.5 hover:bg-black/60 transition-colors border border-white/10"
 									onClick={(event) => {
 										event.stopPropagation()
 										showNext()
@@ -439,7 +436,7 @@ export function ArtworksGallery({
 							</div>
 
 							<div
-								className="absolute inset-0 z-[110] flex items-center justify-center pointer-events-none w-full h-full overflow-hidden"
+								className="absolute inset-0 z-20 flex items-center justify-center pointer-events-none w-full h-full overflow-hidden"
 							>
 								<AnimatePresence mode="wait" initial={false} custom={direction}>
 									<motion.div

@@ -72,7 +72,7 @@ const resolvedSlug = slug || monthSlug(noteDate)
 const resolvedTitle = title || formatTitle(noteDate)
 const resolvedDescription = description || `My daily notes for ${resolvedTitle}`
 
-const projectRoot = __dirname
+const projectRoot = path.join(__dirname, '..')
 const noteDir = path.join(projectRoot, 'src', 'app', 'diary', 'daily-notes', 'days', resolvedSlug)
 const daysFile = path.join(projectRoot, 'src', 'app', 'diary', 'daily-notes', '_data', 'days.ts')
 

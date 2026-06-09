@@ -63,7 +63,7 @@ export function ArticleSectionPreview({ sections }: ArticleSectionPreviewProps) 
                 <button
                     type="button"
                     onClick={() => setIsMobileExpanded((value) => !value)}
-                    className="flex w-full items-center justify-between rounded-xl border border-border/60 bg-background/70 px-4 py-3 text-left"
+                    className="flex w-full items-center justify-between rounded-sm border border-border/60 bg-background/70 px-4 py-3 text-left"
                     aria-expanded={isMobileExpanded}
                 >
                     <div className="space-y-1">
@@ -71,7 +71,7 @@ export function ArticleSectionPreview({ sections }: ArticleSectionPreviewProps) 
                             Sections
                         </div>
                         <div className="flex items-center gap-2">
-                            <span className={cn(monoFont.className, "text-xs text-blue-600 dark:text-blue-400")}>
+                            <span className={cn(monoFont.className, "text-xs pride-text")}>
                                 {String(activeIndex + 1).padStart(2, '0')}
                             </span>
                             <span className={cn(sansFont.className, "text-sm font-semibold text-foreground dark:text-white")}>
@@ -88,7 +88,7 @@ export function ArticleSectionPreview({ sections }: ArticleSectionPreviewProps) 
                 </button>
 
                 {isMobileExpanded ? (
-                    <nav className="mt-2 rounded-xl border border-border/60 bg-background/70 p-2">
+                    <nav className="mt-2 rounded-sm border border-border/60 bg-background/70 p-2">
                         <div className="space-y-1">
                             {sections.map((section, index) => {
                                 const isActive = section.id === activeSection?.id
@@ -99,9 +99,9 @@ export function ArticleSectionPreview({ sections }: ArticleSectionPreviewProps) 
                                         href={`#${section.id}`}
                                         onClick={() => setIsMobileExpanded(false)}
                                         className={cn(
-                                            "flex items-center gap-3 rounded-lg px-3 py-2 transition-colors",
+                                            "flex items-center gap-3 rounded-sm px-3 py-2 transition-colors",
                                             isActive
-                                                ? "bg-blue-50 text-blue-700 dark:bg-blue-500/10 dark:text-blue-300"
+                                                ? "bg-[hsl(var(--pride-glow-val))]/10 text-[hsl(var(--pride-glow-val))]"
                                                 : "text-muted-foreground hover:bg-muted/40 hover:text-foreground dark:hover:text-white"
                                         )}
                                     >
@@ -139,9 +139,9 @@ export function ArticleSectionPreview({ sections }: ArticleSectionPreviewProps) 
                                         key={section.id}
                                         href={`#${section.id}`}
                                         className={cn(
-                                            "flex items-center gap-3 rounded-lg px-2 py-2 transition-colors",
+                                            "flex items-center gap-3 rounded-sm px-2 py-2 transition-colors",
                                             isActive
-                                                ? "text-blue-600 dark:text-blue-400"
+                                                ? "pride-text"
                                                 : "text-muted-foreground hover:text-foreground dark:hover:text-white"
                                         )}
                                     >

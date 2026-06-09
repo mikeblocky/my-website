@@ -1,5 +1,7 @@
+'use client'
+
 import { motion } from 'framer-motion'
-import { BookOpen, Heart, Palette, PenTool, Sparkles } from 'lucide-react'
+import { BookOpen, Palette, PenTool, Sparkles } from 'lucide-react'
 import { StackVertical } from '@/components/layout/layout-stack/layout-stack'
 import Text from '@/components/ui/text/text'
 import TextHeading from '@/components/ui/text-heading/text-heading'
@@ -57,10 +59,6 @@ export function CurrentWork() {
         {
             icon: <Sparkles className="w-4 h-4" />,
             text: "Working on this site slowly, turning it into a place where I can share things and hopefully connect with people."
-        },
-        {
-            icon: <Heart className="w-4 h-4" />,
-            text: "Keeping a few Pride Month colors around the site this June, soft enough to still feel like home."
         }
     ]
 

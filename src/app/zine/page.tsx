@@ -1,7 +1,13 @@
 import type { Metadata } from 'next'
+import dynamic from 'next/dynamic'
 import { SectionPageShell } from '@/components/layout/page-shell/SectionPageShell'
+import { LoadingSurface } from '@/components/ui/loading/LoadingSurface'
 import { getZines } from './_data/zines'
-import { ZineLibrary } from './_components/ZineLibrary'
+
+const ZineLibrary = dynamic(
+	() => import('./_components/ZineLibrary').then((mod) => mod.ZineLibrary),
+	{ loading: () => <LoadingSurface label="Loading zines..." /> }
+)
 
 export const metadata: Metadata = {
 	title: 'Zine | mikeblocky.com',

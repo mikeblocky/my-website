@@ -11,7 +11,7 @@ import { MAX_ATTACHMENT_COUNT } from '@/lib/images/attachment-limits'
 import { prepareImageForUpload } from '@/lib/images/prepare-upload'
 import { formatBoardDate as formatDate } from '@/lib/boards/board-utils'
 import { cn } from '@/lib/utils/utils'
-import { sansFont } from '@/styles/fonts/fonts'
+import { sansFont, monoFont } from '@/styles/fonts/fonts'
 
 type ThreadTheme = 'blue' | 'violet'
 
@@ -62,6 +62,8 @@ export function BoardThreadBubble({
   setPasscode,
   isPending,
   theme,
+  isLast = false,
+  actions,
 }: {
   message: ThreadMessage
   depth: number
@@ -81,15 +83,11 @@ export function BoardThreadBubble({
   setPasscode: (v: string) => void
   isPending: boolean
   theme: ThreadTheme
+  isLast?: boolean
+  actions?: React.ReactNode
 }) {
   const isAdmin = message.role === 'admin'
   const classes = themeClasses[theme]
-  const indentClass = [
-    'ml-2 sm:ml-4',
-    'ml-3 sm:ml-8',
-    'ml-4 sm:ml-12',
-    'ml-5 sm:ml-16'
-  ][Math.min(depth, 3)]
 
   const handleImageUpload = async (file: File, callback: (url: string) => void) => {
     try {
@@ -101,112 +99,121 @@ export function BoardThreadBubble({
 
   return (
     <div
-      style={{ marginLeft: isEditing ? '0px' : undefined }}
       className={cn(
-        'group/bubble relative rounded-xl transition-all duration-300 p-4 border-0 shadow-none text-base text-left',
-        indentClass,
-        isAdmin
-          ? `${classes.adminBg} text-slate-800 dark:text-slate-200`
-          : 'bg-emerald-50/45 dark:bg-emerald-950/20 text-slate-800 dark:text-slate-200',
-        isEditing && `ring-2 ${classes.ring}`
+        'group/bubble relative flex gap-4 text-base text-left transition-all duration-300 p-1 rounded-xl',
+        isEditing && `ring-1.5 ${classes.ring} bg-slate-500/5 dark:bg-stone-500/5 p-4`
       )}
     >
       {!isEditing && (
-        <div
-          className={cn(
-            'hidden sm:block absolute -left-4 top-[-16px] bottom-1/2 w-4 border-l-2 border-b-2 rounded-bl-lg pointer-events-none',
-            isAdmin ? classes.adminBorder : 'border-emerald-200/70 dark:border-emerald-500/20'
-          )}
-        />
-      )}
-      <div className="flex items-center gap-2 mb-1.5 overflow-hidden">
-        <CornerDownRight size={12} className={isAdmin ? classes.adminAccent : 'text-emerald-400'} />
-        <span className={cn(
-          sansFont.className,
-          'text-xs font-bold',
-          isAdmin ? classes.adminText : 'text-emerald-600 dark:text-emerald-400'
-        )}>
-          {isAdmin ? 'Response' : (author || 'anonymous')}
-        </span>
-
-        <div className="ml-auto flex items-center gap-2">
-          <span className={cn(
-            sansFont.className,
-            'text-[11px] text-muted-foreground whitespace-nowrap transition-transform duration-300',
-            isAdmin && !isEditing && 'group-hover/bubble:-translate-x-1'
-          )}>
-            {formatDate(message.createdAt)}
-          </span>
-          {isAdmin && !isEditing && (
-            <div className="w-0 overflow-hidden opacity-0 group-hover/bubble:w-12 group-hover/bubble:opacity-100 transition-all duration-300 flex items-center justify-end">
-              <button
-                onClick={onEditClick}
-                className={cn('text-[10px] font-bold uppercase tracking-wider whitespace-nowrap', classes.editButton)}
-              >
-                Edit
-              </button>
+        <div className="flex flex-col items-center shrink-0">
+          <div className="w-10 flex justify-center">
+            <div className="w-10 h-10 rounded-full border border-black/[0.04] dark:border-white/[0.04] overflow-hidden select-none">
+              <img 
+                src={isAdmin ? "/a.jpg" : "/q.jpg"} 
+                alt={isAdmin ? "Response Avatar" : "Question Avatar"} 
+                className="w-full h-full object-cover" 
+              />
             </div>
+          </div>
+          {!isLast && (
+            <div className="w-0.5 bg-slate-200 dark:bg-slate-800 flex-grow mt-2 -mb-8 rounded-full" />
           )}
         </div>
+      )}
+
+      {/* Right Column: Message Content */}
+      <div className="flex-grow min-w-0">
+        {!isEditing && (
+          <div className="flex items-center justify-between mb-1">
+            <span className={cn(
+              monoFont.className,
+              'text-[11px] font-bold tracking-wider',
+              isAdmin ? classes.adminText : 'text-emerald-650 dark:text-emerald-400'
+            )}>
+              {isAdmin ? 'Response' : (author || 'anonymous')}
+            </span>
+            <div className="flex items-center gap-2">
+              <span className={cn(
+                monoFont.className,
+                'text-[10px] text-muted-foreground whitespace-nowrap'
+              )}>
+                {formatDate(message.createdAt)}
+              </span>
+              {isAdmin && (
+                <button
+                  onClick={onEditClick}
+                  className={cn(monoFont.className, 'text-[10px] font-bold opacity-0 group-hover/bubble:opacity-100 transition-opacity', classes.editButton)}
+                >
+                  Edit
+                </button>
+              )}
+            </div>
+          </div>
+        )}
+
+        {isEditing ? (
+          <div className="space-y-3">
+            <textarea
+              value={editBody}
+              onChange={(e) => setEditBody(e.target.value)}
+              onInput={(e) => {
+                e.currentTarget.style.height = 'auto'
+                e.currentTarget.style.height = `${e.currentTarget.scrollHeight}px`
+              }}
+              rows={Math.max(3, message.body.split('\n').length)}
+              autoFocus
+              className={cn(sansFont.className, 'min-h-[100px] w-full resize-none overflow-hidden rounded-lg border bg-background px-4 py-3 text-sm text-slate-900 focus:outline-none focus:ring-2 dark:text-slate-100', classes.textarea)}
+            />
+            <AttachmentPreviewGrid
+              urls={editImageUrls}
+              onRemove={(index) => setEditImageUrls(prev => prev.filter((_, itemIndex) => itemIndex !== index))}
+              alt="Edit attachment"
+              className="mt-2.5"
+              compact
+            />
+            <div className="flex justify-between items-center gap-2">
+              <div className="flex items-center gap-3">
+                <input
+                  type="password"
+                  value={passcode}
+                  onChange={e => setPasscode(e.target.value)}
+                  placeholder="Passcode"
+                  className={cn('w-24 rounded-full border border-border bg-background px-3 py-1.5 text-xs text-slate-900 focus:outline-none focus:ring-2 dark:text-slate-100', theme === 'violet' ? 'focus:ring-violet-300' : 'focus:ring-blue-300')}
+                />
+                <AttachmentUploadButton
+                  onFiles={(files) => files.forEach(file => {
+                    handleImageUpload(file, (url) => setEditImageUrls(prev => prev.length >= MAX_ATTACHMENT_COUNT ? prev : [...prev, url]))
+                  })}
+                  accent={theme}
+                />
+              </div>
+              <div className="flex gap-2">
+                <Button variant="ghost" size="sm" onClick={onCancel} className="text-xs h-8">
+                  Cancel
+                </Button>
+                <Button size="sm" disabled={isPending || !editBody.trim()} onClick={onSave} className={cn('h-8 rounded-full px-4 text-xs', classes.saveButton)}>
+                  Save
+                </Button>
+              </div>
+            </div>
+          </div>
+        ) : (
+          <>
+            <div className={cn(sansFont.className, 'text-sm text-slate-700 dark:text-slate-300 leading-relaxed break-words')}>
+              <RichText text={message.body} theme={theme} />
+            </div>
+            <ImageGallery
+              urls={message.imageUrls?.length ? message.imageUrls : (message.imageUrl ? [message.imageUrl] : [])}
+              theme={theme}
+            />
+            {actions && (
+              <div className="mt-3">
+                {actions}
+              </div>
+            )}
+          </>
+        )}
       </div>
-
-      {isEditing ? (
-        <div className="space-y-3">
-          <textarea
-            value={editBody}
-            onChange={(e) => setEditBody(e.target.value)}
-            onInput={(e) => {
-              e.currentTarget.style.height = 'auto'
-              e.currentTarget.style.height = `${e.currentTarget.scrollHeight}px`
-            }}
-            rows={Math.max(3, message.body.split('\n').length)}
-            autoFocus
-            className={cn(sansFont.className, 'min-h-[100px] w-full resize-none overflow-hidden rounded-lg border bg-background px-4 py-3 text-sm text-slate-900 focus:outline-none focus:ring-2 dark:text-slate-100', classes.textarea)}
-          />
-          <AttachmentPreviewGrid
-            urls={editImageUrls}
-            onRemove={(index) => setEditImageUrls(prev => prev.filter((_, itemIndex) => itemIndex !== index))}
-            alt="Edit attachment"
-            className="mt-2.5"
-            compact
-          />
-          <div className="flex justify-between items-center gap-2">
-            <div className="flex items-center gap-3">
-              <input
-                type="password"
-                value={passcode}
-                onChange={e => setPasscode(e.target.value)}
-                placeholder="Passcode"
-                className={cn('w-24 rounded-full border border-border bg-background px-3 py-1.5 text-xs text-slate-900 focus:outline-none focus:ring-2 dark:text-slate-100', theme === 'violet' ? 'focus:ring-violet-300' : 'focus:ring-blue-300')}
-              />
-              <AttachmentUploadButton
-                onFiles={(files) => files.forEach(file => {
-                  handleImageUpload(file, (url) => setEditImageUrls(prev => prev.length >= MAX_ATTACHMENT_COUNT ? prev : [...prev, url]))
-                })}
-                accent={theme}
-              />
-            </div>
-            <div className="flex gap-2">
-              <Button variant="ghost" size="sm" onClick={onCancel} className="text-xs h-8">
-                Cancel
-              </Button>
-              <Button size="sm" disabled={isPending || !editBody.trim()} onClick={onSave} className={cn('h-8 rounded-full px-4 text-xs', classes.saveButton)}>
-                Save
-              </Button>
-            </div>
-          </div>
-        </div>
-      ) : (
-        <>
-          <div className={cn(sansFont.className, 'text-base text-slate-700 dark:text-slate-300 leading-relaxed break-words')}>
-            <RichText text={message.body} theme={theme} />
-          </div>
-          <ImageGallery
-            urls={message.imageUrls?.length ? message.imageUrls : (message.imageUrl ? [message.imageUrl] : [])}
-            theme={theme}
-          />
-        </>
-      )}
     </div>
   )
 }

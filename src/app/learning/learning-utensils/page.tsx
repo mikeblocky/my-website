@@ -25,27 +25,23 @@ export default function LearningUtensils() {
 
                 {/* Header Content */}
                 <div>
-                <TextHeading as="h1" weight="bold">
-                    Personal utensils
-                </TextHeading>
+                    <TextHeading as="h1" weight="bold">
+                        Personal utensils
+                    </TextHeading>
                     <Text variant="muted" className="mb-8">
                         All my stuffs that I use to work and draw
                     </Text>
 
-                <StackVertical gap="md">
-                    <Text><span className="font-bold">Keyboard:</span> <Link href="https://www.logitech.com/en-us/products/keyboards/pop-keys-wireless-mechanical.920-010708.html" className="underline hover:text-blue-500">Logitech POP Keys</Link></Text>
-                    <Text><span className="font-bold">Mouse:</span> <Link href="https://www.logitech.com/en-us/products/mice/pop-wireless-mouse.html" className="underline hover:text-blue-500">Logitech POP Mouse</Link></Text>
-                    <Text><span className="font-bold">Notebook (physical):</span> Normal notebook from Muji Japan</Text>
-                    <Text><span className="font-bold">Pen:</span> 0.5 black ink ballpoint pen from Muji Japan (same store as above)</Text>
-                    
-                </StackVertical>
-            </div>
-
+                    <StackVertical gap="md">
+                        <Text><span className="font-bold">Keyboard:</span> <Link href="https://www.logitech.com/en-us/products/keyboards/pop-keys-wireless-mechanical.920-010708.html" className="underline hover:pride-text">Logitech POP Keys</Link></Text>
+                        <Text><span className="font-bold">Mouse:</span> <Link href="https://www.logitech.com/en-us/products/mice/pop-wireless-mouse.html" className="underline hover:pride-text">Logitech POP Mouse</Link></Text>
+                        <Text><span className="font-bold">Notebook (physical):</span> Normal notebook from Muji Japan</Text>
+                        <Text><span className="font-bold">Pen:</span> 0.5 black ink ballpoint pen from Muji Japan (same store as above)</Text>
+                    </StackVertical>
+                </div>
             </StackVertical>
 
             <IndividualPageFooter sectionName={`Learning`} showToTop={false} />
-
         </BaseContainer>
     )
 }
-

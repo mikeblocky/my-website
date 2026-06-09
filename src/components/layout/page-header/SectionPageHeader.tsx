@@ -35,10 +35,6 @@ export function SectionPageHeader({
             </div>
 
             <div className="max-w-2xl space-y-1.5">
-                <span className="pride-badge px-2.5 py-1 text-[11px] font-medium">
-                    <span className="pride-badge-dot" />
-                    Happy Pride Month!
-                </span>
                 <TextHeading as="h1" weight="bold" className={cn("mt-0", titleClassName)}>
                     {title}
                 </TextHeading>

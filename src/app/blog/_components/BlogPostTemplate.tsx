@@ -80,6 +80,7 @@ export function BlogPostTemplate({
                             { href: '/blog', label: 'Blog' },
                             { label: title }
                         ]}
+                        showPrideBadge={false}
                     >
                         <div className="flex flex-wrap items-center gap-x-2 gap-y-1.5">
                             <Text variant="muted" size="sm">
@@ -96,7 +97,7 @@ export function BlogPostTemplate({
                             {themes.map((theme) => (
                                 <div key={theme} className="flex items-center gap-2">
                                     <span className="text-muted-foreground/30">•</span>
-                                    <Text size="sm" weight="medium" className="text-blue-600 dark:text-blue-400">
+                                    <Text size="sm" weight="medium" className="pride-text lowercase">
                                         {theme}
                                     </Text>
                                 </div>

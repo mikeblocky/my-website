@@ -3,6 +3,7 @@
 import { useMemo } from 'react'
 import { PillTabs } from '@/components/ui/tabs/PillTabs'
 import { useUrlPersistedTab } from '@/components/ui/tabs/useUrlPersistedTab'
+import { cn } from '@/lib/utils/utils'
 import { recommendationGroups, type RecommendationTab } from '../_data/recommendations'
 import { RecommendationCard } from './RecommendationCard'
 
@@ -30,7 +31,7 @@ export function RecommendationsClient() {
 				className="pb-4"
 			/>
 
-			<div className="grid grid-cols-1 gap-4">
+			<div className="grid grid-cols-1 gap-6">
 				{activeGroup.items.map((item) => (
 					<RecommendationCard key={`${activeTab}-${item.title}`} item={item} />
 				))}

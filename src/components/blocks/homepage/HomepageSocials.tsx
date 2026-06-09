@@ -11,10 +11,6 @@ export function HomepageSocials() {
             <Text>
                 I always accept any emails about works and personal stuffs, just email me at <Link href="mailto:mibeblocky@gmail.com" className="pride-text hover:underline">mibeblocky@gmail.com</Link> or message via <Link href="https://x.com/mikeblocky" className="pride-text hover:underline">Twitter</Link>.
             </Text>
-            <Text variant="muted" size="sm" className="mt-3">
-                For Pride Month, kind messages, queer art, favorite songs, and tiny internet hellos are especially welcome.
-            </Text>
         </div>
-
     )
-} 
+}

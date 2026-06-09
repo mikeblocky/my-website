@@ -108,7 +108,7 @@ export function ArticleSectionPreviewMobile({ sections }: ArticleSectionPreviewP
                 className="flex w-full items-center justify-between px-4 py-3 text-left"
             >
                 <div className="flex min-w-0 items-center gap-3">
-                    <span className={cn(monoFont.className, "text-[11px] text-blue-600 dark:text-blue-400")}>
+                    <span className={cn(monoFont.className, "text-[11px] pride-text")}>
                         {String(activeIndex + 1).padStart(2, '0')}
                     </span>
                     <span className={cn(sansFont.className, "text-sm font-semibold text-foreground dark:text-white line-clamp-2")}>
@@ -145,9 +145,9 @@ export function ArticleSectionPreviewMobile({ sections }: ArticleSectionPreviewP
                                             setIsMobileExpanded(false)
                                         }}
                                         className={cn(
-                                            "flex items-center gap-3 rounded-xl px-4 py-3 transition-colors",
+                                            "flex items-center gap-3 rounded-sm px-4 py-3 transition-colors",
                                             isActive
-                                                ? "bg-blue-50 text-blue-700 dark:bg-blue-500/10 dark:text-blue-300"
+                                                ? "bg-[hsl(var(--pride-glow-val))]/10 text-[hsl(var(--pride-glow-val))]"
                                                 : "text-muted-foreground hover:bg-muted/40 hover:text-foreground dark:hover:text-white"
                                         )}
                                         style={{ paddingLeft: `${16 + Math.max(0, section.level - 1) * 12}px` }}
@@ -184,7 +184,7 @@ export function ArticleSectionPreview({ sections }: ArticleSectionPreviewProps) 
                     <div className={cn(monoFont.className, "text-[10px] uppercase tracking-[0.2em] text-muted-foreground/40")}>
                         Section
                     </div>
-                    <div className={cn(monoFont.className, "text-[12px] font-bold text-blue-600 dark:text-blue-400 mt-1")}>
+                    <div className={cn(monoFont.className, "text-[12px] font-bold pride-text mt-1")}>
                         {String(activeIndex + 1).padStart(2, '0')}
                     </div>
                     <div className={cn(sansFont.className, "text-sm font-bold text-foreground dark:text-white leading-tight mt-1 max-w-[200px]")}>
@@ -214,9 +214,9 @@ export function ArticleSectionPreview({ sections }: ArticleSectionPreviewProps) 
                                     {section.label}
                                 </span>
                                 <div className={cn(
-                                    "h-1.5 transition-all duration-300 rounded-full shrink-0",
+                                    "h-1 transition-all duration-300 rounded-sm shrink-0",
                                     isActive 
-                                        ? "w-8 bg-blue-500 shadow-[0_0_8px_rgba(59,130,246,0.6)]" 
+                                        ? "w-8 bg-[hsl(var(--pride-glow-val))] shadow-[0_0_8px_hsl(var(--pride-glow-val)/0.6)]" 
                                         : "w-4 bg-muted-foreground/20 group-hover/link:bg-muted-foreground/40 group-hover/link:w-6"
                                 )} />
                             </Link>

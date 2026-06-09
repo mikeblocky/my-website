@@ -155,6 +155,8 @@ export const mdxComponents: MDXComponents = {
             {children}
         </span>
     ),
+
+
 		code: ({ children, className }) => {
         const match = /language-(\w+)/.exec(className || '');
         const language = match ? match[1] : '';
@@ -166,9 +168,9 @@ export const mdxComponents: MDXComponents = {
                     monoFont.className,
                     "px-1.5 py-0.5 mx-0.5 my-0.5",
                     "text-inherit",
-                    "bg-blue-100/80 dark:bg-blue-900/50",
-                    "text-blue-800 dark:text-blue-200",
-                    "rounded-md",
+                    "bg-slate-100 dark:bg-slate-900/60",
+                    "text-slate-800 dark:text-slate-200 border border-slate-200/50 dark:border-slate-800/40",
+                    "rounded-sm",
                     "inline-block leading-normal"
                 )}>
                     {children}
@@ -188,7 +190,7 @@ export const mdxComponents: MDXComponents = {
     // Block elements
     blockquote: ({ children }) => (
         <blockquote className={cn(
-            "pl-4 border-l-2 border-blue-500/50",
+            "pl-4 border-l-2 border-[hsl(var(--pride-glow-val))]/45",
             "my-4 italic",
             "text-muted-foreground/90 dark:text-muted-foreground/90"
         )}>
@@ -202,12 +204,12 @@ export const mdxComponents: MDXComponents = {
         <a 
             href={href} 
             className={cn(
-                "text-blue-600 dark:text-blue-300",
-                "hover:text-blue-700 dark:hover:text-blue-200",
-                "transition-colors duration-200",
+                "text-[hsl(var(--pride-glow-val))] dark:text-[hsl(var(--pride-glow-val))]/90",
+                "hover:text-[hsl(var(--pride-glow-val))]/80 dark:hover:text-[hsl(var(--pride-glow-val))]",
+                "transition-colors duration-150",
                 "underline underline-offset-4",
-                "decoration-blue-300/50 dark:decoration-blue-500/50",
-                "hover:decoration-blue-400 dark:hover:decoration-blue-400"
+                "decoration-[hsl(var(--pride-glow-val))]/30 dark:decoration-[hsl(var(--pride-glow-val))]/45",
+                "hover:decoration-[hsl(var(--pride-glow-val))]/65 dark:hover:decoration-[hsl(var(--pride-glow-val))]/65"
             )}
             target={href?.startsWith('http') ? '_blank' : undefined}
             rel={href?.startsWith('http') ? 'noopener noreferrer' : undefined}
@@ -223,7 +225,7 @@ export const mdxComponents: MDXComponents = {
             loading="lazy"
             decoding="async"
             className={cn(
-                "my-6 h-auto w-full rounded-xl border border-border/50 bg-background/60",
+                "my-6 h-auto w-full rounded-md border border-border/50 bg-background/60",
                 className
             )}
             {...props}

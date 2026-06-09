@@ -72,28 +72,17 @@ function getZinePages(folder: string, title: string): ZinePage[] {
 }
 
 export function getZines(): Zine[] {
-	return zineConfigs.flatMap((zine) => {
+	return zineConfigs.map((zine) => {
 		const pages = getZinePages(zine.folder, zine.title)
-		const verticalPages = pages.filter((page) => page.height >= page.width)
-		const horizontalPages = pages.filter((page) => page.width > page.height)
+		const verticalCount = pages.filter((page) => page.height >= page.width).length
+		const horizontalCount = pages.length - verticalCount
+		const orientation = verticalCount >= horizontalCount ? ('vertical' as const) : ('horizontal' as const)
 
-		return [
-			{
-				...zine,
-				slug: `${zine.slug}-vertical`,
-				title: `${zine.title}: Vertical`,
-				parentTitle: zine.title,
-				orientation: 'vertical' as const,
-				pages: verticalPages
-			},
-			{
-				...zine,
-				slug: `${zine.slug}-horizontal`,
-				title: `${zine.title}: Horizontal`,
-				parentTitle: zine.title,
-				orientation: 'horizontal' as const,
-				pages: horizontalPages
-			}
-		].filter((book) => book.pages.length > 0)
-	})
+		return {
+			...zine,
+			parentTitle: zine.title,
+			orientation,
+			pages
+		}
+	}).filter((zine) => zine.pages.length > 0)
 }

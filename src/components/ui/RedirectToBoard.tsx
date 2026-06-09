@@ -47,7 +47,7 @@ export function RedirectToBoard({ id, type }: RedirectToBoardProps) {
   return (
     <div className="min-h-[60vh] flex flex-col items-center justify-center p-6 text-center">
       <div className={cn(
-        "rounded-2xl border p-8 max-w-sm w-full space-y-5 backdrop-blur-sm shadow-xl shadow-slate-100/50 dark:shadow-none bg-white dark:bg-slate-950/80",
+        "rounded-md border p-8 max-w-sm w-full space-y-5 bg-slate-50/70 dark:bg-slate-900/60",
         accentColor
       )}>
         {/* Loading Spinner */}
@@ -59,7 +59,7 @@ export function RedirectToBoard({ id, type }: RedirectToBoardProps) {
         </div>
         
         <div className="space-y-1">
-          <h3 className={cn(sansFont.className, "text-sm font-bold")}>
+          <h3 className={cn(sansFont.className, "text-sm font-semibold")}>
             Entering {boardLabel}
           </h3>
           <p className={cn(sansFont.className, "text-xs opacity-75")}>
@@ -72,12 +72,12 @@ export function RedirectToBoard({ id, type }: RedirectToBoardProps) {
           <Link
             href={destination}
             className={cn(
-              "block w-full py-3 px-6 text-sm font-bold rounded-xl text-center transition-all duration-200 shadow-sm border border-transparent",
+              "block w-full py-2.5 px-5 text-sm font-semibold rounded-md text-center transition-all duration-200 border border-transparent hover:-translate-y-0.5 active:scale-[0.98]",
               isSuggestion
-                ? "bg-teal-600 text-white hover:bg-teal-700 shadow-teal-500/10"
+                ? "bg-teal-600 text-white hover:bg-teal-700"
                 : isTalk
-                  ? "bg-blue-600 text-white hover:bg-blue-700 shadow-blue-500/10"
-                  : "bg-violet-600 text-white hover:bg-violet-700 shadow-violet-500/10"
+                  ? "bg-blue-600 text-white hover:bg-blue-700"
+                  : "bg-violet-600 text-white hover:bg-violet-700"
             )}
           >
             Press to enter board

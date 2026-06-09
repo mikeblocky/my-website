@@ -176,14 +176,14 @@ export function ArticleLineRail({ articleId = 'content' }: ArticleLineRailProps)
                                         <span className={cn(
                                             monoFont.className, 
                                             "text-[10px] transition-colors duration-300",
-                                            isActive ? "text-blue-500 font-bold" : "text-muted-foreground/30"
+                                            isActive ? "pride-text font-bold" : "text-muted-foreground/30"
                                         )}>
                                             {formatLine(line)}
                                         </span>
                                     )}
                                     <div className={cn(
                                         "h-px transition-all duration-300",
-                                        isActive ? "w-4 bg-blue-500/50" : "w-2 bg-muted-foreground/20"
+                                        isActive ? "w-4 bg-[hsl(var(--pride-glow-val))]/50" : "w-2 bg-muted-foreground/20"
                                     )} />
                                 </div>
                             )
@@ -192,7 +192,7 @@ export function ArticleLineRail({ articleId = 'content' }: ArticleLineRailProps)
 
                     {/* Active Line Indicator (The Dash) */}
                     <div
-                        className="absolute right-0 w-6 h-px bg-blue-500 shadow-[0_0_8px_rgba(59,130,246,0.8)] z-10 transition-all duration-75"
+                        className="absolute right-0 w-6 h-px bg-[hsl(var(--pride-glow-val))] shadow-[0_0_8px_hsl(var(--pride-glow-val)/0.8)] z-10 transition-all duration-75"
                         style={{ top: `${thumbOffset}%` }}
                     />
                     
@@ -203,7 +203,7 @@ export function ArticleLineRail({ articleId = 'content' }: ArticleLineRailProps)
                     >
                         <span className={cn(
                             monoFont.className,
-                            "text-[14px] font-bold text-blue-600 dark:text-blue-400"
+                            "text-[14px] font-bold pride-text"
                         )}>
                             {formatLine(activeLine)}
                         </span>

@@ -21,7 +21,7 @@ export function SectionLinkItem({
         <Link
             href={href}
             className={cn(
-                "group block rounded-xl border border-border/50 bg-background/70 px-4 py-4 transition-all duration-200",
+                "group block rounded-md border border-border/50 bg-background/70 px-4 py-4 transition-all duration-200",
                 "pride-outline-hover hover:bg-muted/30",
                 className
             )}

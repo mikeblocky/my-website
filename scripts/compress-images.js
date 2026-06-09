@@ -2,13 +2,15 @@ const fs = require('fs');
 const path = require('path');
 const sharp = require('sharp');
 
-const TARGET_DIR = path.join(__dirname, '../public/artworks');
-const MAX_DIMENSION = 1920;
+const TARGET_DIR = path.resolve(__dirname, '../public');
+const MAX_DIMENSION = 2000;
 const JPEG_QUALITY = 82;
+const WEBP_QUALITY = 80;
+const AVIF_QUALITY = 80;
 
 async function compressImage(filePath) {
   const ext = path.extname(filePath).toLowerCase();
-  if (!['.jpg', '.jpeg', '.png'].includes(ext)) {
+  if (!['.jpg', '.jpeg', '.png', '.webp', '.avif'].includes(ext)) {
     return;
   }
 
@@ -16,7 +18,9 @@ async function compressImage(filePath) {
   const sizeBefore = stats.size;
 
   try {
-    const image = sharp(filePath);
+    // Read file into memory to avoid file-locking on Windows
+    const fileBuffer = fs.readFileSync(filePath);
+    const image = sharp(fileBuffer);
     const metadata = await image.metadata();
 
     let width = metadata.width;
@@ -45,7 +49,7 @@ async function compressImage(filePath) {
     // Temporary path to write the compressed image
     const tempFilePath = filePath + '.tmp';
 
-    let pipeline = sharp(filePath);
+    let pipeline = sharp(fileBuffer);
     if (needsResize) {
       pipeline = pipeline.resize(newWidth, newHeight);
     }
@@ -54,6 +58,10 @@ async function compressImage(filePath) {
       pipeline = pipeline.jpeg({ quality: JPEG_QUALITY, progressive: true });
     } else if (ext === '.png') {
       pipeline = pipeline.png({ compressionLevel: 8, palette: true });
+    } else if (ext === '.webp') {
+      pipeline = pipeline.webp({ quality: WEBP_QUALITY });
+    } else if (ext === '.avif') {
+      pipeline = pipeline.avif({ quality: AVIF_QUALITY });
     }
 
     await pipeline.toFile(tempFilePath);
@@ -72,7 +80,7 @@ async function compressImage(filePath) {
     } else {
       // Clean up the temp file if the compressed version is somehow larger
       fs.unlinkSync(tempFilePath);
-      console.log(`[SKIPPED] Compressed size is larger for: ${path.relative(TARGET_DIR, filePath)}`);
+      console.log(`[SKIPPED] Compressed size is larger/same for: ${path.relative(TARGET_DIR, filePath)}`);
     }
   } catch (err) {
     console.error(`[ERROR] Failed to compress ${filePath}:`, err);
@@ -94,7 +102,7 @@ async function processDirectory(dirPath) {
 
 async function main() {
   console.log(`Starting image compression under: ${TARGET_DIR}`);
-  console.log(`Settings: Max Dimension = ${MAX_DIMENSION}px, JPEG Quality = ${JPEG_QUALITY}%`);
+  console.log(`Settings: Max Dimension = ${MAX_DIMENSION}px, JPEG/WebP/AVIF Quality = ${JPEG_QUALITY}/${WEBP_QUALITY}/${AVIF_QUALITY}%`);
   
   if (!fs.existsSync(TARGET_DIR)) {
     console.error(`Directory does not exist: ${TARGET_DIR}`);

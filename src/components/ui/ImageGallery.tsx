@@ -5,6 +5,9 @@ import { X, ChevronLeft, ChevronRight, ZoomIn, ZoomOut } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { cn } from '@/lib/utils/utils';
 
+const isDataOrBlob = (url: string) => typeof url === 'string' && (url.startsWith('data:') || url.startsWith('blob:'));
+
+
 interface ImageGalleryProps {
   urls: string[];
   theme?: 'blue' | 'violet' | 'teal' | 'amber';
@@ -30,7 +33,7 @@ const GalleryImage: React.FC<{
   if (!fill) {
     return (
       <div className={cn(
-        "relative w-full overflow-hidden rounded-xl flex items-center justify-center min-h-[140px] transition-colors duration-300",
+        "relative w-full overflow-hidden rounded-md flex items-center justify-center min-h-[140px] transition-colors duration-300",
         loaded ? "bg-transparent" : "bg-slate-100 dark:bg-slate-900/60"
       )}>
         {!loaded && (
@@ -74,7 +77,7 @@ const GalleryImage: React.FC<{
         alt={alt}
         fill
         sizes="(max-width: 640px) 100vw, 420px"
-        unoptimized
+        unoptimized={isDataOrBlob(src)}
         className={cn(
           className, 
           "transition-opacity duration-300 ease-out", 
@@ -301,20 +304,17 @@ export const ImageGallery: React.FC<ImageGalleryProps> = ({ urls = [], theme = '
     enter: (currentDirection: 1 | -1) => ({
       opacity: 0,
       x: currentDirection * 28,
-      scale: 0.985,
-      filter: 'blur(6px)'
+      scale: 0.985
     }),
     center: {
       opacity: 1,
       x: 0,
-      scale: 1,
-      filter: 'blur(0px)'
+      scale: 1
     },
     exit: (currentDirection: 1 | -1) => ({
       opacity: 0,
       x: currentDirection * -28,
-      scale: 0.985,
-      filter: 'blur(6px)'
+      scale: 0.985
     })
   };
 
@@ -326,13 +326,13 @@ export const ImageGallery: React.FC<ImageGalleryProps> = ({ urls = [], theme = '
       return (
         <div 
           onClick={() => openLightbox(0)}
-          className="group relative cursor-zoom-in overflow-hidden rounded-xl transition-all duration-300 flex items-center justify-center shadow-none border-0 w-full"
+          className="group relative cursor-zoom-in overflow-hidden rounded-md transition-all duration-300 flex items-center justify-center shadow-none border-0 w-full"
         >
           <GalleryImage 
             src={cleanUrls[0]} 
             alt="Attachment" 
             fill={false}
-            className="w-full h-auto max-h-[550px] object-contain rounded-xl transition-transform duration-500 group-hover:scale-[1.01]"
+            className="w-full h-auto max-h-[550px] object-contain rounded-md transition-transform duration-500 group-hover:scale-[1.01]"
           />
           <div className="gallery-zoom-overlay absolute inset-0 bg-black/0 transition-colors duration-300 group-hover:bg-black/5 flex items-center justify-center pointer-events-none">
             <span className="opacity-0 scale-95 group-hover:opacity-100 group-hover:scale-100 transition-all duration-300 p-2.5 rounded-lg bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-gray-700 dark:text-gray-300 shadow-none">
@@ -358,13 +358,13 @@ export const ImageGallery: React.FC<ImageGalleryProps> = ({ urls = [], theme = '
             <div 
               key={url}
               onClick={() => openLightbox(idx)}
-              className="group relative break-inside-avoid mb-3.5 cursor-zoom-in overflow-hidden rounded-xl transition-all duration-300 border-0 shadow-none"
+              className="group relative break-inside-avoid mb-3.5 cursor-zoom-in overflow-hidden rounded-md transition-all duration-300 border-0 shadow-none"
             >
               <GalleryImage 
                 src={url} 
                 alt={`Attachment ${idx + 1}`} 
                 fill={false}
-                className="w-full h-auto rounded-xl transition-transform duration-500 group-hover:scale-[1.02]"
+                className="w-full h-auto rounded-md transition-transform duration-500 group-hover:scale-[1.02]"
               />
               
               {showOverlay ? (
@@ -400,19 +400,19 @@ export const ImageGallery: React.FC<ImageGalleryProps> = ({ urls = [], theme = '
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.2, ease: 'easeOut' }}
-              className="fixed inset-0 z-[99999] flex items-center justify-center bg-black/95"
+              className="fixed inset-0 z-50 flex items-center justify-center bg-black/95"
               onClick={closeLightbox}
             >
               {/* Invisible full-area close target (active only when scale is 1) */}
               <button
                 type="button"
                 aria-label="Close lightbox backdrop"
-                className="absolute inset-0 z-[100]"
+                className="absolute inset-0 z-10"
                 onClick={scale === 1 ? closeLightbox : undefined}
               />
 
               {/* Toolbar Panel */}
-              <div className="absolute top-4 right-4 sm:top-6 sm:right-6 z-[120] flex items-center gap-2">
+              <div className="absolute top-4 right-4 sm:top-6 sm:right-6 z-30 flex items-center gap-2">
                 {scale > 1 && (
                   <span className="text-[10px] sm:text-xs text-white/60 font-semibold uppercase tracking-widest font-mono mr-2 bg-black/40 px-2.5 py-1.5 rounded border border-white/5 pointer-events-none">
                     {scale.toFixed(1)}x Zoom
@@ -423,7 +423,7 @@ export const ImageGallery: React.FC<ImageGalleryProps> = ({ urls = [], theme = '
                 <button
                   type="button"
                   aria-label={scale > 1 ? "Zoom Out" : "Zoom In"}
-                  className="rounded-lg bg-black/40 text-white p-2.5 hover:bg-black/60 transition-colors border border-white/10"
+                  className="rounded-md bg-black/40 text-white p-2.5 hover:bg-black/60 transition-colors border border-white/10"
                   onClick={(e) => {
                     e.stopPropagation();
                     toggleZoomButton();
@@ -436,7 +436,7 @@ export const ImageGallery: React.FC<ImageGalleryProps> = ({ urls = [], theme = '
                 <button
                   type="button"
                   aria-label="Close"
-                  className="rounded-lg bg-black/40 text-white p-2.5 hover:bg-black/60 transition-colors border border-white/10"
+                  className="rounded-md bg-black/40 text-white p-2.5 hover:bg-black/60 transition-colors border border-white/10"
                   onClick={closeLightbox}
                 >
                   <X size={20} />
@@ -448,7 +448,7 @@ export const ImageGallery: React.FC<ImageGalleryProps> = ({ urls = [], theme = '
                 <button
                   type="button"
                   aria-label="Previous image"
-                  className="absolute top-1/2 left-4 sm:left-6 -translate-y-1/2 z-[120] rounded-lg bg-black/40 text-white p-2.5 hover:bg-black/60 transition-colors border border-white/10"
+                  className="absolute top-1/2 left-4 sm:left-6 -translate-y-1/2 z-30 rounded-md bg-black/40 text-white p-2.5 hover:bg-black/60 transition-colors border border-white/10"
                   onClick={(e) => { e.stopPropagation(); showPrevious(); }}
                 >
                   <ChevronLeft size={24} />
@@ -460,7 +460,7 @@ export const ImageGallery: React.FC<ImageGalleryProps> = ({ urls = [], theme = '
                 <button
                   type="button"
                   aria-label="Next image"
-                  className="absolute top-1/2 right-4 sm:right-6 -translate-y-1/2 z-[120] rounded-lg bg-black/40 text-white p-2.5 hover:bg-black/60 transition-colors border border-white/10"
+                  className="absolute top-1/2 right-4 sm:right-6 -translate-y-1/2 z-30 rounded-md bg-black/40 text-white p-2.5 hover:bg-black/60 transition-colors border border-white/10"
                   onClick={(e) => { e.stopPropagation(); showNext(); }}
                 >
                   <ChevronRight size={24} />
@@ -469,12 +469,12 @@ export const ImageGallery: React.FC<ImageGalleryProps> = ({ urls = [], theme = '
 
               {/* Background adjacent prefetching for instant loads */}
               <div className="hidden" aria-hidden="true">
-                <Image src={cleanUrls[(activeIdx + 1) % cleanUrls.length]} alt="" width={1} height={1} unoptimized priority />
-                <Image src={cleanUrls[(activeIdx - 1 + cleanUrls.length) % cleanUrls.length]} alt="" width={1} height={1} unoptimized priority />
+                <Image src={cleanUrls[(activeIdx + 1) % cleanUrls.length]} alt="" width={1} height={1} unoptimized={isDataOrBlob(cleanUrls[(activeIdx + 1) % cleanUrls.length])} priority />
+                <Image src={cleanUrls[(activeIdx - 1 + cleanUrls.length) % cleanUrls.length]} alt="" width={1} height={1} unoptimized={isDataOrBlob(cleanUrls[(activeIdx - 1 + cleanUrls.length) % cleanUrls.length])} priority />
               </div>
 
               {/* Image container with direction-aware animation */}
-              <div className="absolute inset-0 z-[110] flex items-center justify-center pointer-events-none overflow-hidden">
+              <div className="absolute inset-0 z-20 flex items-center justify-center pointer-events-none overflow-hidden">
                 <AnimatePresence mode="wait" initial={false} custom={direction}>
                   <motion.div
                     key={activeIdx}
@@ -518,7 +518,7 @@ export const ImageGallery: React.FC<ImageGalleryProps> = ({ urls = [], theme = '
                         alt={`Expanded Attachment ${activeIdx + 1}`} 
                         width={1600}
                         height={1200}
-                        unoptimized
+                        unoptimized={isDataOrBlob(cleanUrls[activeIdx])}
                         priority
                         className={cn(
                           "max-h-[86dvh] max-w-[90vw] h-auto w-auto object-contain pointer-events-none transition-opacity duration-300 ease-out shadow-none",
