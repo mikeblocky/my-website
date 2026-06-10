@@ -145,16 +145,34 @@ export async function updateThreadMessage(
   const prompts = await fetchPrompts(MAX_STORED_PROMPTS)
   
   const target = prompts.find(p => p.id === promptId)
-  if (!target || !target.thread) return null
+  if (!target) return null
   
-  const messageIndex = target.thread.findIndex(m => m.id === messageId)
-  if (messageIndex === -1) return null
-
   const rawAll = await redis.zRange(drawPromptsKey, 0, -1)
   const rawMember = rawAll.find((entry: string) => {
     try { return JSON.parse(entry).id === promptId } catch { return false }
   })
   if (!rawMember) return null
+
+  // If messageId matches promptId, we are editing the original prompt (the question)
+  if (messageId === promptId) {
+    const updatedPrompt: DrawPrompt = {
+      ...target,
+      body: newBody.trim(),
+      imageUrl: newImageUrl !== undefined ? newImageUrl : target.imageUrl,
+      imageUrls: newImageUrls !== undefined ? newImageUrls : target.imageUrls
+    }
+    const newMember = JSON.stringify(updatedPrompt)
+    const score = new Date(target.createdAt).getTime()
+
+    await redis.zRem(drawPromptsKey, rawMember)
+    await redis.zAdd(drawPromptsKey, [{ score, value: newMember }])
+
+    return updatedPrompt
+  }
+
+  if (!target.thread) return null
+  const messageIndex = target.thread.findIndex(m => m.id === messageId)
+  if (messageIndex === -1) return null
 
   const updatedThread = [...target.thread]
   updatedThread[messageIndex] = {

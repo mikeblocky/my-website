@@ -53,7 +53,7 @@ export function TalkPostItem({
   const [editingMessageId, setEditingMessageId] = useState<string | null>(null)
   const [editBody, setEditBody] = useState('')
   const [editImageUrls, setEditImageUrls] = useState<string[]>([])
-
+  
   // Local reply states
   const [isReplying, setIsReplying] = useState(false)
   const [replyBody, setReplyBody] = useState('')
@@ -184,7 +184,7 @@ export function TalkPostItem({
           {/* Right Column: Content */}
           <div className="flex-1 min-w-0">
             <div className="flex justify-between items-center mb-1">
-              <span className={cn(monoFont.className, "text-[11px] font-bold tracking-wider text-slate-800 dark:text-slate-100")}>
+              <span className={cn(monoFont.className, "text-[11px] font-bold tracking-wider text-slate-850 dark:text-slate-100")}>
                 {talk.author}
               </span>
               <div className="flex items-center gap-1">
@@ -243,6 +243,7 @@ export function TalkPostItem({
                 isPending={isPending}
                 isLast={i === thread.length - 1 && !isReplying && !isFollowingUp}
                 actions={i === thread.length - 1 ? actionButtons : undefined}
+                isAdminMode={isAdminMode}
               />
             ))}
           </div>

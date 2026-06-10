@@ -352,6 +352,7 @@ export function SuggestionCard({
                 isPending={isPending}
                 isLast={index === thread.length - 1 && !isReplying && !isFollowingUp}
                 actions={index === thread.length - 1 ? actionButtons : undefined}
+                isAdminMode={isAdminMode}
               />
             ))}
           </div>

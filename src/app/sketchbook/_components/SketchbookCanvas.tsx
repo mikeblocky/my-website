@@ -408,7 +408,7 @@ export function SketchbookCanvas({
         {/* Caption textarea */}
         <div className="px-4 py-2">
           <textarea
-            placeholder="Caption your masterpiece... (optional)"
+            placeholder="Caption your artwork... (optional)"
             value={caption}
             onChange={(e) => setCaption(e.target.value)}
             maxLength={MAX_BODY_LENGTH}
@@ -608,7 +608,7 @@ export function SketchbookCanvas({
       {/* Bottom row */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-t border-slate-100 dark:border-slate-900 px-4 py-3.5 bg-slate-50/20 dark:bg-slate-950/20">
         <span className="text-xs font-semibold text-slate-400 dark:text-slate-550 select-none">
-          Draw on the canvas above to submit your masterpiece!
+          Draw on the canvas above to submit your artwork!
         </span>
 
         <div className="flex flex-col w-full sm:w-auto gap-2">
@@ -622,9 +622,9 @@ export function SketchbookCanvas({
             type="submit"
             disabled={isPending || isCooldownActive}
             className="w-full sm:w-auto pride-button rounded-md h-9 px-4.5 text-xs font-semibold"
-            title={isCooldownActive ? `You can send another masterpiece in ${cooldownLabel}` : undefined}
+            title={isCooldownActive ? `You can send another artwork in ${cooldownLabel}` : undefined}
           >
-            {isCooldownActive ? cooldownLabel : 'Publish masterpiece'}
+            {isCooldownActive ? cooldownLabel : 'Publish artwork'}
           </Button>
         </div>
       </div>

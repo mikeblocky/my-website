@@ -9,7 +9,7 @@ import { StackVertical } from '@/components/layout/layout-stack/layout-stack'
 import Link from 'next/link'
 import Image from 'next/image'
 import imageCover from '../../../../public/image-cover.png'
-import { User, Palette, BookOpen, MessageSquare, ArrowRight, Users, Book } from 'lucide-react'
+import { User, Palette, BookOpen, MessageSquare, ArrowRight, Users, Book, Heart } from 'lucide-react'
 
 export function HeroSection() {
     return (
@@ -82,6 +82,12 @@ export function HeroSection() {
                                     label: "friends",
                                     desc: "mutual connections & creative links",
                                     icon: <Users className="w-4 h-4 text-muted-foreground/70 group-hover:pride-text transition-colors duration-200" strokeWidth={1.5} />
+                                },
+                                {
+                                    href: "/favorites",
+                                    label: "favorites",
+                                    desc: "favorite manga, anime, games & music",
+                                    icon: <Heart className="w-4 h-4 text-muted-foreground/70 group-hover:pride-text transition-colors duration-200" strokeWidth={1.5} />
                                 },
                                 {
                                     href: "/interact",

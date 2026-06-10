@@ -64,6 +64,7 @@ export function BoardThreadBubble({
   theme,
   isLast = false,
   actions,
+  isAdminMode = false,
 }: {
   message: ThreadMessage
   depth: number
@@ -85,6 +86,7 @@ export function BoardThreadBubble({
   theme: ThreadTheme
   isLast?: boolean
   actions?: React.ReactNode
+  isAdminMode?: boolean
 }) {
   const isAdmin = message.role === 'admin'
   const classes = themeClasses[theme]
@@ -133,20 +135,20 @@ export function BoardThreadBubble({
               {isAdmin ? 'Response' : (author || 'anonymous')}
             </span>
             <div className="flex items-center gap-2">
+              {isAdmin && isAdminMode && (
+                <button
+                  onClick={onEditClick}
+                  className={cn(monoFont.className, 'text-[10px] font-bold opacity-0 group-hover/bubble:opacity-100 transition-opacity cursor-pointer', classes.editButton)}
+                >
+                  Edit
+                </button>
+              )}
               <span className={cn(
                 monoFont.className,
                 'text-[10px] text-muted-foreground whitespace-nowrap'
               )}>
                 {formatDate(message.createdAt)}
               </span>
-              {isAdmin && (
-                <button
-                  onClick={onEditClick}
-                  className={cn(monoFont.className, 'text-[10px] font-bold opacity-0 group-hover/bubble:opacity-100 transition-opacity', classes.editButton)}
-                >
-                  Edit
-                </button>
-              )}
             </div>
           </div>
         )}
@@ -157,8 +159,35 @@ export function BoardThreadBubble({
               value={editBody}
               onChange={(e) => setEditBody(e.target.value)}
               onInput={(e) => {
-                e.currentTarget.style.height = 'auto'
-                e.currentTarget.style.height = `${e.currentTarget.scrollHeight}px`
+                const textarea = e.currentTarget
+                textarea.style.height = 'auto'
+                textarea.style.height = `${textarea.scrollHeight}px`
+
+                // Scroll cursor into view dynamically when typing
+                const { selectionStart, value } = textarea
+                const lines = value.substring(0, selectionStart).split('\n')
+                const currentLineIndex = lines.length
+                const totalLines = value.split('\n').length || 1
+
+                const textareaRect = textarea.getBoundingClientRect()
+                const lineHeight = textareaRect.height / totalLines
+                const cursorTop = textareaRect.top + window.scrollY + (currentLineIndex * lineHeight)
+
+                const viewportTop = window.scrollY
+                const viewportBottom = window.scrollY + window.innerHeight
+                const padding = 100 // Contextual vertical padding around text caret
+
+                if (cursorTop + padding > viewportBottom) {
+                  window.scrollTo({
+                    top: cursorTop + padding - window.innerHeight,
+                    behavior: 'auto'
+                  })
+                } else if (cursorTop - padding < viewportTop) {
+                  window.scrollTo({
+                    top: cursorTop - padding,
+                    behavior: 'auto'
+                  })
+                }
               }}
               rows={Math.max(3, message.body.split('\n').length)}
               autoFocus

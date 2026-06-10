@@ -90,7 +90,7 @@ export function SketchbookBoard({
           applyCooldown(result.cooldown)
 
           if (!response.ok) {
-            throw new Error(result.error || 'Failed to submit masterpiece.')
+            throw new Error(result.error || 'Failed to submit artwork.')
           }
 
           setDrawings(prev => [result.drawing, ...prev])
@@ -207,10 +207,10 @@ export function SketchbookBoard({
       const result = await snapSketchbookCard(id)
       if (result === 'snapped') {
         showButtonFeedback(`snap-${id}`, 'Snapped!')
-        showNotification('Masterpiece card copied to clipboard!')
+        showNotification('Artwork card copied to clipboard!')
       } else if (result === 'saved') {
         showButtonFeedback(`snap-${id}`, 'Saved!')
-        showNotification('Masterpiece card saved as image!')
+        showNotification('Artwork card saved as image!')
       }
     } catch (err) {
       console.error('Snap failed', err)
@@ -251,7 +251,7 @@ export function SketchbookBoard({
           <div className="min-w-0 space-y-1.5">
             <div className="flex flex-wrap items-center gap-2">
               <TextHeading as="h3" weight="semibold" className="mt-0 mb-0 text-lg leading-tight">
-                Collaborative masterpieces
+                Artworks
               </TextHeading>
 
               <AdminLockToggle
@@ -272,7 +272,7 @@ export function SketchbookBoard({
               <Text variant="muted" size="xs">Refreshing...</Text>
             ) : null}
             <Text variant="muted" size="sm" className="whitespace-nowrap">
-              {drawings.length} masterpieces collected
+              {drawings.length} artworks collected
             </Text>
           </div>
         </div>
@@ -280,14 +280,14 @@ export function SketchbookBoard({
         {/* Gallery Cards Grid */}
         {isLoading ? (
           <div className="py-16 text-center text-sm text-muted-foreground">
-            Loading masterpieces...
+            Loading artworks...
           </div>
         ) : drawings.length === 0 ? (
           <div className="py-16 text-center border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-2xl">
             <Text variant="muted" size="sm">No drawings found. Be the first to draw on the canvas!</Text>
           </div>
         ) : (
-          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          <div className="grid grid-cols-1 gap-6">
             {drawings.map((drawing) => (
               <SketchbookCard
                 key={drawing.id}

@@ -53,7 +53,7 @@ export function DrawPromptItem({
   const [editingMessageId, setEditingMessageId] = useState<string | null>(null)
   const [editBody, setEditBody] = useState('')
   const [editImageUrls, setEditImageUrls] = useState<string[]>([])
-
+  
   // Local reply states
   const [isReplying, setIsReplying] = useState(false)
   const [replyBody, setReplyBody] = useState('')
@@ -145,7 +145,7 @@ export function DrawPromptItem({
       {canFollowUp && (
         <button
           onClick={handleFollowUpClick}
-          className="flex items-center gap-1.5 text-xs font-mono font-medium text-emerald-600 dark:text-emerald-400 hover:underline transition-all cursor-pointer"
+          className="flex items-center gap-1.5 text-xs font-mono font-medium text-emerald-600 dark:text-emerald-450 hover:underline transition-all cursor-pointer"
         >
           <CornerDownRight size={13} />
           <span>Follow up</span>
@@ -154,7 +154,7 @@ export function DrawPromptItem({
       {canReply && (
         <button
           onClick={handleReplyClick}
-          className="flex items-center gap-1.5 text-xs font-mono font-medium text-violet-655 dark:text-violet-405 hover:underline transition-colors duration-150 cursor-pointer"
+          className="flex items-center gap-1.5 text-xs font-mono font-medium text-violet-655 dark:text-violet-455 hover:underline transition-colors duration-150 cursor-pointer"
         >
           <MessageSquareReply size={13} />
           <span>Reply (Admin)</span>
@@ -263,6 +263,7 @@ export function DrawPromptItem({
                 isPending={isPending}
                 isLast={i === thread.length - 1 && !isReplying && !isFollowingUp}
                 actions={i === thread.length - 1 ? actionButtons : undefined}
+                isAdminMode={isAdminMode}
               />
             ))}
           </div>

@@ -224,8 +224,25 @@ export async function updateSuggestionThreadMessage(
     } catch (_error) {}
   }
 
-  if (!targetSuggestion || !targetSuggestion.thread || !originalMember) return null
+  if (!targetSuggestion || !originalMember) return null
 
+  // If messageId matches suggestionId, we are editing the original suggestion (the question)
+  if (messageId === suggestionId) {
+    const updatedSuggestion: MediaSuggestion = {
+      ...targetSuggestion,
+      note: newBody.trim(),
+      imageUrl: newImageUrl !== undefined ? newImageUrl : targetSuggestion.imageUrl,
+      imageUrls: newImageUrls !== undefined ? newImageUrls : targetSuggestion.imageUrls
+    }
+
+    await redis.zRem(suggestionsKey, originalMember)
+    const score = new Date(targetSuggestion.createdAt).getTime()
+    await redis.zAdd(suggestionsKey, [{ score, value: JSON.stringify(updatedSuggestion) }])
+
+    return updatedSuggestion
+  }
+
+  if (!targetSuggestion.thread) return null
   const messageIndex = targetSuggestion.thread.findIndex(m => m.id === messageId)
   if (messageIndex === -1) return null
 

@@ -168,16 +168,34 @@ export async function updateThreadMessage(
   const talks = await fetchTalks(MAX_STORED_TALKS)
   
   const target = talks.find(t => t.id === talkId)
-  if (!target || !target.thread) return null
+  if (!target) return null
   
-  const messageIndex = target.thread.findIndex(m => m.id === messageId)
-  if (messageIndex === -1) return null
-
   const rawAll = await redis.zRange(talkMessagesKey, 0, -1)
   const rawMember = rawAll.find((entry: string) => {
     try { return JSON.parse(entry).id === talkId } catch { return false }
   })
   if (!rawMember) return null
+
+  // If messageId matches talkId, we are editing the original post (the question)
+  if (messageId === talkId) {
+    const updatedTalk: TalkTopic = {
+      ...target,
+      body: newBody.trim(),
+      imageUrl: newImageUrl !== undefined ? newImageUrl : target.imageUrl,
+      imageUrls: newImageUrls !== undefined ? newImageUrls : target.imageUrls
+    }
+    const newMember = JSON.stringify(updatedTalk)
+    const score = new Date(target.createdAt).getTime()
+
+    await redis.zRem(talkMessagesKey, rawMember)
+    await redis.zAdd(talkMessagesKey, [{ score, value: newMember }])
+
+    return updatedTalk
+  }
+
+  if (!target.thread) return null
+  const messageIndex = target.thread.findIndex(m => m.id === messageId)
+  if (messageIndex === -1) return null
 
   const updatedThread = [...target.thread]
   updatedThread[messageIndex] = {
