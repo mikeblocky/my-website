@@ -62,13 +62,8 @@ export function MobileAppShell() {
 
   // Calculate dynamic bottom offset for the Spotify player bar based on device shell layout
   const getPlayerBottomOffset = () => {
-    if (device === 'apple') {
-      // Floating bar sits at bottom-4 (16px), height is 64px, safe area floats
-      return isMoreOpen ? '340px' : '96px'
-    } else {
-      // Fixed bottom bar sits at bottom-0, height is 64px, safe area is inside
-      return isMoreOpen ? '320px' : '76px'
-    }
+    // Both bars float at bottom-4 (16px) + height 64px (16px + 64px + 16px spacing = 96px)
+    return isMoreOpen ? '320px' : '80px'
   }
 
   return (
@@ -82,7 +77,7 @@ export function MobileAppShell() {
             exit={{ opacity: 0, y: 30, scale: 0.95, x: '-50%' }}
             transition={{ type: 'spring', damping: 25, stiffness: 220 }}
             className="fixed left-1/2 w-[calc(100%-2rem)] max-w-md z-40"
-            style={{ bottom: `calc(env(safe-area-inset-bottom, 16px) + ${getPlayerBottomOffset()})` }}
+            style={{ bottom: `calc(1rem + env(safe-area-inset-bottom, 0px) + ${getPlayerBottomOffset()})` }}
           >
             <a
               href={currentlyPlaying.songUrl}
@@ -144,6 +139,7 @@ export function MobileAppShell() {
             "shadow-[0_8px_32px_rgba(0,0,0,0.12)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.4)]",
             "flex items-center justify-around px-2"
           )}
+          style={{ bottom: 'calc(1rem + env(safe-area-inset-bottom, 0px))' }}
         >
           {/* Shifting Rainbow Gradient Background Tint Overlay */}
           <div 
@@ -209,13 +205,26 @@ export function MobileAppShell() {
       {device === 'material' && (
         <nav
           className={cn(
-            "fixed bottom-0 left-0 right-0 z-50 h-16",
-            "bg-slate-50 dark:bg-slate-950",
-            "border-t border-slate-200/40 dark:border-slate-800/40",
-            "flex items-center justify-around px-1",
-            "pb-[min(16px,env(safe-area-inset-bottom))]"
+            "fixed bottom-4 left-1/2 -translate-x-1/2 w-[calc(100%-2rem)] max-w-md z-50 h-16 rounded-2xl overflow-hidden",
+            "bg-white/92 dark:bg-slate-950/92 backdrop-blur-md",
+            "border border-slate-200/50 dark:border-slate-800/60",
+            "shadow-[0_8px_32px_rgba(0,0,0,0.12)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.4)]",
+            "flex items-center justify-around px-2"
           )}
+          style={{ bottom: 'calc(1rem + env(safe-area-inset-bottom, 0px))' }}
         >
+          {/* Shifting Rainbow Gradient Background Tint Overlay */}
+          <div 
+            className="absolute inset-0 opacity-[0.07] dark:opacity-[0.11] pointer-events-none" 
+            style={{ 
+              backgroundImage: 'linear-gradient(135deg, var(--pride-colors-repeat))',
+              backgroundSize: '200% 200%',
+              animation: 'pride-shift 12s ease-in-out infinite'
+            }}
+          />
+          {/* Glossy Liquid Sheen Overlay */}
+          <div className="absolute inset-0 bg-gradient-to-b from-white/12 via-white/4 to-transparent pointer-events-none" />
+
           {mainTabs.map((tab) => {
             const active = isTabActive(tab) && !isMoreOpen
             const Icon = tab.icon
@@ -235,9 +244,9 @@ export function MobileAppShell() {
                       transition={{ type: 'spring', damping: 22, stiffness: 240 }}
                     />
                   )}
-                  <Icon className={cn("w-5 h-5 transition-colors duration-250", active ? "pride-text" : "text-muted-foreground/60")} />
+                  <Icon className={cn("w-5 h-5 transition-colors duration-250", active ? "pride-text" : "text-slate-500 dark:text-slate-400")} />
                 </div>
-                <span className={cn(sansFont.className, "text-[9px] mt-1 lowercase tracking-normal font-bold", active ? "pride-text" : "text-muted-foreground/60")}>
+                <span className={cn(monoFont.className, "text-[8px] mt-0.5 lowercase tracking-wider font-semibold", active ? "pride-text" : "text-slate-500/80 dark:text-slate-400/80")}>
                   {tab.label}
                 </span>
               </Link>
@@ -257,9 +266,9 @@ export function MobileAppShell() {
                   transition={{ type: 'spring', damping: 22, stiffness: 240 }}
                 />
               )}
-              <MoreHorizontal className={cn("w-5 h-5 transition-colors duration-250", isMoreOpen ? "pride-text" : "text-muted-foreground/60")} />
+              <MoreHorizontal className={cn("w-5 h-5 transition-colors duration-250", isMoreOpen ? "pride-text" : "text-slate-500 dark:text-slate-400")} />
             </div>
-            <span className={cn(sansFont.className, "text-[9px] mt-1 lowercase tracking-normal font-bold", isMoreOpen ? "pride-text" : "text-muted-foreground/60")}>
+            <span className={cn(monoFont.className, "text-[8px] mt-0.5 lowercase tracking-wider font-semibold", isMoreOpen ? "pride-text" : "text-slate-500/80 dark:text-slate-400/80")}>
               more
             </span>
           </button>
@@ -286,12 +295,11 @@ export function MobileAppShell() {
               exit={{ y: '100%', x: '-50%' }}
               transition={{ type: 'spring', damping: 25, stiffness: 240 }}
               className={cn(
-                "fixed bottom-0 left-1/2 z-50 w-full max-w-md overflow-hidden",
+                "fixed bottom-0 left-1/2 z-50 w-full max-w-md overflow-hidden rounded-t-2xl border-t shadow-[0_-8px_24px_rgba(0,0,0,0.12)]",
                 device === 'apple' 
-                  ? "bg-white/95 dark:bg-slate-900/98 backdrop-blur-md rounded-t-2xl border-t border-slate-200/50 dark:border-slate-800/80" 
-                  : "bg-white dark:bg-slate-950 rounded-t-2xl border-t border-slate-200 dark:border-slate-800",
-                "px-5 pt-5 pb-[calc(env(safe-area-inset-bottom,16px)+80px)]",
-                "shadow-[0_-8px_24px_rgba(0,0,0,0.12)]"
+                  ? "bg-white/95 dark:bg-slate-900/98 backdrop-blur-md border-slate-200/50 dark:border-slate-800/80" 
+                  : "bg-white/95 dark:bg-slate-950/98 backdrop-blur-md border-slate-200 dark:border-slate-800",
+                "px-5 pt-5 pb-[calc(env(safe-area-inset-bottom,16px)+88px)]"
               )}
             >
               {/* Shifting Rainbow Gradient Background Tint Overlay */}
