@@ -10,7 +10,7 @@ import { HomepageSocials } from "@/components/blocks/homepage/HomepageSocials"
 export default function Homepage() {
   return (
     <>
-      <BaseContainer size="md" paddingX="md" paddingY="lg">
+      <BaseContainer size="lg" paddingX="md" paddingY="lg">
         <div className="flex justify-between items-center mb-8">
             <Navbar />
             <ThemeToggle />

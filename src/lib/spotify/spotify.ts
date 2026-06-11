@@ -31,9 +31,11 @@ export function getRedirectUri(origin: string) {
 
 export async function getAccessToken(): Promise<string | null> {
 	const redis = await getRedisClient()
-	const accessToken = await redis.get('spotify:access_token')
-	const refreshToken = await redis.get('spotify:refresh_token')
-	const expiresAtStr = await redis.get('spotify:expires_at')
+	const [accessToken, refreshToken, expiresAtStr] = await Promise.all([
+		redis.get('spotify:access_token'),
+		redis.get('spotify:refresh_token'),
+		redis.get('spotify:expires_at')
+	])
 
 	if (!accessToken || !refreshToken) {
 		return null
@@ -105,8 +107,8 @@ async function refreshAccessToken(refreshToken: string) {
 	}
 }
 
-export async function getRecentlyPlayed(limit = 20): Promise<SpotifyTrack[]> {
-	const accessToken = await getAccessToken()
+export async function getRecentlyPlayed(limit = 20, token?: string | null): Promise<SpotifyTrack[]> {
+	const accessToken = token !== undefined ? token : await getAccessToken()
 	if (!accessToken) {
 		return []
 	}
@@ -153,8 +155,8 @@ export async function getRecentlyPlayed(limit = 20): Promise<SpotifyTrack[]> {
 	}
 }
 
-export async function getCurrentlyPlaying(): Promise<SpotifyTrack | null> {
-	const accessToken = await getAccessToken()
+export async function getCurrentlyPlaying(token?: string | null): Promise<SpotifyTrack | null> {
+	const accessToken = token !== undefined ? token : await getAccessToken()
 	if (!accessToken) {
 		return null
 	}

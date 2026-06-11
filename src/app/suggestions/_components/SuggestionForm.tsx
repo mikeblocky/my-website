@@ -38,7 +38,6 @@ type FormState = {
   category: SuggestionCategory
   referenceUrl: string
   note: string
-  bestPart: string
 }
 
 export function SuggestionForm({
@@ -53,8 +52,7 @@ export function SuggestionForm({
     title: '',
     category: 'manga',
     referenceUrl: '',
-    note: '',
-    bestPart: ''
+    note: ''
   })
   const [reference, setReference] = useState<SuggestionReference | undefined>()
   const [imageUrls, setImageUrls] = useState<string[]>([])
@@ -177,11 +175,11 @@ export function SuggestionForm({
         category: formState.category,
         reference: referencePayload,
         author: formState.author.trim(),
-        bestPart: formState.bestPart.trim(),
+        bestPart: '',
         note: formState.note.trim(),
         imageUrls
       })
-      setFormState({ author: '', title: '', category: 'manga', referenceUrl: '', note: '', bestPart: '' })
+      setFormState({ author: '', title: '', category: 'manga', referenceUrl: '', note: '' })
       setReference(undefined)
       setImageUrls([])
     } catch (error) {
@@ -307,17 +305,9 @@ export function SuggestionForm({
       />
 
       <textarea
-        value={formState.bestPart}
-        onChange={(event) => setFormState(state => ({ ...state, bestPart: event.target.value }))}
-        placeholder="Best part / chapter / moment / episode / track (optional)"
-        rows={2}
-        className={cn(sansFont.className, "min-h-[76px] w-full resize-none border-b border-slate-100 dark:border-slate-900 bg-transparent px-4 py-3 text-sm text-slate-800 placeholder:text-muted-foreground/60 focus:outline-none dark:text-slate-100")}
-      />
-
-      <textarea
         value={formState.note}
         onChange={(event) => setFormState(state => ({ ...state, note: event.target.value }))}
-        placeholder="Why should I read, watch, or listen to it? Short note is enough."
+        placeholder="Why do you recommend it? (your thoughts, best parts, favorite tracks...)"
         rows={4}
         className={cn(sansFont.className, "min-h-[120px] w-full resize-none bg-transparent px-4 py-3 text-sm text-slate-800 placeholder:text-muted-foreground/60 focus:outline-none dark:text-slate-100")}
       />

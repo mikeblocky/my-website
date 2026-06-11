@@ -119,9 +119,9 @@ export function BlogPostTemplate({
                                         </div>
                                     </div>
 
-                                    {/* Mobile sticky section bar - in normal flow for reliable sticky */}
+                                    {/* Mobile sticky section bar */}
                                     {mobileSectionBar && (
-                                        <div className="xl:hidden -mx-3 sm:-mx-4 md:-mx-6 mb-4">
+                                        <div className="xl:hidden">
                                             {mobileSectionBar}
                                         </div>
                                     )}

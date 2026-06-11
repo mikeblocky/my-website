@@ -10,7 +10,7 @@ export async function GET() {
 			return NextResponse.json({ success: true, currentlyPlaying: null })
 		}
 
-		const currentlyPlaying = await getCurrentlyPlaying()
+		const currentlyPlaying = await getCurrentlyPlaying(token)
 		
 		// If playing and progress metrics exist, record it to custom history in Redis
 		if (currentlyPlaying && currentlyPlaying.progressMs && currentlyPlaying.durationMs) {

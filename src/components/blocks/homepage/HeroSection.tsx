@@ -14,9 +14,9 @@ import { User, Palette, BookOpen, MessageSquare, ArrowRight, Users, Book, Heart 
 export function HeroSection() {
     return (
         <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
+            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
             className="relative pb-8"
         >
             <div className="relative">
@@ -32,7 +32,7 @@ export function HeroSection() {
                     <motion.div
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
-                        transition={{ delay: 0.2 }}
+                        transition={{ delay: 0.12, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
                         className="relative"
                     >
                         <TextHeading as="h1" className="font-bold text-slate-900 dark:text-white text-2xl sm:text-3xl md:text-4xl lg:text-5xl">
@@ -43,7 +43,7 @@ export function HeroSection() {
                     <motion.div
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
-                        transition={{ delay: 0.4 }}
+                        transition={{ delay: 0.22, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
                         className="space-y-4"
                     >
                         <Text>
@@ -55,43 +55,43 @@ export function HeroSection() {
                             {[
                                 {
                                     href: "/about",
-                                    label: "about me",
+                                    label: "About me",
                                     desc: "personal story, studies & inspirations",
                                     icon: <User className="w-4 h-4 text-muted-foreground/70 group-hover:pride-text transition-colors duration-200" strokeWidth={1.5} />
                                 },
                                 {
                                     href: "/artworks",
-                                    label: "gallery",
+                                    label: "Gallery",
                                     desc: "collections of illustrations & stats",
                                     icon: <Palette className="w-4 h-4 text-muted-foreground/70 group-hover:pride-text transition-colors duration-200" strokeWidth={1.5} />
                                 },
                                 {
                                     href: "/zine",
-                                    label: "zine",
+                                    label: "Zine",
                                     desc: "collected works as page-turning books",
                                     icon: <Book className="w-4 h-4 text-muted-foreground/70 group-hover:pride-text transition-colors duration-200" strokeWidth={1.5} />
                                 },
                                 {
                                     href: "/journal",
-                                    label: "journal",
+                                    label: "Journal",
                                     desc: "essays, daily logs & journaling tools",
                                     icon: <BookOpen className="w-4 h-4 text-muted-foreground/70 group-hover:pride-text transition-colors duration-200" strokeWidth={1.5} />
                                 },
                                 {
                                     href: "/friends",
-                                    label: "friends",
+                                    label: "Friends",
                                     desc: "mutual connections & creative links",
                                     icon: <Users className="w-4 h-4 text-muted-foreground/70 group-hover:pride-text transition-colors duration-200" strokeWidth={1.5} />
                                 },
                                 {
                                     href: "/favorites",
-                                    label: "favorites",
+                                    label: "Favorites",
                                     desc: "favorite manga, anime, games & music",
                                     icon: <Heart className="w-4 h-4 text-muted-foreground/70 group-hover:pride-text transition-colors duration-200" strokeWidth={1.5} />
                                 },
                                 {
                                     href: "/interact",
-                                    label: "interact",
+                                    label: "Interact",
                                     desc: "guestbook & drawing prompt suggests",
                                     icon: <MessageSquare className="w-4 h-4 text-muted-foreground/70 group-hover:pride-text transition-colors duration-200" strokeWidth={1.5} />
                                 }
@@ -99,7 +99,7 @@ export function HeroSection() {
                                 <Link 
                                     key={portal.href} 
                                     href={portal.href}
-                                    className="group flex items-center justify-between py-3.5 transition-all duration-300 ease-[cubic-bezier(0.32,0.72,0,1)]"
+                                    className="group flex items-center justify-between py-3.5 transition-colors duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]"
                                 >
                                     <div className="flex items-center gap-4 min-w-0">
                                         <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-slate-50 dark:bg-slate-900/60 flex items-center justify-center border border-slate-100 dark:border-slate-900/50 group-hover:border-pink-500/20 dark:group-hover:border-pink-500/10 transition-colors duration-300">
@@ -118,7 +118,7 @@ export function HeroSection() {
                                             </span>
                                         </div>
                                     </div>
-                                    <ArrowRight className="w-4 h-4 text-muted-foreground/50 transition-all duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] group-hover:translate-x-1 group-hover:-translate-y-0.5 group-hover:pride-text" strokeWidth={1.5} />
+                                    <ArrowRight className="w-4 h-4 text-muted-foreground/50 transition-[transform,color] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-x-1 group-hover:-translate-y-0.5 group-hover:pride-text" strokeWidth={1.5} />
                                 </Link>
                             ))}
                         </div>
@@ -129,7 +129,7 @@ export function HeroSection() {
             <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                transition={{ delay: 0.7 }}
+                transition={{ delay: 0.35, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
                 className="mt-8 -mb-8"
             >
                 <div className="relative w-full aspect-[4/3] sm:aspect-[2/1] md:aspect-[21/9] rounded-lg overflow-hidden border-0">

@@ -22,7 +22,7 @@ export default function ZinePage() {
 			title="Zine"
 			description="Collected works arranged as handmade books."
 			currentLabel="Zine"
-			containerSize="3xl"
+			containerSize="lg"
 			footerColor="pink"
 		>
 			<ZineLibrary zines={zines} />

@@ -45,7 +45,7 @@ export function StatsClient({ data }: Props) {
                             <motion.div
                                 initial={{ width: 0 }}
                                 animate={{ width: `${total > 0 ? (item.value / total) * 100 : 0}%` }}
-                                transition={{ duration: 1, delay: i * 0.05, ease: "easeOut" }}
+                                transition={{ duration: 1.2, delay: i * 0.04, ease: [0.16, 1, 0.3, 1] }}
                                 className={`h-full ${item.color} rounded-sm`}
                             />
                         </div>

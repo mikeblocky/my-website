@@ -19,24 +19,33 @@ export async function GET() {
 		let customRecorded: any[] = []
 
 		if (token) {
-			try {
-				currentlyPlaying = await getCurrentlyPlaying()
-				// If playing and progress metrics exist, record it to custom history in Redis
+			const [currentlyPlayingRes, spotifyRecentRes, customRecordedRes] = await Promise.allSettled([
+				getCurrentlyPlaying(token),
+				getRecentlyPlayed(30, token),
+				getRecordedHistory()
+			])
+
+			if (currentlyPlayingRes.status === 'fulfilled') {
+				currentlyPlaying = currentlyPlayingRes.value
+				// If playing and progress metrics exist, record it to custom history in Redis in the background
 				if (currentlyPlaying && currentlyPlaying.progressMs && currentlyPlaying.durationMs) {
-					await recordTrackPlay(currentlyPlaying, currentlyPlaying.progressMs, currentlyPlaying.durationMs)
+					recordTrackPlay(currentlyPlaying, currentlyPlaying.progressMs, currentlyPlaying.durationMs)
+						.catch(e => console.error('Error recording track play in background:', e))
 				}
-			} catch (e: any) {
-				debugInfo.currentlyPlayingError = e.message || String(e)
+			} else {
+				debugInfo.currentlyPlayingError = currentlyPlayingRes.reason?.message || String(currentlyPlayingRes.reason)
 			}
-			try {
-				spotifyRecent = await getRecentlyPlayed(30)
-			} catch (e: any) {
-				debugInfo.recentlyPlayedError = e.message || String(e)
+
+			if (spotifyRecentRes.status === 'fulfilled') {
+				spotifyRecent = spotifyRecentRes.value || []
+			} else {
+				debugInfo.recentlyPlayedError = spotifyRecentRes.reason?.message || String(spotifyRecentRes.reason)
 			}
-			try {
-				customRecorded = await getRecordedHistory()
-			} catch (e: any) {
-				debugInfo.customRecordedError = e.message || String(e)
+
+			if (customRecordedRes.status === 'fulfilled') {
+				customRecorded = customRecordedRes.value || []
+			} else {
+				debugInfo.customRecordedError = customRecordedRes.reason?.message || String(customRecordedRes.reason)
 			}
 		}
 

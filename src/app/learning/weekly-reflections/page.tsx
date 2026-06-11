@@ -17,7 +17,7 @@ export default function WeeklyReflections() {
 	const mostRecentMonth = monthGroups[0]?.month;
 
 	return (
-		<BaseContainer size="md" paddingX="md" paddingY="lg">
+		<BaseContainer size="lg" paddingX="md" paddingY="lg">
 			<StackVertical gap="md">
 				<div className="flex items-center justify-between">
 					<DynamicBreadcrumb

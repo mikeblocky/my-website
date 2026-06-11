@@ -310,7 +310,7 @@ export function ArtworksGallery({
 									}}
 									style={{ aspectRatio: `${aspectRatio}` }}
 									className={cn(
-										'group mb-4 block w-full break-inside-avoid overflow-hidden rounded-md bg-slate-50 dark:bg-slate-900/60 focus:outline-none focus:ring-2 focus:ring-[hsl(var(--pride-glow-val))]/40 relative border border-slate-200/60 dark:border-slate-800/60 shadow-none hover:bg-slate-100/50 dark:hover:bg-slate-900/80',
+										'group mb-4 block w-full break-inside-avoid overflow-hidden rounded-md bg-slate-50 dark:bg-slate-900/60 focus:outline-none focus:ring-2 focus:ring-[hsl(var(--pride-glow-val))]/40 relative border border-slate-200/60 dark:border-slate-800/60 shadow-none hover:bg-slate-100/50 dark:hover:bg-slate-900/80 transition-colors duration-300',
 										cardClassName
 									)}
 								>
@@ -332,7 +332,7 @@ export function ArtworksGallery({
 										sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
 										onLoad={() => setLoadedThumbnails(prev => ({ ...prev, [item.src]: true }))}
 										className={cn(
-											'h-auto w-full object-contain transition-all duration-300 group-hover:scale-[1.01]',
+											'h-auto w-full object-contain transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] will-change-transform group-hover:scale-[1.018]',
 											isThumbLoaded ? 'opacity-100' : 'opacity-0',
 											imageClassName
 										)}

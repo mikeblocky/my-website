@@ -6,7 +6,7 @@ import { SectionPageHeader } from "@/components/layout/page-header/SectionPageHe
 
 export default function About() {
     return (
-        <BaseContainer size="md" paddingX="md" paddingY="lg">
+        <BaseContainer size="lg" paddingX="md" paddingY="lg">
             <StackVertical gap="md">
                 <SectionPageHeader
                     title="From me, an incomplete message"

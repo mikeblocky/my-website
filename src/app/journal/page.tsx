@@ -3,8 +3,6 @@ import { SectionPageShell } from '@/components/layout/page-shell/SectionPageShel
 import { getSearchablePosts } from '@/lib/blog/search'
 import { JournalClient } from './_components/JournalClient'
 
-export const dynamic = 'force-dynamic'
-export const revalidate = 0
 
 export const metadata: Metadata = {
 	title: 'Journal | mikeblocky.com',

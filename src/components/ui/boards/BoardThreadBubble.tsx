@@ -108,8 +108,8 @@ export function BoardThreadBubble({
     >
       {!isEditing && (
         <div className="flex flex-col items-center shrink-0">
-          <div className="w-10 flex justify-center">
-            <div className="w-10 h-10 rounded-full border border-black/[0.04] dark:border-white/[0.04] overflow-hidden select-none">
+          <div className="w-12 flex justify-center">
+            <div className="w-12 h-12 rounded-full border border-black/[0.04] dark:border-white/[0.04] overflow-hidden select-none">
               <img 
                 src={isAdmin ? "/a.jpg" : "/q.jpg"} 
                 alt={isAdmin ? "Response Avatar" : "Question Avatar"} 

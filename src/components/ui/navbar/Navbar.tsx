@@ -108,7 +108,7 @@ export function Navbar() {
                     >
                         {isMenuOpen ? <X size={16} /> : <Menu size={16} />}
                     </motion.div>
-                    <span className="text-[11px] font-mono tracking-wider lowercase">menu</span>
+                    <span className="text-[11px] font-mono tracking-wider">Open menu</span>
                 </button>
 
                 <AnimatePresence>

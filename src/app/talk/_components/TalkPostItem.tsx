@@ -173,7 +173,7 @@ export function TalkPostItem({
         <div className="flex gap-4">
           {/* Left Column: Avatar & Thread Line */}
           <div className="flex flex-col items-center shrink-0">
-            <div className="w-10 h-10 rounded-full border border-blue-200/30 dark:border-blue-900/30 overflow-hidden select-none">
+            <div className="w-12 h-12 rounded-full border border-blue-200/30 dark:border-blue-900/30 overflow-hidden select-none">
               <img src="/q.jpg" alt="Question Avatar" className="w-full h-full object-cover" />
             </div>
             {(thread.length > 0 || isReplying || isFollowingUp) && (
@@ -253,8 +253,8 @@ export function TalkPostItem({
         {isReplying && (
           <div className="flex gap-4 border-t border-slate-100/50 dark:border-slate-800/50 pt-3">
             <div className="flex flex-col items-center shrink-0">
-              <div className="w-10 flex justify-center">
-                <div className="w-10 h-10 rounded-full border border-black/[0.04] overflow-hidden select-none">
+              <div className="w-12 flex justify-center">
+                <div className="w-12 h-12 rounded-full border border-black/[0.04] overflow-hidden select-none">
                   <img src="/a.jpg" alt="Response Avatar" className="w-full h-full object-cover" />
                 </div>
               </div>
@@ -314,8 +314,8 @@ export function TalkPostItem({
         {isFollowingUp && (
           <div className="flex gap-4 border-t border-slate-100/50 dark:border-slate-800/50 pt-3">
             <div className="flex flex-col items-center shrink-0">
-              <div className="w-10 flex justify-center">
-                <div className="w-10 h-10 rounded-full border border-black/[0.04] overflow-hidden select-none">
+              <div className="w-12 flex justify-center">
+                <div className="w-12 h-12 rounded-full border border-black/[0.04] overflow-hidden select-none">
                   <img src="/q.jpg" alt="Question Avatar" className="w-full h-full object-cover" />
                 </div>
               </div>

@@ -17,6 +17,7 @@ import { SuggestionCard } from './SuggestionCard'
 import { ITEMS_PER_PAGE, seededSuggestions } from './suggestion-board-config'
 import { snapSuggestionCard } from './suggestion-snap'
 import { SuggestionForm } from './SuggestionForm'
+import { BoardShell } from '@/app/interact/_components/BoardShell'
 
 export function SuggestionsBoard({
   initialItems = seededSuggestions,
@@ -333,121 +334,93 @@ export function SuggestionsBoard({
   }, [suggestions, currentPage])
 
   return (
-    <StackVertical gap="lg">
-      <SuggestionForm
-        onSubmit={handleSubmit}
-        isPending={isPending}
-        isCooldownActive={isCooldownActive}
-        cooldownLabel={cooldownLabel}
-        showNotification={showNotification}
-      />
-
+    <BoardShell
+      title="Suggestion archive"
+      count={suggestions.length}
+      isRefreshing={isRefreshing}
+      isLoading={isLoading}
+      isAdminMode={isAdminMode}
+      setIsAdminMode={setIsAdminMode}
+      passcode={passcode}
+      setPasscode={setPasscode}
+      accent="teal"
+      formButtonLabel="suggest a book, manga, anime, film..."
+      formComponent={
+        <SuggestionForm
+          onSubmit={handleSubmit}
+          isPending={isPending}
+          isCooldownActive={isCooldownActive}
+          cooldownLabel={cooldownLabel}
+          showNotification={showNotification}
+        />
+      }
+      notification={notification}
+      clearNotification={clearNotification}
+    >
       {errorMessage && (
-        <div className="rounded-lg border border-orange-350 bg-orange-50 px-3 py-2 text-sm text-orange-900 dark:border-orange-500/50 dark:bg-orange-950/20 dark:text-orange-100">
+        <div className="rounded-lg border border-orange-355 bg-orange-50 px-3 py-2 text-sm text-orange-900 dark:border-orange-500/50 dark:bg-orange-955/20 dark:text-orange-100">
           {errorMessage}
         </div>
       )}
 
-      <section className="space-y-6">
-        <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 border-b border-border/60 pb-3 sm:flex-nowrap">
-          <div className="flex items-center gap-2">
-            <TextHeading as="h3" weight="semibold" className="mt-0 mb-0 text-lg">
-              Suggestion archive
-            </TextHeading>
-
-            <AdminLockToggle
-              isAdminMode={isAdminMode}
-              setIsAdminMode={setIsAdminMode}
-              passcode={passcode}
-              setPasscode={setPasscode}
-              showPasscodeInput={showPasscodeInput}
-              setShowPasscodeInput={setShowPasscodeInput}
-              onEnabled={() => showNotification('Admin Mode enabled. You can now toggle suggestion status levels!')}
-              accent="teal"
-            />
+      <AnimatePresence mode="wait" initial={false}>
+        <motion.div
+          key={currentPage}
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -10 }}
+          transition={{ duration: 0.24, ease: [0.16, 1, 0.3, 1] }}
+        >
+          <div className="grid gap-4">
+            {paginatedSuggestions.map(suggestion => (
+              <SuggestionCard
+                key={suggestion.id}
+                suggestion={suggestion}
+                isAdminMode={isAdminMode}
+                activeStatusDropdown={activeStatusDropdown}
+                setActiveStatusDropdown={setActiveStatusDropdown}
+                onStatusChange={handleStatusChange}
+                passcode={passcode}
+                setPasscode={setPasscode}
+                isPending={isPending}
+                buttonFeedback={buttonFeedback}
+                onShare={shareAndSnap}
+                onSnap={snapAndCopy}
+                onReplySubmit={handleReplySubmit}
+                onFollowUpSubmit={handleFollowUpSubmit}
+                onEditSubmit={handleEditSubmit}
+                isCooldownActive={isCooldownActive}
+                cooldownLabel={cooldownLabel}
+              />
+            ))}
           </div>
-
-          <div className="flex shrink-0 items-center gap-3">
-            {isRefreshing ? (
-              <Text variant="muted" size="xs">
-                Refreshing...
-              </Text>
-            ) : null}
-            <Text variant="muted" size="sm" className="whitespace-nowrap">
-              {suggestions.length} items collected
-            </Text>
-          </div>
-        </div>
-
-        <div className="grid gap-4">
-          {paginatedSuggestions.map(suggestion => (
-            <SuggestionCard
-              key={suggestion.id}
-              suggestion={suggestion}
-              isAdminMode={isAdminMode}
-              activeStatusDropdown={activeStatusDropdown}
-              setActiveStatusDropdown={setActiveStatusDropdown}
-              onStatusChange={handleStatusChange}
-              passcode={passcode}
-              setPasscode={setPasscode}
-              isPending={isPending}
-              buttonFeedback={buttonFeedback}
-              onShare={shareAndSnap}
-              onSnap={snapAndCopy}
-              onReplySubmit={handleReplySubmit}
-              onFollowUpSubmit={handleFollowUpSubmit}
-              onEditSubmit={handleEditSubmit}
-              isCooldownActive={isCooldownActive}
-              cooldownLabel={cooldownLabel}
-            />
-          ))}
-        </div>
-        {!isLoading && totalPages > 1 && (
-          <div className="flex items-center justify-center gap-4 border-t border-border/60 pt-6">
-            <button
-              onClick={() => setCurrentPage(page => Math.max(1, page - 1))}
-              disabled={currentPage === 1}
-              className="rounded-lg p-2 text-slate-500 transition-colors hover:bg-teal-100 disabled:opacity-50 disabled:hover:bg-transparent dark:text-slate-400 dark:hover:bg-teal-900/30"
-              aria-label="Previous page"
-            >
-              <ChevronLeft className="h-5 w-5" />
-            </button>
-            <span className={cn(monoFont.className, "text-xs text-muted-foreground")}>
-              {currentPage} / {totalPages}
-            </span>
-            <button
-              onClick={() => setCurrentPage(page => Math.min(totalPages, page + 1))}
-              disabled={currentPage === totalPages}
-              className="rounded-lg p-2 text-slate-500 transition-colors hover:bg-teal-100 disabled:opacity-50 disabled:hover:bg-transparent dark:text-slate-400 dark:hover:bg-teal-900/30"
-              aria-label="Next page"
-            >
-              <ChevronRight className="h-5 w-5" />
-            </button>
-          </div>
-        )}
-      </section>
-
-      <AnimatePresence>
-        {notification && (
-          <motion.div
-            initial={{ opacity: 0, y: 50, scale: 0.95, x: '-50%' }}
-            animate={{ opacity: 1, y: 0, scale: 1, x: '-50%' }}
-            exit={{ opacity: 0, y: 20, scale: 0.95, x: '-50%' }}
-            className="fixed bottom-6 left-1/2 z-50 flex w-[calc(100%-2rem)] max-w-sm -translate-x-1/2 items-center gap-2 rounded-xl border border-teal-200 bg-white/95 py-1.5 pl-4 pr-1.5 shadow-sm backdrop-blur-sm dark:border-teal-500/30 dark:bg-[#101a18] md:left-auto md:right-6 md:w-auto md:translate-x-0"
-          >
-            <div className="h-2 w-2 shrink-0 rounded-full bg-teal-600 dark:bg-teal-300" />
-            <span className={cn(sansFont.className, "truncate text-sm text-slate-800 dark:text-slate-200")}>
-              {notification}
-            </span>
-            <button
-              onClick={clearNotification}
-              className={cn(monoFont.className, "ml-auto rounded-lg border border-teal-100 bg-teal-50/50 px-2 py-0.5 text-xs text-teal-700 hover:bg-teal-100 dark:border-teal-500/20 dark:bg-teal-900/30 dark:text-teal-300 dark:hover:bg-teal-900/50")}
-            >
-              close
-            </button>
-          </motion.div>
-        )}
+        </motion.div>
       </AnimatePresence>
-    </StackVertical>
+
+      {/* Pagination Controls */}
+      {!isLoading && totalPages > 1 && (
+        <div className="flex items-center justify-center gap-4 border-t border-border/60 pt-6">
+          <button
+            onClick={() => setCurrentPage(page => Math.max(1, page - 1))}
+            disabled={currentPage === 1}
+            className="rounded-lg p-2 text-slate-500 transition-colors hover:bg-teal-100 disabled:opacity-50 disabled:hover:bg-transparent dark:text-slate-400 dark:hover:bg-teal-900/30"
+            aria-label="Previous page"
+          >
+            <ChevronLeft className="h-5 w-5" />
+          </button>
+          <span className={cn(monoFont.className, "text-xs text-muted-foreground")}>
+            {currentPage} / {totalPages}
+          </span>
+          <button
+            onClick={() => setCurrentPage(page => Math.min(totalPages, page + 1))}
+            disabled={currentPage === totalPages}
+            className="rounded-lg p-2 text-slate-500 transition-colors hover:bg-teal-100 disabled:opacity-50 disabled:hover:bg-transparent dark:text-slate-400 dark:hover:bg-teal-900/30"
+            aria-label="Next page"
+          >
+            <ChevronRight className="h-5 w-5" />
+          </button>
+        </div>
+      )}
+    </BoardShell>
   )
 }

@@ -79,8 +79,12 @@
       radial-gradient(circle at 30% 30%, hsl(52 92% 70% / 0.11), transparent 40rem),
       radial-gradient(circle at 50% 50%, hsl(142 76% 66% / 0.09), transparent 40rem),
       radial-gradient(circle at 75% 70%, hsl(206 90% 72% / 0.13), transparent 45rem),
-      radial-gradient(circle at 95% 90%, hsl(272 75% 70% / 0.08), transparent 55rem);
+      radial-gradient(circle at 95% 90%, hsl(272 75% 70% / 0.08), transparent 55rem),
+      linear-gradient(rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.95)),
+      url('/distribution/2026/kemutai-hanashi/Illustration125c.jpg');
     background-attachment: fixed;
+    background-size: cover;
+    background-position: center;
   }
   .dark body {
     background-image:
@@ -88,7 +92,9 @@
       radial-gradient(circle at 30% 30%, hsl(52 92% 70% / 0.07), transparent 40rem),
       radial-gradient(circle at 50% 50%, hsl(142 76% 66% / 0.06), transparent 40rem),
       radial-gradient(circle at 75% 70%, hsl(206 90% 72% / 0.09), transparent 45rem),
-      radial-gradient(circle at 95% 90%, hsl(272 75% 70% / 0.05), transparent 55rem);
+      radial-gradient(circle at 95% 90%, hsl(272 75% 70% / 0.05), transparent 55rem),
+      linear-gradient(rgba(7, 12, 22, 0.95), rgba(7, 12, 22, 0.95)),
+      url('/distribution/2026/kemutai-hanashi/Illustration125c.jpg');
   }
 }
 
@@ -222,27 +228,23 @@
   }
 
   .pride-focus-within-glow {
-    border: 1.5px solid hsl(var(--border) / 0.5) !important;
-    transition: all 300ms ease;
+    border: 1px solid hsl(var(--border) / 0.6) !important;
+    transition: border-color 200ms ease, box-shadow 200ms ease;
   }
 
   .pride-focus-within-glow:focus-within {
-    border-color: transparent !important;
-    background:
-      linear-gradient(hsl(var(--card)), hsl(var(--card))) padding-box,
-      linear-gradient(135deg, var(--pride-colors-repeat)) border-box !important;
-    background-size: 100% 100%, 200% 200% !important;
-    background-repeat: no-repeat, repeat !important;
+    border-color: hsl(var(--pride-glow-val) / 0.55) !important;
     box-shadow: 
-      0 0 18px hsl(var(--pride-glow-val) / 0.32),
-      0 0 36px hsl(217 92% 70% / 0.22),
-      0 0 54px hsl(142 76% 66% / 0.12);
+      0 0 0 1px hsl(var(--pride-glow-val) / 0.15),
+      0 0 15px hsl(var(--pride-glow-val) / 0.22),
+      0 0 30px hsl(217 92% 70% / 0.12),
+      0 0 45px hsl(142 76% 66% / 0.05);
   }
 }
 
 @media (prefers-reduced-motion: no-preference) {
   .pride-focus-within-glow:focus-within {
-    animation: gemini-border-flow 3.5s linear infinite, gemini-glow-spread 2.8s ease-in-out infinite;
+    animation: gemini-glow-spread 2.8s ease-in-out infinite;
   }
 
   .pride-gradient-text {
@@ -335,15 +337,17 @@
 @keyframes gemini-glow-spread {
   0%, 100% {
     box-shadow: 
-      0 0 15px hsl(var(--pride-glow-val) / 0.28),
-      0 0 30px hsl(217 92% 70% / 0.18),
-      0 0 45px hsl(142 76% 66% / 0.08);
+      0 0 0 1px hsl(var(--pride-glow-val) / 0.15),
+      0 0 15px hsl(var(--pride-glow-val) / 0.22),
+      0 0 30px hsl(217 92% 70% / 0.12),
+      0 0 45px hsl(142 76% 66% / 0.05);
   }
   50% {
     box-shadow: 
-      0 0 32px hsl(var(--pride-glow-val) / 0.48),
-      0 0 58px hsl(217 92% 70% / 0.35),
-      0 0 85px hsl(142 76% 66% / 0.2);
+      0 0 0 1px hsl(var(--pride-glow-val) / 0.25),
+      0 0 28px hsl(var(--pride-glow-val) / 0.36),
+      0 0 48px hsl(217 92% 70% / 0.22),
+      0 0 70px hsl(142 76% 66% / 0.1);
   }
 }
 

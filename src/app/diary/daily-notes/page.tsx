@@ -14,7 +14,7 @@ export default function DailyNotes() {
 	const mostRecentMonth = monthGroups[0]?.month;
 
 	return (
-		<BaseContainer size="md" paddingX="md" paddingY="lg">
+		<BaseContainer size="lg" paddingX="md" paddingY="lg">
 			<StackVertical gap="md">
 				<SectionPageHeader
 					title="Daily notes"

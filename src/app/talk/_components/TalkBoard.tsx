@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState, useTransition, useMemo } from 'react'
+import { AnimatePresence, motion } from 'framer-motion'
 import { initialTalks } from '../_data/talks'
 import { TalkTopic } from '../_types/talk'
 import { StackVertical } from '@/components/layout/layout-stack/layout-stack'
@@ -15,6 +16,7 @@ import { AdminLockToggle } from '@/components/ui/admin/AdminLockToggle'
 import { snapTalkCard } from './talk-snap'
 import { TalkPostForm } from './TalkPostForm'
 import { TalkPostItem } from './TalkPostItem'
+import { BoardShell } from '@/app/interact/_components/BoardShell'
 
 const seededTalks = sortByCreatedAt(initialTalks)
 const ITEMS_PER_PAGE = 5
@@ -329,8 +331,19 @@ export function TalkBoard({
   }
 
   return (
-    <StackVertical gap="lg">
-      {!singleMode && (
+    <BoardShell
+      title={singleMode ? "Post" : "Talk archive"}
+      count={talks.length}
+      isRefreshing={isRefreshing}
+      isLoading={isLoading}
+      isAdminMode={isAdminMode}
+      setIsAdminMode={setIsAdminMode}
+      passcode={passcode}
+      setPasscode={setPasscode}
+      accent="blue"
+      formButtonLabel="write in the guestbook"
+      singleMode={singleMode}
+      formComponent={
         <TalkPostForm
           onSubmit={handleSubmit}
           isPending={isPending}
@@ -341,129 +354,94 @@ export function TalkBoard({
           setWantNotification={setWantNotification}
           showNotification={showNotification}
         />
-      )}
-
+      }
+      notification={notification}
+      clearNotification={clearNotification}
+    >
       {errorMessage && (
         <div className="rounded-lg border border-orange-300 bg-orange-50 px-3 py-2 text-sm text-orange-800 dark:border-orange-500/50 dark:bg-orange-900/20 dark:text-orange-100">
           {errorMessage}
         </div>
       )}
 
-      <section className="space-y-6">
-        <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 border-b border-border/60 pb-3 sm:flex-nowrap">
-          <div className="flex items-center gap-2">
-            <TextHeading as="h3" weight="semibold" className="mt-0 mb-0 text-lg">
-              {singleMode ? "Post" : "Talk archive"}
-            </TextHeading>
+      <AnimatePresence mode="wait" initial={false}>
+        <motion.div
+          key={currentPage}
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -10 }}
+          transition={{ duration: 0.24, ease: [0.16, 1, 0.3, 1] }}
+        >
+          <StackVertical gap="md">
+            {isLoading && talks.length === 0 ? (
+              <div className="py-8 text-center">
+                <Text variant="muted" size="sm">
+                  Loading history...
+                </Text>
+              </div>
+            ) : (
+              paginatedTalks.map((talk: TalkTopic) => (
+                <TalkPostItem
+                  key={talk.id}
+                  talk={talk}
+                  isAdminMode={isAdminMode}
+                  passcode={passcode}
+                  setPasscode={setPasscode}
+                  isPending={isPending}
+                  buttonFeedback={buttonFeedback}
+                  isCooldownActive={isCooldownActive}
+                  cooldownLabel={cooldownLabel}
+                  onShare={shareAndSnap}
+                  onSnap={snapAndCopy}
+                  onReplySubmit={handleReplySubmit}
+                  onFollowUpSubmit={handleFollowUpSubmit}
+                  onEditSubmit={handleEditSubmit}
+                  showNotification={showNotification}
+                />
+              ))
+            )}
+          </StackVertical>
+        </motion.div>
+      </AnimatePresence>
 
-            <AdminLockToggle
-              isAdminMode={isAdminMode}
-              setIsAdminMode={setIsAdminMode}
-              passcode={passcode}
-              setPasscode={setPasscode}
-              showPasscodeInput={showPasscodeInput}
-              setShowPasscodeInput={setShowPasscodeInput}
-              onEnabled={() => showNotification('Admin Mode enabled. You can now reply and edit!')}
-              accent="blue"
-            />
-          </div>
-
-          <div className="flex shrink-0 items-center gap-3">
-            {isRefreshing ? (
-              <Text variant="muted" size="xs">
-                Refreshing...
-              </Text>
-            ) : null}
-            <Text variant="muted" size="sm" className="whitespace-nowrap">
-              {talks.length} posts collected
-            </Text>
-          </div>
-        </div>
-
-        <StackVertical gap="md">
-          {isLoading && talks.length === 0 ? (
-            <div className="py-8 text-center">
-              <Text variant="muted" size="sm">
-                Loading history...
-              </Text>
-            </div>
-          ) : (
-            paginatedTalks.map((talk: TalkTopic) => (
-              <TalkPostItem
-                key={talk.id}
-                talk={talk}
-                isAdminMode={isAdminMode}
-                passcode={passcode}
-                setPasscode={setPasscode}
-                isPending={isPending}
-                buttonFeedback={buttonFeedback}
-                isCooldownActive={isCooldownActive}
-                cooldownLabel={cooldownLabel}
-                onShare={shareAndSnap}
-                onSnap={snapAndCopy}
-                onReplySubmit={handleReplySubmit}
-                onFollowUpSubmit={handleFollowUpSubmit}
-                onEditSubmit={handleEditSubmit}
-                showNotification={showNotification}
-              />
-            ))
-          )}
-        </StackVertical>
-
-        {/* Pagination Controls */}
-        {!isLoading && totalPages > 1 && (
-          <div className="mt-8 flex items-center justify-center gap-4 border-t border-border/60 pt-6">
-            <button
-              onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
-              disabled={currentPage === 1}
-              className="p-2 rounded-lg text-slate-500 hover:bg-blue-100 disabled:opacity-50 disabled:hover:bg-transparent dark:text-slate-400 dark:hover:bg-blue-900/30 transition-colors"
-              aria-label="Previous page"
-            >
-              <ChevronLeft className="w-5 h-5" />
-            </button>
-            
-            <div className="flex gap-2">
-              {Array.from({ length: totalPages }).map((_, i) => (
-                <button
-                  key={i}
-                  onClick={() => setCurrentPage(i + 1)}
-                  className={`w-8 h-8 rounded-lg text-sm font-medium transition-colors ${
-                    currentPage === i + 1
-                      ? 'bg-blue-500 text-white'
-                      : 'text-slate-600 hover:bg-blue-100 dark:text-slate-400 dark:hover:bg-blue-900/30'
-                  }`}
-                >
-                  {i + 1}
-                </button>
-              ))}
-            </div>
-
-            <button
-              onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
-              disabled={currentPage === totalPages}
-              className="p-2 rounded-lg text-slate-500 hover:bg-blue-100 disabled:opacity-50 disabled:hover:bg-transparent dark:text-slate-400 dark:hover:bg-blue-900/30 transition-colors"
-              aria-label="Next page"
-            >
-              <ChevronRight className="w-5 h-5" />
-            </button>
-          </div>
-        )}
-      </section>
-
-      {notification && (
-        <div className="fixed bottom-6 left-1/2 z-50 flex w-[calc(100%-2rem)] max-w-sm -translate-x-1/2 items-center gap-2 rounded-xl border border-blue-200 bg-white/95 py-1.5 pl-4 pr-1.5 shadow-sm backdrop-blur-sm motion-safe:animate-in motion-safe:fade-in-0 motion-safe:slide-in-from-bottom-3 motion-safe:zoom-in-95 motion-safe:duration-200 md:left-auto md:right-6 md:w-auto md:translate-x-0 dark:border-blue-500/30 dark:bg-[#1a1525]">
-          <div className="h-2 w-2 rounded-full bg-blue-600 dark:bg-blue-400 shrink-0" />
-          <span className="text-sm text-slate-800 dark:text-slate-200 truncate">
-            {notification}
-          </span>
+      {/* Pagination Controls */}
+      {!isLoading && totalPages > 1 && (
+        <div className="mt-8 flex items-center justify-center gap-4 border-t border-border/60 pt-6">
           <button
-            onClick={clearNotification}
-            className="ml-auto rounded-lg border border-blue-100 bg-blue-50/50 px-2 py-0.5 text-xs text-blue-600 hover:bg-blue-100 dark:border-blue-800 dark:bg-blue-900/30 dark:text-blue-300 dark:hover:bg-blue-900/50"
+            onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+            disabled={currentPage === 1}
+            className="p-2 rounded-lg text-slate-500 hover:bg-blue-100 disabled:opacity-50 disabled:hover:bg-transparent dark:text-slate-400 dark:hover:bg-blue-900/30 transition-colors"
+            aria-label="Previous page"
           >
-            close
+            <ChevronLeft className="w-5 h-5" />
+          </button>
+          
+          <div className="flex gap-2">
+            {Array.from({ length: totalPages }).map((_, i) => (
+              <button
+                key={i}
+                onClick={() => setCurrentPage(i + 1)}
+                className={`w-8 h-8 rounded-lg text-sm font-medium transition-colors ${
+                  currentPage === i + 1
+                    ? 'bg-blue-500 text-white'
+                    : 'text-slate-600 hover:bg-blue-100 dark:text-slate-400 dark:hover:bg-blue-900/30'
+                }`}
+              >
+                {i + 1}
+              </button>
+            ))}
+          </div>
+
+          <button
+            onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+            disabled={currentPage === totalPages}
+            className="p-2 rounded-lg text-slate-500 hover:bg-blue-100 disabled:opacity-50 disabled:hover:bg-transparent dark:text-slate-400 dark:hover:bg-blue-900/30 transition-colors"
+            aria-label="Next page"
+          >
+            <ChevronRight className="w-5 h-5" />
           </button>
         </div>
       )}
-    </StackVertical>
+    </BoardShell>
   )
 }

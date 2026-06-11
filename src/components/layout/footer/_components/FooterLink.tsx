@@ -32,6 +32,18 @@ export function FooterLink({ href, children, color = 'blue', external, icon }: F
                 "hover:after:w-full"
             )}
             {...(external && { target: "_blank", rel: "noopener noreferrer" })}
+            onClick={(e) => {
+                if (href.startsWith('#')) {
+                    e.preventDefault()
+                    const targetId = href.substring(1)
+                    const elem = targetId ? document.getElementById(targetId) : null
+                    if (elem) {
+                        elem.scrollIntoView({ behavior: 'smooth' })
+                    } else {
+                        window.scrollTo({ top: 0, behavior: 'smooth' })
+                    }
+                }
+            }}
         >
             {icon && (
                 <motion.div

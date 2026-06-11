@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState, useTransition } from 'react'
+import { motion } from 'framer-motion'
 import { Bell } from 'lucide-react'
 import { formatBoardDate as formatDate, type ApiCooldown } from '@/lib/boards/board-utils'
 import { useBoardCooldown, useButtonFeedback, useControlledState, useTimedMessage } from '@/lib/boards/board-hooks'
@@ -11,6 +12,7 @@ import Text from '@/components/ui/text/text'
 import { StackVertical } from '@/components/layout/layout-stack/layout-stack'
 import { SketchbookCanvas } from './SketchbookCanvas'
 import { SketchbookCard } from './SketchbookCard'
+import { BoardShell } from '@/app/interact/_components/BoardShell'
 
 export function SketchbookBoard({
   isAdminMode: parentIsAdminMode,
@@ -36,7 +38,7 @@ export function SketchbookBoard({
   // Like track local storage list
   const [likedList, setLikedList] = useState<string[]>([])
 
-  const { message: notification, showMessage: showNotification } = useTimedMessage()
+  const { message: notification, showMessage: showNotification, clearMessage: clearNotification } = useTimedMessage()
   const { feedback: buttonFeedback, showFeedback: showButtonFeedback } = useButtonFeedback()
   const { isCooldownActive, cooldownLabel, applyCooldown } = useBoardCooldown()
 
@@ -228,86 +230,64 @@ export function SketchbookBoard({
   }
 
   return (
-    <StackVertical gap="lg" className="w-full">
-      {/* Dynamic Notifications */}
-      {notification && (
-        <div className="fixed bottom-6 right-6 z-50 rounded-xl bg-violet-600 px-4 py-2.5 text-sm font-semibold text-white shadow-xl flex items-center gap-2 motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-bottom-5">
-          <Bell size={15} />
-          {notification}
+    <BoardShell
+      title="Artworks"
+      count={drawings.length}
+      isRefreshing={isRefreshing}
+      isLoading={isLoading}
+      isAdminMode={isAdminMode}
+      setIsAdminMode={setIsAdminMode}
+      passcode={passcode}
+      setPasscode={setPasscode}
+      accent="violet"
+      formButtonLabel="open drawing canvas"
+      formComponent={
+        <SketchbookCanvas
+          onSubmit={handleSubmit}
+          isPending={isPending}
+          isCooldownActive={isCooldownActive}
+          cooldownLabel={cooldownLabel}
+          showNotification={showNotification}
+        />
+      }
+      notification={notification}
+      clearNotification={clearNotification}
+    >
+      {/* Gallery Cards Grid */}
+      {isLoading ? (
+        <div className="py-16 text-center text-sm text-muted-foreground">
+          Loading artworks...
         </div>
+      ) : drawings.length === 0 ? (
+        <div className="py-16 text-center border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-2xl">
+          <Text variant="muted" size="sm">No drawings found. Be the first to draw on the canvas!</Text>
+        </div>
+      ) : (
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
+          className="grid grid-cols-1 gap-6"
+        >
+          {drawings.map((drawing) => (
+            <SketchbookCard
+              key={drawing.id}
+              drawing={drawing}
+              isAdminMode={isAdminMode}
+              likedList={likedList}
+              passcode={passcode}
+              isPending={isPending}
+              buttonFeedback={buttonFeedback}
+              onLike={handleLike}
+              onShare={handleShareDrawing}
+              onSnap={handleSnapDrawing}
+              onDownload={handleDownloadDrawing}
+              onReplySubmit={handleReplySubmit}
+              onDeleteDrawing={handleDeleteDrawing}
+            />
+          ))}
+        </motion.div>
       )}
-
-      <SketchbookCanvas
-        onSubmit={handleSubmit}
-        isPending={isPending}
-        isCooldownActive={isCooldownActive}
-        cooldownLabel={cooldownLabel}
-        showNotification={showNotification}
-      />
-
-      {/* Gallery */}
-      <div className="space-y-5">
-        <div className="flex flex-wrap items-end justify-between gap-x-6 gap-y-2 border-b border-slate-200/60 pb-4 dark:border-slate-800/60">
-          <div className="min-w-0 space-y-1.5">
-            <div className="flex flex-wrap items-center gap-2">
-              <TextHeading as="h3" weight="semibold" className="mt-0 mb-0 text-lg leading-tight">
-                Artworks
-              </TextHeading>
-
-              <AdminLockToggle
-                isAdminMode={isAdminMode}
-                setIsAdminMode={setIsAdminMode}
-                passcode={passcode}
-                setPasscode={setPasscode}
-                showPasscodeInput={showPasscodeInput}
-                setShowPasscodeInput={setShowPasscodeInput}
-                onEnabled={() => showNotification('Admin Mode active. Moderation unlocked!')}
-                accent="violet"
-              />
-            </div>
-          </div>
-
-          <div className="flex shrink-0 items-center gap-3">
-            {isRefreshing ? (
-              <Text variant="muted" size="xs">Refreshing...</Text>
-            ) : null}
-            <Text variant="muted" size="sm" className="whitespace-nowrap">
-              {drawings.length} artworks collected
-            </Text>
-          </div>
-        </div>
-
-        {/* Gallery Cards Grid */}
-        {isLoading ? (
-          <div className="py-16 text-center text-sm text-muted-foreground">
-            Loading artworks...
-          </div>
-        ) : drawings.length === 0 ? (
-          <div className="py-16 text-center border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-2xl">
-            <Text variant="muted" size="sm">No drawings found. Be the first to draw on the canvas!</Text>
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 gap-6">
-            {drawings.map((drawing) => (
-              <SketchbookCard
-                key={drawing.id}
-                drawing={drawing}
-                isAdminMode={isAdminMode}
-                likedList={likedList}
-                passcode={passcode}
-                isPending={isPending}
-                buttonFeedback={buttonFeedback}
-                onLike={handleLike}
-                onShare={handleShareDrawing}
-                onSnap={handleSnapDrawing}
-                onDownload={handleDownloadDrawing}
-                onReplySubmit={handleReplySubmit}
-                onDeleteDrawing={handleDeleteDrawing}
-              />
-            ))}
-          </div>
-        )}
-      </div>
-    </StackVertical>
+    </BoardShell>
   )
 }

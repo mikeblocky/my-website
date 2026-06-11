@@ -23,7 +23,7 @@ export function SectionPageShell({
 	title,
 	description,
 	currentLabel,
-	containerSize = 'md',
+	containerSize = 'lg',
 	contentGap = 'lg',
 	footerColor = 'blue',
 	showToTop = false,

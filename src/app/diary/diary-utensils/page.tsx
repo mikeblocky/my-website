@@ -9,7 +9,7 @@ import { SectionPageHeader } from "@/components/layout/page-header/SectionPageHe
 
 export default function DiaryUtensils() {
     return (
-        <BaseContainer size="md" paddingX="md" paddingY="lg">
+        <BaseContainer size="lg" paddingX="md" paddingY="lg">
             <StackVertical gap="md">
                 <SectionPageHeader
                     title="Diary utensils"

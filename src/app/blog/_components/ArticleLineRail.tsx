@@ -125,8 +125,8 @@ export function ArticleLineRail({ articleId = 'content' }: ArticleLineRailProps)
 
     return (
         <aside className="hidden xl:flex xl:sticky xl:top-24 xl:h-fit xl:flex-col xl:items-end xl:gap-4">
-            <div className={cn(monoFont.className, "text-[9px] uppercase tracking-[0.25em] text-muted-foreground/45 select-none")}>
-                lines
+            <div className={cn(monoFont.className, "text-[9px] tracking-[0.25em] text-muted-foreground/45 select-none")}>
+               Lines
             </div>
             
             <div className="relative flex items-center pr-1">

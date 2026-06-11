@@ -21,6 +21,16 @@ export function MobileAppShell() {
   const [isMoreOpen, setIsMoreOpen] = useState(false)
   const [device, setDevice] = useState<'apple' | 'material'>('apple')
   const { song: currentlyPlaying } = useSpotifyCurrentlyPlaying()
+  const [showScrollTop, setShowScrollTop] = useState(false)
+
+  // Detect scroll to show/hide Scroll to Top button
+  useEffect(() => {
+    const handleScroll = () => {
+      setShowScrollTop(window.scrollY > 300)
+    }
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
 
   // Detect device client-side
   useEffect(() => {
@@ -40,17 +50,17 @@ export function MobileAppShell() {
   }, [pathname])
 
   const mainTabs: NavTab[] = [
-    { href: '/', label: 'home', icon: Home, exact: true },
-    { href: '/artworks', label: 'gallery', icon: Grid },
-    { href: '/journal', label: 'journal', icon: BookOpen },
-    { href: '/interact', label: 'interact', icon: MessageSquare },
+    { href: '/', label: 'Home', icon: Home, exact: true },
+    { href: '/artworks', label: 'Gallery', icon: Grid },
+    { href: '/journal', label: 'Journal', icon: BookOpen },
+    { href: '/interact', label: 'Interact', icon: MessageSquare },
   ]
 
   const moreTabs: NavTab[] = [
-    { href: '/about', label: 'about me', icon: User },
-    { href: '/zine', label: 'zine', icon: Book },
-    { href: '/friends', label: 'friends', icon: Users },
-    { href: '/favorites', label: 'favorites', icon: Heart },
+    { href: '/about', label: 'About', icon: User },
+    { href: '/zine', label: 'Zine', icon: Book },
+    { href: '/friends', label: 'Friends', icon: Users },
+    { href: '/favorites', label: 'Favorites', icon: Heart },
   ]
 
   const isTabActive = (tab: NavTab) => {
@@ -68,6 +78,50 @@ export function MobileAppShell() {
 
   return (
     <div className="sm:hidden select-none">
+      {/* ────────────────── FLOATING SCROLL TO TOP BUTTON ────────────────── */}
+      <AnimatePresence>
+        {showScrollTop && (
+          <motion.button
+            initial={{ opacity: 0, scale: 0.85, y: 10 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.85, y: 10 }}
+            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            className={cn(
+              "fixed right-4 z-40 p-2.5 rounded-full",
+              "bg-white/92 dark:bg-slate-950/92 backdrop-blur-md",
+              "border border-slate-200/50 dark:border-slate-800/60",
+              "shadow-lg shadow-black/5 dark:shadow-black/20",
+              "text-slate-600 dark:text-slate-350 hover:text-slate-900 dark:hover:text-white",
+              "active:scale-95 transition-all duration-200 cursor-pointer"
+            )}
+            style={{ 
+              bottom: currentlyPlaying 
+                ? `calc(5.75rem + env(safe-area-inset-bottom, 0px))` // above Spotify player
+                : `calc(5rem + env(safe-area-inset-bottom, 0px))` // above main navigation tabs
+            }}
+          >
+            {/* Shifting Pride Gradient Glow Border */}
+            <div 
+              className="absolute inset-0 rounded-full opacity-[0.1] dark:opacity-[0.15] pointer-events-none" 
+              style={{ 
+                backgroundImage: 'linear-gradient(135deg, var(--pride-colors-repeat))',
+                backgroundSize: '200% 200%',
+                animation: 'pride-shift 12s ease-in-out infinite'
+              }}
+            />
+            <svg 
+              className="w-4 h-4 relative z-10" 
+              fill="none" 
+              viewBox="0 0 24 24" 
+              stroke="currentColor" 
+              strokeWidth={2.5}
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" d="M5 15l7-7 7 7" />
+            </svg>
+          </motion.button>
+        )}
+      </AnimatePresence>
+
       {/* ────────────────── SPOTIFY FLOATING PLAYER BAR ────────────────── */}
       <AnimatePresence>
         {currentlyPlaying && (
@@ -162,9 +216,15 @@ export function MobileAppShell() {
                 key={tab.href}
                 href={tab.href}
                 className="flex flex-col items-center justify-center flex-1 h-full py-1 text-center cursor-pointer relative"
+                onClick={(e) => {
+                  if (active) {
+                    e.preventDefault()
+                    window.scrollTo({ top: 0, behavior: 'smooth' })
+                  }
+                }}
               >
                 <Icon className={cn("w-[21px] h-[21px] transition-colors duration-300", active ? "pride-text" : "text-slate-500 dark:text-slate-400")} />
-                <span className={cn(monoFont.className, "text-[8px] mt-0.5 lowercase tracking-wider font-semibold", active ? "pride-text" : "text-slate-500/80 dark:text-slate-400/80")}>
+                <span className={cn(monoFont.className, "text-[8px] mt-0.5 tracking-wider font-normal", active ? "pride-text" : "text-slate-500/80 dark:text-slate-400/80")}>
                   {tab.label}
                 </span>
 
@@ -173,7 +233,7 @@ export function MobileAppShell() {
                   <motion.div
                     layoutId="apple-active-dot"
                     className="absolute bottom-1 w-[4px] h-[4px] rounded-full bg-[hsl(var(--pride-glow-val))] shadow-[0_0_8px_hsl(var(--pride-glow-val)/0.9)]"
-                    transition={{ type: 'spring', damping: 20, stiffness: 220 }}
+                    transition={{ type: 'spring', damping: 25, stiffness: 280 }}
                   />
                 )}
               </Link>
@@ -183,18 +243,18 @@ export function MobileAppShell() {
           {/* More Tab Trigger */}
           <button
             onClick={() => setIsMoreOpen(!isMoreOpen)}
-            className="flex flex-col items-center justify-center flex-1 h-full py-1 text-center cursor-pointer relative"
+            className="flex flex-col items-center justify-center flex-1 w-full h-full py-0 text-center cursor-pointer relative"
           >
             <MoreHorizontal className={cn("w-[21px] h-[21px] transition-colors duration-300", isMoreOpen ? "pride-text" : "text-slate-500 dark:text-slate-400")} />
-            <span className={cn(monoFont.className, "text-[8px] mt-0.5 lowercase tracking-wider font-semibold", isMoreOpen ? "pride-text" : "text-slate-500/80 dark:text-slate-400/80")}>
-              more
+            <span className={cn(monoFont.className, "text-[8px] mt-0.5 tracking-wider font-normal", isMoreOpen ? "pride-text" : "text-slate-500/80 dark:text-slate-400/80")}>
+              More
             </span>
 
             {isMoreOpen && (
               <motion.div
                 layoutId="apple-active-dot"
                 className="absolute bottom-1 w-[4px] h-[4px] rounded-full bg-[hsl(var(--pride-glow-val))] shadow-[0_0_8px_hsl(var(--pride-glow-val)/0.9)]"
-                transition={{ type: 'spring', damping: 20, stiffness: 220 }}
+                transition={{ type: 'spring', damping: 25, stiffness: 280 }}
               />
             )}
           </button>
@@ -234,6 +294,12 @@ export function MobileAppShell() {
                 key={tab.href}
                 href={tab.href}
                 className="flex flex-col items-center justify-center flex-1 h-full py-1 text-center cursor-pointer relative"
+                onClick={(e) => {
+                  if (active) {
+                    e.preventDefault()
+                    window.scrollTo({ top: 0, behavior: 'smooth' })
+                  }
+                }}
               >
                 {/* M3 Sliding Pill Background */}
                 <div className="relative py-1 px-5 flex items-center justify-center rounded-full">
@@ -241,12 +307,12 @@ export function MobileAppShell() {
                     <motion.div
                       layoutId="m3-active-pill"
                       className="absolute inset-x-2 inset-y-0.5 rounded-full bg-[hsl(var(--pride-glow-val))]/12 -z-10"
-                      transition={{ type: 'spring', damping: 22, stiffness: 240 }}
+                      transition={{ type: 'spring', damping: 26, stiffness: 300 }}
                     />
                   )}
                   <Icon className={cn("w-5 h-5 transition-colors duration-250", active ? "pride-text" : "text-slate-500 dark:text-slate-400")} />
                 </div>
-                <span className={cn(monoFont.className, "text-[8px] mt-0.5 lowercase tracking-wider font-semibold", active ? "pride-text" : "text-slate-500/80 dark:text-slate-400/80")}>
+                <span className={cn(monoFont.className, "text-[8px] mt-0.5 tracking-wider font-normal", active ? "pride-text" : "text-slate-500/80 dark:text-slate-400/80")}>
                   {tab.label}
                 </span>
               </Link>
@@ -256,105 +322,102 @@ export function MobileAppShell() {
           {/* More Tab Trigger */}
           <button
             onClick={() => setIsMoreOpen(!isMoreOpen)}
-            className="flex flex-col items-center justify-center flex-1 h-full py-1 text-center cursor-pointer relative"
+            className="flex flex-col items-center justify-center flex-1 w-full h-full py-0 text-center cursor-pointer relative"
           >
             <div className="relative py-1 px-5 flex items-center justify-center rounded-full">
               {isMoreOpen && (
                 <motion.div
                   layoutId="m3-active-pill"
                   className="absolute inset-x-2 inset-y-0.5 rounded-full bg-[hsl(var(--pride-glow-val))]/12 -z-10"
-                  transition={{ type: 'spring', damping: 22, stiffness: 240 }}
+                  transition={{ type: 'spring', damping: 26, stiffness: 300 }}
                 />
               )}
               <MoreHorizontal className={cn("w-5 h-5 transition-colors duration-250", isMoreOpen ? "pride-text" : "text-slate-500 dark:text-slate-400")} />
             </div>
-            <span className={cn(monoFont.className, "text-[8px] mt-0.5 lowercase tracking-wider font-semibold", isMoreOpen ? "pride-text" : "text-slate-500/80 dark:text-slate-400/80")}>
-              more
+            <span className={cn(monoFont.className, "text-[8px] mt-0.5 tracking-wider font-normal", isMoreOpen ? "pride-text" : "text-slate-500/80 dark:text-slate-400/80")}>
+              More
             </span>
           </button>
         </nav>
       )}
 
-      {/* ────────────────── MORE SHEET DRAWER ────────────────── */}
+      {/* ────────────────── MORE FLOATING OVERLAY MENU ────────────────── */}
       <AnimatePresence>
         {isMoreOpen && (
           <>
-            {/* Backdrop */}
+            {/* Dark Blur Backdrop */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="fixed inset-0 z-40 bg-black/40 backdrop-blur-sm"
+              transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
+              className="fixed inset-0 z-40 bg-black/65 backdrop-blur-md"
               onClick={() => setIsMoreOpen(false)}
             />
 
-            {/* Bottom Sheet Menu */}
+            {/* Floating Menu Overlay (No Outer Container) */}
             <motion.div
-              initial={{ y: '100%', x: '-50%' }}
-              animate={{ y: 0, x: '-50%' }}
-              exit={{ y: '100%', x: '-50%' }}
-              transition={{ type: 'spring', damping: 25, stiffness: 240 }}
-              className={cn(
-                "fixed bottom-0 left-1/2 z-50 w-full max-w-md overflow-hidden rounded-t-2xl border-t shadow-[0_-8px_24px_rgba(0,0,0,0.12)]",
-                device === 'apple' 
-                  ? "bg-white/95 dark:bg-slate-900/98 backdrop-blur-md border-slate-200/50 dark:border-slate-800/80" 
-                  : "bg-white/95 dark:bg-slate-950/98 backdrop-blur-md border-slate-200 dark:border-slate-800",
-                "px-5 pt-5 pb-[calc(env(safe-area-inset-bottom,16px)+88px)]"
-              )}
+              variants={{
+                show: {
+                  transition: {
+                    staggerChildren: 0.04,
+                  }
+                },
+                hide: {
+                  transition: {
+                    staggerChildren: 0.03,
+                    staggerDirection: -1
+                  }
+                }
+              }}
+              initial="hide"
+              animate="show"
+              exit="hide"
+              className="fixed left-8 z-50 w-auto flex flex-col gap-4.5 items-start justify-center"
+              style={{ bottom: 'calc(6.5rem + env(safe-area-inset-bottom, 0px))' }}
             >
-              {/* Shifting Rainbow Gradient Background Tint Overlay */}
-              <div 
-                className="absolute inset-0 opacity-[0.05] dark:opacity-[0.09] pointer-events-none" 
-                style={{ 
-                  backgroundImage: 'linear-gradient(135deg, var(--pride-colors-repeat))',
-                  backgroundSize: '200% 200%',
-                  animation: 'pride-shift 15s ease-in-out infinite'
-                }}
-              />
-              {/* Drag Indicator Bar */}
-              <div className="w-12 h-1 bg-slate-200 dark:bg-slate-800 rounded-full mx-auto mb-6 relative z-10" />
+              {moreTabs.map((tab) => {
+                const active = isTabActive(tab)
+                const Icon = tab.icon
 
-              <div className="flex items-center justify-between mb-4 relative z-10">
-                <span className={cn(monoFont.className, "text-[10px] tracking-[0.2em] text-slate-400 dark:text-slate-500 font-semibold")}>
-                  others
-                </span>
-                <button
-                  onClick={() => setIsMoreOpen(false)}
-                  className="p-1 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-350"
-                >
-                  <X className="w-4 h-4" />
-                </button>
-              </div>
-
-              {/* Grid links layout */}
-              <div className="grid grid-cols-2 gap-3 relative z-10">
-                {moreTabs.map((tab) => {
-                  const active = isTabActive(tab)
-                  const Icon = tab.icon
-
-                  return (
+                return (
+                  <motion.div
+                    key={tab.href}
+                    variants={{
+                      show: { y: 0, opacity: 1, scale: 1 },
+                      hide: { y: 12, opacity: 0, scale: 0.95 }
+                    }}
+                    transition={{ type: 'spring', damping: 22, stiffness: 260 }}
+                  >
                     <Link
-                      key={tab.href}
                       href={tab.href}
                       className={cn(
-                        "flex items-center gap-3 p-3.5 rounded-xl border transition-all duration-200",
+                        "flex items-center gap-3 py-2 px-2 transition-transform duration-155 active:scale-95 select-none",
                         active
-                          ? "bg-[hsl(var(--pride-glow-val))]/10 border-[hsl(var(--pride-glow-val))]/30 pride-text shadow-[0_4px_12px_hsl(var(--pride-glow-val)/0.15)] font-bold"
-                          : "border-slate-200/50 dark:border-slate-800/40 bg-slate-100/10 dark:bg-slate-950/20 text-slate-600 dark:text-slate-400 hover:bg-slate-100/50 dark:hover:bg-slate-800/45 hover:text-slate-900 dark:hover:text-white"
+                          ? "pride-text font-normal text-sm"
+                          : "text-white/80 hover:text-white text-sm"
                       )}
+                      onClick={(e) => {
+                        if (active) {
+                          e.preventDefault()
+                          window.scrollTo({ top: 0, behavior: 'smooth' })
+                          setIsMoreOpen(false)
+                        }
+                      }}
                     >
-                      <Icon className="w-4 h-4 shrink-0" />
-                      <span className={cn(monoFont.className, "text-[11px] font-semibold tracking-wide lowercase")}>
+                      <Icon className={cn("w-5 h-5 shrink-0 transition-colors duration-200", active ? "pride-text" : "text-white/60")} />
+                      <span className={cn(monoFont.className, "tracking-wider")}>
                         {tab.label}
                       </span>
                     </Link>
-                  )
-                })}
-              </div>
+                  </motion.div>
+                )
+              })}
             </motion.div>
           </>
         )}
       </AnimatePresence>
+
     </div>
   )
 }

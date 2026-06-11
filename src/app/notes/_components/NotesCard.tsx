@@ -15,7 +15,7 @@ export function NotesCard({ post, isLast }: { post: NotesTypes; isLast?: boolean
                 target={isExternalLink ? "_blank" : undefined}
                 className={cn(
                     "block py-3",
-                    "transition-all duration-300",
+                    "transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] will-change-transform",
                     "hover:translate-x-1"
                 )}
             >

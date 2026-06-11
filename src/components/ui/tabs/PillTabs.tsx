@@ -2,6 +2,7 @@
 
 import { cn } from '@/lib/utils/utils'
 import { sansFont } from '@/styles/fonts/fonts'
+import { motion } from 'framer-motion'
 
 export interface PillTabItem<TId extends string> {
 	id: TId
@@ -37,16 +38,24 @@ export function PillTabs<TId extends string>({
 						onClick={() => onTabChange(tab.id)}
 						className={cn(
 							sansFont.className,
-							'pride-ring flex items-center gap-2.5 whitespace-nowrap rounded-sm border px-3 py-1.5 text-[10px] lowercase tracking-wider font-semibold transition-all duration-150 focus:outline-none focus-visible:ring-2',
+							'pride-ring flex items-center gap-2.5 whitespace-nowrap rounded-sm border px-3 py-1.5 text-[10px] lowercase tracking-wider font-semibold focus:outline-none focus-visible:ring-2 relative z-0',
 							isActive
-								? 'bg-[hsl(var(--pride-glow-val))]/10 text-[hsl(var(--pride-glow-val))] border-[hsl(var(--pride-glow-val))]/45 shadow-none'
-								: 'pride-outline-hover border-slate-200 bg-transparent text-slate-500 hover:border-slate-350 hover:text-slate-800 dark:border-slate-850 dark:text-slate-400 dark:hover:border-slate-700 dark:hover:text-slate-200'
+								? 'text-[hsl(var(--pride-glow-val))] border-[hsl(var(--pride-glow-val))]/45 shadow-none'
+								: 'pride-outline-hover border-slate-200 bg-transparent text-slate-500 hover:border-slate-350 hover:text-slate-800 dark:border-slate-850 dark:text-slate-400 dark:hover:border-slate-700 dark:hover:text-slate-200',
+							'transition-colors duration-200'
 						)}
 					>
-						<span>{tab.label}</span>
+						{isActive && (
+							<motion.span
+								layoutId="pill-active-bg"
+								className="absolute inset-0 bg-[hsl(var(--pride-glow-val))]/10 rounded-[inherit] -z-10"
+								transition={{ type: 'spring', damping: 25, stiffness: 280 }}
+							/>
+						)}
+						<span className="relative z-10">{tab.label}</span>
 						{showCount && (
 							<span className={cn(
-								'rounded-sm px-1.5 py-0.5 text-[9px] font-bold',
+								'rounded-sm px-1.5 py-0.5 text-[9px] font-bold relative z-10 transition-colors duration-200',
 								isActive
 									? 'bg-[hsl(var(--pride-glow-val))]/20 text-[hsl(var(--pride-glow-val))] dark:bg-[hsl(var(--pride-glow-val))]/30'
 									: 'bg-slate-100 text-slate-500 dark:bg-slate-900/50 dark:text-slate-400'
@@ -60,3 +69,4 @@ export function PillTabs<TId extends string>({
 		</div>
 	)
 }
+

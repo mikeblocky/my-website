@@ -9,7 +9,7 @@ import Link from "next/link"
 
 export default function LearningUtensils() {
     return (
-        <BaseContainer size="md" paddingX="md" paddingY="lg">
+        <BaseContainer size="lg" paddingX="md" paddingY="lg">
             <StackVertical gap="md">
                 {/* Breadcrumb */}
                 <div className="flex items-center justify-between">

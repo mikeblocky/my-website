@@ -27,7 +27,7 @@ export function BlogCard({ post, isLast, searchTerm, searchMatches = [] }: BlogC
                 href={`/blog/${post.slug}`} 
                 className={cn(
                     "block py-3",
-                    "transition-all duration-300"
+                    "transition-colors duration-200"
                 )}
             >
                 <article>

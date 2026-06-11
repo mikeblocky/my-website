@@ -26,8 +26,6 @@ export function DrawPromptForm({
 }: DrawPromptFormProps) {
   const [author, setAuthor] = useState('')
   const [body, setBody] = useState('')
-  const [character, setCharacter] = useState('')
-  const [media, setMedia] = useState('')
   const [imageUrls, setImageUrls] = useState<string[]>([])
 
   const handleImageUpload = async (file: File) => {
@@ -48,13 +46,11 @@ export function DrawPromptForm({
       await onSubmit({
         author: author.trim(),
         body: trimmedBody,
-        character: character.trim(),
-        media: media.trim(),
+        character: '',
+        media: '',
         imageUrls
       })
       setBody('')
-      setCharacter('')
-      setMedia('')
       setImageUrls([])
     } catch (e) {
       // Parent handles showing error
@@ -66,44 +62,18 @@ export function DrawPromptForm({
       className="bg-white/40 dark:bg-slate-950/20 rounded-xl border border-slate-200/50 dark:border-slate-850/50 shadow-sm flex flex-col overflow-hidden pride-focus-within-glow" 
       onSubmit={handleSubmit}
     >
-      {/* Top: Alias, Character, Media Fields */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 border-b border-slate-100 dark:border-slate-900 bg-slate-50/20 dark:bg-slate-950/20">
-        <div className="px-4 py-3 border-b sm:border-b-0 sm:border-r border-slate-100 dark:border-slate-900">
-          <input
-            type="text"
-            value={author}
-            onChange={(event) => setAuthor(event.target.value)}
-            placeholder="Your alias (optional)"
-            className={cn(
-              sansFont.className,
-              "w-full bg-transparent text-sm font-semibold text-slate-800 placeholder:text-muted-foreground/60 focus:outline-none dark:text-slate-100"
-            )}
-          />
-        </div>
-        <div className="px-4 py-3 border-b sm:border-b-0 sm:border-r border-slate-100 dark:border-slate-900">
-          <input
-            type="text"
-            value={character}
-            onChange={(event) => setCharacter(event.target.value)}
-            placeholder="Character(s) (optional)"
-            className={cn(
-              sansFont.className,
-              "w-full bg-transparent text-sm font-semibold text-slate-800 placeholder:text-muted-foreground/60 focus:outline-none dark:text-slate-100"
-            )}
-          />
-        </div>
-        <div className="px-4 py-3">
-          <input
-            type="text"
-            value={media}
-            onChange={(event) => setMedia(event.target.value)}
-            placeholder="Series / Media (optional)"
-            className={cn(
-              sansFont.className,
-              "w-full bg-transparent text-sm font-semibold text-slate-800 placeholder:text-muted-foreground/60 focus:outline-none dark:text-slate-100"
-            )}
-          />
-        </div>
+      {/* Top: Alias Field */}
+      <div className="border-b border-slate-100 dark:border-slate-900 px-4 py-3 bg-slate-50/20 dark:bg-slate-950/20">
+        <input
+          type="text"
+          value={author}
+          onChange={(event) => setAuthor(event.target.value)}
+          placeholder="Your alias (optional)"
+          className={cn(
+            sansFont.className,
+            "w-full bg-transparent text-sm font-semibold text-slate-800 placeholder:text-muted-foreground/60 focus:outline-none dark:text-slate-100"
+          )}
+        />
       </div>
 
       {/* Middle: Prompt Field */}
@@ -115,7 +85,7 @@ export function DrawPromptForm({
             e.currentTarget.style.height = 'auto';
             e.currentTarget.style.height = `${e.currentTarget.scrollHeight}px`;
           }}
-          placeholder="Suggest a drawing prompt... (e.g. A lazy cat asleep on old books)"
+          placeholder="Suggest a drawing prompt... (describe characters, actions, or series here)"
           rows={1}
           className={cn(
             sansFont.className,

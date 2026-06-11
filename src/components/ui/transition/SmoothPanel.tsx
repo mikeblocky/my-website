@@ -1,6 +1,7 @@
 'use client'
 
 import type { ReactNode } from 'react'
+import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 
 interface SmoothPanelProps {
 	children: ReactNode
@@ -9,15 +10,28 @@ interface SmoothPanelProps {
 }
 
 export function SmoothPanel({ children, panelKey, className }: SmoothPanelProps) {
+	const prefersReducedMotion = useReducedMotion()
+
+	if (prefersReducedMotion) {
+		return <div className={className}>{children}</div>
+	}
+
 	return (
-		<div
-			key={panelKey}
-			className={[
-				'motion-safe:animate-in motion-safe:fade-in-0 motion-safe:slide-in-from-bottom-1 motion-safe:duration-200',
-				className,
-			].filter(Boolean).join(' ')}
-		>
-			{children}
-		</div>
+		<AnimatePresence mode="wait" initial={false}>
+			<motion.div
+				key={panelKey}
+				initial={{ opacity: 0, y: 6 }}
+				animate={{ opacity: 1, y: 0 }}
+				exit={{ opacity: 0, y: -6 }}
+				transition={{
+					opacity: { duration: 0.18, ease: 'linear' },
+					y: { duration: 0.24, ease: [0.16, 1, 0.3, 1] }
+				}}
+				className={className}
+			>
+				{children}
+			</motion.div>
+		</AnimatePresence>
 	)
 }
+
