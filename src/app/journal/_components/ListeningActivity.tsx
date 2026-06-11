@@ -217,7 +217,7 @@ export function ListeningActivity() {
       <div className="mb-6">
         <h3 className="text-lg font-semibold text-slate-800 dark:text-slate-100">Listening activity</h3>
         <p className="text-sm text-muted-foreground leading-relaxed mt-1">
-          A live log of the music and tracks I am hearing across Spotify, Apple Music, and YouTube.
+          A live log of the music and tracks I am hearing on Spotify.
         </p>
       </div>
 
@@ -380,7 +380,7 @@ export function ListeningActivity() {
         <div className="space-y-6">
           {groupActivitiesByDay(activities).map((group) => (
             <div key={group.dayLabel} className="space-y-3">
-              <h4 className={cn(monoFont.className, "text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest")}>
+              <h4 className={cn(monoFont.className, "text-[10px] font-bold text-slate-400 dark:text-slate-500 lowercase tracking-widest")}>
                 {group.dayLabel}
               </h4>
               <div className="space-y-2">

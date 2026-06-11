@@ -125,8 +125,8 @@ export function ArticleLineRail({ articleId = 'content' }: ArticleLineRailProps)
 
     return (
         <aside className="hidden xl:flex xl:sticky xl:top-24 xl:h-fit xl:flex-col xl:items-end xl:gap-4">
-            <div className={cn(monoFont.className, "text-[11px] uppercase tracking-[0.28em] text-muted-foreground")}>
-                Lines
+            <div className={cn(monoFont.className, "text-[9px] uppercase tracking-[0.25em] text-muted-foreground/45 select-none")}>
+                lines
             </div>
             
             <div className="relative flex items-center pr-1">
@@ -163,27 +163,17 @@ export function ArticleLineRail({ articleId = 'content' }: ArticleLineRailProps)
                     {/* Background Rail */}
                     <div className="absolute right-0 top-0 bottom-0 w-[1px] bg-muted/30" />
 
-                    {/* Checkpoints */}
+                    {/* Checkpoints (Ruler Ticks) */}
                     <div className="absolute inset-0 flex flex-col justify-between pointer-events-none">
                         {checkpoints.map((ratio) => {
                             const line = Math.max(1, Math.round(ratio * (totalLines - 1)) + 1)
                             const isActive = Math.abs(activeLine - line) < (totalLines / 20)
-                            const isTooClose = Math.abs(activeLine - line) < 5
                             
                             return (
-                                <div key={ratio} className="flex items-center justify-end gap-2 group transition-all duration-300">
-                                    {!isTooClose && (
-                                        <span className={cn(
-                                            monoFont.className, 
-                                            "text-[10px] transition-colors duration-300",
-                                            isActive ? "pride-text font-bold" : "text-muted-foreground/30"
-                                        )}>
-                                            {formatLine(line)}
-                                        </span>
-                                    )}
+                                <div key={ratio} className="flex items-center justify-end gap-2 transition-all duration-300">
                                     <div className={cn(
-                                        "h-px transition-all duration-300",
-                                        isActive ? "w-4 bg-[hsl(var(--pride-glow-val))]/50" : "w-2 bg-muted-foreground/20"
+                                        "h-[1px] transition-all duration-300 rounded-full",
+                                        isActive ? "w-3 bg-[hsl(var(--pride-glow-val))]/50" : "w-1.5 bg-muted-foreground/15"
                                     )} />
                                 </div>
                             )
@@ -192,18 +182,18 @@ export function ArticleLineRail({ articleId = 'content' }: ArticleLineRailProps)
 
                     {/* Active Line Indicator (The Dash) */}
                     <div
-                        className="absolute right-0 w-6 h-px bg-[hsl(var(--pride-glow-val))] shadow-[0_0_8px_hsl(var(--pride-glow-val)/0.8)] z-10 transition-all duration-75"
+                        className="absolute right-0 w-4 h-[2px] bg-[hsl(var(--pride-glow-val))] shadow-[0_0_6px_hsl(var(--pride-glow-val)/0.7)] z-10 transition-all duration-75 rounded-full"
                         style={{ top: `${thumbOffset}%` }}
                     />
                     
                     {/* Current Line Label floating next to indicator */}
                     <div 
-                        className="absolute right-8 -translate-y-1/2 pointer-events-none transition-all duration-75"
+                        className="absolute right-7 -translate-y-1/2 pointer-events-none transition-all duration-75"
                         style={{ top: `${thumbOffset}%` }}
                     >
                         <span className={cn(
                             monoFont.className,
-                            "text-[14px] font-bold pride-text"
+                            "text-[11px] font-bold pride-text"
                         )}>
                             {formatLine(activeLine)}
                         </span>
@@ -211,7 +201,7 @@ export function ArticleLineRail({ articleId = 'content' }: ArticleLineRailProps)
                 </div>
             </div>
 
-            <div className={cn(monoFont.className, "text-[11px] text-muted-foreground mt-2")}>
+            <div className={cn(monoFont.className, "text-[10px] text-muted-foreground/40 mt-1 select-none lowercase")}>
                 {formatLine(totalLines)} total
             </div>
         </aside>

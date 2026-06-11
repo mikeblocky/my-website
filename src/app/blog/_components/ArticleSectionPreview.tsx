@@ -111,7 +111,7 @@ export function ArticleSectionPreviewMobile({ sections }: ArticleSectionPreviewP
                     <span className={cn(monoFont.className, "text-[11px] pride-text")}>
                         {String(activeIndex + 1).padStart(2, '0')}
                     </span>
-                    <span className={cn(sansFont.className, "text-sm font-semibold text-foreground dark:text-white line-clamp-2")}>
+                    <span className={cn(sansFont.className, "text-sm font-semibold text-foreground dark:text-white line-clamp-2 lowercase")}>
                         {activeSection?.label}
                     </span>
                 </div>
@@ -155,7 +155,7 @@ export function ArticleSectionPreviewMobile({ sections }: ArticleSectionPreviewP
                                         <span className={cn(monoFont.className, "text-[11px] shrink-0")}>
                                             {String(index + 1).padStart(2, '0')}
                                         </span>
-                                        <span className={cn(sansFont.className, "min-w-0 flex-1 text-sm font-medium")}>
+                                        <span className={cn(sansFont.className, "min-w-0 flex-1 text-sm font-medium lowercase")}>
                                             {section.label}
                                         </span>
                                     </Link>
@@ -180,44 +180,48 @@ export function ArticleSectionPreview({ sections }: ArticleSectionPreviewProps) 
     return (
         <div className="w-[14rem] 2xl:w-[16rem]">
             <div className="space-y-4">
-                <div className="flex flex-col items-end text-right">
-                    <div className={cn(monoFont.className, "text-[10px] uppercase tracking-[0.2em] text-muted-foreground/40")}>
-                        Section
+                <div className="flex flex-col items-end text-right gap-1 mb-2">
+                    <div className={cn(monoFont.className, "text-[9px] tracking-[0.25em] text-muted-foreground/40 select-none")}>
+                        table of contents
                     </div>
-                    <div className={cn(monoFont.className, "text-[12px] font-bold pride-text mt-1")}>
-                        {String(activeIndex + 1).padStart(2, '0')}
-                    </div>
-                    <div className={cn(sansFont.className, "text-sm font-bold text-foreground dark:text-white leading-tight mt-1 max-w-[200px]")}>
-                        {activeSection?.label}
-                    </div>
+                    <div className="h-[1px] w-6 bg-muted-foreground/20" />
                 </div>
 
-                {/* Expandable Progress List */}
-                <div className="group flex flex-col items-end gap-2.5 py-2">
-                    {sections.map((section) => {
+                {/* Progress List */}
+                <div className="flex flex-col items-end gap-3.5 py-1">
+                    {sections.map((section, index) => {
                         const isActive = section.id === activeSection?.id
                         return (
                             <Link
                                 key={section.id}
                                 href={`#${section.id}`}
                                 onClick={() => handleLinkClick(section.id)}
-                                className="flex items-center gap-3 group/link justify-end w-full"
+                                className="flex items-center gap-3.5 group/link justify-end w-full cursor-pointer select-none"
                                 style={{ paddingRight: `${Math.max(0, section.level - 1) * 8}px` }}
                             >
-                                <span className={cn(
-                                    sansFont.className,
-                                    "text-xs transition-all duration-300 text-right whitespace-normal break-words leading-snug",
-                                    isActive 
-                                        ? "opacity-100 font-bold text-foreground" 
-                                        : "opacity-0 -translate-x-2 group-hover:translate-x-0 group-hover:opacity-100 text-muted-foreground group-hover/link:text-foreground"
-                                )}>
-                                    {section.label}
-                                </span>
+                                <div className="flex items-baseline gap-2.5 text-right">
+                                    <span className={cn(
+                                        monoFont.className,
+                                        "text-[9px] transition-colors duration-300",
+                                        isActive ? "pride-text font-bold" : "text-muted-foreground/35 group-hover/link:text-muted-foreground/75"
+                                    )}>
+                                        {String(index + 1).padStart(2, '0')}
+                                    </span>
+                                    <span className={cn(
+                                        sansFont.className,
+                                        "text-xs transition-colors duration-300 lowercase leading-snug max-w-[150px] truncate",
+                                        isActive 
+                                            ? "font-bold text-foreground" 
+                                            : "text-muted-foreground/60 group-hover/link:text-foreground"
+                                    )}>
+                                        {section.label}
+                                    </span>
+                                </div>
                                 <div className={cn(
-                                    "h-1 transition-all duration-300 rounded-sm shrink-0",
+                                    "h-[3px] transition-all duration-300 rounded-full shrink-0",
                                     isActive 
-                                        ? "w-8 bg-[hsl(var(--pride-glow-val))] shadow-[0_0_8px_hsl(var(--pride-glow-val)/0.6)]" 
-                                        : "w-4 bg-muted-foreground/20 group-hover/link:bg-muted-foreground/40 group-hover/link:w-6"
+                                        ? "w-7 bg-[hsl(var(--pride-glow-val))] shadow-[0_0_8px_hsl(var(--pride-glow-val)/0.6)]" 
+                                        : "w-3 bg-muted-foreground/25 group-hover/link:bg-muted-foreground/50 group-hover/link:w-5"
                                 )} />
                             </Link>
                         )

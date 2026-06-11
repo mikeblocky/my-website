@@ -3,7 +3,7 @@
 import { FormEvent, useEffect, useRef, useState } from 'react'
 import { Palette, Undo2, Redo2, Eraser, Pencil, Trash2 } from 'lucide-react'
 import { Button } from '@/components/ui/primitives/button'
-import { sansFont } from '@/styles/fonts/fonts'
+import { sansFont, monoFont } from '@/styles/fonts/fonts'
 import { cn } from '@/lib/utils/utils'
 
 const MAX_BODY_LENGTH = 300
@@ -389,109 +389,111 @@ export function SketchbookCanvas({
   return (
     <form 
       onSubmit={handleSubmit} 
-      className="bg-white/40 dark:bg-slate-950/20 rounded-xl border border-slate-200/50 dark:border-slate-850/50 shadow-sm flex flex-col overflow-hidden pride-focus-within-glow"
+      className="bg-white/70 dark:bg-slate-950/40 rounded-2xl border border-slate-200/60 dark:border-slate-800/60 shadow-xl flex flex-col overflow-hidden pride-focus-within-glow backdrop-blur-md"
     >
       {/* Top Alias input field */}
-      <div className="border-b border-slate-100 dark:border-slate-900 px-4 py-3 bg-slate-50/20 dark:bg-slate-950/20">
-          <input
-            type="text"
-            placeholder="Your alias (optional)"
-            value={author}
-            onChange={(e) => setAuthor(e.target.value)}
-            className={cn(
-              sansFont.className,
-              "w-full bg-transparent text-sm font-semibold text-slate-800 placeholder:text-muted-foreground/60 focus:outline-none dark:text-slate-100"
-            )}
-          />
-        </div>
+      <div className="border-b border-slate-200/50 dark:border-slate-800/50 px-5 py-4 bg-slate-50/30 dark:bg-slate-950/30">
+        <input
+          type="text"
+          placeholder="Your alias (optional)"
+          value={author}
+          onChange={(e) => setAuthor(e.target.value)}
+          className={cn(
+            sansFont.className,
+            "w-full bg-transparent text-sm font-semibold text-slate-800 placeholder:text-slate-400 dark:placeholder:text-slate-650 focus:outline-none dark:text-slate-100"
+          )}
+        />
+      </div>
 
-        {/* Caption textarea */}
-        <div className="px-4 py-2">
-          <textarea
-            placeholder="Caption your artwork... (optional)"
-            value={caption}
-            onChange={(e) => setCaption(e.target.value)}
-            maxLength={MAX_BODY_LENGTH}
-            onInput={(e) => {
-              e.currentTarget.style.height = 'auto';
-              e.currentTarget.style.height = `${e.currentTarget.scrollHeight}px`;
-            }}
-            rows={1}
-            className={cn(
-              sansFont.className,
-              "w-full bg-transparent py-2 text-base text-slate-900 placeholder:text-slate-400 focus:outline-none dark:text-slate-100 dark:placeholder:text-slate-600 resize-none overflow-hidden min-h-[60px]"
-            )}
-          />
-        </div>
+      {/* Caption textarea */}
+      <div className="px-5 py-3.5 bg-white/20 dark:bg-slate-950/10">
+        <textarea
+          placeholder="Caption your artwork... (optional)"
+          value={caption}
+          onChange={(e) => setCaption(e.target.value)}
+          maxLength={MAX_BODY_LENGTH}
+          onInput={(e) => {
+            e.currentTarget.style.height = 'auto';
+            e.currentTarget.style.height = `${e.currentTarget.scrollHeight}px`;
+          }}
+          rows={1}
+          className={cn(
+            sansFont.className,
+            "w-full bg-transparent py-1.5 text-sm leading-relaxed text-slate-900 placeholder:text-slate-400 focus:outline-none dark:text-slate-150 dark:placeholder:text-slate-650 resize-none overflow-hidden min-h-[50px]"
+          )}
+        />
+      </div>
 
-        {/* Clean Drawing Area with Canvas and settings */}
-        <div className="flex flex-col items-center gap-6 px-4 pb-6 pt-4 border-t border-slate-100 dark:border-slate-900 bg-slate-50/10 dark:bg-slate-950/5 w-full">
-        <div className="flex flex-col md:flex-row items-center md:items-stretch justify-center gap-5 w-full max-w-[900px] mx-auto">
+      {/* Clean Drawing Area with Canvas and settings */}
+      <div className="flex flex-col items-center gap-6 px-4 pb-6 pt-5 border-t border-slate-200/50 dark:border-slate-800/50 bg-slate-50/10 dark:bg-slate-950/5 w-full">
+        <div className="flex flex-col md:flex-row items-center md:items-stretch justify-center gap-6 w-full max-w-[900px] mx-auto">
           
           {/* Left Panel: Brush Tools */}
-          <div className="w-full max-w-[400px] md:max-w-none md:w-[62px] bg-slate-50/50 dark:bg-slate-900/30 p-2 rounded-md border border-slate-200/60 dark:border-slate-800/60 flex flex-col gap-4 md:gap-6 md:justify-between md:items-center shadow-none order-1 md:order-1">
-            <div className="flex flex-row md:flex-col bg-slate-200/40 dark:bg-slate-850/50 p-1 rounded-sm border border-slate-200/60 dark:border-slate-800/60 w-full gap-1">
+          <div className="w-full max-w-[400px] md:max-w-none md:w-[68px] bg-white/80 dark:bg-slate-900/60 backdrop-blur-sm p-2.5 rounded-2xl border border-slate-200/50 dark:border-slate-800/60 flex flex-col gap-4 md:gap-5 md:justify-between md:items-center shadow-lg shadow-slate-100/10 dark:shadow-black/15 order-1 md:order-1">
+            
+            {/* Tool Switcher */}
+            <div className="flex flex-row md:flex-col bg-slate-100/60 dark:bg-slate-950/60 p-1 rounded-xl border border-slate-200/30 dark:border-slate-800/40 w-full gap-1">
               <button
                 type="button"
                 onClick={() => setIsDrawingTool('pencil')}
                 className={cn(
-                  "p-2 rounded-sm transition-colors flex items-center justify-center text-xs font-semibold select-none cursor-pointer flex-1 md:w-full",
+                  "p-2.5 rounded-lg transition-all duration-200 flex items-center justify-center cursor-pointer flex-1 md:w-full",
                   isDrawingTool === 'pencil' 
-                    ? "pride-text bg-slate-200/50 dark:bg-slate-800/80" 
-                    : "text-slate-400 hover:text-slate-950 dark:text-slate-500 dark:hover:text-slate-200"
+                    ? "pride-text bg-white dark:bg-slate-850 shadow-md shadow-black/5 pride-icon-glow scale-[1.03]" 
+                    : "text-slate-450 hover:text-slate-700 dark:text-slate-500 dark:hover:text-slate-300 hover:bg-white/40 dark:hover:bg-slate-800/20"
                 )}
-                title="Pencil mode"
+                title="Pencil mode (B)"
               >
-                <Pencil size={14} />
+                <Pencil size={15} />
               </button>
               <button
                 type="button"
                 onClick={() => setIsDrawingTool('eraser')}
                 className={cn(
-                  "p-2 rounded-sm transition-colors flex items-center justify-center text-xs font-semibold select-none cursor-pointer flex-1 md:w-full",
+                  "p-2.5 rounded-lg transition-all duration-200 flex items-center justify-center cursor-pointer flex-1 md:w-full",
                   isDrawingTool === 'eraser' 
-                    ? "pride-text bg-slate-200/50 dark:bg-slate-800/80" 
-                    : "text-slate-400 hover:text-slate-950 dark:text-slate-500 dark:hover:text-slate-200"
+                    ? "pride-text bg-white dark:bg-slate-850 shadow-md shadow-black/5 pride-icon-glow scale-[1.03]" 
+                    : "text-slate-450 hover:text-slate-700 dark:text-slate-500 dark:hover:text-slate-300 hover:bg-white/40 dark:hover:bg-slate-800/20"
                 )}
-                title="Eraser mode"
+                title="Eraser mode (E)"
               >
-                <Eraser size={14} />
+                <Eraser size={15} />
               </button>
             </div>
 
             {/* Undo, Redo, Clear */}
-            <div className="flex flex-row md:flex-col bg-slate-200/40 dark:bg-slate-850/50 p-1 rounded-sm border border-slate-200/60 dark:border-slate-800/60 items-center justify-between md:justify-center gap-1 md:gap-1.5 w-full">
+            <div className="flex flex-row md:flex-col bg-slate-100/60 dark:bg-slate-950/60 p-1.5 rounded-xl border border-slate-200/30 dark:border-slate-800/40 items-center justify-between md:justify-center gap-1 w-full">
               <button
                 type="button"
                 onClick={handleUndo}
                 disabled={!historyState.canUndo}
-                className="p-1.5 rounded-sm text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-750 disabled:opacity-30 disabled:pointer-events-none transition-all cursor-pointer flex-1 md:w-full flex items-center justify-center"
+                className="p-2 rounded-lg text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-250 hover:bg-white dark:hover:bg-slate-800 disabled:opacity-20 disabled:pointer-events-none transition-all cursor-pointer flex-1 md:w-full flex items-center justify-center"
                 title="Undo (Ctrl+Z)"
               >
-                <Undo2 size={13} />
+                <Undo2 size={14} />
               </button>
               <button
                 type="button"
                 onClick={handleRedo}
                 disabled={!historyState.canRedo}
-                className="p-1.5 rounded-sm text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-750 disabled:opacity-30 disabled:pointer-events-none transition-all cursor-pointer flex-1 md:w-full flex items-center justify-center"
+                className="p-2 rounded-lg text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-250 hover:bg-white dark:hover:bg-slate-800 disabled:opacity-20 disabled:pointer-events-none transition-all cursor-pointer flex-1 md:w-full flex items-center justify-center"
                 title="Redo (Ctrl+Y)"
               >
-                <Redo2 size={13} />
+                <Redo2 size={14} />
               </button>
-              <div className="w-[1px] md:w-full h-auto md:h-[1px] bg-slate-250 dark:bg-slate-800 self-stretch md:self-auto my-0.5 md:my-1" />
+              <div className="w-[1px] md:w-4/5 h-4 md:h-[1px] bg-slate-200 dark:bg-slate-800 self-center my-0.5 md:my-1" />
               <button
                 type="button"
                 onClick={initCanvas}
-                className="p-1.5 rounded-sm text-slate-400 hover:text-red-650 dark:text-slate-500 dark:hover:text-red-400 hover:bg-red-500/5 dark:hover:bg-red-950/20 transition-all cursor-pointer flex-1 md:w-full flex items-center justify-center"
+                className="p-2 rounded-lg text-slate-400 hover:text-red-500 dark:text-slate-500 dark:hover:text-red-400 hover:bg-red-500/10 dark:hover:bg-red-950/30 transition-all cursor-pointer flex-1 md:w-full flex items-center justify-center"
                 title="Clear board"
               >
-                <Trash2 size={13} />
+                <Trash2 size={14} />
               </button>
             </div>
 
             {/* Brush Thickness Slider */}
-            <div className="flex flex-col items-center gap-2 bg-slate-200/40 dark:bg-slate-850/50 px-1.5 py-2 rounded-sm border border-slate-200/60 dark:border-slate-800/60 w-full">
+            <div className="flex flex-col items-center gap-2.5 bg-slate-100/60 dark:bg-slate-950/60 p-2 rounded-xl border border-slate-200/30 dark:border-slate-800/40 w-full">
               <input
                 type="range"
                 min="1"
@@ -501,12 +503,12 @@ export function SketchbookCanvas({
                 className="w-full md:[writing-mode:vertical-lr] md:[direction:rtl] h-1.5 md:h-24 md:w-1.5 accent-[hsl(var(--pride-glow-val))] cursor-pointer bg-slate-200 dark:bg-slate-800 rounded-full my-1"
                 title={`Brush size: ${brushSize}px`}
               />
-              <div className="w-7 h-7 rounded-full bg-slate-50 dark:bg-slate-900 flex items-center justify-center border border-slate-200/60 dark:border-slate-800/60 shadow-none shrink-0">
+              <div className="w-8 h-8 rounded-full bg-white dark:bg-slate-900 flex items-center justify-center border border-slate-200/60 dark:border-slate-800/60 shadow-inner shrink-0 relative overflow-hidden">
                 <div
                   className="rounded-full transition-all"
                   style={{
-                    width: `${Math.max(2, Math.min(brushSize, 18))}px`,
-                    height: `${Math.max(2, Math.min(brushSize, 18))}px`,
+                    width: `${Math.max(2, Math.min(brushSize, 20))}px`,
+                    height: `${Math.max(2, Math.min(brushSize, 20))}px`,
                     backgroundColor: isDrawingTool === 'eraser' ? '#cbd5e1' : brushColor
                   }}
                 />
@@ -541,19 +543,22 @@ export function SketchbookCanvas({
                     (e.target as HTMLInputElement).blur()
                   }
                 }}
-                className="w-9 h-6 text-center text-[10px] font-bold bg-white dark:bg-slate-900 border border-slate-200/60 dark:border-slate-800/60 rounded-sm text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-1 focus:ring-[hsl(var(--pride-glow-val))] shrink-0"
+                className={cn(
+                  monoFont.className,
+                  "w-9 h-6 text-center text-[10px] font-bold bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800/80 rounded-lg text-slate-700 dark:text-slate-300 focus:outline-none focus:ring-1 focus:ring-[hsl(var(--pride-glow-val))] shrink-0"
+                )}
                 title="Type custom size (1-100)"
               />
             </div>
           </div>
 
           {/* Center Panel: Canvas */}
-          <div className="relative w-full max-w-[400px] aspect-square rounded-md overflow-hidden border border-slate-200 bg-white dark:border-slate-800/60 shadow-none order-2 md:order-2 shrink-0">
+          <div className="relative w-full max-w-[400px] aspect-square rounded-2xl overflow-hidden border-4 border-slate-100 dark:border-slate-900 shadow-xl order-2 md:order-2 shrink-0">
             <canvas
               ref={canvasRef}
               width={600}
               height={600}
-              className="absolute inset-0 w-full h-full"
+              className="absolute inset-0 w-full h-full shadow-[inset_0_2px_8px_rgba(0,0,0,0.06)]"
             />
             <canvas
               ref={tempCanvasRef}
@@ -563,21 +568,21 @@ export function SketchbookCanvas({
               onPointerMove={draw}
               onPointerUp={stopDrawing}
               onPointerCancel={stopDrawing}
-              className="absolute inset-0 w-full h-full cursor-crosshair touch-none"
+              className="absolute inset-0 w-full h-full cursor-crosshair touch-none z-10"
             />
           </div>
 
           {/* Right Panel: Colors */}
-          <div className="w-full max-w-[400px] md:max-w-none md:w-[62px] bg-slate-50/50 dark:bg-slate-900/30 p-2 rounded-md border border-slate-200/60 dark:border-slate-800/60 flex flex-col shadow-none order-3 md:order-3">
-            <div className="grid grid-cols-5 md:flex md:flex-col md:justify-between md:items-center md:h-full gap-2.5 md:gap-3 w-full h-full bg-slate-200/40 dark:bg-slate-855/50 px-2 py-2.5 rounded-sm border border-slate-200/60 dark:border-slate-800/60">
+          <div className="w-full max-w-[400px] md:max-w-none md:w-[68px] bg-white/80 dark:bg-slate-900/60 backdrop-blur-sm p-2.5 rounded-2xl border border-slate-200/50 dark:border-slate-800/60 flex flex-col shadow-lg shadow-slate-100/10 dark:shadow-black/15 order-3 md:order-3">
+            <div className="grid grid-cols-5 md:flex md:flex-col md:justify-between md:items-center md:h-full gap-2.5 md:gap-3 w-full h-full bg-slate-100/60 dark:bg-slate-950/60 px-2 py-3 rounded-xl border border-slate-200/30 dark:border-slate-800/40">
               {PRESETS.map((color) => (
                 <button
                   key={color.hex}
                   type="button"
                   onClick={() => setBrushColor(color.hex)}
                   className={cn(
-                    "w-5.5 h-5.5 rounded-full border border-slate-200 dark:border-slate-800 relative transition-all duration-100 scale-100 hover:scale-110 shadow-sm cursor-pointer",
-                    brushColor === color.hex && "ring-2 ring-[hsl(var(--pride-glow-val))] ring-offset-2 dark:ring-offset-slate-950 scale-105"
+                    "w-[22px] h-[22px] rounded-full border border-slate-200 dark:border-slate-800 relative transition-all duration-200 scale-100 hover:scale-120 shadow-md cursor-pointer",
+                    brushColor === color.hex && "ring-2 ring-[hsl(var(--pride-glow-val))] ring-offset-2 dark:ring-offset-slate-900 scale-110 shadow-lg shadow-[hsl(var(--pride-glow-val))/0.15]"
                   )}
                   style={{ backgroundColor: color.hex }}
                   title={color.name}
@@ -586,8 +591,8 @@ export function SketchbookCanvas({
               
               <label
                 className={cn(
-                  "w-5.5 h-5.5 rounded-full border border-slate-200/60 dark:border-slate-800/60 flex items-center justify-center relative cursor-pointer hover:scale-110 shadow-sm overflow-hidden bg-background transition-all",
-                  !PRESETS.some(p => p.hex === brushColor) && "ring-2 ring-[hsl(var(--pride-glow-val))] ring-offset-2 dark:ring-offset-slate-950 scale-105"
+                  "w-[22px] h-[22px] rounded-full border border-slate-200/80 dark:border-slate-800/80 flex items-center justify-center relative cursor-pointer hover:scale-120 shadow-md bg-white dark:bg-slate-900 transition-all",
+                  !PRESETS.some(p => p.hex === brushColor) && "ring-2 ring-[hsl(var(--pride-glow-val))] ring-offset-2 dark:ring-offset-slate-900 scale-110 shadow-lg shadow-[hsl(var(--pride-glow-val))/0.15]"
                 )}
                 title="Custom Color"
               >
@@ -606,14 +611,14 @@ export function SketchbookCanvas({
       </div>
 
       {/* Bottom row */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-t border-slate-100 dark:border-slate-900 px-4 py-3.5 bg-slate-50/20 dark:bg-slate-950/20">
-        <span className="text-xs font-semibold text-slate-400 dark:text-slate-550 select-none">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-t border-slate-200/50 dark:border-slate-850/50 px-5 py-4 bg-slate-50/30 dark:bg-slate-950/30">
+        <span className="text-xs font-semibold text-slate-400 dark:text-slate-500 select-none">
           Draw on the canvas above to submit your artwork!
         </span>
 
         <div className="flex flex-col w-full sm:w-auto gap-2">
           {errorMessage && (
-            <div className="rounded-sm border border-red-200/50 bg-red-50/50 dark:border-red-950/20 dark:bg-red-950/20 px-3 py-1.5 text-xs text-red-600 dark:text-red-400">
+            <div className="rounded-lg border border-red-200/50 bg-red-50/50 dark:border-red-950/20 dark:bg-red-950/20 px-3.5 py-2 text-xs text-red-600 dark:text-red-400 font-medium">
               {errorMessage}
             </div>
           )}
@@ -621,7 +626,7 @@ export function SketchbookCanvas({
           <Button
             type="submit"
             disabled={isPending || isCooldownActive}
-            className="w-full sm:w-auto pride-button rounded-md h-9 px-4.5 text-xs font-semibold"
+            className="w-full sm:w-auto pride-button rounded-xl h-9 px-5 text-xs font-semibold"
             title={isCooldownActive ? `You can send another artwork in ${cooldownLabel}` : undefined}
           >
             {isCooldownActive ? cooldownLabel : 'Publish artwork'}

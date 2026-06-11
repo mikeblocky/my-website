@@ -1,0 +1,35 @@
+import { NextResponse } from 'next/server'
+import { getCurrentlyPlaying, getAccessToken, recordTrackPlay } from '@/lib/spotify/spotify'
+
+export const dynamic = 'force-dynamic'
+
+export async function GET() {
+	try {
+		const token = await getAccessToken()
+		if (!token) {
+			return NextResponse.json({ success: true, currentlyPlaying: null })
+		}
+
+		const currentlyPlaying = await getCurrentlyPlaying()
+		
+		// If playing and progress metrics exist, record it to custom history in Redis
+		if (currentlyPlaying && currentlyPlaying.progressMs && currentlyPlaying.durationMs) {
+			try {
+				await recordTrackPlay(currentlyPlaying, currentlyPlaying.progressMs, currentlyPlaying.durationMs)
+			} catch (e) {
+				console.error('Error recording track play in Redis:', e)
+			}
+		}
+
+		return NextResponse.json({
+			success: true,
+			currentlyPlaying
+		})
+	} catch (err: any) {
+		console.error('Error fetching currently playing track:', err)
+		return NextResponse.json({
+			success: false,
+			error: 'Internal server error'
+		}, { status: 500 })
+	}
+}

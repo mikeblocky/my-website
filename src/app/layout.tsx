@@ -4,6 +4,7 @@ import { ThemeProvider } from '@/components/ui/theme/theme-provider'
 import { cn } from '@/lib/utils/utils'
 import { monoFont, sansFont, codeFont } from '@/styles/fonts/fonts'
 import { PageTransition } from '@/components/layout/page-transition/PageTransition'
+import { MobileAppShell } from '@/components/layout/mobile-app-shell/MobileAppShell'
 
 const SITE_URL = 'https://www.mikeblocky.com'
 
@@ -193,13 +194,14 @@ export default function RootLayout({
         >
           <div className="flex flex-col min-h-screen relative">
             <div className="flex-1 flex flex-col">
-              <main className="container mx-auto mt-4 px-4 flex-1">
+              <main className="container mx-auto mt-4 px-4 flex-1 pb-32 sm:pb-4">
                 <PageTransition>
                   {children}
                 </PageTransition>
               </main>
             </div>
           </div>
+          <MobileAppShell />
         </ThemeProvider>
       </body>
     </html>
