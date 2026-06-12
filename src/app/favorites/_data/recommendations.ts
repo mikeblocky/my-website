@@ -189,7 +189,7 @@ export const recommendationGroups: Record<RecommendationTab, {
 				covers: [
 					'/recommendations/solanin.jpg'
 				],
-				thought: 'This was my bible during that post-college phase where you’re just drifting and terrified of the future. Asano Inio perfectly captures the raw, confusing ache of wanting to create something meaningful while struggling to pay rent. The band, the grief, the messy love; it feels so painfully real and close to home.',
+				thought: 'This was my bible during that high school to read an adult phase where you’re just drifting and terrified of the future. Asano Inio perfectly captures the raw, confusing ache of wanting to create something meaningful while struggling to pay rent. The band, the grief, the messy love; it feels so painfully real and close to home.',
 				links: [
 					{ label: 'Author', url: 'https://x.com/asano_inio' },
 					{ label: 'Purchase', url: 'https://www.amazon.co.jp/dp/B009JZH4CY' }
