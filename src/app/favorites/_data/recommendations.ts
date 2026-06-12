@@ -38,7 +38,7 @@ export const recommendationGroups: Record<RecommendationTab, {
 				covers: [
 					'/recommendations/skip-and-loafer_manga.jpg'
 				],
-				thought: 'This is the one I keep coming back to when I want something gentle but still honest. I love how nobody changes all at once. Everyone is still awkward, a little selfish, a little kind, and somehow that makes their growth feel more real to me.',
+				thought: 'Every time I reread this, I’m reminded of how rare it is for a story to treat its characters with such complete kindness. It’s my absolute comfort read because nobody changes overnight; their growth is slow, quiet, and feels so honest. It always makes me feel like it’s okay to be a little awkward, as long as we keep trying to connect.',
 				links: [
 					{ label: 'Latest volume', url: 'https://www.kodansha.co.jp/comic/products/0000425789' },
 					{ label: 'Comic DAYS', url: 'https://comic-days.com/episode/10834108156642600786' },
@@ -57,7 +57,7 @@ export const recommendationGroups: Record<RecommendationTab, {
 					'/recommendations/kemutai_hanashi.jpg',
 					'/recommendations/kemutai-hanashi.png'
 				],
-				thought: 'I really like how this story lets the relationship stay a little hard to explain. It does not rush to name everything. It just sits with the feeling of choosing someone, sharing daily life, and not needing the outside world to fully understand it.',
+				thought: 'There’s this beautiful, hazy atmosphere to the way their relationship develops. I love how it doesn’t rush to label what they are to each other. It just sits with the quiet comfort of sharing a cigarette, choosing to live together, and letting the days pass without needing the outside world’s approval.',
 				links: [
 					{ label: 'COMIC Nettai', url: 'https://www.comicnettai.com/book/9' },
 					{ label: 'Author', url: 'https://x.com/fuhit0be' },
@@ -73,7 +73,7 @@ export const recommendationGroups: Record<RecommendationTab, {
 				covers: [
 					'/recommendations/i-cannot-reach-you.jpg'
 				],
-				thought: 'This one is sweet in a way that feels easy to understand. They are already close, but saying what they actually mean is still difficult. I like that it keeps the tenderness simple without making it feel effortless.',
+				thought: 'What strikes me most here is how much weight is carried by the things they don’t say. They are childhood friends, so they are incredibly close, yet communicating their actual feelings is the hardest part. I love that the story respects that difficulty; it makes the small, tender moments feel so earned and fragile.',
 				links: [
 					{ label: 'Latest volume', url: 'https://www.kadokawa.co.jp/product/322407001875/' },
 					{ label: 'pixiv Comic', url: 'https://comic.pixiv.net/works/5306' },
@@ -90,7 +90,7 @@ export const recommendationGroups: Record<RecommendationTab, {
 				covers: [
 					'/recommendations/hanako_manga.jpg'
 				],
-				thought: 'I am completely captivated by the gorgeous, intricate art style that feels like a dark fairytale come to life. Underneath the playful rumors of school ghosts, there is a beautifully bittersweet and deeply emotional story about life, death, and human connection that stays with you long after reading.',
+				thought: 'The artwork is what drew me in, feeling like stepping into a stained-glass fairytale, but what kept me was the bittersweet depth of the story. Beneath the playful school ghost rumors, there’s a heavy, lingering sadness about mortality, regret, and wanting to protect someone even when you know time is running out.',
 				links: [
 					{ label: 'Manga site', url: 'https://magazine.jp.square-enix.com/gfantasy/story/hanakokun/' },
 					{ label: 'Anime site', url: 'https://hanakokun.com/2nd/' },
@@ -108,7 +108,7 @@ export const recommendationGroups: Record<RecommendationTab, {
 				covers: [
 					'/recommendations/hikari.jpg'
 				],
-				thought: 'A story about a sister processing the sudden loss of her beloved older brother. It is a gentle but devastating look at grief, self-blame, and the hidden facets of those who have departed, showing the quiet connections formed between those left behind.',
+				thought: 'Grief is so hard to capture without feeling performative, but this story hits me right in the chest. Watching the sister slowly piece together the life of her brother after his sudden death is incredibly painful but so tender. It reminded me of how we only ever see fragments of the people we love.',
 				links: [
 					{ label: 'COMIC Nettai', url: 'https://www.comicnettai.com/book/26' },
 					{ label: 'Author', url: 'https://x.com/hibi_no_anz' },
@@ -125,7 +125,7 @@ export const recommendationGroups: Record<RecommendationTab, {
 				covers: [
 					'/recommendations/gakkou.jpg'
 				],
-				thought: 'A poignant narrative detailing the lives of young girls preparing for junior high school entrance exams, depicting their academic struggles, family expectations, and the bittersweet transition from childhood to adolescence under societal pressure.',
+				thought: 'This really took me back to that suffocating anxiety of youth where every exam and parent’s expectation feels like the end of the world. It captures the bittersweet transition from childhood to junior high with so much empathy, showing the small, secret rebellions of young girls just trying to find their own feet.',
 				links: [
 					{ label: 'Author', url: 'https://x.com/machikomemo' },
 					{ label: 'Purchase', url: 'https://www.amazon.co.jp/gp/aw/d/B0CHW65D9V' }
@@ -141,7 +141,7 @@ export const recommendationGroups: Record<RecommendationTab, {
 				covers: [
 					'/recommendations/time.jpg'
 				],
-				thought: 'A beautifully introspective manga that explores the subtle, complex dynamics of human relationships and time, capturing the nostalgia of youth and the quiet moments of connection with Sagan Sagan\'s signature sensitive and detailed artwork.',
+				thought: 'I love Sagan Sagan’s art; there’s a delicate, soft texture to it that matches the introspective tone of the story. It feels like a quiet walk through nostalgia and time, looking at the silent connections we form that shape who we are, even if they only last for a season.',
 				links: [
 					{ label: 'Manga preview', url: 'https://shiori-on.com/product/handkerchief' },
 					{ label: 'Author', url: 'https://x.com/sagan2staff' },
@@ -158,7 +158,7 @@ export const recommendationGroups: Record<RecommendationTab, {
 				covers: [
 					'/recommendations/hirayasumi.jpg'
 				],
-				thought: 'A heartwarming, cozy slice-of-life manga about a free-spirited young man and his cousin living in Tokyo, celebrating the beauty of ordinary days and quiet connections.',
+				thought: 'This is like a warm cup of tea on a rainy afternoon. Following Hiro’s slow, aimless days in Tokyo makes me want to slow down my own life. It finds so much magic in the mundane: eating croquettes, chatting with neighbors, and just sitting on the veranda. It’s a gentle reminder that you don’t need a grand purpose to live a meaningful life.',
 				links: [
 					{ label: 'Author', url: 'https://x.com/shinzokeigo' },
 					{ label: 'Purchase (latest volume)', url: 'https://www.amazon.co.jp/dp/4098638878' }
@@ -174,7 +174,7 @@ export const recommendationGroups: Record<RecommendationTab, {
 				covers: [
 					'/recommendations/star_gazing.jpg'
 				],
-				thought: 'A profoundly moving and bittersweet story of unconditional love and loyalty between a man and his dog on a final road trip. A quiet masterpiece that lingers long after the final page.',
+				thought: 'I don’t think I’ve ever cried as hard at a manga as I did with this one. It’s a devastating look at loneliness, but the dog Happy’s unwavering, pure devotion to his owner is what stays with me. It’s a painful read, but it makes me want to hold my own loved ones a little closer.',
 				links: [
 					{ label: 'Futabasha', url: 'https://www.futabasha.co.jp/book/97845753014340000000' }
 				]
@@ -189,7 +189,7 @@ export const recommendationGroups: Record<RecommendationTab, {
 				covers: [
 					'/recommendations/solanin.jpg'
 				],
-				thought: 'A beautifully raw and empathetic exploration of post-college uncertainty, relationships, and the search for purpose in modern-day Japan.',
+				thought: 'This was my bible during that post-college phase where you’re just drifting and terrified of the future. Asano Inio perfectly captures the raw, confusing ache of wanting to create something meaningful while struggling to pay rent. The band, the grief, the messy love; it feels so painfully real and close to home.',
 				links: [
 					{ label: 'Author', url: 'https://x.com/asano_inio' },
 					{ label: 'Purchase', url: 'https://www.amazon.co.jp/dp/B009JZH4CY' }
@@ -205,7 +205,7 @@ export const recommendationGroups: Record<RecommendationTab, {
 				covers: [
 					'/recommendations/stove.jpg'
 				],
-				thought: 'An award-winning collection of short stories capturing the subtle, delicate shifts in daily life, relationships, and quiet emotional landscapes.',
+				thought: 'These short stories feel like quiet poetry. They capture those small, fleeting shifts in relationships, like the moment you realize you’re drifting apart, or the quiet warmth of a shared room. The title story about a personified stove witnessing a breakup is incredibly creative and deeply moving.',
 				links: [
 					{ label: 'Author', url: 'https://x.com/ROIHOS' },
 					{ label: 'Purchase', url: 'https://amazon.co.jp/dp/B0BMKHQLMM' }
@@ -221,7 +221,7 @@ export const recommendationGroups: Record<RecommendationTab, {
 				covers: [
 					'/recommendations/kirakira.jpg'
 				],
-				thought: 'A sensitive and warm slice-of-life omnibus manga focusing on the lives, friendships, and subtle emotional changes of high school boys.',
+				thought: 'I really love how grounded this omnibus feels. It follows these high school boys without the usual dramatic tropes, focusing instead on the quiet, fragile moments of adolescence and friendship. It’s gentle, a little melancholy, and feels very honest.',
 				links: [
 					{ label: 'Author', url: 'https://x.com/koike_sadaji' },
 					{ label: 'Futabasha', url: 'https://www.futabasha.co.jp/book/97845758599660000000' }
@@ -237,7 +237,7 @@ export const recommendationGroups: Record<RecommendationTab, {
 				covers: [
 					'/recommendations/one_room_angel.jpg'
 				],
-				thought: 'A bittersweet, deeply emotional, and humorous story of a down-on-his-luck man and a mysterious angel who share a tiny apartment and heal each other\'s hidden wounds.',
+				thought: 'An incredibly unique story that balances crude humor with deep, crushing emotional weight. The relationship between a broken, hopeless man and a cynical angel is so beautifully written. It’s a story about healing from trauma in the most unexpected way, and the ending always leaves me in tears.',
 				links: [
 					{ label: 'Author', url: 'https://x.com/harada_info' },
 					{ label: 'Shodensha', url: 'https://www.shodensha.co.jp/oneroomangel/' },
@@ -254,14 +254,14 @@ export const recommendationGroups: Record<RecommendationTab, {
 				covers: [
 					'/recommendations/erased.jpg'
 				],
-				thought: 'A tense, suspenseful mystery thriller about a man sent back in time to prevent a tragedy, combining emotional depth with edge-of-your-seat storytelling.',
+				thought: 'While the mystery and time-travel keep you hooked, for me, the heart of the story is Satoru’s desperate drive to save Hinazuki. That quiet scene of her seeing a warm breakfast for the first time always stays with me. It’s a thriller, but at its core, it’s about the life-saving power of simple kindness.',
 				links: [
 					{ label: 'Kadokawa', url: 'https://www.kadokawa.co.jp/product/321208000180/' }
 				]
 			},
 			{
 				title: 'Summer Ghost (サマーゴースト)',
-				creator: 'Yoshi Inomi (井ノ巳吉), loundraw, Hirotaka Adachi (Otsuichi) (安達寛高（乙一））',
+				creator: 'Yoshi Inomi (井ノ巳吉), loundraw, Adachi Hirotaka (Otsuichi) (安達寛高（乙一））',
 				category: 'manga',
 				medium: 'Manga',
 				status: 'Recommended',
@@ -269,11 +269,27 @@ export const recommendationGroups: Record<RecommendationTab, {
 				covers: [
 					'/recommendations/summer_ghost_manga.jpg'
 				],
-				thought: 'The manga adaptation of the beautiful film, expanding on the three high school students encountering a ghost during a quiet summer night.',
+				thought: 'It’s amazing how much emotion is packed into such a short story. The manga does a wonderful job capturing the film’s quiet, reflective mood. It deals with some really heavy themes of suicide and despair, but it leaves you with this fragile, precious sense of wanting to live.',
 				links: [
 					{ label: 'Author - loundraw', url: 'https://x.com/loundraw' },
 					{ label: 'Online reading', url: 'https://tonarinoyj.jp/episode/3269754496537164447' },
 					{ label: 'Purchase', url: 'https://www.amazon.co.jp/dp/4088921372' }
+				]
+			},
+			{
+				title: 'Pajama Gohan (ぱじゃまご飯)',
+				creator: 'Megumi Watanabe (わたなべ萌)',
+				category: 'manga',
+				medium: 'Manga',
+				status: 'Recommended',
+				imageUrl: '/recommendations/pajama.jpg',
+				covers: [
+					'/recommendations/pajama.jpg'
+				],
+				thought: 'There’s something so comforting about Pajama Gohan. It follows a freelance guy who works from home and cooks simple, satisfying comfort meals while staying in his pajamas. Reading it feels like a lazy Sunday morning, making me want to whip up something warm and just enjoy being cozy.',
+				links: [
+					{ label: 'Author', url: 'https://x.com/wtnbmotimoto' },
+					{ label: 'Purchase', url: 'https://www.amazon.co.jp/dp/4046842563' }
 				]
 			}
 		],
