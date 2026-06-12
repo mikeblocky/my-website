@@ -8,7 +8,7 @@ interface RecommendationCardProps {
 }
 
 export function RecommendationCard({ item }: RecommendationCardProps) {
-	const isTopThumbnail = item.category === 'anime' || item.category === 'film' || item.category === 'game' || item.category === 'music'
+	const isTopThumbnail = true
 
 	return (
 		<article className={cn(
@@ -20,7 +20,7 @@ export function RecommendationCard({ item }: RecommendationCardProps) {
 					"relative bg-white dark:bg-slate-950 shrink-0 border-slate-200/60 dark:border-slate-800/60",
 					isTopThumbnail
 						? "h-48 sm:h-64 w-full border-b"
-						: "h-48 w-full sm:h-auto sm:w-48 md:w-64 border-b sm:border-b-0 sm:border-r"
+						: "h-48 w-full sm:h-auto sm:w-44 lg:w-36 border-b sm:border-b-0 sm:border-r"
 				)}>
 					<img
 						src={item.imageUrl}

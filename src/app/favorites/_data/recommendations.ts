@@ -29,12 +29,12 @@ export const recommendationGroups: Record<RecommendationTab, {
 		tag: 'Read',
 		items: [
 			{
-				title: 'Skip and Loafer',
+				title: 'Skip and Loafer (スキップとローファー)',
 				creator: 'Misaki Takamatsu',
 				category: 'manga',
 				medium: 'Manga',
 				status: 'All-time favorite',
-				imageUrl: '/recommendations/skip-and-loafer_manga.jpg',
+				imageUrl: '/recommendations/skip-and-loafer-manga.jpg',
 				covers: [
 					'/recommendations/skip-and-loafer_manga.jpg'
 				],
@@ -47,12 +47,12 @@ export const recommendationGroups: Record<RecommendationTab, {
 				]
 			},
 			{
-				title: 'Kemutai Hanashi',
+				title: 'Kemutai Hanashi (煙たい話)',
 				creator: 'Fumiya Hayashi',
 				category: 'manga',
 				medium: 'Manga',
 				status: 'Deep favorite',
-				imageUrl: '/recommendations/kemutai_hanashi.jpg',
+				imageUrl: '/recommendations/kemutai-hanashi.png',
 				covers: [
 					'/recommendations/kemutai_hanashi.jpg',
 					'/recommendations/kemutai-hanashi.png'
@@ -64,12 +64,12 @@ export const recommendationGroups: Record<RecommendationTab, {
 				]
 			},
 			{
-				title: 'I Cannot Reach You',
+				title: 'I Cannot Reach You (君には届かない。)',
 				creator: 'Mika',
 				category: 'manga',
 				medium: 'Manga',
 				status: 'Recommended',
-				imageUrl: '/recommendations/i-cannot-reach-you.jpg',
+				imageUrl: '/recommendations/kiminai.jpg',
 				covers: [
 					'/recommendations/i-cannot-reach-you.jpg'
 				],
@@ -81,7 +81,7 @@ export const recommendationGroups: Record<RecommendationTab, {
 				]
 			},
 			{
-				title: 'Toilet-bound Hanako-kun',
+				title: 'Toilet-bound Hanako-kun (地縛少年花子くん)',
 				creator: 'AidaIro',
 				category: 'manga',
 				medium: 'Manga',
@@ -104,7 +104,7 @@ export const recommendationGroups: Record<RecommendationTab, {
 				category: 'manga',
 				medium: 'Manga',
 				status: 'Recommended',
-				imageUrl: '/recommendations/hikari.jpg',
+				imageUrl: '/recommendations/hikari1.jpg',
 				covers: [
 					'/recommendations/hikari.jpg'
 				],
@@ -137,7 +137,7 @@ export const recommendationGroups: Record<RecommendationTab, {
 				category: 'manga',
 				medium: 'Manga',
 				status: 'Recommended',
-				imageUrl: '/recommendations/time.jpg',
+				imageUrl: '/recommendations/time1.jpg',
 				covers: [
 					'/recommendations/time.jpg'
 				],
@@ -146,6 +146,134 @@ export const recommendationGroups: Record<RecommendationTab, {
 					{ label: 'Manga preview', url: 'https://shiori-on.com/product/handkerchief' },
 					{ label: 'Author', url: 'https://x.com/sagan2staff' },
 					{ label: 'Purchase', url: 'https://www.amazon.co.jp/dp/4813054358' }
+				]
+			},
+			{
+				title: 'Hirayasumi (ひらやすみ)',
+				creator: 'Keigo Shinzō (真造圭伍)',
+				category: 'manga',
+				medium: 'Manga',
+				status: 'Recommended',
+				imageUrl: '/recommendations/hirayasumi1.jpg',
+				covers: [
+					'/recommendations/hirayasumi.jpg'
+				],
+				thought: 'A heartwarming, cozy slice-of-life manga about a free-spirited young man and his cousin living in Tokyo, celebrating the beauty of ordinary days and quiet connections.',
+				links: [
+					{ label: 'Author', url: 'https://x.com/shinzokeigo' },
+					{ label: 'Purchase (latest volume)', url: 'https://www.amazon.co.jp/dp/4098638878' }
+				]
+			},
+			{
+				title: 'Stargazing Dog (星守る犬)',
+				creator: 'Takashi Murakami (村上たかし)',
+				category: 'manga',
+				medium: 'Manga',
+				status: 'Recommended',
+				imageUrl: '/recommendations/star_gazing.jpg',
+				covers: [
+					'/recommendations/star_gazing.jpg'
+				],
+				thought: 'A profoundly moving and bittersweet story of unconditional love and loyalty between a man and his dog on a final road trip. A quiet masterpiece that lingers long after the final page.',
+				links: [
+					{ label: 'Futabasha', url: 'https://www.futabasha.co.jp/book/97845753014340000000' }
+				]
+			},
+			{
+				title: 'Solanin (ソラニン)',
+				creator: 'Inio Asano (浅野いにお)',
+				category: 'manga',
+				medium: 'Manga',
+				status: 'Recommended',
+				imageUrl: '/recommendations/solanin.jpg',
+				covers: [
+					'/recommendations/solanin.jpg'
+				],
+				thought: 'A beautifully raw and empathetic exploration of post-college uncertainty, relationships, and the search for purpose in modern-day Japan.',
+				links: [
+					{ label: 'Author', url: 'https://x.com/asano_inio' },
+					{ label: 'Purchase', url: 'https://www.amazon.co.jp/dp/B009JZH4CY' }
+				]
+			},
+			{
+				title: 'Umibe no Stove (うみべのストーブ 大白小蟹短編集)',
+				creator: 'Oshiro Kogani (大白小蟹)',
+				category: 'manga',
+				medium: 'Manga',
+				status: 'Recommended',
+				imageUrl: '/recommendations/stove1.jpg',
+				covers: [
+					'/recommendations/stove.jpg'
+				],
+				thought: 'An award-winning collection of short stories capturing the subtle, delicate shifts in daily life, relationships, and quiet emotional landscapes.',
+				links: [
+					{ label: 'Author', url: 'https://x.com/ROIHOS' },
+					{ label: 'Purchase', url: 'https://amazon.co.jp/dp/B0BMKHQLMM' }
+				]
+			},
+			{
+				title: 'Even if you shine, even if you don’t (キラキラしても、しなくても)',
+				creator: 'Sadaji Koike (小池定路)',
+				category: 'manga',
+				medium: 'Manga',
+				status: 'Recommended',
+				imageUrl: '/recommendations/kirakira1.jpg',
+				covers: [
+					'/recommendations/kirakira.jpg'
+				],
+				thought: 'A sensitive and warm slice-of-life omnibus manga focusing on the lives, friendships, and subtle emotional changes of high school boys.',
+				links: [
+					{ label: 'Author', url: 'https://x.com/koike_sadaji' },
+					{ label: 'Futabasha', url: 'https://www.futabasha.co.jp/book/97845758599660000000' }
+				]
+			},
+			{
+				title: 'One Room Angel (ワンルームエンジェル)',
+				creator: 'Harada (はらだ)',
+				category: 'manga',
+				medium: 'Manga',
+				status: 'Recommended',
+				imageUrl: '/recommendations/one_room_angel.jpg',
+				covers: [
+					'/recommendations/one_room_angel.jpg'
+				],
+				thought: 'A bittersweet, deeply emotional, and humorous story of a down-on-his-luck man and a mysterious angel who share a tiny apartment and heal each other\'s hidden wounds.',
+				links: [
+					{ label: 'Author', url: 'https://x.com/harada_info' },
+					{ label: 'Shodensha', url: 'https://www.shodensha.co.jp/oneroomangel/' },
+					{ label: 'Purchase', url: 'https://www.amazon.co.jp/dp/B07NP7GLKL' }
+				]
+			},
+			{
+				title: 'Erased (僕だけがいない街)',
+				creator: 'Kei Sanbe (三部けい)',
+				category: 'manga',
+				medium: 'Manga',
+				status: 'Recommended',
+				imageUrl: '/recommendations/erased1.jpg',
+				covers: [
+					'/recommendations/erased.jpg'
+				],
+				thought: 'A tense, suspenseful mystery thriller about a man sent back in time to prevent a tragedy, combining emotional depth with edge-of-your-seat storytelling.',
+				links: [
+					{ label: 'Kadokawa', url: 'https://www.kadokawa.co.jp/product/321208000180/' }
+				]
+			},
+			{
+				title: 'Summer Ghost (サマーゴースト)',
+				creator: 'Yoshi Inomi (井ノ巳吉), loundraw, Hirotaka Adachi (Otsuichi) (安達寛高（乙一））',
+				category: 'manga',
+				medium: 'Manga',
+				status: 'Recommended',
+				imageUrl: '/recommendations/summer_ghost_manga.jpg',
+				covers: [
+					'/recommendations/summer_ghost_manga.jpg'
+				],
+				thought: 'The manga adaptation of the beautiful film, expanding on the three high school students encountering a ghost during a quiet summer night.',
+				links: [
+					{ label: 'Author - loundraw', url: 'https://x.com/loundraw' },
+					{ label: 'Online reading', url: 'https://tonarinoyj.jp/episode/3269754496537164447' },
+					{ label: 'Purchase', url: 'https://www.amazon.co.jp/dp/4088921372' }
 				]
 			}
 		],
@@ -226,6 +354,18 @@ export const recommendationGroups: Record<RecommendationTab, {
 				links: [
 					{ label: 'Official TBS site', url: 'https://www.tbs.co.jp/anime/hanakokun/' },
 					{ label: 'Official Anime X', url: 'https://x.com/hanakokun_info' }
+				]
+			},
+			{
+				title: 'Summer Ghost (サマーゴースト)',
+				creator: 'loundraw / Flat Studio',
+				category: 'anime',
+				medium: 'Anime',
+				status: 'Recommended',
+				imageUrl: '/recommendations/summer_ghost.jpg',
+				thought: 'A visually stunning, short anime film about three high schoolers searching for a ghost, exploring life, death, and finding meaning in youth.',
+				links: [
+					{ label: 'Official Site', url: 'https://summerghost.jp/' }
 				]
 			}
 		],
