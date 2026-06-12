@@ -5,9 +5,10 @@ import type { Recommendation } from '../_data/recommendations'
 
 interface RecommendationCardProps {
 	item: Recommendation
+	viewMode?: 'detailed' | 'simplified'
 }
 
-export function RecommendationCard({ item }: RecommendationCardProps) {
+export function RecommendationCard({ item, viewMode = 'detailed' }: RecommendationCardProps) {
 	const isTopThumbnail = true
 
 	return (
@@ -56,28 +57,31 @@ export function RecommendationCard({ item }: RecommendationCardProps) {
 						</p>
 					</div>
 
-					<p className={cn(sansFont.className, 'text-sm leading-relaxed text-slate-700 dark:text-slate-300')}>
-						{item.thought}
-					</p>
+					{viewMode === 'detailed' && (
+						<>
+							<p className={cn(sansFont.className, 'text-sm leading-relaxed text-slate-700 dark:text-slate-300')}>
+								{item.thought}
+							</p>
 
-					{item.links.length > 0 && (
-						<div className="flex flex-wrap gap-3 pt-1">
-							{item.links.map((link) => (
-								<a
-									key={link.url}
-									href={link.url}
-									target="_blank"
-									rel="noopener noreferrer"
-									className={cn(monoFont.className, 'inline-flex items-center gap-1 text-[11px] text-muted-foreground hover:pride-text transition-colors duration-150')}
-								>
-									{link.label.toLowerCase()} →
-								</a>
-							))}
-						</div>
+							{item.links.length > 0 && (
+								<div className="flex flex-wrap gap-3 pt-1">
+									{item.links.map((link) => (
+										<a
+											key={link.url}
+											href={link.url}
+											target="_blank"
+											rel="noopener noreferrer"
+											className={cn(monoFont.className, 'inline-flex items-center gap-1 text-[11px] text-muted-foreground hover:pride-text transition-colors duration-150')}
+										>
+											{link.label.toLowerCase()} →
+										</a>
+									))}
+								</div>
+							)}
+						</>
 					)}
 				</StackVertical>
 			</div>
 		</article>
 	)
 }
-
