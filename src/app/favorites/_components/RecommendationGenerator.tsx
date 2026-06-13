@@ -1,28 +1,31 @@
 'use client'
 
 import { useState, useRef, useEffect } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
-import { Plus, Trash2, Download, Copy, Upload, Check, Image as ImageIcon, LayoutGrid, Eye } from 'lucide-react'
+import { motion, AnimatePresence, Reorder } from 'framer-motion'
+import { Plus, Trash2, Download, Copy, Upload, Check, Image as ImageIcon, LayoutGrid, Eye, GripVertical, X } from 'lucide-react'
 import { RecommendationCard } from './RecommendationCard'
 import { Button } from '@/components/ui/primitives/button'
 import { monoFont, sansFont } from '@/styles/fonts/fonts'
 import { cn } from '@/lib/utils/utils'
 import type { Recommendation } from '../_data/recommendations'
+import { ImageCropperModal } from './ImageCropperModal'
 
 export function RecommendationGenerator() {
 	// Items state - starts with a default manga and anime/game item (without status field in form)
-	const [items, setItems] = useState<Omit<Recommendation, 'status' | 'category'>[]>([
+	const [items, setItems] = useState<(Omit<Recommendation, 'status' | 'category'> & { id: string })[]>([
 		{
+			id: 'default-1',
 			title: 'Skip and Loafer (スキップとローファー)',
 			creator: 'Misaki Takamatsu',
 			medium: 'Manga',
-			thought: 'Every time I reread this, I’m reminded of how rare it is for a story to treat its characters with such complete kindness. It’s my absolute comfort read because nobody changes overnight; their growth is slow, quiet, and feels so honest.',
+			thought: 'Every time I reread this, I’m reminded of how rare it is for a story to treat its characters with such complete kindness. It’s my comfort read because nobody changes overnight; their growth is slow, quiet, and feels so honest.',
 			links: [
 				{ label: 'Latest volume', url: 'https://example.com/volume' },
 				{ label: 'Official Site', url: 'https://example.com/official' }
 			]
 		},
 		{
+			id: 'default-2',
 			title: 'OMORI',
 			creator: 'OMOCAT',
 			medium: 'Game',
@@ -40,6 +43,8 @@ export function RecommendationGenerator() {
 	const [dragActive, setDragActive] = useState(false)
 	const fileInputRef = useRef<HTMLInputElement>(null)
 	const [isInitialized, setIsInitialized] = useState(false)
+	const [pendingImageSrc, setPendingImageSrc] = useState<string | null>(null)
+	const [showMobilePreview, setShowMobilePreview] = useState(false)
 
 	// Load cached state from localStorage on mount (only if no URL query data is present)
 	useEffect(() => {
@@ -47,13 +52,17 @@ export function RecommendationGenerator() {
 		const dataParam = params.get('data')
 		if (!dataParam) {
 			try {
-				let loadedItems: Omit<Recommendation, 'status' | 'category'>[] | null = null
+				let loadedItems: (Omit<Recommendation, 'status' | 'category'> & { id: string })[] | null = null
 				const cachedItems = localStorage.getItem('mikeblocky:favorites-generator-items')
 				if (cachedItems) {
 					const parsed = JSON.parse(cachedItems)
 					if (Array.isArray(parsed) && parsed.length > 0) {
-						loadedItems = parsed
-						setItems(parsed)
+						const withIds = parsed.map((item, idx) => ({
+							...item,
+							id: item.id || `cached-${idx}-${Math.random().toString(36).substr(2, 9)}`
+						}))
+						loadedItems = withIds
+						setItems(withIds)
 					}
 				}
 				
@@ -112,7 +121,8 @@ export function RecommendationGenerator() {
 						const decoded = JSON.parse(decodeURIComponent(escape(atob(sanitized))))
 						if (Array.isArray(decoded) && decoded.length > 0) {
 							// Strip category/status if they were serialized
-							const sanitizedItems = decoded.map(({ title, creator, medium, thought, links, imageUrl }) => ({
+							const sanitizedItems = decoded.map(({ title, creator, medium, thought, links, imageUrl }, idx) => ({
+								id: `shared-${idx}-${Math.random().toString(36).substr(2, 9)}`,
 								title, creator, medium, thought, links, imageUrl
 							}))
 							setItems(sanitizedItems)
@@ -146,7 +156,8 @@ export function RecommendationGenerator() {
 
 	// Add/Remove cards
 	const addNewItem = () => {
-		const newItem: Omit<Recommendation, 'status' | 'category'> = {
+		const newItem: Omit<Recommendation, 'status' | 'category'> & { id: string } = {
+			id: Math.random().toString(36).substr(2, 9),
 			title: '',
 			creator: '',
 			medium: 'Manga',
@@ -161,6 +172,7 @@ export function RecommendationGenerator() {
 		const nextItems = items.filter((_, idx) => idx !== index)
 		setItems(nextItems.length > 0 ? nextItems : [
 			{
+				id: Math.random().toString(36).substr(2, 9),
 				title: '',
 				creator: '',
 				medium: 'Manga',
@@ -176,7 +188,7 @@ export function RecommendationGenerator() {
 		if (file && file.type.startsWith('image/')) {
 			const reader = new FileReader()
 			reader.onloadend = () => {
-				updateActiveItem({ imageUrl: reader.result as string })
+				setPendingImageSrc(reader.result as string)
 			}
 			reader.readAsDataURL(file)
 		}
@@ -273,6 +285,7 @@ export function RecommendationGenerator() {
 			if (serialized.imageUrl && serialized.imageUrl.startsWith('data:')) {
 				delete serialized.imageUrl
 			}
+			delete (serialized as any).id
 			return serialized
 		})
 		const json = JSON.stringify(itemsToSerialize)
@@ -368,50 +381,71 @@ export function RecommendationGenerator() {
 		<motion.div
 			initial={{ opacity: 0, y: 15 }}
 			animate={{ opacity: 1, y: 0 }}
-			transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+			transition={{ duration: 0.4, ease: [0.32, 0.72, 0, 1] }}
 			className="space-y-6 pt-4 w-full"
 		>
-			{/* Card Selection Tabs (Styled like standard page tabs) */}
-			<div className="flex flex-wrap gap-2 items-center">
-				{items.map((item, idx) => (
-					<button
-						key={idx}
-						type="button"
-						onClick={() => setActiveIndex(idx)}
-						className={cn(
-							sansFont.className,
-							"px-3.5 py-1.5 rounded-sm border text-[10px] tracking-wider font-semibold lowercase transition-all duration-200 flex items-center gap-2 relative cursor-pointer",
-							activeIndex === idx
-								? "text-[hsl(var(--pride-glow-val))] border-[hsl(var(--pride-glow-val))]/45 bg-[hsl(var(--pride-glow-val))]/10 shadow-none font-bold"
-								: "border-slate-200 bg-transparent text-slate-500 hover:border-slate-350 hover:text-slate-800 dark:border-slate-850 dark:text-slate-400 dark:hover:border-slate-700 dark:hover:text-slate-200"
-						)}
+			<div className="grid grid-cols-1 lg:grid-cols-[1fr_360px] xl:grid-cols-[1fr_400px] gap-8 items-start">
+				{/* Editor Column */}
+				<div className="space-y-6 w-full min-w-0">
+					{/* Card Selection Tabs (Styled like standard page tabs, drag to reorder) */}
+					<Reorder.Group
+						values={items}
+						onReorder={(newItems) => {
+							const active = items[activeIndex]
+							setItems(newItems)
+							if (active) {
+								const newIdx = newItems.findIndex(item => item.id === active.id)
+								if (newIdx !== -1) {
+									setActiveIndex(newIdx)
+								}
+							}
+						}}
+						axis="x"
+						className="flex flex-wrap gap-2 items-center animate-none"
 					>
-						<span>{item.title || `card #${idx + 1}`}</span>
-						{items.length > 1 && (
-							<span
-								onClick={(e) => {
-									e.stopPropagation()
-									removeItem(idx)
-								}}
-								className="text-slate-400 hover:text-red-500 rounded px-0.5 cursor-pointer ml-1 text-[11px] font-bold"
-								title="Delete card"
+						{items.map((item, idx) => (
+							<Reorder.Item
+								key={item.id}
+								value={item}
+								dragListener={true}
+								className={cn(
+									sansFont.className,
+									"px-3.5 py-1.5 rounded-sm border text-[10px] tracking-wider font-semibold lowercase transition-all duration-200 flex items-center gap-2 relative cursor-grab active:cursor-grabbing select-none touch-none",
+									activeIndex === idx
+										? "text-[hsl(var(--pride-glow-val))] border-[hsl(var(--pride-glow-val))]/45 bg-[hsl(var(--pride-glow-val))]/10 shadow-none font-bold"
+										: "border-slate-200 bg-transparent text-slate-500 hover:border-slate-350 hover:text-slate-800 dark:border-slate-850 dark:text-slate-400 dark:hover:border-slate-700 dark:hover:text-slate-200"
+								)}
+								onClick={() => setActiveIndex(idx)}
 							>
-								&times;
-							</span>
-						)}
-					</button>
-				))}
-				<button
-					type="button"
-					onClick={addNewItem}
-					className={cn(
-						sansFont.className,
-						"px-3.5 py-1.5 rounded-sm border border-dashed border-slate-300 hover:border-slate-400 dark:border-slate-700 dark:hover:border-slate-500 text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 text-[10px] tracking-wider font-semibold lowercase flex items-center gap-1 cursor-pointer transition-colors duration-250"
-					)}
-				>
-					<Plus className="h-3 w-3" /> add card
-				</button>
-			</div>
+								<GripVertical className="h-2.5 w-2.5 text-slate-400 dark:text-slate-500 shrink-0 pointer-events-none touch-none" />
+								<span>{item.title || `card #${idx + 1}`}</span>
+								{items.length > 1 && (
+									<span
+										onClick={(e) => {
+											e.stopPropagation()
+											removeItem(idx)
+										}}
+										className="text-slate-400 hover:text-red-500 rounded px-0.5 cursor-pointer ml-1 text-[11px] font-bold"
+										title="Delete card"
+									>
+										&times;
+									</span>
+								)}
+							</Reorder.Item>
+						))}
+						<button
+							type="button"
+							onClick={addNewItem}
+							className={cn(
+								sansFont.className,
+								"px-3.5 py-1.5 rounded-sm border border-dashed border-slate-300 hover:border-slate-400 dark:border-slate-700 dark:hover:border-slate-500 text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 text-[10px] tracking-wider font-semibold lowercase flex items-center gap-1 cursor-pointer transition-colors duration-250"
+							)}
+						>
+							<Plus className="h-3 w-3" /> add card
+						</button>
+					</Reorder.Group>
+
+					{/* Collapsible Live Preview removed in favor of floating picture-in-picture crop preview */}
 
 			{/* Cohesive Grid-Split Card Form Container (Matches SuggestionForm/Guestbook aesthetic) */}
 			<div className="bg-white/40 dark:bg-slate-950/20 rounded-xl border border-slate-200/50 dark:border-slate-850/50 shadow-sm flex flex-col overflow-hidden pride-focus-within-glow">
@@ -461,13 +495,22 @@ export function RecommendationGenerator() {
 								alt="Cover thumbnail"
 								className="w-6 h-8 object-cover rounded-sm border border-slate-200 dark:border-slate-800 shrink-0"
 							/>
-							<button
-								type="button"
-								onClick={() => updateActiveItem({ imageUrl: undefined })}
-								className={cn(monoFont.className, "text-[9px] text-red-500 hover:text-red-700 font-semibold cursor-pointer")}
-							>
-								remove cover
-							</button>
+							<div className="flex items-center gap-2.5">
+								<button
+									type="button"
+									onClick={() => setPendingImageSrc(activeItem.imageUrl || null)}
+									className={cn(monoFont.className, "text-[9px] text-[hsl(var(--pride-glow-val))] hover:underline font-bold cursor-pointer")}
+								>
+									crop
+								</button>
+								<button
+									type="button"
+									onClick={() => updateActiveItem({ imageUrl: undefined })}
+									className={cn(monoFont.className, "text-[9px] text-red-500 hover:text-red-750 font-bold cursor-pointer")}
+								>
+									remove
+								</button>
+							</div>
 						</div>
 					) : (
 						<button
@@ -590,6 +633,18 @@ export function RecommendationGenerator() {
 						<><Download className="h-3.5 w-3.5 shrink-0" /> {previewMode === 'single' ? 'export active card' : previewMode === 'row' ? 'export active row' : 'export full grid'}</>
 					)}
 				</Button>
+			</div>
+				</div>
+
+				{/* Live Preview Column */}
+				<div className="hidden lg:block lg:sticky lg:top-24 space-y-3 shrink-0">
+					<div className={cn(monoFont.className, "text-[9px] lowercase tracking-widest text-slate-400 font-semibold border-b border-slate-100 dark:border-slate-900 pb-1.5")}>
+						live preview (active)
+					</div>
+					<div className="w-full max-w-[400px] rounded-lg overflow-hidden border border-slate-200/50 dark:border-slate-800/50 bg-white/40 dark:bg-slate-950/20">
+						<RecommendationCard item={buildFullRecommendation(activeItem)} viewMode="detailed" />
+					</div>
+				</div>
 			</div>
 
 			{/* Page Preview Section */}
@@ -803,6 +858,73 @@ export function RecommendationGenerator() {
 					</div>
 				</div>
 			</div>
+
+			{/* Floating Mobile Live Preview (Picture-in-picture style scaled card overlay) */}
+			<div className="block lg:hidden">
+				<AnimatePresence>
+					{showMobilePreview ? (
+						<motion.div
+							initial={{ opacity: 0, scale: 0.85, y: 20 }}
+							animate={{ opacity: 1, scale: 1, y: 0 }}
+							exit={{ opacity: 0, scale: 0.85, y: 20 }}
+							transition={{ type: 'spring', damping: 25, stiffness: 250 }}
+							className="fixed bottom-24 right-4 z-40 bg-white/95 dark:bg-slate-900/95 border border-slate-200/80 dark:border-slate-800/80 rounded-xl shadow-2xl p-3 flex flex-col gap-2 w-[304px] origin-bottom-right"
+						>
+							{/* Mini Header */}
+							<div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800/60 pb-1.5 px-0.5">
+								<span className={cn(monoFont.className, "text-[9px] lowercase tracking-wider text-slate-400 font-bold")}>
+									live preview (active)
+								</span>
+								<button
+									type="button"
+									onClick={() => setShowMobilePreview(false)}
+									className="text-slate-400 hover:text-slate-650 dark:hover:text-slate-200 transition-colors p-0.5 cursor-pointer"
+								>
+									<X className="h-3.5 w-3.5" />
+								</button>
+							</div>
+							
+							{/* Scrollable Live Preview Card */}
+							<div className="w-full overflow-hidden rounded-lg bg-slate-50/30 dark:bg-slate-950/30 p-1 flex justify-center items-center">
+								<div className="w-[280px] max-h-[300px] h-auto overflow-y-auto rounded-md border border-slate-100 dark:border-slate-800/80 bg-white/50 dark:bg-slate-950/30">
+									<RecommendationCard item={buildFullRecommendation(activeItem)} viewMode="detailed" compact={true} />
+								</div>
+							</div>
+						</motion.div>
+					) : (
+						<motion.button
+							type="button"
+							initial={{ opacity: 0, scale: 0.8 }}
+							animate={{ opacity: 1, scale: 1 }}
+							exit={{ opacity: 0, scale: 0.8 }}
+							onClick={() => setShowMobilePreview(true)}
+							className="fixed bottom-24 right-4 z-40 bg-[hsl(var(--pride-glow-val))] text-white p-3 rounded-full shadow-lg flex items-center justify-center cursor-pointer hover:scale-105 active:scale-95 transition-transform duration-150 border border-white/10"
+							title="Show live preview"
+						>
+							<Eye className="h-5 w-5" />
+						</motion.button>
+					)}
+				</AnimatePresence>
+			</div>
+
+			{/* Recommended Aspect Ratio Helper */}
+			{pendingImageSrc && (
+				<ImageCropperModal
+					imageSrc={pendingImageSrc}
+					defaultAspectRatio={(() => {
+						const m = (activeItem.medium || '').toLowerCase()
+						if (m === 'manga' || m === 'anime' || m === 'book') return '3:4'
+						if (m === 'game' || m === 'film' || m === 'movie' || m === 'video') return '16:9'
+						if (m === 'music' || m === 'album' || m === 'song') return '1:1'
+						return 'original'
+					})()}
+					onClose={() => setPendingImageSrc(null)}
+					onCrop={(croppedDataUrl) => {
+						updateActiveItem({ imageUrl: croppedDataUrl })
+						setPendingImageSrc(null)
+					}}
+				/>
+			)}
 		</motion.div>
 	)
 }
