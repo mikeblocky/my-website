@@ -457,7 +457,7 @@ export const recommendationGroups: Record<RecommendationTab, {
 				thought: 'Starting art school at sixty-five to learn filmmaking is such a beautiful, inspiring premise, but what makes this special is how it treats her ambition with absolute seriousness. It captures that terrifying, electric feeling of realizing you want to create something, and how that desire doesn\'t care about your age or what stage of life you are in.',
 				links: [
 					{ label: 'Author', url: 'https://x.com/new_john1' },
-					{ label: 'Akita Shoten', url: 'https://www.akitashoten.co.jp/series/10398' }
+					{ label: 'Read online & purchase', url: 'https://championcross.jp/series/d25778a8afa97#' }
 				]
 			}
 		],
