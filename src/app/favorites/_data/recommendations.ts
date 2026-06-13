@@ -57,7 +57,7 @@ export const recommendationGroups: Record<RecommendationTab, {
 					'/recommendations/kemutai_hanashi.jpg',
 					'/recommendations/kemutai-hanashi.png'
 				],
-				thought: 'There’s this beautiful, hazy atmosphere to the way their relationship develops. I love how it doesn’t rush to label what they are to each other. It just sits with the quiet comfort of sharing an apartment, choosing to live together, and letting the days pass without needing the outside world’s approval.',
+				thought: 'There’s this beautiful, hazy atmosphere to the way their relationship develops. I love how it doesn’t rush to label what they are to each other. It just sits with the quiet comfort of sharing an apartment, choosing to live together, and letting the days pass without needing the outside world’s approval. Beside that, solving the lingering feelings having in each character is a beautiful thing to happen, and I appreciate the writing in that sense.',
 				links: [
 					{ label: 'COMIC Nettai', url: 'https://www.comicnettai.com/book/9' },
 					{ label: 'Author', url: 'https://x.com/fuhit0be' },
