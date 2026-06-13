@@ -510,7 +510,7 @@ export const recommendationGroups: Record<RecommendationTab, {
 				medium: 'Anime',
 				status: 'Recommended',
 				imageUrl: '/recommendations/further_than_universe.avif',
-				thought: 'It makes the act of moving forward feel physical and real. The journey to the edge of the earth is an escape from being stuck in grief. It’s a very hopeful story, but it never cheapens the pain, letting loss and fear exist without neat resolutions.',
+				thought: 'It makes the act of taking a big leap of faith feel physical and real. The journey of four high school girls traveling all the way to Antarctica is a beautiful, high-energy story about friendship, ambition, and proving something to themselves. It captures the sheer excitement of youth, showing how taking that first step can completely open up your world.',
 				links: [
 					{ label: 'Official site', url: 'https://yorimoi.com/' }
 				]
@@ -534,7 +534,7 @@ export const recommendationGroups: Record<RecommendationTab, {
 				medium: 'Anime',
 				status: 'Recommended watch',
 				imageUrl: '/recommendations/hanako_anime.webp',
-				thought: 'Seeing AidaIro\'s vintage, stained-glass artwork come alive in motion is beautiful. The anime captures the playful yet eerie atmosphere perfectly, but what stays with me is the sadness beneath the comedy: the fragile connections between the living and the dead, and the fear of being forgotten.',
+				thought: 'Seeing AidaIro\'s vintage, stained-glass artwork come alive in motion is beautiful. The anime captures the playful, eerie, and highly energetic atmosphere perfectly. I love the way it contrasts chaotic school ghost rumors and supernatural comedy with a really compelling mystery about the boundaries between the living and the dead.',
 				links: [
 					{ label: 'Official TBS site', url: 'https://www.tbs.co.jp/anime/hanakokun/' },
 					{ label: 'Official Anime X', url: 'https://x.com/hanakokun_info' }
@@ -622,6 +622,18 @@ export const recommendationGroups: Record<RecommendationTab, {
 				thought: 'A funny, anxiety-driven mirror to Barakamon that captures the comedy of teenage isolation. It shows how easily we can get trapped in our own heads, translating genuine admiration into imagined hostility. There is a strange comfort in its absurdity, showing that we are often our own harshest critics.',
 				links: [
 					{ label: 'TBS official site', url: 'https://www.tbs.co.jp/anime/handaanime/' }
+				]
+			},
+			{
+				title: 'Tsuritama (つり球)',
+				creator: 'Kenji Nakamura / A-1 Pictures',
+				category: 'anime',
+				medium: 'Anime',
+				status: 'Recommended watch',
+				imageUrl: '/recommendations/tsuritama.webp',
+				thought: 'It has this incredibly bright, sun-soaked coastal energy that immediately makes you feel like you\'re on a summer vacation. The way it blends alien invasions with the slow, rhythmic focus of fishing, dancing, and a pet duck is so charming and weird. It is just a highly colorful, fun ride that always puts me in a good mood.',
+				links: [
+					{ label: 'Official site', url: 'http://www.tsuritama.com/' }
 				]
 			}
 		],
