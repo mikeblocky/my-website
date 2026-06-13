@@ -39,6 +39,62 @@ export function RecommendationGenerator() {
 	const [isExporting, setIsExporting] = useState(false)
 	const [dragActive, setDragActive] = useState(false)
 	const fileInputRef = useRef<HTMLInputElement>(null)
+	const [isInitialized, setIsInitialized] = useState(false)
+
+	// Load cached state from localStorage on mount (only if no URL query data is present)
+	useEffect(() => {
+		const params = new URLSearchParams(window.location.search)
+		const dataParam = params.get('data')
+		if (!dataParam) {
+			try {
+				let loadedItems: Omit<Recommendation, 'status' | 'category'>[] | null = null
+				const cachedItems = localStorage.getItem('mikeblocky:favorites-generator-items')
+				if (cachedItems) {
+					const parsed = JSON.parse(cachedItems)
+					if (Array.isArray(parsed) && parsed.length > 0) {
+						loadedItems = parsed
+						setItems(parsed)
+					}
+				}
+				
+				const cachedActiveIndex = localStorage.getItem('mikeblocky:favorites-generator-active-index')
+				if (cachedActiveIndex) {
+					const parsedIndex = parseInt(cachedActiveIndex, 10)
+					if (!isNaN(parsedIndex)) {
+						const maxIndex = loadedItems ? loadedItems.length - 1 : items.length - 1
+						setActiveIndex(Math.max(0, Math.min(parsedIndex, maxIndex)))
+					}
+				}
+				
+				const cachedPreviewMode = localStorage.getItem('mikeblocky:favorites-generator-preview-mode')
+				if (cachedPreviewMode === 'grid' || cachedPreviewMode === 'row' || cachedPreviewMode === 'single') {
+					setPreviewMode(cachedPreviewMode)
+				}
+			} catch (e) {
+				console.error('Failed to load cached generator state:', e)
+			}
+		}
+		setIsInitialized(true)
+	}, [])
+
+	// Cache state changes to localStorage
+	useEffect(() => {
+		if (isInitialized) {
+			localStorage.setItem('mikeblocky:favorites-generator-items', JSON.stringify(items))
+		}
+	}, [items, isInitialized])
+
+	useEffect(() => {
+		if (isInitialized) {
+			localStorage.setItem('mikeblocky:favorites-generator-active-index', activeIndex.toString())
+		}
+	}, [activeIndex, isInitialized])
+
+	useEffect(() => {
+		if (isInitialized) {
+			localStorage.setItem('mikeblocky:favorites-generator-preview-mode', previewMode)
+		}
+	}, [previewMode, isInitialized])
 
 	// Load shared items on mount or when URL query parameters change
 	useEffect(() => {
