@@ -427,6 +427,38 @@ export const recommendationGroups: Record<RecommendationTab, {
 					{ label: 'Spirits page', url: 'https://bigcomicbros.net/work/83391/' },
 					{ label: 'Purchase', url: 'https://www.amazon.co.jp/gp/product/B0GMDWHTV7' }
 				]
+			},
+			{
+				title: 'My Broken Mariko (マイ・ブロークン・マリコ)',
+				creator: 'Waka Hirako (平庫ワカ)',
+				category: 'manga',
+				medium: 'Manga',
+				status: 'Recommended',
+				imageUrl: '/recommendations/mariko.png',
+				covers: [
+					'/recommendations/mariko.png'
+				],
+				thought: 'It is incredibly loud, messy, and painful in a way that feels completely real. Tomoyo\'s grief isn\'t quiet or beautiful; she is angry, smoking, cursing, and stealing her best friend\'s ashes to save her from an abusive family. It’s a short, intense read that captures how complicated suicide and love can be, and it leaves a heavy, lingering ache.',
+				links: [
+					{ label: 'Author', url: 'https://x.com/MuicoMu' },
+					{ label: 'Kadokawa', url: 'https://www.kadokawa.co.jp/product/321908000317/' }
+				]
+			},
+			{
+				title: 'The Credits Roll into the Sea (海が走るエンドロール)',
+				creator: 'John Tarachine (たらちねジョン)',
+				category: 'manga',
+				medium: 'Manga',
+				status: 'Recommended',
+				imageUrl: '/recommendations/endoroll.png',
+				covers: [
+					'/recommendations/endoroll.png'
+				],
+				thought: 'Starting art school at sixty-five to learn filmmaking is such a beautiful, inspiring premise, but what makes this special is how it treats her ambition with absolute seriousness. It captures that terrifying, electric feeling of realizing you want to create something, and how that desire doesn\'t care about your age or what stage of life you are in.',
+				links: [
+					{ label: 'Author', url: 'https://x.com/new_john1' },
+					{ label: 'Akita Shoten', url: 'https://www.akitashoten.co.jp/series/10398' }
+				]
 			}
 		],
 	},
