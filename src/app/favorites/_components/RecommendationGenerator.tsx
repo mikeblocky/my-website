@@ -41,32 +41,44 @@ export function RecommendationGenerator() {
 	const [dragActive, setDragActive] = useState(false)
 	const fileInputRef = useRef<HTMLInputElement>(null)
 
-	// Load shared items on mount if data query parameter is in URL
+	// Load shared items on mount or when URL query parameters change
 	useEffect(() => {
-		const params = new URLSearchParams(window.location.search)
-		const dataParam = params.get('data')
-		if (dataParam) {
-			try {
-				let sanitized = dataParam.replace(/ /g, '+')
-				while (sanitized.length % 4 !== 0) {
-					sanitized += '='
-				}
-				const base64Regex = /^[A-Za-z0-9+/]+={0,2}$/
-				if (base64Regex.test(sanitized)) {
-					const decoded = JSON.parse(decodeURIComponent(escape(atob(sanitized))))
-					if (Array.isArray(decoded) && decoded.length > 0) {
-						// Strip category/status if they were serialized
-						const sanitizedItems = decoded.map(({ title, creator, medium, thought, links, imageUrl }) => ({
-							title, creator, medium, thought, links, imageUrl
-						}))
-						setItems(sanitizedItems)
-						setActiveIndex(0)
-						setPreviewMode('grid')
+		const handleLoadData = () => {
+			const params = new URLSearchParams(window.location.search)
+			const dataParam = params.get('data')
+			if (dataParam) {
+				try {
+					let sanitized = dataParam.replace(/ /g, '+')
+					while (sanitized.length % 4 !== 0) {
+						sanitized += '='
 					}
+					const base64Regex = /^[A-Za-z0-9+/]+={0,2}$/
+					if (base64Regex.test(sanitized)) {
+						const decoded = JSON.parse(decodeURIComponent(escape(atob(sanitized))))
+						if (Array.isArray(decoded) && decoded.length > 0) {
+							// Strip category/status if they were serialized
+							const sanitizedItems = decoded.map(({ title, creator, medium, thought, links, imageUrl }) => ({
+								title, creator, medium, thought, links, imageUrl
+							}))
+							setItems(sanitizedItems)
+							setActiveIndex(0)
+							setPreviewMode('grid')
+						}
+					}
+				} catch (e) {
+					console.error('Failed to parse shared favorites:', e)
 				}
-			} catch (e) {
-				console.error('Failed to parse shared favorites:', e)
 			}
+		}
+
+		handleLoadData()
+
+		window.addEventListener('popstate', handleLoadData)
+		window.addEventListener('mikeblocky-tab-url', handleLoadData)
+
+		return () => {
+			window.removeEventListener('popstate', handleLoadData)
+			window.removeEventListener('mikeblocky-tab-url', handleLoadData)
 		}
 	}, [])
 
@@ -210,7 +222,7 @@ export function RecommendationGenerator() {
 		})
 		const json = JSON.stringify(itemsToSerialize)
 		const encoded = btoa(unescape(encodeURIComponent(json)))
-		return `${window.location.origin}${window.location.pathname}?tab=generator&data=${encoded}`
+		return `${window.location.origin}${window.location.pathname}?tab=generator&data=${encodeURIComponent(encoded)}`
 	}
 
 	const copyShareLink = async () => {
