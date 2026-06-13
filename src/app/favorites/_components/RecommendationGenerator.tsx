@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Plus, Trash2, Download, Copy, Upload, Check, Image as ImageIcon, Share2, LayoutGrid, Eye } from 'lucide-react'
+import { Plus, Trash2, Download, Copy, Upload, Check, Image as ImageIcon, LayoutGrid, Eye } from 'lucide-react'
 import { RecommendationCard } from './RecommendationCard'
 import { Button } from '@/components/ui/primitives/button'
 import { monoFont, sansFont } from '@/styles/fonts/fonts'
@@ -36,7 +36,6 @@ export function RecommendationGenerator() {
 	const [activeIndex, setActiveIndex] = useState<number>(0)
 	const [previewMode, setPreviewMode] = useState<'grid' | 'row' | 'single'>('grid')
 	const [isCopying, setIsCopying] = useState(false)
-	const [isLinkCopying, setIsLinkCopying] = useState(false)
 	const [isExporting, setIsExporting] = useState(false)
 	const [dragActive, setDragActive] = useState(false)
 	const fileInputRef = useRef<HTMLInputElement>(null)
@@ -223,16 +222,6 @@ export function RecommendationGenerator() {
 		const json = JSON.stringify(itemsToSerialize)
 		const encoded = btoa(unescape(encodeURIComponent(json)))
 		return `${window.location.origin}${window.location.pathname}?tab=generator&data=${encodeURIComponent(encoded)}`
-	}
-
-	const copyShareLink = async () => {
-		try {
-			await navigator.clipboard.writeText(getShareUrl())
-			setIsLinkCopying(true)
-			setTimeout(() => setIsLinkCopying(false), 2000)
-		} catch (err) {
-			console.error('Failed to copy share link:', err)
-		}
 	}
 
 	// PNG Card Grid / Single Exporter
@@ -505,76 +494,46 @@ export function RecommendationGenerator() {
 				)}
 			</div>
 
-			{/* Cohesive Share Link Panel (Grid-split style) */}
-			<div className="bg-white/40 dark:bg-slate-950/20 rounded-xl border border-slate-200/50 dark:border-slate-850/50 shadow-sm p-4 flex flex-col md:flex-row gap-4 items-center justify-between">
-				<div className="flex-1 w-full space-y-1 text-left">
-					<div className="flex items-center justify-between">
-						<span className={cn(sansFont.className, "text-xs font-semibold text-slate-800 dark:text-slate-200 flex items-center gap-1")}>
-							link to share
-						</span>
-						<Button
-							variant="outline"
-							size="sm"
-							onClick={copyShareLink}
-							className="rounded-full text-[10px] tracking-wider py-1.5 h-8 font-semibold lowercase cursor-pointer"
-						>
-							{isLinkCopying ? (
-								<><Check className="h-3 w-3 shrink-0" /> copied link!</>
-							) : (
-								<><Share2 className="h-3 w-3 shrink-0" /> copy share link</>
-							)}
-						</Button>
-					</div>
-					<input
-						type="text"
-						readOnly
-						value={getShareUrl()}
-						onClick={(e) => (e.target as HTMLInputElement).select()}
-						className={cn(monoFont.className, "w-full rounded-md border border-slate-200/80 dark:border-slate-800 bg-white/40 dark:bg-slate-950/40 px-3 py-2 text-[10px] text-slate-500 select-all cursor-text focus:outline-none")}
-					/>
-				</div>
+			{/* Action Panel */}
+			<div className="bg-white/40 dark:bg-slate-950/20 rounded-xl border border-slate-200/50 dark:border-slate-850/50 shadow-sm p-4 flex flex-wrap gap-3 items-center justify-end">
+				<Button
+					variant="outline"
+					onClick={copyToClipboard}
+					className="lowercase font-bold flex-1 md:flex-initial h-10 px-5 text-xs rounded-full"
+				>
+					{isCopying ? (
+						<><Check className="h-3.5 w-3.5 shrink-0" /> copied config</>
+					) : (
+						<><Copy className="h-3.5 w-3.5 shrink-0" /> copy config</>
+					)}
+				</Button>
 
-				{/* Actions (Native Rounded-Full Buttons) */}
-				<div className="flex flex-wrap gap-3 w-full md:w-auto self-end pt-1 md:pt-0">
+				{items.length > 2 && (previewMode === 'grid' || previewMode === 'row') && (
 					<Button
 						variant="outline"
-						onClick={copyToClipboard}
-						className="lowercase font-bold flex-1 md:flex-initial h-10 px-5 text-xs rounded-full"
-					>
-						{isCopying ? (
-							<><Check className="h-3.5 w-3.5 shrink-0" /> copied config</>
-						) : (
-							<><Copy className="h-3.5 w-3.5 shrink-0" /> copy config</>
-						)}
-					</Button>
-
-					{items.length > 2 && (previewMode === 'grid' || previewMode === 'row') && (
-						<Button
-							variant="outline"
-							onClick={exportAllRows}
-							disabled={isExporting}
-							className="lowercase font-bold flex-1 md:flex-initial h-10 px-5 text-xs rounded-full"
-						>
-							{isExporting ? (
-								<>generating...</>
-							) : (
-								<><Download className="h-3.5 w-3.5 shrink-0" /> export all rows</>
-							)}
-						</Button>
-					)}
-
-					<Button
-						onClick={exportCardPng}
+						onClick={exportAllRows}
 						disabled={isExporting}
 						className="lowercase font-bold flex-1 md:flex-initial h-10 px-5 text-xs rounded-full"
 					>
 						{isExporting ? (
 							<>generating...</>
 						) : (
-							<><Download className="h-3.5 w-3.5 shrink-0" /> {previewMode === 'single' ? 'export active card' : previewMode === 'row' ? 'export active row' : 'export full grid'}</>
+							<><Download className="h-3.5 w-3.5 shrink-0" /> export all rows</>
 						)}
 					</Button>
-				</div>
+				)}
+
+				<Button
+					onClick={exportCardPng}
+					disabled={isExporting}
+					className="lowercase font-bold flex-1 md:flex-initial h-10 px-5 text-xs rounded-full"
+				>
+					{isExporting ? (
+						<>generating...</>
+					) : (
+						<><Download className="h-3.5 w-3.5 shrink-0" /> {previewMode === 'single' ? 'export active card' : previewMode === 'row' ? 'export active row' : 'export full grid'}</>
+					)}
+				</Button>
 			</div>
 
 			{/* Page Preview Section */}
@@ -582,10 +541,9 @@ export function RecommendationGenerator() {
 				<div className="flex items-center justify-between border-b border-slate-200/60 dark:border-slate-800/60 pb-2">
 					<div className="flex items-center gap-2">
 						<span className={cn(sansFont.className, "text-sm font-semibold tracking-wide text-slate-900 dark:text-slate-100")}>
-							live page preview
+							preview
 						</span>
 						<span className={cn(monoFont.className, "text-[9px] text-muted-foreground")}>
-							(renders at your exact design size and grid columns)
 						</span>
 					</div>
 
