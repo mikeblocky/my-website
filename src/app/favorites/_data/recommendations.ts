@@ -424,8 +424,8 @@ export const recommendationGroups: Record<RecommendationTab, {
 				thought: 'A breathtaking, deeply moving story about semilingualism, isolation, and finding a voice through the dream of space. The connection between Alice and class-genius Rui is incredibly fragile yet fierce. I love how Urino Kiko captures the sensory experience of language—or the lack thereof—and turns the vast, cold cosmos into a symbol of ultimate freedom and connection.',
 				links: [
 					{ label: 'Author', url: 'https://x.com/urino_kiko' },
-					{ label: 'Spirits page', url: 'https://bigcomicbros.net/work/82672/' },
-					{ label: 'Purchase', url: 'https://www.amazon.co.jp/dp/B0D5NFRJ8D' }
+					{ label: 'Spirits page', url: 'https://bigcomicbros.net/work/83391/' },
+					{ label: 'Purchase', url: 'https://www.amazon.co.jp/gp/product/B0GMDWHTV7' }
 				]
 			}
 		],
