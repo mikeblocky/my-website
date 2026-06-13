@@ -182,6 +182,7 @@ export default function RootLayout({
             `
           }}
         />
+        <link rel="preload" as="image" href="/distribution/2026/kemutai-hanashi/Illustration125c.webp?v=1" type="image/webp" />
       </head>
       <body className={cn(
         "h-full bg-background transition-colors duration-300"

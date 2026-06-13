@@ -1,3 +1,5 @@
+'use client'
+
 import { StackVertical } from '@/components/layout/layout-stack/layout-stack'
 import { cn } from '@/lib/utils/utils'
 import { monoFont, sansFont } from '@/styles/fonts/fonts'
@@ -9,24 +11,14 @@ interface RecommendationCardProps {
 }
 
 export function RecommendationCard({ item, viewMode = 'detailed' }: RecommendationCardProps) {
-	const isTopThumbnail = true
-
 	return (
-		<article className={cn(
-			"group overflow-hidden rounded-md border border-slate-200/60 dark:border-slate-800/60 bg-slate-50/50 dark:bg-slate-900/30 hover:bg-slate-100/40 dark:hover:bg-slate-900/50 transition-colors duration-150 shadow-none flex flex-col h-full",
-			!isTopThumbnail && "sm:flex-row min-h-[220px]"
-		)}>
+		<article className="group overflow-hidden rounded-md border border-slate-200/60 dark:border-slate-800/60 bg-slate-50/50 dark:bg-slate-900/30 hover:bg-slate-100/40 dark:hover:bg-slate-900/50 transition-colors duration-150 shadow-none flex flex-col h-full">
 			{item.imageUrl && (
-				<div className={cn(
-					"relative bg-white dark:bg-slate-950 shrink-0 border-slate-200/60 dark:border-slate-800/60",
-					isTopThumbnail
-						? "h-48 sm:h-64 w-full border-b"
-						: "h-48 w-full sm:h-auto sm:w-44 lg:w-36 border-b sm:border-b-0 sm:border-r"
-				)}>
+				<div className="relative bg-slate-100/50 dark:bg-slate-950/20 shrink-0 border-b border-slate-200/60 dark:border-slate-800/60 overflow-hidden h-48 sm:h-64 w-full rounded-t-md">
 					<img
 						src={item.imageUrl}
 						alt=""
-						className="h-full w-full object-cover object-center"
+						className="h-full w-full object-cover object-center rounded-t-md"
 						loading="lazy"
 					/>
 				</div>

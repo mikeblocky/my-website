@@ -291,6 +291,126 @@ export const recommendationGroups: Record<RecommendationTab, {
 					{ label: 'Author', url: 'https://x.com/wtnbmotimoto' },
 					{ label: 'Purchase', url: 'https://www.amazon.co.jp/dp/4046842563' }
 				]
+			},
+			{
+				title: 'Tanaka-kun is Always Listless (田中くんはいつもけだるげ)',
+				creator: 'Nozomi Uda',
+				category: 'manga',
+				medium: 'Manga',
+				status: 'Comfort read',
+				imageUrl: '/recommendations/tanaka_kun_manga.png',
+				covers: [
+					'/recommendations/tanaka_kun_manga.png'
+				],
+				thought: 'Uda Nozomi’s thin, delicate lines and uncluttered layouts are the perfect canvas for Tanaka\'s lethargy. The comedy never feels rushed or loud, choosing instead to drift through slow school days. I love how it celebrates the ease of a friendship where you can sit together in complete silence without any pressure to perform.',
+				links: [
+					{ label: 'Author', url: 'https://x.com/8kaichi' },
+					{ label: 'Reading preview & purchase', url: 'https://www.ganganonline.com/title/86' },
+				]
+			},
+			{
+				title: "Minato's Laundromat (みなと商事コインランドリー)",
+				creator: 'Yuzu Tsubaki / Sawa Kanzume',
+				category: 'manga',
+				medium: 'Manga',
+				status: 'Recommended',
+				imageUrl: '/recommendations/minato_laundromat.png',
+				covers: [
+					'/recommendations/minato_laundromat.png'
+				],
+				thought: 'There is a gentle, sun-bleached nostalgia to the setting of this run-down laundromat. While the age-gap romance is filled with playful bickering, what I love most is the emotional vulnerability—how Akira\'s fear of his own adulthood is challenged by Shintarou\'s fierce, unswerving clarity. It feels like a lazy summer afternoon where the heat refuses to fade.',
+				links: [
+					{ label: 'Official account', url: 'https://x.com/minato_syouji' },
+					{ label: 'pixiv Comic', url: 'https://comic.pixiv.net/works/6246' },
+					{ label: 'Purchase (latest volume)', url: 'https://www.kadokawa.co.jp/product/322601000095/' }
+				]
+			},
+			{
+				title: 'Love Bullet (ラブ・バレット)',
+				creator: 'inee',
+				category: 'manga',
+				medium: 'Manga',
+				status: 'Recommended',
+				imageUrl: '/recommendations/love_bullet_manga.png',
+				covers: [
+					'/recommendations/love_bullet_manga.png'
+				],
+				thought: 'On the surface, it’s a high-energy, stylized action story about Cupids using firearms to shoot bullets of love. But beneath the stylish shipping wars and neon-lit gunfights, there is a lingering, melancholic weight about regret, life, and the heavy memories of their past human lives. It\'s a gorgeous balance of aesthetic kineticism and emotional grief.',
+				links: [
+					{ label: 'Author', url: 'https://x.com/inee' },
+					{ label: 'Comic WALKER', url: 'https://comic-walker.com/detail/KC_005229_S/episodes/KC_0052290000100011_E?episodeType=first' },
+					{ label: 'Purchase (volume 1)', url: 'https://www.amazon.co.jp/-/en/inee-ebook/dp/B0CW1FRJDD/' },
+					{ label: 'Purchase (volume 2)', url: 'https://www.amazon.co.jp/dp/4046849266?' }
+				]
+			},
+			{
+				title: 'Sweet, Spicy, and Sour (甘くて辛くて酸っぱい)',
+				creator: 'Hasha (はしゃ)',
+				category: 'manga',
+				medium: 'Manga',
+				status: 'Recommended',
+				imageUrl: '/recommendations/amakute_karakute.png',
+				covers: [
+					'/recommendations/amakute_karakute.png'
+				],
+				thought: 'Following three thirty-something women sharing a second house in the countryside feels like a cozy retreat. I love how the simple acts of cooking and sharing meals become metaphors for their lives—sweetness tempering acidity, and spice bringing warmth to cold days. It captures the quiet comfort of female friendship and the slow process of figuring out who you are in your thirties.',
+				links: [
+					{ label: 'Author', url: 'https://x.com/suya_lemon' },
+					{ label: 'Official site', url: 'https://shuro.world/manga/delicious/' },
+					{ label: 'Purchase', url: 'https://www.amazon.co.jp/dp/4838733208'}
+				]
+			},
+			{
+				title: 'Okaeri Aureole (おかえりオーレオール)',
+				creator: 'Takatsu (高津) - former pen name of Takamatsu-sensei',
+				category: 'manga',
+				medium: 'Manga',
+				status: 'Recommended',
+				thought: 'There is a beautiful, aching patience to how their childhood bond shifts into something heavier and harder to define. It captures that fragile boundary where a shared history becomes both a comfort and a barrier. I love how it trusts the small shifts in posture and the space between their words to show the depth of their connection.',
+				links: [
+					{ label: 'Author', url: 'https://x.com/takamatsumisaki' },
+					{ label: 'pixiv Comic', url: 'https://comic.pixiv.net/works/7772' },
+					{ label: 'Purchase', url: 'https://www.amazon.co.jp/dp/4829685883' }
+				]
+			},
+			{
+				title: 'At the end of the mourning period (四十九日のお終いに 田沼朝作品集)',
+				creator: 'Asa Tanuma (田沼朝)',
+				category: 'manga',
+				medium: 'Manga',
+				status: 'Recommended',
+				thought: 'A collection of stories that feel like finding a quiet pocket of warmth on a cold evening. Tanuma Asa writes about human connections—friendships, grief, and the subtle ways we lean on each other—with such a gentle, unpretentious touch. The character dynamics are beautifully complex, lingering in the mind long after the book is closed.',
+				links: [
+					{ label: 'Author', url: 'https://x.com/tanumaasa' },
+					{ label: 'Comic WALKER', url: 'https://comic-walker.com/detail/KC_000574_S?episodeType=comics' },
+					{ label: 'Purchase', url: 'https://www.amazon.co.jp/dp/4047373389' }
+				]
+			},
+			{
+				title: 'Stardust Family (星屑家族)',
+				creator: 'Aki Horoyama (幌山あき)',
+				category: 'manga',
+				medium: 'Manga',
+				status: 'Recommended',
+				thought: 'Underneath its sterile, near-future SF premise of child welfare evaluation, it is a deeply human exploration of what it means to choose to be a family. It doesn\'t look away from the messy, painful realities of parenthood, but it handles the characters\' vulnerabilities with incredible care. The final chapters are profoundly moving.',
+				links: [
+					{ label: 'Author', url: 'https://x.com/poroyama_aki' },
+					{ label: 'Comic WALKER', url: 'https://comic-walker.com/detail/KC_004260_S?episodeType=comics' },
+					{ label: 'Purchase', url: 'https://www.amazon.co.jp/dp/B0BT75QCJY' }
+				]
+			},
+			{
+				title: 'Internet Love! (インターネット・ラヴ！)',
+				creator: 'Kiko Urino (売野機子)',
+				category: 'manga',
+				medium: 'Manga',
+				status: 'Recommended',
+				thought: 'A raw, hyper-modern look at how we connect and obsess in the digital age. The boundary between Japanese and Korean social media landscapes feels incredibly accurate, translating the weight of screen interactions into deep, physical yearning. It captures that dizzying, slightly manic reality of loving someone through a screen.',
+				links: [
+					{ label: 'Author', url: 'https://x.com/urino_kiko' },
+					{ label: 'Read preview', url: 'https://feelweb.jp/episode/4855956445093912839' },
+					{ label: 'Purchase', url: 'https://www.amazon.co.jp/dp/B0CGTF54QN' }
+				]
 			}
 		],
 	},
@@ -305,7 +425,7 @@ export const recommendationGroups: Record<RecommendationTab, {
 				medium: 'Anime',
 				status: 'Masterpiece',
 				imageUrl: '/recommendations/sonny-boy_anime.jpg',
-				thought: 'A silent drift through the currents of a dreamless adolescence, where classrooms float in an endless dark and rules melt like winter snow. It is a quiet rebellion against growing up, a search for a compass when the stars themselves have lost their names. A masterpiece of drifting youth and quiet, lasting hope.',
+				thought: 'A drift through the hazy currents of a dreamless adolescence, where classrooms float in an endless void and rules melt like winter snow. It is a subtle rebellion against growing up, a search for a compass when the stars themselves have lost their names. A masterpiece of drifting youth and a fragile, lasting sense of hope.',
 				links: [
 					{ label: 'Official site', url: 'https://anime.shochiku.co.jp/sonny-boy/' }
 				]
@@ -317,7 +437,7 @@ export const recommendationGroups: Record<RecommendationTab, {
 				medium: 'Anime',
 				status: 'Personal favorite',
 				imageUrl: '/recommendations/hoshai_no_sora.jpg',
-				thought: 'What stays with me is how much these kids are carrying before they even have the words for it. The tennis gives the story movement, but what I remember most is the need to be noticed, understood, and allowed to exist as you are.',
+				thought: 'There is a heavy weight carried by these kids before they even have the words to name it. While the tennis matches bring movement to the screen, what truly lingers is their search for a space to belong—the desperate, honest need to be noticed, understood, and simply allowed to exist as they are.',
 				links: [
 					{ label: 'TBS official site', url: 'https://www.tbs.co.jp/anime/hoshiai/' }
 				]
@@ -329,7 +449,7 @@ export const recommendationGroups: Record<RecommendationTab, {
 				medium: 'Anime',
 				status: 'Comfort watch',
 				imageUrl: '/recommendations/skip-and-loafer_anime.webp',
-				thought: 'The anime keeps the lightness of the manga without making it feel shallow. I like how much it trusts small moments: a pause, a bad joke, a look across the classroom, or a friendship becoming easier without anyone announcing it.',
+				thought: 'It captures the weightless breeze of youth without ever brushing past its subtle, internal friction. The beauty lies in how much it trusts the unsaid: a sudden pause, a bad joke, or a look across a crowded classroom. It makes the slow, unhurried ease of a growing friendship feel like the most natural thing in the world.',
 				links: [
 					{ label: 'Anime site', url: 'https://skip-and-loafer.com/' },
 					{ label: 'Comic DAYS', url: 'https://comic-days.com/episode/10834108156642600786' }
@@ -342,7 +462,7 @@ export const recommendationGroups: Record<RecommendationTab, {
 				medium: 'Anime',
 				status: 'Recommended',
 				imageUrl: '/recommendations/further_than_universe.avif',
-				thought: 'I like how this makes moving forward feel physical. The girls are going to Antarctica, but emotionally it feels like they are running away from being stuck. It is hopeful without pretending grief or fear disappear cleanly.',
+				thought: 'It turns the act of moving forward into something beautifully physical and raw. The journey to the edge of the earth is really an escape from the paralysis of grief and stuck time. It is a fiercely hopeful story, yet it never cheapens the pain, allowing loss and fear to exist without neat resolutions.',
 				links: [
 					{ label: 'Official site', url: 'https://yorimoi.com/' }
 				]
@@ -354,7 +474,7 @@ export const recommendationGroups: Record<RecommendationTab, {
 				medium: 'Anime',
 				status: 'Recommended',
 				imageUrl: '/recommendations/girl_last_tour.jpg',
-				thought: 'The world is empty, but the show never feels empty to me. I like the little routines: eating, moving, talking, wondering. It makes the end of everything feel quiet, warm, and strangely full of traces people left behind.',
+				thought: 'An empty world that somehow feels incredibly warm and full. I love the small, repetitive routines—cooking soup in the snow, maintaining the half-broken kettenkrad, and looking up at the rain. It makes the end of everything feel peaceful and strangely comforting, filled with the soft traces of those who came before.',
 				links: [
 					{ label: 'Official site', url: 'https://girls-last-tour.com/' }
 				]
@@ -366,7 +486,7 @@ export const recommendationGroups: Record<RecommendationTab, {
 				medium: 'Anime',
 				status: 'Recommended watch',
 				imageUrl: '/recommendations/hanako_anime.webp',
-				thought: 'The anime does a stunning job translating AidaIro\'s distinct, vintage-inspired art style and bold line work into motion. The vibrant, warm-toned color palettes and whimsical yet eerie atmosphere create an incredibly unique viewing experience.',
+				thought: 'Seeing AidaIro\'s vintage-inspired, stained-glass pages come alive in motion is breathtaking. The anime captures the playful yet eerie atmosphere perfectly, but what stays with me is the bittersweet weight beneath the comedy—the fragile connections between the living and the departed, and the desperation to be remembered.',
 				links: [
 					{ label: 'Official TBS site', url: 'https://www.tbs.co.jp/anime/hanakokun/' },
 					{ label: 'Official Anime X', url: 'https://x.com/hanakokun_info' }
@@ -379,9 +499,81 @@ export const recommendationGroups: Record<RecommendationTab, {
 				medium: 'Anime',
 				status: 'Recommended',
 				imageUrl: '/recommendations/summer_ghost.jpg',
-				thought: 'A visually stunning, short anime film about three high schoolers searching for a ghost, exploring life, death, and finding meaning in youth.',
+				thought: 'A gorgeous, bittersweet film that captures the fragile edge of youth where life and death feel almost interchangeable. Watching three teenagers standing in the summer breeze, seeking answers from a ghost because they feel invisible in their own lives, leaves you with a lingering, precious desire to hold onto today.',
 				links: [
 					{ label: 'Official Site', url: 'https://summerghost.jp/' }
+				]
+			},
+			{
+				title: 'Tanaka-kun is Always Listless (田中くんはいつもけだるげ)',
+				creator: 'Nozomi Uda / Silver Link.',
+				category: 'anime',
+				medium: 'Anime',
+				status: 'Comfort watch',
+				imageUrl: '/recommendations/tanaka_kun.png',
+				thought: 'It elevates doing absolutely nothing into a sort of tranquil art form. The comedy has a slow, patient rhythm, finding a strange grace in Tanaka\'s deliberate lethargy. It is a lovely reminder that napping under the afternoon light and letting the hurried world pass you by is a perfectly valid way of existing.',
+				links: [
+					{ label: 'Official site', url: 'https://tanakakun.tv/' }
+				]
+			},
+			{
+				title: "Kino's Journey (キノの旅 -the Beautiful World-) (2003)",
+				creator: 'Ryutaro Nakamura / A.C.G.T.',
+				category: 'anime',
+				medium: 'Anime',
+				status: 'Recommended',
+				imageUrl: '/recommendations/kinos_journey.png',
+				thought: '"The world is not beautiful, therefore it is." That sentiment carries every episode. Following Kino and Hermes through a series of strange, self-contained countries feels like reading a book of dark, philosophical fables. It doesn\'t judge the flaws of humanity; it simply observes them with a detached, yet deeply empathetic curiosity.',
+				links: [
+					{ label: 'Original site', url: 'https://kinonotabi.com/' }
+				]
+			},
+			{
+				title: 'Colorful (カラフル)',
+				creator: 'Keiichi Hara / Sunrise',
+				category: 'anime',
+				medium: 'Anime',
+				status: 'Recommended',
+				imageUrl: '/recommendations/colorful.png',
+				thought: 'A raw, deeply moving exploration of the heavy layers of depression and family expectations. It never shies away from how exhausting it can be to just exist, but it gently reminds us that life is painted in a spectrum of messy, overlapping colors. We are all allowed to make mistakes, piece ourselves back together, and find our own pace.',
+				links: [
+					{ label: 'Official site', url: 'https://www.sunrise-inc.co.jp/colorful/' }
+				]
+			},
+			{
+				title: 'Nichijou (日常)',
+				creator: 'Kyoto Animation',
+				category: 'anime',
+				medium: 'Anime',
+				status: 'Personal favorite',
+				imageUrl: '/recommendations/nichijou.png',
+				thought: 'It elevates the mundane absurdities of high school into grand, explosive spectacles of comedy. Yet, beneath the chaotic pacing and brilliant animation, there is a lovely, grounding affection for the ordinary. It celebrates the ridiculous, shared moments that make the everyday feel so vibrant and unforgettable.',
+				links: [
+					{ label: 'Kyoto Animation', url: 'https://www.kyotoanimation.co.jp/works/nichijou/' }
+				]
+			},
+			{
+				title: 'Barakamon (ばらかもん)',
+				creator: 'Kinema Citrus',
+				category: 'anime',
+				medium: 'Anime',
+				status: 'Comfort watch',
+				imageUrl: '/recommendations/barakamon.png',
+				thought: 'I love how Handa\'s self-discovery is bound to the slow, untamed rhythm of the island and the boisterous warmth of its villagers. It captures the realization that failure is not a dead end, but a spacious place to breathe and find a voice that belongs to you alone. The children\'s laughter and the salty sea breeze feel entirely tangible.',
+				links: [
+					{ label: 'Official site', url: 'https://www.vap.co.jp/barakamon/' }
+				]
+			},
+			{
+				title: 'Handa-kun (はんだくん)',
+				creator: 'Diomedéa',
+				category: 'anime',
+				medium: 'Anime',
+				status: 'Recommended watch',
+				imageUrl: '/recommendations/handa_kun.png',
+				thought: 'A brilliant, anxiety-driven mirror to Barakamon that captures the comedy of teenage isolation. It shows how easily we can get trapped in our own heads, translating genuine admiration into imagined hostility. There is a strange comfort in its absurdity, reminding us that the monsters we fear are often just our own internal critics.',
+				links: [
+					{ label: 'TBS official site', url: 'https://www.tbs.co.jp/anime/handaanime/' }
 				]
 			}
 		],
