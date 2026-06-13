@@ -212,7 +212,7 @@ export function RecommendationsClient() {
 							className={cn(
 								"w-full transition-all duration-150",
 								capturingId === `favorites-official-block-wrapper-${blockIdx}`
-									? "official-bg-preview rounded-xl border border-slate-200/40 dark:border-slate-850/20 shadow-md p-6"
+									? "official-bg-preview rounded-xl p-6"
 									: "bg-transparent p-0 border-none shadow-none"
 							)}
 						>
@@ -234,7 +234,7 @@ export function RecommendationsClient() {
 											className={cn(
 												"w-full transition-all duration-150",
 												capturingId === `favorites-official-row-wrapper-${rowIdx}`
-													? "official-bg-preview rounded-xl border border-slate-200/40 dark:border-slate-850/20 shadow-md p-6"
+													? "official-bg-preview rounded-xl p-6"
 													: "bg-transparent p-0 border-none shadow-none"
 											)}
 										>

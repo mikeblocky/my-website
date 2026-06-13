@@ -661,7 +661,7 @@ export function RecommendationGenerator() {
 						data-exporting={isExporting}
 						className={cn(
 							isExporting
-								? "official-bg-preview rounded-xl border border-slate-200/40 dark:border-slate-850/20 shadow-md p-6 shrink-0"
+								? "official-bg-preview rounded-xl p-6 shrink-0"
 								: "w-full bg-transparent"
 						)}
 						style={
