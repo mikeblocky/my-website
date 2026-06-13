@@ -34,7 +34,7 @@ export function RecommendationGenerator() {
 	])
 	
 	const [activeIndex, setActiveIndex] = useState<number>(0)
-	const [previewMode, setPreviewMode] = useState<'grid' | 'single'>('grid')
+	const [previewMode, setPreviewMode] = useState<'grid' | 'row' | 'single'>('grid')
 	const [isCopying, setIsCopying] = useState(false)
 	const [isLinkCopying, setIsLinkCopying] = useState(false)
 	const [isExporting, setIsExporting] = useState(false)
@@ -233,7 +233,6 @@ export function RecommendationGenerator() {
 		await new Promise((resolve) => setTimeout(resolve, 120))
 		try {
 			const { toPng } = await import('html-to-image')
-			const isSingle = previewMode === 'single'
 			const dataUrl = await toPng(element, {
 				style: {
 					transform: 'none',
@@ -242,7 +241,11 @@ export function RecommendationGenerator() {
 
 			// Download file
 			const link = document.createElement('a')
-			const suffix = isSingle ? activeItem.title.toLowerCase().replace(/[^a-z0-9]+/g, '-') : 'grid'
+			const suffix = previewMode === 'single'
+				? activeItem.title.toLowerCase().replace(/[^a-z0-9]+/g, '-')
+				: previewMode === 'row'
+					? `row-${Math.floor(activeIndex / 2) + 1}`
+					: 'grid'
 			link.download = `favorites-${suffix}.png`
 			link.href = dataUrl
 			link.click()
@@ -258,6 +261,48 @@ export function RecommendationGenerator() {
 		} catch (error) {
 			console.error('Failed to export card image:', error)
 		} finally {
+			setIsExporting(false)
+		}
+	}
+
+	const exportAllRows = async () => {
+		const originalPreviewMode = previewMode
+		const originalActiveIndex = activeIndex
+		setIsExporting(true)
+
+		try {
+			const { toPng } = await import('html-to-image')
+			const element = document.getElementById('favorites-card-export-target')
+			if (!element) return
+
+			const rowCount = Math.ceil(items.length / 2)
+			for (let i = 0; i < rowCount; i++) {
+				// Select a card in the target row to activate it
+				setActiveIndex(i * 2)
+				setPreviewMode('row')
+				
+				// Wait for React rendering and styling to commit
+				await new Promise((resolve) => setTimeout(resolve, 200))
+
+				const dataUrl = await toPng(element, {
+					style: {
+						transform: 'none',
+					},
+				})
+
+				const link = document.createElement('a')
+				link.download = `favorites-row-${i + 1}.png`
+				link.href = dataUrl
+				link.click()
+
+				// Small delay to prevent browser download throttling
+				await new Promise((resolve) => setTimeout(resolve, 300))
+			}
+		} catch (error) {
+			console.error('Failed to export all rows:', error)
+		} finally {
+			setPreviewMode(originalPreviewMode)
+			setActiveIndex(originalActiveIndex)
 			setIsExporting(false)
 		}
 	}
@@ -478,7 +523,7 @@ export function RecommendationGenerator() {
 				</div>
 
 				{/* Actions (Native Rounded-Full Buttons) */}
-				<div className="flex gap-3 w-full md:w-auto self-end pt-1 md:pt-0">
+				<div className="flex flex-wrap gap-3 w-full md:w-auto self-end pt-1 md:pt-0">
 					<Button
 						variant="outline"
 						onClick={copyToClipboard}
@@ -491,6 +536,21 @@ export function RecommendationGenerator() {
 						)}
 					</Button>
 
+					{items.length > 2 && (previewMode === 'grid' || previewMode === 'row') && (
+						<Button
+							variant="outline"
+							onClick={exportAllRows}
+							disabled={isExporting}
+							className="lowercase font-bold flex-1 md:flex-initial h-10 px-5 text-xs rounded-full"
+						>
+							{isExporting ? (
+								<>generating...</>
+							) : (
+								<><Download className="h-3.5 w-3.5 shrink-0" /> export all rows</>
+							)}
+						</Button>
+					)}
+
 					<Button
 						onClick={exportCardPng}
 						disabled={isExporting}
@@ -499,7 +559,7 @@ export function RecommendationGenerator() {
 						{isExporting ? (
 							<>generating...</>
 						) : (
-							<><Download className="h-3.5 w-3.5 shrink-0" /> export png image</>
+							<><Download className="h-3.5 w-3.5 shrink-0" /> {previewMode === 'single' ? 'export active card' : previewMode === 'row' ? 'export active row' : 'export full grid'}</>
 						)}
 					</Button>
 				</div>
@@ -531,6 +591,21 @@ export function RecommendationGenerator() {
 						>
 							<Eye className="h-3 w-3" /> active card
 						</button>
+						{items.length > 2 && (
+							<button
+								type="button"
+								onClick={() => setPreviewMode('row')}
+								className={cn(
+									sansFont.className,
+									"px-2.5 py-1 text-[10px] font-semibold flex items-center gap-1 rounded border lowercase transition-colors cursor-pointer",
+									previewMode === 'row'
+										? "text-[hsl(var(--pride-glow-val))] border-[hsl(var(--pride-glow-val))]/45 bg-[hsl(var(--pride-glow-val))]/10"
+										: "border-slate-200 dark:border-slate-800 text-slate-500 hover:text-slate-800 dark:hover:text-slate-250"
+								)}
+							>
+								<LayoutGrid className="h-3 w-3" /> active row
+							</button>
+						)}
 						<button
 							type="button"
 							onClick={() => setPreviewMode('grid')}
@@ -635,6 +710,39 @@ export function RecommendationGenerator() {
 						{previewMode === 'single' ? (
 							<div className="w-full rounded-md">
 								<RecommendationCard item={buildFullRecommendation(activeItem)} viewMode="detailed" />
+							</div>
+						) : previewMode === 'row' ? (
+							<div
+								className={cn(
+									"grid gap-6 w-full",
+									isExporting ? "grid-cols-2" : "grid-cols-1 lg:grid-cols-2"
+								)}
+							>
+								{items.map((item, idx) => {
+									const isSameRow = Math.floor(idx / 2) === Math.floor(activeIndex / 2)
+									if (!isSameRow) return null
+									return (
+										<div
+											key={idx}
+											onClick={() => setActiveIndex(idx)}
+											data-active-card={activeIndex === idx}
+											className={cn(
+												"rounded-md h-full transition-all duration-300 cursor-pointer relative",
+												(activeIndex === idx && !isExporting)
+													? "ring-2 ring-[hsl(var(--pride-glow-val))] ring-offset-2 dark:ring-offset-slate-950"
+													: "hover:ring-1 hover:ring-slate-350 dark:hover:ring-slate-700"
+											)}
+											title="Click to edit this card"
+										>
+											<RecommendationCard item={buildFullRecommendation(item)} viewMode="detailed" />
+											{activeIndex === idx && !isExporting && (
+												<div className={cn(monoFont.className, "absolute top-2 right-2 bg-[hsl(var(--pride-glow-val))]/90 text-white text-[9px] px-2 py-0.5 rounded shadow-sm tracking-wide lowercase z-10 font-bold")}>
+													editing
+												</div>
+											)}
+										</div>
+									)
+								})}
 							</div>
 						) : (
 							<div
