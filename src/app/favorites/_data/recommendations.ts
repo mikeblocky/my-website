@@ -366,6 +366,10 @@ export const recommendationGroups: Record<RecommendationTab, {
 				category: 'manga',
 				medium: 'Manga',
 				status: 'Recommended',
+				imageUrl: '/recommendations/okaeri.jpg',
+				covers: [
+					'/recommendations/okaeri.jpg'
+				],
 				thought: 'There is a beautiful, aching patience to how their childhood bond shifts into something heavier and harder to define. It captures that fragile boundary where a shared history becomes both a comfort and a barrier. I love how it trusts the small shifts in posture and the space between their words to show the depth of their connection.',
 				links: [
 					{ label: 'Author', url: 'https://x.com/takamatsumisaki' },
@@ -379,6 +383,10 @@ export const recommendationGroups: Record<RecommendationTab, {
 				category: 'manga',
 				medium: 'Manga',
 				status: 'Recommended',
+				imageUrl: '/recommendations/asa.jpg',
+				covers: [
+					'/recommendations/asa.jpg'
+				],
 				thought: 'A collection of stories that feel like finding a quiet pocket of warmth on a cold evening. Tanuma Asa writes about human connections—friendships, grief, and the subtle ways we lean on each other—with such a gentle, unpretentious touch. The character dynamics are beautifully complex, lingering in the mind long after the book is closed.',
 				links: [
 					{ label: 'Author', url: 'https://x.com/tanumaasa' },
@@ -392,6 +400,10 @@ export const recommendationGroups: Record<RecommendationTab, {
 				category: 'manga',
 				medium: 'Manga',
 				status: 'Recommended',
+				imageUrl: '/recommendations/kazoku.jpg',
+				covers: [
+					'/recommendations/kazoku.jpg'
+				],
 				thought: 'Underneath its sterile, near-future SF premise of child welfare evaluation, it is a deeply human exploration of what it means to choose to be a family. It doesn\'t look away from the messy, painful realities of parenthood, but it handles the characters\' vulnerabilities with incredible care. The final chapters are profoundly moving.',
 				links: [
 					{ label: 'Author', url: 'https://x.com/poroyama_aki' },
@@ -400,16 +412,20 @@ export const recommendationGroups: Record<RecommendationTab, {
 				]
 			},
 			{
-				title: 'Internet Love! (インターネット・ラヴ！)',
+				title: 'Alice, Everywhere (ありす、宇宙までも)',
 				creator: 'Kiko Urino (売野機子)',
 				category: 'manga',
 				medium: 'Manga',
 				status: 'Recommended',
-				thought: 'A raw, hyper-modern look at how we connect and obsess in the digital age. The boundary between Japanese and Korean social media landscapes feels incredibly accurate, translating the weight of screen interactions into deep, physical yearning. It captures that dizzying, slightly manic reality of loving someone through a screen.',
+				imageUrl: '/recommendations/arisu.png',
+				covers: [
+					'/recommendations/arisu.png'
+				],
+				thought: 'A breathtaking, deeply moving story about semilingualism, isolation, and finding a voice through the dream of space. The connection between Alice and class-genius Rui is incredibly fragile yet fierce. I love how Urino Kiko captures the sensory experience of language—or the lack thereof—and turns the vast, cold cosmos into a symbol of ultimate freedom and connection.',
 				links: [
 					{ label: 'Author', url: 'https://x.com/urino_kiko' },
-					{ label: 'Read preview', url: 'https://feelweb.jp/episode/4855956445093912839' },
-					{ label: 'Purchase', url: 'https://www.amazon.co.jp/dp/B0CGTF54QN' }
+					{ label: 'Spirits page', url: 'https://bigcomicbros.net/work/82672/' },
+					{ label: 'Purchase', url: 'https://www.amazon.co.jp/dp/B0D5NFRJ8D' }
 				]
 			}
 		],
