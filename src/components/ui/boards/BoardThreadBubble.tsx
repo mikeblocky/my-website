@@ -9,7 +9,7 @@ import { AttachmentPreviewGrid } from '@/components/ui/attachments/AttachmentPre
 import { AttachmentUploadButton } from '@/components/ui/attachments/AttachmentUploadButton'
 import { MAX_ATTACHMENT_COUNT } from '@/lib/images/attachment-limits'
 import { prepareImageForUpload } from '@/lib/images/prepare-upload'
-import { formatBoardDate as formatDate } from '@/lib/boards/board-utils'
+import { formatBoardDate as formatDate, formatBoardDateCompact as formatDateCompact } from '@/lib/boards/board-utils'
 import { cn } from '@/lib/utils/utils'
 import { sansFont, monoFont } from '@/styles/fonts/fonts'
 
@@ -102,14 +102,14 @@ export function BoardThreadBubble({
   return (
     <div
       className={cn(
-        'group/bubble relative flex gap-4 text-base text-left transition-all duration-300 p-1 rounded-xl',
+        'group/bubble relative flex gap-3 sm:gap-4 text-base text-left transition-all duration-300 pl-0 pr-1 py-1 rounded-xl',
         isEditing && `ring-1.5 ${classes.ring} bg-slate-500/5 dark:bg-stone-500/5 p-4`
       )}
     >
       {!isEditing && (
         <div className="flex flex-col items-center shrink-0">
-          <div className="w-12 flex justify-center">
-            <div className="w-12 h-12 rounded-full border border-black/[0.04] dark:border-white/[0.04] overflow-hidden select-none">
+          <div className="w-9 sm:w-12 flex justify-center">
+            <div className="w-9 h-9 sm:w-12 sm:h-12 rounded-full border border-black/[0.04] dark:border-white/[0.04] overflow-hidden select-none">
               <img 
                 src={isAdmin ? "/a.jpg" : "/q.jpg"} 
                 alt={isAdmin ? "Response Avatar" : "Question Avatar"} 
@@ -126,10 +126,10 @@ export function BoardThreadBubble({
       {/* Right Column: Message Content */}
       <div className="flex-grow min-w-0">
         {!isEditing && (
-          <div className="flex items-center justify-between mb-1">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-1.5 gap-1 sm:gap-2">
             <span className={cn(
               monoFont.className,
-              'text-[11px] font-bold tracking-wider',
+              'text-[11px] font-bold tracking-wider truncate',
               isAdmin ? classes.adminText : 'text-emerald-650 dark:text-emerald-400'
             )}>
               {isAdmin ? 'Response' : (author || 'anonymous')}
@@ -138,16 +138,17 @@ export function BoardThreadBubble({
               {isAdmin && isAdminMode && (
                 <button
                   onClick={onEditClick}
-                  className={cn(monoFont.className, 'text-[10px] font-bold opacity-0 group-hover/bubble:opacity-100 transition-opacity cursor-pointer', classes.editButton)}
+                  className={cn(monoFont.className, 'text-[10px] font-bold opacity-0 group-hover/bubble:opacity-100 transition-opacity cursor-pointer mr-1 shrink-0', classes.editButton)}
                 >
                   Edit
                 </button>
               )}
               <span className={cn(
                 monoFont.className,
-                'text-[10px] text-muted-foreground whitespace-nowrap'
+                'text-[10px] text-muted-foreground whitespace-nowrap shrink-0'
               )}>
-                {formatDate(message.createdAt)}
+                <span className="hidden sm:inline">{formatDate(message.createdAt)}</span>
+                <span className="inline sm:hidden">{formatDateCompact(message.createdAt)}</span>
               </span>
             </div>
           </div>

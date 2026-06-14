@@ -21,16 +21,36 @@ export function MobileAppShell() {
   const [isMoreOpen, setIsMoreOpen] = useState(false)
   const [device, setDevice] = useState<'apple' | 'material'>('apple')
   const { song: currentlyPlaying } = useSpotifyCurrentlyPlaying()
-  const [showScrollTop, setShowScrollTop] = useState(false)
+  const [isGenerator, setIsGenerator] = useState(false)
 
-  // Detect scroll to show/hide Scroll to Top button
+  // Check if active page/tab is recommendation generator
   useEffect(() => {
-    const handleScroll = () => {
-      setShowScrollTop(window.scrollY > 300)
+    if (typeof window === 'undefined') return
+
+    const checkGenerator = () => {
+      if (pathname !== '/favorites') {
+        setIsGenerator(false)
+        return
+      }
+      const params = new URLSearchParams(window.location.search)
+      const tabParam = params.get('tab')
+      const storedTab = localStorage.getItem('mikeblocky:recommendations-tab')
+      const activeTab = tabParam || storedTab || 'manga'
+      setIsGenerator(activeTab === 'generator')
     }
-    window.addEventListener('scroll', handleScroll, { passive: true })
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
+
+    checkGenerator()
+
+    window.addEventListener('popstate', checkGenerator)
+    window.addEventListener('mikeblocky-tab-url', checkGenerator)
+    window.addEventListener('mikeblocky-tab-storage', checkGenerator)
+
+    return () => {
+      window.removeEventListener('popstate', checkGenerator)
+      window.removeEventListener('mikeblocky-tab-url', checkGenerator)
+      window.removeEventListener('mikeblocky-tab-storage', checkGenerator)
+    }
+  }, [pathname])
 
   // Detect device client-side
   useEffect(() => {
@@ -72,55 +92,12 @@ export function MobileAppShell() {
 
   // Calculate dynamic bottom offset for the Spotify player bar based on device shell layout
   const getPlayerBottomOffset = () => {
-    // Both bars float at bottom-4 (16px) + height 64px (16px + 64px + 16px spacing = 96px)
-    return isMoreOpen ? '320px' : '80px'
+    // Both bars float at bottom-4 (16px) + height 56px (16px + 56px = 72px)
+    return isMoreOpen ? '320px' : '72px'
   }
 
   return (
     <div className="sm:hidden select-none">
-      {/* ────────────────── FLOATING SCROLL TO TOP BUTTON ────────────────── */}
-      <AnimatePresence>
-        {showScrollTop && (
-          <motion.button
-            initial={{ opacity: 0, scale: 0.85, y: 10 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.85, y: 10 }}
-            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-            className={cn(
-              "fixed right-4 z-40 p-2.5 rounded-full",
-              "bg-white/92 dark:bg-slate-950/92 backdrop-blur-md",
-              "border border-slate-200/50 dark:border-slate-800/60",
-              "shadow-lg shadow-black/5 dark:shadow-black/20",
-              "text-slate-600 dark:text-slate-350 hover:text-slate-900 dark:hover:text-white",
-              "active:scale-95 transition-all duration-200 cursor-pointer"
-            )}
-            style={{ 
-              bottom: currentlyPlaying 
-                ? `calc(5.75rem + env(safe-area-inset-bottom, 0px))` // above Spotify player
-                : `calc(5rem + env(safe-area-inset-bottom, 0px))` // above main navigation tabs
-            }}
-          >
-            {/* Shifting Pride Gradient Glow Border */}
-            <div 
-              className="absolute inset-0 rounded-full opacity-[0.1] dark:opacity-[0.15] pointer-events-none" 
-              style={{ 
-                backgroundImage: 'linear-gradient(135deg, var(--pride-colors-repeat))',
-                backgroundSize: '200% 200%',
-                animation: 'pride-shift 12s ease-in-out infinite'
-              }}
-            />
-            <svg 
-              className="w-4 h-4 relative z-10" 
-              fill="none" 
-              viewBox="0 0 24 24" 
-              stroke="currentColor" 
-              strokeWidth={2.5}
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" d="M5 15l7-7 7 7" />
-            </svg>
-          </motion.button>
-        )}
-      </AnimatePresence>
 
       {/* ────────────────── SPOTIFY FLOATING PLAYER BAR ────────────────── */}
       <AnimatePresence>
@@ -138,7 +115,7 @@ export function MobileAppShell() {
               target="_blank"
               rel="noopener noreferrer"
               className={cn(
-                "flex items-center justify-between p-2.5 rounded-xl relative overflow-hidden",
+                "flex items-center justify-between p-2.5 rounded-xl relative overflow-hidden focus:outline-none",
                 "bg-white/92 dark:bg-slate-950/92 backdrop-blur-md",
                 "border border-slate-200/50 dark:border-slate-800/50",
                 "shadow-lg shadow-black/5 dark:shadow-black/20",
@@ -155,7 +132,7 @@ export function MobileAppShell() {
                 }}
               />
               <div className="flex items-center gap-3 min-w-0 flex-1 z-10">
-                <div className="relative w-8 h-8 rounded-lg overflow-hidden shrink-0 bg-slate-100 dark:bg-slate-800 border border-slate-200/20 dark:border-slate-800/20 flex items-center justify-center">
+                <div className="relative w-8 h-8 rounded-full overflow-hidden shrink-0 bg-slate-100 dark:bg-slate-800 border border-slate-200/20 dark:border-slate-800/20 flex items-center justify-center">
                   {currentlyPlaying.artworkUrl ? (
                     <img
                       src={currentlyPlaying.artworkUrl}
@@ -187,17 +164,17 @@ export function MobileAppShell() {
       {device === 'apple' && (
         <nav
           className={cn(
-            "fixed bottom-4 left-1/2 -translate-x-1/2 w-[calc(100%-2rem)] max-w-md z-50 h-16 rounded-2xl overflow-hidden",
-            "bg-white/92 dark:bg-slate-950/92 backdrop-blur-md",
-            "border border-slate-200/50 dark:border-slate-800/60",
-            "shadow-[0_8px_32px_rgba(0,0,0,0.12)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.4)]",
+            "fixed bottom-4 left-1/2 -translate-x-1/2 w-[calc(100%-2rem)] max-w-md z-50 h-14 rounded-2xl overflow-hidden",
+            "bg-white/70 dark:bg-slate-900/65 backdrop-blur-2xl",
+            "border border-white/25 dark:border-white/10",
+            "shadow-[inset_0_1px_1px_rgba(255,255,255,0.3),0_8px_32px_rgba(0,0,0,0.06)] dark:shadow-[inset_0_0.5px_1px_rgba(255,255,255,0.15),0_8px_32px_rgba(0,0,0,0.45)]",
             "flex items-center justify-around px-2"
           )}
           style={{ bottom: 'calc(1rem + env(safe-area-inset-bottom, 0px))' }}
         >
           {/* Shifting Rainbow Gradient Background Tint Overlay */}
           <div 
-            className="absolute inset-0 opacity-[0.07] dark:opacity-[0.11] pointer-events-none" 
+            className="absolute inset-0 opacity-[0.04] dark:opacity-[0.06] pointer-events-none" 
             style={{ 
               backgroundImage: 'linear-gradient(135deg, var(--pride-colors-repeat))',
               backgroundSize: '200% 200%',
@@ -205,7 +182,7 @@ export function MobileAppShell() {
             }}
           />
           {/* Glossy Liquid Sheen Overlay */}
-          <div className="absolute inset-0 bg-gradient-to-b from-white/12 via-white/4 to-transparent pointer-events-none" />
+          <div className="absolute inset-0 bg-[linear-gradient(120deg,rgba(255,255,255,0.15)_0%,rgba(255,255,255,0.05)_30%,rgba(255,255,255,0)_70%)] pointer-events-none" />
 
           {mainTabs.map((tab) => {
             const active = isTabActive(tab) && !isMoreOpen
@@ -215,16 +192,18 @@ export function MobileAppShell() {
               <Link
                 key={tab.href}
                 href={tab.href}
-                className="flex flex-col items-center justify-center flex-1 h-full py-1 text-center cursor-pointer relative"
+                className="flex flex-col items-center justify-center flex-1 h-full py-1 text-center cursor-pointer relative focus:outline-none"
                 onClick={(e) => {
                   if (active) {
                     e.preventDefault()
-                    window.scrollTo({ top: 0, behavior: 'smooth' })
+                    if (!isGenerator) {
+                      window.scrollTo({ top: 0, behavior: 'smooth' })
+                    }
                   }
                 }}
               >
-                <Icon className={cn("w-[21px] h-[21px] transition-colors duration-300", active ? "pride-text" : "text-slate-500 dark:text-slate-400")} />
-                <span className={cn(monoFont.className, "text-[8px] mt-0.5 tracking-wider font-normal", active ? "pride-text" : "text-slate-500/80 dark:text-slate-400/80")}>
+                <Icon className={cn("w-[19px] h-[19px] transition-colors duration-300", active ? "pride-text" : "text-slate-800 hover:text-slate-950 dark:text-slate-100 dark:hover:text-white")} />
+                <span className={cn(monoFont.className, "text-[8px] mt-0.5 tracking-wider font-semibold", active ? "pride-text" : "text-slate-800 hover:text-slate-950 dark:text-slate-100 dark:hover:text-white")}>
                   {tab.label}
                 </span>
 
@@ -243,10 +222,10 @@ export function MobileAppShell() {
           {/* More Tab Trigger */}
           <button
             onClick={() => setIsMoreOpen(!isMoreOpen)}
-            className="flex flex-col items-center justify-center flex-1 w-full h-full py-0 text-center cursor-pointer relative"
+            className="flex flex-col items-center justify-center flex-1 w-full h-full py-1 text-center cursor-pointer relative focus:outline-none"
           >
-            <MoreHorizontal className={cn("w-[21px] h-[21px] transition-colors duration-300", isMoreOpen ? "pride-text" : "text-slate-500 dark:text-slate-400")} />
-            <span className={cn(monoFont.className, "text-[8px] mt-0.5 tracking-wider font-normal", isMoreOpen ? "pride-text" : "text-slate-500/80 dark:text-slate-400/80")}>
+            <MoreHorizontal className={cn("w-[19px] h-[19px] transition-colors duration-300", isMoreOpen ? "pride-text" : "text-slate-800 hover:text-slate-950 dark:text-slate-100 dark:hover:text-white")} />
+            <span className={cn(monoFont.className, "text-[8px] mt-0.5 tracking-wider font-semibold", isMoreOpen ? "pride-text" : "text-slate-800 hover:text-slate-950 dark:text-slate-100 dark:hover:text-white")} >
               More
             </span>
 
@@ -265,17 +244,17 @@ export function MobileAppShell() {
       {device === 'material' && (
         <nav
           className={cn(
-            "fixed bottom-4 left-1/2 -translate-x-1/2 w-[calc(100%-2rem)] max-w-md z-50 h-16 rounded-2xl overflow-hidden",
-            "bg-white/92 dark:bg-slate-950/92 backdrop-blur-md",
-            "border border-slate-200/50 dark:border-slate-800/60",
-            "shadow-[0_8px_32px_rgba(0,0,0,0.12)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.4)]",
+            "fixed bottom-4 left-1/2 -translate-x-1/2 w-[calc(100%-2rem)] max-w-md z-50 h-14 rounded-2xl overflow-hidden",
+            "bg-white/70 dark:bg-slate-900/65 backdrop-blur-2xl",
+            "border border-white/25 dark:border-white/10",
+            "shadow-[inset_0_1px_1px_rgba(255,255,255,0.3),0_8px_32px_rgba(0,0,0,0.06)] dark:shadow-[inset_0_0.5px_1px_rgba(255,255,255,0.15),0_8px_32px_rgba(0,0,0,0.45)]",
             "flex items-center justify-around px-2"
           )}
           style={{ bottom: 'calc(1rem + env(safe-area-inset-bottom, 0px))' }}
         >
           {/* Shifting Rainbow Gradient Background Tint Overlay */}
           <div 
-            className="absolute inset-0 opacity-[0.07] dark:opacity-[0.11] pointer-events-none" 
+            className="absolute inset-0 opacity-[0.04] dark:opacity-[0.06] pointer-events-none" 
             style={{ 
               backgroundImage: 'linear-gradient(135deg, var(--pride-colors-repeat))',
               backgroundSize: '200% 200%',
@@ -283,7 +262,7 @@ export function MobileAppShell() {
             }}
           />
           {/* Glossy Liquid Sheen Overlay */}
-          <div className="absolute inset-0 bg-gradient-to-b from-white/12 via-white/4 to-transparent pointer-events-none" />
+          <div className="absolute inset-0 bg-[linear-gradient(120deg,rgba(255,255,255,0.15)_0%,rgba(255,255,255,0.05)_30%,rgba(255,255,255,0)_70%)] pointer-events-none" />
 
           {mainTabs.map((tab) => {
             const active = isTabActive(tab) && !isMoreOpen
@@ -293,26 +272,28 @@ export function MobileAppShell() {
               <Link
                 key={tab.href}
                 href={tab.href}
-                className="flex flex-col items-center justify-center flex-1 h-full py-1 text-center cursor-pointer relative"
+                className="flex flex-col items-center justify-center flex-1 h-full py-1 text-center cursor-pointer relative focus:outline-none"
                 onClick={(e) => {
                   if (active) {
                     e.preventDefault()
-                    window.scrollTo({ top: 0, behavior: 'smooth' })
+                    if (!isGenerator) {
+                      window.scrollTo({ top: 0, behavior: 'smooth' })
+                    }
                   }
                 }}
               >
                 {/* M3 Sliding Pill Background */}
-                <div className="relative py-1 px-5 flex items-center justify-center rounded-full">
+                <div className="relative py-1 px-4.5 flex items-center justify-center rounded-full">
                   {active && (
                     <motion.div
                       layoutId="m3-active-pill"
-                      className="absolute inset-x-2 inset-y-0.5 rounded-full bg-[hsl(var(--pride-glow-val))]/12 -z-10"
+                      className="absolute inset-x-1.5 inset-y-0.5 rounded-full bg-[hsl(var(--pride-glow-val))]/12 -z-10"
                       transition={{ type: 'spring', damping: 26, stiffness: 300 }}
                     />
                   )}
-                  <Icon className={cn("w-5 h-5 transition-colors duration-250", active ? "pride-text" : "text-slate-500 dark:text-slate-400")} />
+                  <Icon className={cn("w-[19px] h-[19px] transition-colors duration-250", active ? "pride-text" : "text-slate-800 hover:text-slate-950 dark:text-slate-100 dark:hover:text-white")} />
                 </div>
-                <span className={cn(monoFont.className, "text-[8px] mt-0.5 tracking-wider font-normal", active ? "pride-text" : "text-slate-500/80 dark:text-slate-400/80")}>
+                <span className={cn(monoFont.className, "text-[8px] mt-0.5 tracking-wider font-semibold", active ? "pride-text" : "text-slate-800 hover:text-slate-950 dark:text-slate-100 dark:hover:text-white")}>
                   {tab.label}
                 </span>
               </Link>
@@ -322,19 +303,19 @@ export function MobileAppShell() {
           {/* More Tab Trigger */}
           <button
             onClick={() => setIsMoreOpen(!isMoreOpen)}
-            className="flex flex-col items-center justify-center flex-1 w-full h-full py-0 text-center cursor-pointer relative"
+            className="flex flex-col items-center justify-center flex-1 w-full h-full py-1 text-center cursor-pointer relative focus:outline-none"
           >
-            <div className="relative py-1 px-5 flex items-center justify-center rounded-full">
+            <div className="relative py-1 px-4.5 flex items-center justify-center rounded-full">
               {isMoreOpen && (
                 <motion.div
                   layoutId="m3-active-pill"
-                  className="absolute inset-x-2 inset-y-0.5 rounded-full bg-[hsl(var(--pride-glow-val))]/12 -z-10"
+                  className="absolute inset-x-1.5 inset-y-0.5 rounded-full bg-[hsl(var(--pride-glow-val))]/12 -z-10"
                   transition={{ type: 'spring', damping: 26, stiffness: 300 }}
                 />
               )}
-              <MoreHorizontal className={cn("w-5 h-5 transition-colors duration-250", isMoreOpen ? "pride-text" : "text-slate-500 dark:text-slate-400")} />
+              <MoreHorizontal className={cn("w-[19px] h-[19px] transition-colors duration-250", isMoreOpen ? "pride-text" : "text-slate-800 hover:text-slate-950 dark:text-slate-100 dark:hover:text-white")} />
             </div>
-            <span className={cn(monoFont.className, "text-[8px] mt-0.5 tracking-wider font-normal", isMoreOpen ? "pride-text" : "text-slate-500/80 dark:text-slate-400/80")}>
+            <span className={cn(monoFont.className, "text-[8px] mt-0.5 tracking-wider font-semibold", isMoreOpen ? "pride-text" : "text-slate-800 hover:text-slate-950 dark:text-slate-100 dark:hover:text-white")}>
               More
             </span>
           </button>
@@ -374,7 +355,7 @@ export function MobileAppShell() {
               animate="show"
               exit="hide"
               className="fixed left-8 z-50 w-auto flex flex-col gap-4.5 items-start justify-center"
-              style={{ bottom: 'calc(6.5rem + env(safe-area-inset-bottom, 0px))' }}
+              style={{ bottom: 'calc(5.25rem + env(safe-area-inset-bottom, 0px))' }}
             >
               {moreTabs.map((tab) => {
                 const active = isTabActive(tab)
@@ -392,7 +373,7 @@ export function MobileAppShell() {
                     <Link
                       href={tab.href}
                       className={cn(
-                        "flex items-center gap-3 py-2 px-2 transition-transform duration-155 active:scale-95 select-none",
+                        "flex items-center gap-3 py-2 px-2 transition-transform duration-155 active:scale-95 select-none focus:outline-none",
                         active
                           ? "pride-text font-normal text-sm"
                           : "text-white/80 hover:text-white text-sm"
@@ -400,12 +381,14 @@ export function MobileAppShell() {
                       onClick={(e) => {
                         if (active) {
                           e.preventDefault()
-                          window.scrollTo({ top: 0, behavior: 'smooth' })
+                          if (!isGenerator) {
+                            window.scrollTo({ top: 0, behavior: 'smooth' })
+                          }
                           setIsMoreOpen(false)
                         }
                       }}
                     >
-                      <Icon className={cn("w-5 h-5 shrink-0 transition-colors duration-200", active ? "pride-text" : "text-white/60")} />
+                      <Icon className={cn("w-[19px] h-[19px] shrink-0 transition-colors duration-200", active ? "pride-text" : "text-white/60")} />
                       <span className={cn(monoFont.className, "tracking-wider")}>
                         {tab.label}
                       </span>

@@ -12,7 +12,7 @@ import { AttachmentUploadButton } from '@/components/ui/attachments/AttachmentUp
 import { BoardThreadBubble } from '@/components/ui/boards/BoardThreadBubble'
 import { MAX_ATTACHMENT_COUNT } from '@/lib/images/attachment-limits'
 import { prepareImageForUpload } from '@/lib/images/prepare-upload'
-import { formatBoardDate as formatDate } from '@/lib/boards/board-utils'
+import { formatBoardDate as formatDate, formatBoardDateCompact as formatDateCompact } from '@/lib/boards/board-utils'
 import { cn } from '@/lib/utils/utils'
 import { monoFont, sansFont } from '@/styles/fonts/fonts'
 import type { MediaSuggestion, SuggestionStatus } from '../_types/suggestion'
@@ -198,13 +198,15 @@ export function SuggestionCard({
         </div>
       )}
 
-      <div className={cn('min-w-0 flex-1 flex flex-col gap-4', hasCardImage ? 'p-5 sm:p-6' : 'p-6')}>
+      <div className={cn('min-w-0 flex-1 flex flex-col gap-4', hasCardImage ? 'p-4 sm:p-6' : 'p-4 sm:p-6')}>
         {/* Original Post */}
-        <div className="flex gap-4">
+        <div className="flex gap-3 sm:gap-4">
           {/* Left Column: Avatar & Thread Line */}
           <div className="flex flex-col items-center shrink-0">
-            <div className="w-12 h-12 rounded-full border border-teal-200/30 dark:border-teal-900/30 overflow-hidden select-none">
-              <img src="/q.jpg" alt="Question Avatar" className="w-full h-full object-cover" />
+            <div className="w-9 sm:w-12 flex justify-center">
+              <div className="w-9 h-9 sm:w-12 sm:h-12 rounded-full border border-teal-200/30 dark:border-teal-900/30 overflow-hidden select-none">
+                <img src="/q.jpg" alt="Question Avatar" className="w-full h-full object-cover" />
+              </div>
             </div>
             {(thread.length > 0 || isReplying || isFollowingUp) && (
               <div className="w-0.5 bg-slate-200 dark:bg-slate-800 flex-grow mt-2 -mb-8 rounded-full" />
@@ -218,8 +220,9 @@ export function SuggestionCard({
                 <span className={cn(monoFont.className, "text-[10px] font-bold uppercase tracking-wider text-teal-600 dark:text-teal-400 border border-teal-200/50 dark:border-teal-900/50 bg-teal-50/50 dark:bg-teal-950/20 px-1.5 py-0.5 rounded")}>
                   {suggestion.category}
                 </span>
-                <span className={cn(monoFont.className, 'text-[11px] text-muted-foreground')}>
-                  {formatDate(suggestion.createdAt)}
+                <span className={cn(monoFont.className, 'text-[10px] sm:text-[11px] text-muted-foreground whitespace-nowrap shrink-0')}>
+                  <span className="hidden sm:inline">{formatDate(suggestion.createdAt)}</span>
+                  <span className="inline sm:hidden">{formatDateCompact(suggestion.createdAt)}</span>
                 </span>
 
                 {(() => {
@@ -360,10 +363,10 @@ export function SuggestionCard({
 
         {/* Admin reply form */}
         {isReplying && (
-          <div className="flex gap-4 border-t border-slate-100/50 dark:border-slate-800/50 pt-3">
+          <div className="flex gap-3 sm:gap-4 border-t border-slate-100/50 dark:border-slate-800/50 pt-3">
             <div className="flex flex-col items-center shrink-0">
-              <div className="w-12 flex justify-center">
-                <div className="w-12 h-12 rounded-full border border-black/[0.04] overflow-hidden select-none">
+              <div className="w-9 sm:w-12 flex justify-center">
+                <div className="w-9 h-9 sm:w-12 sm:h-12 rounded-full border border-black/[0.04] overflow-hidden select-none">
                   <img src="/a.jpg" alt="Response Avatar" className="w-full h-full object-cover" />
                 </div>
               </div>
@@ -436,10 +439,10 @@ export function SuggestionCard({
 
         {/* Visitor follow-up form */}
         {isFollowingUp && (
-          <div className="flex gap-4 border-t border-slate-100/50 dark:border-slate-800/50 pt-3">
+          <div className="flex gap-3 sm:gap-4 border-t border-slate-100/50 dark:border-slate-800/50 pt-3">
             <div className="flex flex-col items-center shrink-0">
-              <div className="w-12 flex justify-center">
-                <div className="w-12 h-12 rounded-full border border-black/[0.04] overflow-hidden select-none">
+              <div className="w-9 sm:w-12 flex justify-center">
+                <div className="w-9 h-9 sm:w-12 sm:h-12 rounded-full border border-black/[0.04] overflow-hidden select-none">
                   <img src="/q.jpg" alt="Question Avatar" className="w-full h-full object-cover" />
                 </div>
               </div>

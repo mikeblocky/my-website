@@ -12,6 +12,14 @@ const boardDateFormatter = new Intl.DateTimeFormat('en', {
 	timeZone: 'Asia/Bangkok',
 })
 
+const boardDateFormatterCompact = new Intl.DateTimeFormat('en', {
+	month: 'short',
+	day: 'numeric',
+	hour: 'numeric',
+	minute: '2-digit',
+	timeZone: 'Asia/Bangkok',
+})
+
 export function sortByCreatedAt<TItem extends { createdAt: string }>(items: TItem[]) {
 	return items.slice().sort(
 		(a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
@@ -21,6 +29,14 @@ export function sortByCreatedAt<TItem extends { createdAt: string }>(items: TIte
 export function formatBoardDate(iso: string) {
 	try {
 		return boardDateFormatter.format(new Date(iso))
+	} catch (_error) {
+		return iso
+	}
+}
+
+export function formatBoardDateCompact(iso: string) {
+	try {
+		return boardDateFormatterCompact.format(new Date(iso))
 	} catch (_error) {
 		return iso
 	}

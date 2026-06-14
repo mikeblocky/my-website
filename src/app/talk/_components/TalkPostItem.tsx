@@ -11,7 +11,7 @@ import { sansFont, monoFont } from '@/styles/fonts/fonts'
 import { cn } from '@/lib/utils/utils'
 import { prepareImageForUpload } from '@/lib/images/prepare-upload'
 import { MAX_ATTACHMENT_COUNT } from '@/lib/images/attachment-limits'
-import { formatBoardDate as formatDate } from '@/lib/boards/board-utils'
+import { formatBoardDate as formatDate, formatBoardDateCompact as formatDateCompact } from '@/lib/boards/board-utils'
 import { AttachmentPreviewGrid } from '@/components/ui/attachments/AttachmentPreviewGrid'
 import { AttachmentUploadButton } from '@/components/ui/attachments/AttachmentUploadButton'
 import { BoardThreadBubble } from '@/components/ui/boards/BoardThreadBubble'
@@ -166,15 +166,16 @@ export function TalkPostItem({
   return (
     <article 
       id={`talk-${talk.id}`} 
-      className="group relative rounded-xl border border-slate-200/50 dark:border-slate-850/50 bg-white/40 dark:bg-slate-950/20 p-6 transition-all duration-200 hover:bg-white/65 dark:hover:bg-slate-950/35 shadow-none text-left"
+      className="group relative rounded-xl border border-slate-200/50 dark:border-slate-850/50 bg-white/40 dark:bg-slate-950/20 p-4 sm:p-6 transition-all duration-200 hover:bg-white/65 dark:hover:bg-slate-950/35 shadow-none text-left"
     >
       <div className="flex flex-col gap-4">
-        {/* Original Post */}
-        <div className="flex gap-4">
+        <div className="flex gap-3 sm:gap-4">
           {/* Left Column: Avatar & Thread Line */}
           <div className="flex flex-col items-center shrink-0">
-            <div className="w-12 h-12 rounded-full border border-blue-200/30 dark:border-blue-900/30 overflow-hidden select-none">
-              <img src="/q.jpg" alt="Question Avatar" className="w-full h-full object-cover" />
+            <div className="w-9 sm:w-12 flex justify-center">
+              <div className="w-9 h-9 sm:w-12 sm:h-12 rounded-full border border-blue-200/30 dark:border-blue-900/30 overflow-hidden select-none">
+                <img src="/q.jpg" alt="Question Avatar" className="w-full h-full object-cover" />
+              </div>
             </div>
             {(thread.length > 0 || isReplying || isFollowingUp) && (
               <div className="w-0.5 bg-slate-200 dark:bg-slate-800 flex-grow mt-2 -mb-8 rounded-full" />
@@ -183,16 +184,17 @@ export function TalkPostItem({
 
           {/* Right Column: Content */}
           <div className="flex-1 min-w-0">
-            <div className="flex justify-between items-center mb-1">
-              <span className={cn(monoFont.className, "text-[11px] font-bold tracking-wider text-slate-850 dark:text-slate-100")}>
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-1.5 gap-1 sm:gap-2">
+              <span className={cn(monoFont.className, "text-[11px] font-bold tracking-wider text-slate-850 dark:text-slate-100 truncate")}>
                 {talk.author}
               </span>
               <div className="flex items-center gap-1">
                 {talk.notifying && (
-                  <Bell size={13} className="text-blue-650 dark:text-blue-450 fill-blue-500/10 mr-1" />
+                  <Bell size={13} className="text-blue-650 dark:text-blue-450 fill-blue-500/10 mr-1 shrink-0" />
                 )}
-                <span className={cn(monoFont.className, "text-[11px] text-muted-foreground")}>
-                  {formatDate(talk.createdAt)}
+                <span className={cn(monoFont.className, "text-[10px] sm:text-[11px] text-muted-foreground whitespace-nowrap shrink-0")}>
+                  <span className="hidden sm:inline">{formatDate(talk.createdAt)}</span>
+                  <span className="inline sm:hidden">{formatDateCompact(talk.createdAt)}</span>
                 </span>
               </div>
             </div>
@@ -251,10 +253,10 @@ export function TalkPostItem({
 
         {/* Admin reply form */}
         {isReplying && (
-          <div className="flex gap-4 border-t border-slate-100/50 dark:border-slate-800/50 pt-3">
+          <div className="flex gap-3 sm:gap-4 border-t border-slate-100/50 dark:border-slate-800/50 pt-3">
             <div className="flex flex-col items-center shrink-0">
-              <div className="w-12 flex justify-center">
-                <div className="w-12 h-12 rounded-full border border-black/[0.04] overflow-hidden select-none">
+              <div className="w-9 sm:w-12 flex justify-center">
+                <div className="w-9 h-9 sm:w-12 sm:h-12 rounded-full border border-black/[0.04] overflow-hidden select-none">
                   <img src="/a.jpg" alt="Response Avatar" className="w-full h-full object-cover" />
                 </div>
               </div>
@@ -312,10 +314,10 @@ export function TalkPostItem({
 
         {/* Visitor follow-up form */}
         {isFollowingUp && (
-          <div className="flex gap-4 border-t border-slate-100/50 dark:border-slate-800/50 pt-3">
+          <div className="flex gap-3 sm:gap-4 border-t border-slate-100/50 dark:border-slate-800/50 pt-3">
             <div className="flex flex-col items-center shrink-0">
-              <div className="w-12 flex justify-center">
-                <div className="w-12 h-12 rounded-full border border-black/[0.04] overflow-hidden select-none">
+              <div className="w-9 sm:w-12 flex justify-center">
+                <div className="w-9 h-9 sm:w-12 sm:h-12 rounded-full border border-black/[0.04] overflow-hidden select-none">
                   <img src="/q.jpg" alt="Question Avatar" className="w-full h-full object-cover" />
                 </div>
               </div>

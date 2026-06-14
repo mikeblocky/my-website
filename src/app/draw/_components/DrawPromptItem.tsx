@@ -11,7 +11,7 @@ import { sansFont, monoFont } from '@/styles/fonts/fonts'
 import { cn } from '@/lib/utils/utils'
 import { prepareImageForUpload } from '@/lib/images/prepare-upload'
 import { MAX_ATTACHMENT_COUNT } from '@/lib/images/attachment-limits'
-import { formatBoardDate as formatDate } from '@/lib/boards/board-utils'
+import { formatBoardDate as formatDate, formatBoardDateCompact as formatDateCompact } from '@/lib/boards/board-utils'
 import { AttachmentPreviewGrid } from '@/components/ui/attachments/AttachmentPreviewGrid'
 import { AttachmentUploadButton } from '@/components/ui/attachments/AttachmentUploadButton'
 import { BoardThreadBubble } from '@/components/ui/boards/BoardThreadBubble'
@@ -166,15 +166,17 @@ export function DrawPromptItem({
   return (
     <article 
       id={`prompt-${prompt.id}`} 
-      className="group relative rounded-xl border border-slate-200/50 dark:border-slate-850/50 bg-white/40 dark:bg-slate-950/20 p-6 transition-all duration-200 hover:bg-white/65 dark:hover:bg-slate-950/35 shadow-none text-left"
+      className="group relative rounded-xl border border-slate-200/50 dark:border-slate-850/50 bg-white/40 dark:bg-slate-950/20 p-4 sm:p-6 transition-all duration-200 hover:bg-white/65 dark:hover:bg-slate-950/35 shadow-none text-left"
     >
       <div className="flex flex-col gap-4">
         {/* Original prompt */}
-        <div className="flex gap-4">
+        <div className="flex gap-3 sm:gap-4">
           {/* Left Column: Avatar & Thread Line */}
           <div className="flex flex-col items-center shrink-0">
-            <div className="w-12 h-12 rounded-full border border-violet-200/30 dark:border-violet-900/30 overflow-hidden select-none">
-              <img src="/q.jpg" alt="Question Avatar" className="w-full h-full object-cover" />
+            <div className="w-9 sm:w-12 flex justify-center">
+              <div className="w-9 h-9 sm:w-12 sm:h-12 rounded-full border border-violet-200/30 dark:border-violet-900/30 overflow-hidden select-none">
+                <img src="/q.jpg" alt="Question Avatar" className="w-full h-full object-cover" />
+              </div>
             </div>
             {(thread.length > 0 || isReplying || isFollowingUp) && (
               <div className="w-0.5 bg-slate-200 dark:bg-slate-800 flex-grow mt-2 -mb-8 rounded-full" />
@@ -183,19 +185,20 @@ export function DrawPromptItem({
 
           {/* Right Column: Content */}
           <div className="flex-1 min-w-0">
-            <div className="flex justify-between items-center mb-1">
-              <span className={cn(monoFont.className, "text-[11px] font-bold tracking-wider text-violet-600 dark:text-violet-300")}>
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-1.5 gap-1 sm:gap-2">
+              <span className={cn(monoFont.className, "text-[11px] font-bold tracking-wider text-violet-600 dark:text-violet-300 truncate")}>
                 {prompt.author}
               </span>
               <div className="flex items-center gap-1">
-                <div className="flex items-center mr-1" title="Notifications active (strict)">
+                <div className="flex items-center mr-1 shrink-0" title="Notifications active (strict)">
                   <div className="relative flex items-center justify-center w-6 h-6 rounded-full bg-violet-50 dark:bg-violet-500/10">
                     <Bell size={14} className="text-violet-600 dark:text-violet-400 fill-violet-600/10" />
                     <span className="absolute top-0 right-0 h-2 w-2 rounded-full bg-violet-600 border-2 border-white dark:border-slate-900 animate-pulse" />
                   </div>
                 </div>
-                <span className={cn(monoFont.className, "text-[11px] text-muted-foreground")}>
-                  {formatDate(prompt.createdAt)}
+                <span className={cn(monoFont.className, "text-[10px] sm:text-[11px] text-muted-foreground whitespace-nowrap shrink-0")}>
+                  <span className="hidden sm:inline">{formatDate(prompt.createdAt)}</span>
+                  <span className="inline sm:hidden">{formatDateCompact(prompt.createdAt)}</span>
                 </span>
               </div>
             </div>
@@ -271,10 +274,10 @@ export function DrawPromptItem({
 
         {/* Admin reply form */}
         {isReplying && (
-          <div className="flex gap-4 border-t border-slate-100/50 dark:border-slate-800/50 pt-3">
+          <div className="flex gap-3 sm:gap-4 border-t border-slate-100/50 dark:border-slate-800/50 pt-3">
             <div className="flex flex-col items-center shrink-0">
-              <div className="w-12 flex justify-center">
-                <div className="w-12 h-12 rounded-full border border-black/[0.04] overflow-hidden select-none">
+              <div className="w-9 sm:w-12 flex justify-center">
+                <div className="w-9 h-9 sm:w-12 sm:h-12 rounded-full border border-black/[0.04] overflow-hidden select-none">
                   <img src="/a.jpg" alt="Response Avatar" className="w-full h-full object-cover" />
                 </div>
               </div>
@@ -332,10 +335,10 @@ export function DrawPromptItem({
 
         {/* Visitor follow-up form */}
         {isFollowingUp && (
-          <div className="flex gap-4 border-t border-slate-100/50 dark:border-slate-800/50 pt-3">
+          <div className="flex gap-3 sm:gap-4 border-t border-slate-100/50 dark:border-slate-800/50 pt-3">
             <div className="flex flex-col items-center shrink-0">
-              <div className="w-12 flex justify-center">
-                <div className="w-12 h-12 rounded-full border border-black/[0.04] overflow-hidden select-none">
+              <div className="w-9 sm:w-12 flex justify-center">
+                <div className="w-9 h-9 sm:w-12 sm:h-12 rounded-full border border-black/[0.04] overflow-hidden select-none">
                   <img src="/q.jpg" alt="Question Avatar" className="w-full h-full object-cover" />
                 </div>
               </div>
