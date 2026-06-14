@@ -20,7 +20,7 @@ interface IndividualPageFooterProps {
 export function IndividualPageFooter({ 
     sectionName,
     parentPageName,
-    showToTop = true,
+    showToTop = false,
     showParentPage = true,
     showHomePage = true,
     showSocialLinks = true,

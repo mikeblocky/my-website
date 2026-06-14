@@ -23,7 +23,7 @@ export function BaseFooter({
     color = 'blue', 
     navigationLinks, 
     className,
-    showToTop = true,
+    showToTop = false,
     showSectionName = true,
     showSocialLinks = true,
     showCopyright = true,
