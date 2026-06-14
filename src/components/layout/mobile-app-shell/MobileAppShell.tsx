@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Home, Grid, BookOpen, MessageSquare, MoreHorizontal, User, Book, Users, Heart, X, Music } from 'lucide-react'
+import { Home, Grid, BookOpen, MessageSquare, MoreHorizontal, User, Book, Users, Heart, X, Music, ChevronDown } from 'lucide-react'
 import { cn } from '@/lib/utils/utils'
 import { monoFont, sansFont } from '@/styles/fonts/fonts'
 import { useSpotifyCurrentlyPlaying } from '@/lib/spotify/use-spotify-currently-playing'
@@ -22,6 +22,7 @@ export function MobileAppShell() {
   const [device, setDevice] = useState<'apple' | 'material'>('apple')
   const { song: currentlyPlaying } = useSpotifyCurrentlyPlaying()
   const [isGenerator, setIsGenerator] = useState(false)
+  const [isSpotifyCollapsed, setIsSpotifyCollapsed] = useState(false)
 
   // Check if active page/tab is recommendation generator
   useEffect(() => {
@@ -100,63 +101,123 @@ export function MobileAppShell() {
     <div className="sm:hidden select-none">
 
       {/* ────────────────── SPOTIFY FLOATING PLAYER BAR ────────────────── */}
-      <AnimatePresence>
+      <AnimatePresence mode="wait">
         {currentlyPlaying && (
-          <motion.div
-            initial={{ opacity: 0, y: 30, scale: 0.95, x: '-50%' }}
-            animate={{ opacity: 1, y: 0, scale: 1, x: '-50%' }}
-            exit={{ opacity: 0, y: 30, scale: 0.95, x: '-50%' }}
-            transition={{ type: 'spring', damping: 25, stiffness: 220 }}
-            className="fixed left-1/2 w-[calc(100%-2rem)] max-w-md z-40"
-            style={{ bottom: `calc(1rem + env(safe-area-inset-bottom, 0px) + ${getPlayerBottomOffset()})` }}
-          >
-            <a
-              href={currentlyPlaying.songUrl}
-              target="_blank"
-              rel="noopener noreferrer"
+          isSpotifyCollapsed ? (
+            <motion.button
+              key="spotify-collapsed"
+              initial={{ opacity: 0, scale: 0.8, x: 20 }}
+              animate={{ opacity: 1, scale: 1, x: 0 }}
+              exit={{ opacity: 0, scale: 0.8, x: 20 }}
+              transition={{ type: 'spring', damping: 25, stiffness: 220 }}
+              onClick={() => setIsSpotifyCollapsed(false)}
               className={cn(
-                "flex items-center justify-between p-2.5 rounded-xl relative overflow-hidden focus:outline-none",
-                "bg-white/92 dark:bg-slate-950/92 backdrop-blur-md",
-                "border border-slate-200/50 dark:border-slate-800/50",
+                "fixed right-4 z-40 w-11 h-11 rounded-full flex items-center justify-center overflow-hidden focus:outline-none",
+                "bg-white/10 dark:bg-slate-950/20 backdrop-blur-2xl",
+                "border border-white/25 dark:border-white/10",
                 "shadow-lg shadow-black/5 dark:shadow-black/20",
-                "active:scale-[0.98] transition-transform duration-100"
+                "active:scale-[0.95] transition-transform duration-100"
               )}
+              style={{ bottom: `calc(1rem + env(safe-area-inset-bottom, 0px) + ${getPlayerBottomOffset()})` }}
+              title="Expand currently playing"
             >
               {/* Shifting Rainbow Gradient Background Tint Overlay */}
               <div 
-                className="absolute inset-0 opacity-[0.12] dark:opacity-[0.18] pointer-events-none" 
+                className="absolute inset-0 opacity-[0.05] dark:opacity-[0.08] pointer-events-none" 
                 style={{ 
                   backgroundImage: 'linear-gradient(135deg, var(--pride-colors-repeat))',
                   backgroundSize: '200% 200%',
                   animation: 'pride-shift 12s ease-in-out infinite'
                 }}
               />
-              <div className="flex items-center gap-3 min-w-0 flex-1 z-10">
-                <div className="relative w-8 h-8 rounded-full overflow-hidden shrink-0 bg-slate-100 dark:bg-slate-800 border border-slate-200/20 dark:border-slate-800/20 flex items-center justify-center">
-                  {currentlyPlaying.artworkUrl ? (
-                    <img
-                      src={currentlyPlaying.artworkUrl}
-                      alt={currentlyPlaying.album || 'artwork'}
-                      className="w-full h-full object-cover"
-                      style={{ animation: 'spin 12s linear infinite' }}
-                    />
-                  ) : (
-                    <Music className="w-3.5 h-3.5 text-muted-foreground" />
-                  )}
-                  <div className="absolute inset-0 bg-emerald-500/5 mix-blend-overlay pointer-events-none" />
-                </div>
-
-                <div className="min-w-0 flex-1">
-                  <p className={cn(sansFont.className, "text-[11px] font-bold text-foreground truncate lowercase")}>
-                    {currentlyPlaying.song}
-                  </p>
-                  <p className={cn(monoFont.className, "text-[9px] text-muted-foreground truncate lowercase")}>
-                    listening to: {currentlyPlaying.artist}
-                  </p>
-                </div>
+              <div className="relative w-8 h-8 rounded-full overflow-hidden shrink-0 bg-slate-100 dark:bg-slate-800 border border-slate-200/20 dark:border-slate-800/20 flex items-center justify-center z-10">
+                {currentlyPlaying.artworkUrl ? (
+                  <img
+                    src={currentlyPlaying.artworkUrl}
+                    alt={currentlyPlaying.album || 'artwork'}
+                    className="w-full h-full object-cover"
+                    style={{ animation: 'spin 12s linear infinite' }}
+                  />
+                ) : (
+                  <Music className="w-3.5 h-3.5 text-muted-foreground" />
+                )}
+                <div className="absolute inset-0 bg-emerald-500/5 mix-blend-overlay pointer-events-none" />
               </div>
-            </a>
-          </motion.div>
+            </motion.button>
+          ) : (
+            <motion.div
+              key="spotify-expanded"
+              initial={{ opacity: 0, y: 30, scale: 0.95, x: '-50%' }}
+              animate={{ opacity: 1, y: 0, scale: 1, x: '-50%' }}
+              exit={{ opacity: 0, y: 30, scale: 0.95, x: '-50%' }}
+              transition={{ type: 'spring', damping: 25, stiffness: 220 }}
+              className="fixed left-1/2 w-[calc(100%-2rem)] max-w-md z-40"
+              style={{ bottom: `calc(1rem + env(safe-area-inset-bottom, 0px) + ${getPlayerBottomOffset()})` }}
+            >
+              <div
+                className={cn(
+                  "flex items-center justify-between p-2.5 rounded-xl relative overflow-hidden",
+                  "bg-white/10 dark:bg-slate-950/20 backdrop-blur-2xl",
+                  "border border-white/25 dark:border-white/10",
+                  "shadow-lg shadow-black/5 dark:shadow-black/20"
+                )}
+              >
+                {/* Shifting Rainbow Gradient Background Tint Overlay */}
+                <div 
+                  className="absolute inset-0 opacity-[0.05] dark:opacity-[0.08] pointer-events-none" 
+                  style={{ 
+                    backgroundImage: 'linear-gradient(135deg, var(--pride-colors-repeat))',
+                    backgroundSize: '200% 200%',
+                    animation: 'pride-shift 12s ease-in-out infinite'
+                  }}
+                />
+                
+                {/* Link part (artwork & text) */}
+                <a
+                  href={currentlyPlaying.songUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-3 min-w-0 flex-1 z-10 focus:outline-none active:scale-[0.98] transition-transform duration-100"
+                >
+                  <div className="relative w-8 h-8 rounded-full overflow-hidden shrink-0 bg-slate-100 dark:bg-slate-800 border border-slate-200/20 dark:border-slate-800/20 flex items-center justify-center">
+                    {currentlyPlaying.artworkUrl ? (
+                      <img
+                        src={currentlyPlaying.artworkUrl}
+                        alt={currentlyPlaying.album || 'artwork'}
+                        className="w-full h-full object-cover"
+                        style={{ animation: 'spin 12s linear infinite' }}
+                      />
+                    ) : (
+                      <Music className="w-3.5 h-3.5 text-muted-foreground" />
+                    )}
+                    <div className="absolute inset-0 bg-emerald-500/5 mix-blend-overlay pointer-events-none" />
+                  </div>
+
+                  <div className="min-w-0 flex-1">
+                    <p className={cn(sansFont.className, "text-[11px] font-bold text-foreground truncate lowercase")}>
+                      {currentlyPlaying.song}
+                    </p>
+                    <p className={cn(monoFont.className, "text-[9px] text-muted-foreground truncate lowercase")}>
+                      listening to: {currentlyPlaying.artist}
+                    </p>
+                  </div>
+                </a>
+
+                {/* Collapse button */}
+                <button
+                  onClick={(e) => {
+                    e.preventDefault()
+                    e.stopPropagation()
+                    setIsSpotifyCollapsed(true)
+                  }}
+                  className="p-1 text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200 cursor-pointer z-20 focus:outline-none ml-2 active:scale-90 transition-transform duration-100 shrink-0"
+                  title="Collapse player"
+                >
+                  <ChevronDown className="h-4.5 w-4.5" />
+                </button>
+              </div>
+            </motion.div>
+          )
         )}
       </AnimatePresence>
 
