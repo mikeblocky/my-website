@@ -868,7 +868,7 @@ export function RecommendationGenerator() {
 							animate={{ opacity: 1, scale: 1, y: 0 }}
 							exit={{ opacity: 0, scale: 0.85, y: 20 }}
 							transition={{ type: 'spring', damping: 25, stiffness: 250 }}
-							className="fixed bottom-24 right-4 z-40 bg-white/95 dark:bg-slate-900/95 border border-slate-200/80 dark:border-slate-800/80 rounded-xl shadow-2xl p-3 flex flex-col gap-2 w-[304px] origin-bottom-right"
+							className="fixed bottom-24 left-4 z-40 bg-white/95 dark:bg-slate-900/95 border border-slate-200/80 dark:border-slate-800/80 rounded-xl shadow-2xl p-3 flex flex-col gap-2 w-[304px] origin-bottom-left"
 						>
 							{/* Mini Header */}
 							<div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800/60 pb-1.5 px-0.5">
@@ -898,10 +898,15 @@ export function RecommendationGenerator() {
 							animate={{ opacity: 1, scale: 1 }}
 							exit={{ opacity: 0, scale: 0.8 }}
 							onClick={() => setShowMobilePreview(true)}
-							className="fixed bottom-24 right-4 z-40 bg-[hsl(var(--pride-glow-val))] text-white p-3 rounded-full shadow-lg flex items-center justify-center cursor-pointer hover:scale-105 active:scale-95 transition-transform duration-150 border border-white/10"
+							className={cn(
+								"fixed left-4 z-40 w-12 h-12 rounded-full flex items-center justify-center overflow-hidden focus:outline-none",
+								"bg-[hsl(var(--pride-glow-val))] text-white border-2 border-white/40 dark:border-slate-700/60 shadow-lg shadow-black/20",
+								"active:scale-[0.95] transition-transform duration-100 cursor-pointer"
+							)}
+							style={{ bottom: 'calc(1rem + env(safe-area-inset-bottom, 0px) + 72px)' }}
 							title="Show live preview"
 						>
-							<Eye className="h-5 w-5" />
+							<Eye className="h-5.5 w-5.5" />
 						</motion.button>
 					)}
 				</AnimatePresence>

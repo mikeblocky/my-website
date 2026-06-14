@@ -101,7 +101,7 @@ export function MobileAppShell() {
     <div className="sm:hidden select-none">
 
       {/* ────────────────── SPOTIFY FLOATING PLAYER BAR ────────────────── */}
-      <AnimatePresence mode="wait">
+      <AnimatePresence>
         {currentlyPlaying && (
           isSpotifyCollapsed ? (
             <motion.button
@@ -109,40 +109,30 @@ export function MobileAppShell() {
               initial={{ opacity: 0, scale: 0.8, x: 20 }}
               animate={{ opacity: 1, scale: 1, x: 0 }}
               exit={{ opacity: 0, scale: 0.8, x: 20 }}
-              transition={{ type: 'spring', damping: 25, stiffness: 220 }}
+              transition={{
+                opacity: { duration: 0.15 },
+                default: { type: 'spring', damping: 25, stiffness: 220 }
+              }}
               onClick={() => setIsSpotifyCollapsed(false)}
               className={cn(
-                "fixed right-4 z-40 w-11 h-11 rounded-full flex items-center justify-center overflow-hidden focus:outline-none",
-                "bg-white/10 dark:bg-slate-950/20 backdrop-blur-2xl",
-                "border border-white/25 dark:border-white/10",
-                "shadow-lg shadow-black/5 dark:shadow-black/20",
+                "fixed right-4 z-40 w-12 h-12 rounded-full overflow-hidden focus:outline-none",
+                "bg-slate-100 dark:bg-slate-800 border-2 border-white/40 dark:border-slate-700/60 shadow-lg shadow-black/20",
                 "active:scale-[0.95] transition-transform duration-100"
               )}
               style={{ bottom: `calc(1rem + env(safe-area-inset-bottom, 0px) + ${getPlayerBottomOffset()})` }}
               title="Expand currently playing"
             >
-              {/* Shifting Rainbow Gradient Background Tint Overlay */}
-              <div 
-                className="absolute inset-0 opacity-[0.05] dark:opacity-[0.08] pointer-events-none" 
-                style={{ 
-                  backgroundImage: 'linear-gradient(135deg, var(--pride-colors-repeat))',
-                  backgroundSize: '200% 200%',
-                  animation: 'pride-shift 12s ease-in-out infinite'
-                }}
-              />
-              <div className="relative w-8 h-8 rounded-full overflow-hidden shrink-0 bg-slate-100 dark:bg-slate-800 border border-slate-200/20 dark:border-slate-800/20 flex items-center justify-center z-10">
-                {currentlyPlaying.artworkUrl ? (
-                  <img
-                    src={currentlyPlaying.artworkUrl}
-                    alt={currentlyPlaying.album || 'artwork'}
-                    className="w-full h-full object-cover"
-                    style={{ animation: 'spin 12s linear infinite' }}
-                  />
-                ) : (
-                  <Music className="w-3.5 h-3.5 text-muted-foreground" />
-                )}
-                <div className="absolute inset-0 bg-emerald-500/5 mix-blend-overlay pointer-events-none" />
-              </div>
+              {currentlyPlaying.artworkUrl ? (
+                <img
+                  src={currentlyPlaying.artworkUrl}
+                  alt={currentlyPlaying.album || 'artwork'}
+                  className="w-full h-full object-cover"
+                  style={{ animation: 'spin 12s linear infinite' }}
+                />
+              ) : (
+                <Music className="w-4 h-4 text-muted-foreground" />
+              )}
+              <div className="absolute inset-0 bg-emerald-500/5 mix-blend-overlay pointer-events-none" />
             </motion.button>
           ) : (
             <motion.div
@@ -150,14 +140,17 @@ export function MobileAppShell() {
               initial={{ opacity: 0, y: 30, scale: 0.95, x: '-50%' }}
               animate={{ opacity: 1, y: 0, scale: 1, x: '-50%' }}
               exit={{ opacity: 0, y: 30, scale: 0.95, x: '-50%' }}
-              transition={{ type: 'spring', damping: 25, stiffness: 220 }}
+              transition={{
+                opacity: { duration: 0.15 },
+                default: { type: 'spring', damping: 25, stiffness: 220 }
+              }}
               className="fixed left-1/2 w-[calc(100%-2rem)] max-w-md z-40"
               style={{ bottom: `calc(1rem + env(safe-area-inset-bottom, 0px) + ${getPlayerBottomOffset()})` }}
             >
               <div
                 className={cn(
                   "flex items-center justify-between p-2.5 rounded-xl relative overflow-hidden",
-                  "bg-white/10 dark:bg-slate-950/20 backdrop-blur-2xl",
+                  "bg-white/80 dark:bg-slate-950/85 backdrop-blur-2xl",
                   "border border-white/25 dark:border-white/10",
                   "shadow-lg shadow-black/5 dark:shadow-black/20"
                 )}
@@ -226,7 +219,7 @@ export function MobileAppShell() {
         <nav
           className={cn(
             "fixed bottom-4 left-1/2 -translate-x-1/2 w-[calc(100%-2rem)] max-w-md z-50 h-14 rounded-2xl overflow-hidden",
-            "bg-white/10 dark:bg-slate-950/20 backdrop-blur-2xl",
+            "bg-white/80 dark:bg-slate-950/85 backdrop-blur-2xl",
             "border border-white/25 dark:border-white/10",
             "shadow-[inset_0_1px_1px_rgba(255,255,255,0.3),0_8px_32px_rgba(0,0,0,0.06)] dark:shadow-[inset_0_0.5px_1px_rgba(255,255,255,0.15),0_8px_32px_rgba(0,0,0,0.45)]",
             "flex items-center justify-around px-2"
@@ -263,8 +256,8 @@ export function MobileAppShell() {
                   }
                 }}
               >
-                <Icon className={cn("w-[19px] h-[19px] transition-colors duration-300", active ? "pride-text" : "text-slate-800 hover:text-slate-950 dark:text-slate-100 dark:hover:text-white")} />
-                <span className={cn(monoFont.className, "text-[8px] mt-0.5 tracking-wider font-semibold", active ? "pride-text" : "text-slate-800 hover:text-slate-950 dark:text-slate-100 dark:hover:text-white")}>
+                <Icon className={cn("w-[19px] h-[19px] transition-colors duration-300", active ? "pride-text" : "text-slate-500 hover:text-slate-800 dark:text-slate-100 dark:hover:text-white")} />
+                <span className={cn(monoFont.className, "text-[8px] mt-0.5 tracking-wider font-semibold", active ? "pride-text" : "text-slate-500 hover:text-slate-800 dark:text-slate-100 dark:hover:text-white")}>
                   {tab.label}
                 </span>
 
@@ -285,8 +278,8 @@ export function MobileAppShell() {
             onClick={() => setIsMoreOpen(!isMoreOpen)}
             className="flex flex-col items-center justify-center flex-1 w-full h-full py-1 text-center cursor-pointer relative focus:outline-none"
           >
-            <MoreHorizontal className={cn("w-[19px] h-[19px] transition-colors duration-300", isMoreOpen ? "pride-text" : "text-slate-800 hover:text-slate-950 dark:text-slate-100 dark:hover:text-white")} />
-            <span className={cn(monoFont.className, "text-[8px] mt-0.5 tracking-wider font-semibold", isMoreOpen ? "pride-text" : "text-slate-800 hover:text-slate-950 dark:text-slate-100 dark:hover:text-white")} >
+            <MoreHorizontal className={cn("w-[19px] h-[19px] transition-colors duration-300", isMoreOpen ? "pride-text" : "text-slate-500 hover:text-slate-800 dark:text-slate-100 dark:hover:text-white")} />
+            <span className={cn(monoFont.className, "text-[8px] mt-0.5 tracking-wider font-semibold", isMoreOpen ? "pride-text" : "text-slate-500 hover:text-slate-800 dark:text-slate-100 dark:hover:text-white")} >
               More
             </span>
 
@@ -306,7 +299,7 @@ export function MobileAppShell() {
         <nav
           className={cn(
             "fixed bottom-4 left-1/2 -translate-x-1/2 w-[calc(100%-2rem)] max-w-md z-50 h-14 rounded-2xl overflow-hidden",
-            "bg-white/10 dark:bg-slate-950/20 backdrop-blur-2xl",
+            "bg-white/80 dark:bg-slate-950/85 backdrop-blur-2xl",
             "border border-white/25 dark:border-white/10",
             "shadow-[inset_0_1px_1px_rgba(255,255,255,0.3),0_8px_32px_rgba(0,0,0,0.06)] dark:shadow-[inset_0_0.5px_1px_rgba(255,255,255,0.15),0_8px_32px_rgba(0,0,0,0.45)]",
             "flex items-center justify-around px-2"
@@ -352,9 +345,9 @@ export function MobileAppShell() {
                       transition={{ type: 'spring', damping: 26, stiffness: 300 }}
                     />
                   )}
-                  <Icon className={cn("w-[19px] h-[19px] transition-colors duration-250", active ? "pride-text" : "text-slate-800 hover:text-slate-950 dark:text-slate-100 dark:hover:text-white")} />
+                  <Icon className={cn("w-[19px] h-[19px] transition-colors duration-250", active ? "pride-text" : "text-slate-500 hover:text-slate-800 dark:text-slate-100 dark:hover:text-white")} />
                 </div>
-                <span className={cn(monoFont.className, "text-[8px] mt-0.5 tracking-wider font-semibold", active ? "pride-text" : "text-slate-800 hover:text-slate-950 dark:text-slate-100 dark:hover:text-white")}>
+                <span className={cn(monoFont.className, "text-[8px] mt-0.5 tracking-wider font-semibold", active ? "pride-text" : "text-slate-500 hover:text-slate-800 dark:text-slate-100 dark:hover:text-white")}>
                   {tab.label}
                 </span>
               </Link>
@@ -374,9 +367,9 @@ export function MobileAppShell() {
                   transition={{ type: 'spring', damping: 26, stiffness: 300 }}
                 />
               )}
-              <MoreHorizontal className={cn("w-[19px] h-[19px] transition-colors duration-250", isMoreOpen ? "pride-text" : "text-slate-800 hover:text-slate-950 dark:text-slate-100 dark:hover:text-white")} />
+              <MoreHorizontal className={cn("w-[19px] h-[19px] transition-colors duration-250", isMoreOpen ? "pride-text" : "text-slate-500 hover:text-slate-800 dark:text-slate-100 dark:hover:text-white")} />
             </div>
-            <span className={cn(monoFont.className, "text-[8px] mt-0.5 tracking-wider font-semibold", isMoreOpen ? "pride-text" : "text-slate-800 hover:text-slate-950 dark:text-slate-100 dark:hover:text-white")}>
+            <span className={cn(monoFont.className, "text-[8px] mt-0.5 tracking-wider font-semibold", isMoreOpen ? "pride-text" : "text-slate-500 hover:text-slate-800 dark:text-slate-100 dark:hover:text-white")}>
               More
             </span>
           </button>
