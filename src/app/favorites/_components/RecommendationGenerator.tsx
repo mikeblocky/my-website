@@ -44,7 +44,7 @@ export function RecommendationGenerator() {
 	const fileInputRef = useRef<HTMLInputElement>(null)
 	const [isInitialized, setIsInitialized] = useState(false)
 	const [pendingImageSrc, setPendingImageSrc] = useState<string | null>(null)
-	const [showMobilePreview, setShowMobilePreview] = useState(false)
+
 
 	// Load cached state from localStorage on mount (only if no URL query data is present)
 	useEffect(() => {
@@ -859,58 +859,7 @@ export function RecommendationGenerator() {
 				</div>
 			</div>
 
-			{/* Floating Mobile Live Preview (Picture-in-picture style scaled card overlay) */}
-			<div className="block lg:hidden">
-				<AnimatePresence>
-					{showMobilePreview ? (
-						<motion.div
-							initial={{ opacity: 0, scale: 0.85, y: 20 }}
-							animate={{ opacity: 1, scale: 1, y: 0 }}
-							exit={{ opacity: 0, scale: 0.85, y: 20 }}
-							transition={{ type: 'spring', damping: 25, stiffness: 250 }}
-							className="fixed bottom-24 left-4 z-40 bg-white/95 dark:bg-slate-900/95 border border-slate-200/80 dark:border-slate-800/80 rounded-xl shadow-2xl p-3 flex flex-col gap-2 w-[304px] origin-bottom-left"
-						>
-							{/* Mini Header */}
-							<div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800/60 pb-1.5 px-0.5">
-								<span className={cn(monoFont.className, "text-[9px] lowercase tracking-wider text-slate-400 font-bold")}>
-									live preview (active)
-								</span>
-								<button
-									type="button"
-									onClick={() => setShowMobilePreview(false)}
-									className="text-slate-400 hover:text-slate-650 dark:hover:text-slate-200 transition-colors p-0.5 cursor-pointer"
-								>
-									<X className="h-3.5 w-3.5" />
-								</button>
-							</div>
-							
-							{/* Scrollable Live Preview Card */}
-							<div className="w-full overflow-hidden rounded-lg bg-slate-50/30 dark:bg-slate-950/30 p-1 flex justify-center items-center">
-								<div className="w-[280px] max-h-[300px] h-auto overflow-y-auto rounded-md border border-slate-100 dark:border-slate-800/80 bg-white/50 dark:bg-slate-950/30">
-									<RecommendationCard item={buildFullRecommendation(activeItem)} viewMode="detailed" compact={true} />
-								</div>
-							</div>
-						</motion.div>
-					) : (
-						<motion.button
-							type="button"
-							initial={{ opacity: 0, scale: 0.8 }}
-							animate={{ opacity: 1, scale: 1 }}
-							exit={{ opacity: 0, scale: 0.8 }}
-							onClick={() => setShowMobilePreview(true)}
-							className={cn(
-								"fixed left-4 z-40 w-12 h-12 rounded-full flex items-center justify-center overflow-hidden focus:outline-none",
-								"bg-[hsl(var(--pride-glow-val))] text-white border-2 border-white/40 dark:border-slate-700/60 shadow-lg shadow-black/20",
-								"active:scale-[0.95] transition-transform duration-100 cursor-pointer"
-							)}
-							style={{ bottom: 'calc(1rem + env(safe-area-inset-bottom, 0px) + 72px)' }}
-							title="Show live preview"
-						>
-							<Eye className="h-5.5 w-5.5" />
-						</motion.button>
-					)}
-				</AnimatePresence>
-			</div>
+
 
 			{/* Recommended Aspect Ratio Helper */}
 			{pendingImageSrc && (
