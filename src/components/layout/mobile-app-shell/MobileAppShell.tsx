@@ -165,7 +165,7 @@ export function MobileAppShell() {
         <nav
           className={cn(
             "fixed bottom-4 left-1/2 -translate-x-1/2 w-[calc(100%-2rem)] max-w-md z-50 h-14 rounded-2xl overflow-hidden",
-            "bg-white/70 dark:bg-slate-900/65 backdrop-blur-2xl",
+            "bg-white/10 dark:bg-slate-950/20 backdrop-blur-2xl",
             "border border-white/25 dark:border-white/10",
             "shadow-[inset_0_1px_1px_rgba(255,255,255,0.3),0_8px_32px_rgba(0,0,0,0.06)] dark:shadow-[inset_0_0.5px_1px_rgba(255,255,255,0.15),0_8px_32px_rgba(0,0,0,0.45)]",
             "flex items-center justify-around px-2"
@@ -174,7 +174,7 @@ export function MobileAppShell() {
         >
           {/* Shifting Rainbow Gradient Background Tint Overlay */}
           <div 
-            className="absolute inset-0 opacity-[0.04] dark:opacity-[0.06] pointer-events-none" 
+            className="absolute inset-0 opacity-[0.05] dark:opacity-[0.08] pointer-events-none" 
             style={{ 
               backgroundImage: 'linear-gradient(135deg, var(--pride-colors-repeat))',
               backgroundSize: '200% 200%',
@@ -245,7 +245,7 @@ export function MobileAppShell() {
         <nav
           className={cn(
             "fixed bottom-4 left-1/2 -translate-x-1/2 w-[calc(100%-2rem)] max-w-md z-50 h-14 rounded-2xl overflow-hidden",
-            "bg-white/70 dark:bg-slate-900/65 backdrop-blur-2xl",
+            "bg-white/10 dark:bg-slate-950/20 backdrop-blur-2xl",
             "border border-white/25 dark:border-white/10",
             "shadow-[inset_0_1px_1px_rgba(255,255,255,0.3),0_8px_32px_rgba(0,0,0,0.06)] dark:shadow-[inset_0_0.5px_1px_rgba(255,255,255,0.15),0_8px_32px_rgba(0,0,0,0.45)]",
             "flex items-center justify-around px-2"
@@ -254,7 +254,7 @@ export function MobileAppShell() {
         >
           {/* Shifting Rainbow Gradient Background Tint Overlay */}
           <div 
-            className="absolute inset-0 opacity-[0.04] dark:opacity-[0.06] pointer-events-none" 
+            className="absolute inset-0 opacity-[0.05] dark:opacity-[0.08] pointer-events-none" 
             style={{ 
               backgroundImage: 'linear-gradient(135deg, var(--pride-colors-repeat))',
               backgroundSize: '200% 200%',
