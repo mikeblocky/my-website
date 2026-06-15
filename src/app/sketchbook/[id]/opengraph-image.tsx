@@ -1,12 +1,12 @@
 import { ImageResponse } from 'next/og'
 import { getDrawingById } from '@/lib/kv/sketchbook'
-import { BoardOgCard, boardOgSize } from '@/components/og/BoardOgCard'
+import { ArtworkOgCard, artworkOgSize } from '@/components/og/ArtworkOgCard'
 
 export const runtime = 'nodejs'
 
 export const alt = 'Sketchbook drawing'
 export const size = {
-  ...boardOgSize,
+  ...artworkOgSize,
 }
 
 export const contentType = 'image/png'
@@ -37,14 +37,13 @@ export default async function Image({ params }: { params: Promise<{ id: string }
   }
 
   return new ImageResponse(
-    <BoardOgCard
+    <ArtworkOgCard
       accent="#8b5cf6"
       accentSoft="#f3e8ff"
       border="#ddd6fe"
       footer="mikeblocky.com/sketchbook"
       label={`Drawing by ${drawing.author}`}
-      title=""
-      body={drawing.body || 'Collaborative sketchbook canvas submission!'}
+      body={drawing.body || ''}
       date={new Date(drawing.createdAt).toLocaleDateString('en-US', {
         month: 'long',
         day: 'numeric',
