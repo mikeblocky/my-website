@@ -50,7 +50,12 @@ if (!existsSync(appOutput)) {
 
 rmSync(rootOutput, { force: true, recursive: true });
 mkdirSync(rootVercel, { recursive: true });
-cpSync(appOutput, rootOutput, { recursive: true });
+// verbatimSymlinks: keep adapter-vercel's relative function symlinks intact.
+// Without it, cpSync resolves them and rewrites the links as absolute paths
+// into apps/web-sveltekit/.vercel/output, which then point outside the
+// relocated root output on Vercel and break catchall function resolution
+// ("Could not find target .../![-]/catchall for path .../__data.json").
+cpSync(appOutput, rootOutput, { recursive: true, verbatimSymlinks: true });
 normalizeFunctionHandlers(resolve(rootOutput, 'functions'));
 
 console.log(`Copied SvelteKit Vercel output to ${rootOutput}`);
