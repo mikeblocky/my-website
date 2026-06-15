@@ -63,7 +63,7 @@
         </div>
 
         <div class="section-title-block space-y-2 mt-4">
-          <h1 class="font-sans font-bold text-2xl sm:text-3xl md:text-3xl lg:text-4xl text-slate-900 dark:text-white mt-0 mb-4">
+          <h1 class="font-sans font-bold text-2xl sm:text-3xl md:text-3xl lg:text-4xl text-slate-900 dark:text-white mt-0 mb-4 w-full break-words">
             {title}
           </h1>
           <div class="flex flex-wrap items-center gap-x-2 gap-y-1.5 font-mono text-xs text-muted-foreground">
@@ -82,7 +82,7 @@
 
       <!-- Main Article Area Grid -->
       <div class="blog-post-shell">
-        <article id="content" class="relative min-w-0 overflow-hidden">
+        <article id="content" class="relative min-w-0">
           <!-- Desktop sidebar - absolutely positioned to the left -->
           <div class="hidden xl:block absolute right-full mr-8 2xl:mr-12 top-0 bottom-0 pointer-events-none">
             <div class="sticky top-1/2 -translate-y-1/2 pointer-events-auto flex justify-end">

@@ -20,6 +20,8 @@ article code {
   line-height: 1.25;
   margin-top: 1.5em;
   margin-bottom: 0.75em;
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 .blog-post-shell article h1 {
