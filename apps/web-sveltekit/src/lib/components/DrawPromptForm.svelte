@@ -113,7 +113,6 @@
   <!-- Bottom: Action Bar -->
   <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-t border-slate-100 dark:border-slate-900 px-4 py-4 bg-slate-50/20 dark:bg-slate-950/20 rounded-b-xl">
     <div class="flex flex-wrap items-center gap-x-5 gap-y-3">
-      <EmojiPickerButton getTarget={() => bodyTextareaEl} accent="violet" />
       <AttachmentUploadButton
         onFiles={(files) => files.forEach(handleImageUpload)}
         iconSize={13}
@@ -123,14 +122,17 @@
         Add images
       </AttachmentUploadButton>
     </div>
-    
-    <button 
-      type="submit" 
-      disabled={!body.trim() || isPending || isCooldownActive}
-      class="w-full sm:w-auto h-9 px-4.5 text-sm font-semibold rounded-md pride-button cursor-pointer disabled:opacity-50 font-sans"
-      title={isCooldownActive ? `You can send another prompt in ${cooldownLabel}` : undefined}
-    >
-      {isCooldownActive ? cooldownLabel : 'Send prompt'}
-    </button>
+
+    <div class="flex items-center gap-2.5 w-full sm:w-auto">
+      <EmojiPickerButton getTarget={() => bodyTextareaEl} accent="violet" />
+      <button
+        type="submit"
+        disabled={!body.trim() || isPending || isCooldownActive}
+        class="flex-1 sm:flex-none h-9 px-4.5 text-sm font-semibold rounded-md pride-button cursor-pointer disabled:opacity-50 font-sans"
+        title={isCooldownActive ? `You can send another prompt in ${cooldownLabel}` : undefined}
+      >
+        {isCooldownActive ? cooldownLabel : 'Send prompt'}
+      </button>
+    </div>
   </div>
 </form>

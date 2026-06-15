@@ -129,7 +129,6 @@
         </label>
       {/if}
 
-      <EmojiPickerButton getTarget={() => emojiTarget} accent="indigo" />
       <AttachmentUploadButton
         onFiles={(files) => files.forEach(handleImageUpload)}
         iconSize={13}
@@ -139,14 +138,17 @@
         Add images
       </AttachmentUploadButton>
     </div>
-    
-    <button 
-      type="submit" 
-      disabled={!body.trim() || isPending || isCooldownActive}
-      class="w-full sm:w-auto h-9 px-4.5 text-sm font-semibold rounded-md pride-button cursor-pointer disabled:opacity-50 font-sans"
-      title={isCooldownActive ? `You can send another message in ${cooldownLabel}` : undefined}
-    >
-      {isCooldownActive ? cooldownLabel : 'Post message'}
-    </button>
+
+    <div class="flex items-center gap-2.5 w-full sm:w-auto">
+      <EmojiPickerButton getTarget={() => emojiTarget} accent="indigo" />
+      <button
+        type="submit"
+        disabled={!body.trim() || isPending || isCooldownActive}
+        class="flex-1 sm:flex-none h-9 px-4.5 text-sm font-semibold rounded-md pride-button cursor-pointer disabled:opacity-50 font-sans"
+        title={isCooldownActive ? `You can send another message in ${cooldownLabel}` : undefined}
+      >
+        {isCooldownActive ? cooldownLabel : 'Post message'}
+      </button>
+    </div>
   </div>
 </form>

@@ -320,7 +320,6 @@
 
   <div class="flex flex-col gap-3 border-t border-slate-100 dark:border-slate-900 px-4 py-4 bg-slate-50/20 dark:bg-slate-950/20 sm:flex-row sm:items-center sm:justify-between rounded-b-xl">
     <div class="flex items-center gap-3">
-      <EmojiPickerButton getTarget={() => emojiTarget} accent="sky" />
       <AttachmentUploadButton
         onFiles={(files) => files.forEach(handleImageUpload)}
         iconSize={13}
@@ -329,10 +328,11 @@
       />
     </div>
 
-    <div class="flex items-center gap-3">
+    <div class="flex items-center gap-2.5">
       {#if errorMessage}
         <span class="text-sm text-rose-550">{errorMessage}</span>
       {/if}
+      <EmojiPickerButton getTarget={() => emojiTarget} accent="sky" />
       <button
         type="submit"
         disabled={isPending || !title.trim() || isCooldownActive}
