@@ -114,7 +114,7 @@ export function ArtworkOgCard({
                   fontWeight: 500,
                   color: '#334155',
                   lineHeight: 1.4,
-                  fontStyle: 'italic',
+                  fontStyle: 'normal',
                   letterSpacing: '-0.01em',
                   overflow: 'hidden',
                 }}

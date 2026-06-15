@@ -125,7 +125,7 @@ export function BoardOgCard({
                 fontWeight: 500,
                 color: '#334155',
                 lineHeight: 1.5,
-                fontStyle: 'italic',
+                fontStyle: 'normal',
                 letterSpacing: '-0.015em',
                 overflow: 'hidden',
               }}
