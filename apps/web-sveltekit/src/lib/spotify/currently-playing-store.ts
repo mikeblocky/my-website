@@ -31,6 +31,7 @@ const fetchCurrentlyPlaying = async () => {
           isPlaying: data.currentlyPlaying.isPlaying,
           artworkUrl: data.currentlyPlaying.artworkUrl,
           album: data.currentlyPlaying.album,
+          previewUrl: data.currentlyPlaying.previewUrl || '',
         }
       : null;
 

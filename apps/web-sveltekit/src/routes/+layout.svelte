@@ -2,6 +2,7 @@
   import { page } from '$app/stores';
   import '$lib/styles/app.css';
   import MobileDock from '$lib/components/MobileDock.svelte';
+  // import SpotifyAmbientPlayer from '$lib/components/SpotifyAmbientPlayer.svelte';
 
   $: pathname = $page.url.pathname;
   $: isBlogPost = pathname.startsWith('/blog/') && pathname !== '/blog/';
@@ -19,3 +20,4 @@
   </div>
 </div>
 <MobileDock />
+<!-- <SpotifyAmbientPlayer /> -->
