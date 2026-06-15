@@ -27,13 +27,53 @@ async function getFonts() {
   ]
 }
 
+// Convert an emoji string to its Twemoji CDN codepoint path (e.g. "1f600" or "1f1fa-1f1f8")
+function emojiToTwemojiPath(emoji: string): string {
+  const points: string[] = []
+  for (const char of emoji) {
+    const cp = char.codePointAt(0)
+    if (cp !== undefined && cp !== 0xfe0f) {
+      // Skip variation selector U+FE0F — Twemoji file names omit it
+      points.push(cp.toString(16))
+    }
+  }
+  return points.join('-')
+}
+
+const emojiCache = new Map<string, string>()
+
+async function loadEmoji(segment: string): Promise<string> {
+  if (emojiCache.has(segment)) return emojiCache.get(segment)!
+  const path = emojiToTwemojiPath(segment)
+  const url = `https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/svg/${path}.svg`
+  try {
+    const res = await fetch(url)
+    if (!res.ok) return ''
+    const svg = await res.text()
+    const b64 = Buffer.from(svg).toString('base64')
+    const dataUrl = `data:image/svg+xml;base64,${b64}`
+    emojiCache.set(segment, dataUrl)
+    return dataUrl
+  } catch {
+    return ''
+  }
+}
+
 export async function generatePng(
   element: Parameters<typeof satori>[0],
   width = 1200,
   height = 630
 ): Promise<ArrayBuffer> {
   const fonts = await getFonts()
-  const svg = await satori(element, { width, height, fonts })
+  const svg = await satori(element, {
+    width,
+    height,
+    fonts,
+    loadAdditionalAsset: async (code: string, segment: string) => {
+      if (code === 'emoji') return loadEmoji(segment)
+      return ''
+    },
+  })
   const resvg = new Resvg(svg, { fitTo: { mode: 'width', value: width } })
   const png = resvg.render().asPng()
   return png.buffer.slice(png.byteOffset, png.byteOffset + png.byteLength) as ArrayBuffer
