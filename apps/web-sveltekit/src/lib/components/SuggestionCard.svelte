@@ -415,7 +415,7 @@
                 on:click={handleReplyFormSubmit}
                 class="h-8 rounded px-4 text-xs bg-sky-600 text-white hover:bg-sky-700 cursor-pointer disabled:opacity-50"
               >
-                Send response
+                Send
               </button>
             </div>
           </div>
@@ -471,7 +471,7 @@
                 on:click={handleFollowUpFormSubmit}
                 class="h-8 rounded px-4 text-xs bg-emerald-600 text-white hover:bg-emerald-700 cursor-pointer disabled:opacity-50"
               >
-                {isCooldownActive ? cooldownLabel : 'Send message'}
+                {isCooldownActive ? cooldownLabel : 'Send'}
               </button>
             </div>
           </div>

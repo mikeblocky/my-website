@@ -85,7 +85,8 @@ export function emojiAutocomplete(node: HTMLInputElement | HTMLTextAreaElement) 
     open(trigger.query, trigger.start)
   }
 
-  function onKeydown(e: KeyboardEvent) {
+  function onKeydown(event: Event) {
+    const e = event as KeyboardEvent
     if (!state.open) return
     if (e.key === 'Escape') { e.preventDefault(); close(); return }
     if (e.key === 'ArrowDown') {

@@ -322,8 +322,11 @@
               on:emoji:close={onEmojiClose}
               placeholder="Write your answer..."
               rows={1}
-              class="min-h-[44px] w-full resize-none overflow-hidden rounded-md border border-border bg-background px-4 py-3 text-base md:text-[17px] text-slate-900 focus:outline-none focus:ring-1 focus:ring-violet-350 dark:text-slate-100 font-sans"
+              class="min-h-[44px] w-full resize-none overflow-hidden rounded-md border border-border bg-background pl-4 pr-11 py-3 text-base md:text-[17px] text-slate-900 focus:outline-none focus:ring-1 focus:ring-violet-350 dark:text-slate-100 font-sans"
             />
+            <div class="absolute right-2 top-1/2 -translate-y-1/2">
+              <EmojiPickerButton getTarget={() => replyTextareaEl} accent="violet" />
+            </div>
             {#if emojiOpen && emojiTarget === replyTextareaEl}
               <EmojiSuggestions results={emojiResults} selectedIndex={emojiSelectedIndex} query={emojiQuery} onSelect={onEmojiSelect} anchorEl={replyTextareaEl} />
             {/if}
@@ -343,7 +346,6 @@
                 placeholder="Passcode"
                 class="w-24 rounded-full border border-border bg-background px-3 py-1.5 text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-violet-300 dark:text-slate-100"
               />
-              <EmojiPickerButton getTarget={() => replyTextareaEl} accent="violet" />
               <AttachmentUploadButton
                 onFiles={(files) => files.forEach(file => {
                   handleImageUpload(file, (url) => (replyImageUrls = replyImageUrls.length >= MAX_ATTACHMENT_COUNT ? replyImageUrls : [...replyImageUrls, url]));
@@ -394,8 +396,11 @@
               on:emoji:close={onEmojiClose}
               placeholder="Ask a follow-up..."
               rows={1}
-              class="min-h-[44px] w-full resize-none overflow-hidden rounded-md border border-emerald-250 bg-background px-4 py-3 text-base md:text-[17px] text-slate-900 focus:outline-none focus:ring-1 focus:ring-emerald-350 dark:border-emerald-500/30 dark:text-slate-100 font-sans"
+              class="min-h-[44px] w-full resize-none overflow-hidden rounded-md border border-emerald-250 bg-background pl-4 pr-11 py-3 text-base md:text-[17px] text-slate-900 focus:outline-none focus:ring-1 focus:ring-emerald-350 dark:border-emerald-500/30 dark:text-slate-100 font-sans"
             />
+            <div class="absolute right-2 top-1/2 -translate-y-1/2">
+              <EmojiPickerButton getTarget={() => followUpTextareaEl} accent="emerald" />
+            </div>
             {#if emojiOpen && emojiTarget === followUpTextareaEl}
               <EmojiSuggestions results={emojiResults} selectedIndex={emojiSelectedIndex} query={emojiQuery} onSelect={onEmojiSelect} anchorEl={followUpTextareaEl} />
             {/if}
@@ -409,7 +414,6 @@
           />
           <div class="mt-2 flex justify-between items-center gap-2">
             <div class="flex items-center gap-3">
-              <EmojiPickerButton getTarget={() => followUpTextareaEl} accent="emerald" />
               <AttachmentUploadButton
                 onFiles={(files) => files.forEach(file => {
                   handleImageUpload(file, (url) => (followUpImageUrls = followUpImageUrls.length >= MAX_ATTACHMENT_COUNT ? followUpImageUrls : [...followUpImageUrls, url]));
@@ -432,7 +436,7 @@
                 class="h-8 rounded px-4 text-xs bg-emerald-650 hover:bg-emerald-750 text-white cursor-pointer disabled:opacity-50"
                 title={isCooldownActive ? `You can send another prompt in ${cooldownLabel}` : undefined}
               >
-                {isCooldownActive ? cooldownLabel : 'Send follow-up'}
+                {isCooldownActive ? cooldownLabel : 'Send'}
               </button>
             </div>
           </div>

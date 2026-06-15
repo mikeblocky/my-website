@@ -5,6 +5,7 @@
   import AttachmentPreviewGrid from './AttachmentPreviewGrid.svelte';
   import AttachmentUploadButton from './AttachmentUploadButton.svelte';
   import EmojiSuggestions from './EmojiSuggestions.svelte';
+  import EmojiPickerButton from './EmojiPickerButton.svelte';
   import { emojiAutocomplete } from '$lib/actions/emojiAutocomplete';
   import type { EmojiMatch, EmojiAutocompleteState } from '$lib/actions/emojiAutocomplete';
   import { MAX_ATTACHMENT_COUNT } from '$lib/images/attachment-limits';
@@ -36,6 +37,9 @@
   export let isAdminMode = false;
 
   const isAdmin = message.role === 'admin';
+
+  // EmojiPickerButton doesn't support the 'blue' accent — fall back to 'sky'.
+  $: emojiAccent = theme === 'blue' ? 'sky' : theme;
 
   const themeClasses = {
     blue: {
@@ -174,8 +178,11 @@
             on:emoji:open={onEmojiOpen}
             on:emoji:close={onEmojiClose}
             rows={Math.max(3, message.body.split('\n').length)}
-            class="min-h-[44px] w-full resize-none overflow-hidden rounded-md border bg-background px-4 py-3 text-base md:text-[17px] text-slate-900 focus:outline-none focus:ring-1 dark:text-slate-100 font-sans {themeClasses.textarea}"
+            class="min-h-[44px] w-full resize-none overflow-hidden rounded-md border bg-background pl-4 pr-11 py-3 text-base md:text-[17px] text-slate-900 focus:outline-none focus:ring-1 dark:text-slate-100 font-sans {themeClasses.textarea}"
           />
+          <div class="absolute right-2 top-1/2 -translate-y-1/2">
+            <EmojiPickerButton getTarget={() => editTextareaEl} accent={emojiAccent} />
+          </div>
           {#if emojiOpen}
             <EmojiSuggestions results={emojiResults} selectedIndex={emojiSelectedIndex} query={emojiQuery} onSelect={onEmojiSelect} anchorEl={editTextareaEl} />
           {/if}

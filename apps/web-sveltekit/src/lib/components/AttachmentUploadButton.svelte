@@ -28,7 +28,7 @@
 </script>
 
 <label
-  class="flex cursor-pointer items-center gap-1 font-semibold text-slate-500 transition-colors select-none {accentClasses[accent]} {!className.includes('text-') ? 'text-xs' : ''} {className}"
+  class="inline-flex h-8 cursor-pointer items-center justify-center gap-1.5 rounded-lg border border-slate-200/50 px-3 font-semibold text-slate-500 transition-colors select-none hover:bg-slate-100 dark:border-slate-800/40 dark:hover:bg-slate-800 {accentClasses[accent]} {!className.includes('text-') ? 'text-xs' : ''} {className}"
 >
   <input
     type="file"
@@ -38,5 +38,5 @@
     class="hidden"
   />
   <ImageIcon size={iconSize} />
-  <span><slot>Attach images</slot></span>
+  <span><slot>Add</slot></span>
 </label>

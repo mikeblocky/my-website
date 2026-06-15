@@ -292,8 +292,11 @@
       on:emoji:close={onEmojiClose}
       placeholder="Why do you recommend it? Favorite tracks, key highlights, or general thoughts..."
       rows={4}
-      class="min-h-[120px] w-full resize-none bg-transparent px-4 py-4 text-sm text-slate-850 placeholder:text-muted-foreground/60 focus:outline-none dark:text-slate-100"
+      class="min-h-[120px] w-full resize-none bg-transparent pl-4 pr-11 py-4 text-sm text-slate-850 placeholder:text-muted-foreground/60 focus:outline-none dark:text-slate-100"
     />
+    <div class="absolute right-3 top-1/2 -translate-y-1/2">
+      <EmojiPickerButton getTarget={() => emojiTarget} accent="sky" />
+    </div>
     {#if emojiOpen}
       <div class="px-4">
         <EmojiSuggestions
@@ -328,11 +331,10 @@
       />
     </div>
 
-    <div class="flex items-center gap-2.5">
+    <div class="flex items-center gap-3">
       {#if errorMessage}
         <span class="text-sm text-rose-550">{errorMessage}</span>
       {/if}
-      <EmojiPickerButton getTarget={() => emojiTarget} accent="sky" />
       <button
         type="submit"
         disabled={isPending || !title.trim() || isCooldownActive}

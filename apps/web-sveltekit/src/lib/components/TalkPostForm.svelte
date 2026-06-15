@@ -93,8 +93,11 @@
       on:emoji:close={onEmojiClose}
       placeholder="Let's talk about anything... (ask questions, ask for suggestions, casual chat)"
       rows={1}
-      class="w-full bg-transparent py-2 text-sm text-slate-900 placeholder:text-muted-foreground/60 focus:outline-none dark:text-slate-100 dark:placeholder:text-slate-600 resize-none overflow-hidden min-h-[100px] font-sans"
+      class="w-full bg-transparent py-2 pr-9 text-sm text-slate-900 placeholder:text-muted-foreground/60 focus:outline-none dark:text-slate-100 dark:placeholder:text-slate-600 resize-none overflow-hidden min-h-[100px] font-sans"
     />
+    <div class="absolute right-3 top-1/2 -translate-y-1/2">
+      <EmojiPickerButton getTarget={() => emojiTarget} accent="indigo" />
+    </div>
     {#if emojiOpen}
       <EmojiSuggestions
         results={emojiResults}
@@ -124,7 +127,7 @@
           />
           <span class="text-sm font-semibold text-slate-500 dark:text-slate-400 flex items-center gap-2 group-hover/notify:text-[hsl(var(--pride-glow-val))] transition-colors font-sans">
             <Bell size={13} />
-            Notify me
+            Notify
           </span>
         </label>
       {/if}
@@ -135,20 +138,17 @@
         className="gap-1.5 text-sm font-semibold font-sans"
         accent="indigo"
       >
-        Add images
+        Add
       </AttachmentUploadButton>
     </div>
 
-    <div class="flex items-center gap-2.5 w-full sm:w-auto">
-      <EmojiPickerButton getTarget={() => emojiTarget} accent="indigo" />
-      <button
-        type="submit"
-        disabled={!body.trim() || isPending || isCooldownActive}
-        class="flex-1 sm:flex-none h-9 px-4.5 text-sm font-semibold rounded-md pride-button cursor-pointer disabled:opacity-50 font-sans"
-        title={isCooldownActive ? `You can send another message in ${cooldownLabel}` : undefined}
-      >
-        {isCooldownActive ? cooldownLabel : 'Post message'}
-      </button>
-    </div>
+    <button
+      type="submit"
+      disabled={!body.trim() || isPending || isCooldownActive}
+      class="w-full sm:w-auto h-9 px-4.5 text-sm font-semibold rounded-md pride-button cursor-pointer disabled:opacity-50 font-sans"
+      title={isCooldownActive ? `You can send another message in ${cooldownLabel}` : undefined}
+    >
+      {isCooldownActive ? cooldownLabel : 'Post message'}
+    </button>
   </div>
 </form>
