@@ -43,7 +43,7 @@ export default async function Image({ params }: { params: Promise<{ id: string }
       border="#ddd6fe"
       footer="mikeblocky.com/sketchbook"
       label={`Drawing by ${drawing.author}`}
-      title={drawing.body ? 'Sketchbook drawing' : ''}
+      title=""
       body={drawing.body || 'Collaborative sketchbook canvas submission!'}
       date={new Date(drawing.createdAt).toLocaleDateString('en-US', {
         month: 'long',

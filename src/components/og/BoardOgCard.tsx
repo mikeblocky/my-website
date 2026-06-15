@@ -29,6 +29,12 @@ export function BoardOgCard({
   const hasImage = !!imageUrl && !imageUrl.includes('image/webp')
   const hasTitle = !!title && title.trim().length > 0
 
+  // Scale font size down for longer messages so full text fits
+  const bodyLen = body.length
+  const bodyFontSize = hasImage
+    ? (bodyLen > 220 ? '26px' : bodyLen > 140 ? '30px' : '34px')
+    : (bodyLen > 280 ? '28px' : bodyLen > 180 ? '34px' : '42px')
+
   return (
     <div
       style={{
@@ -88,8 +94,10 @@ export function BoardOgCard({
             style={{
               display: 'flex',
               flexDirection: 'column',
+              justifyContent: 'center',
               flex: 1,
               paddingRight: hasImage ? '48px' : '0px',
+              overflow: 'hidden',
             }}
           >
             {/* Conditional Title (only if present) */}
@@ -102,7 +110,7 @@ export function BoardOgCard({
                   color: '#0f172a',
                   lineHeight: 1.35,
                   letterSpacing: '-0.02em',
-                  marginBottom: '28px', // Space between title and quote body!
+                  marginBottom: '20px',
                 }}
               >
                 {title}
@@ -113,15 +121,16 @@ export function BoardOgCard({
             <div
               style={{
                 display: 'flex',
-                fontSize: hasImage ? '34px' : '44px',
-                fontWeight: 500, // Modern medium font-weight looks much neater than blocky heavy bold!
+                fontSize: bodyFontSize,
+                fontWeight: 500,
                 color: '#334155',
-                lineHeight: 1.5, // Generous line height makes text very clean and easy to look at
-                fontStyle: 'italic', // Italics for quotes look extremely elegant and premium!
+                lineHeight: 1.5,
+                fontStyle: 'italic',
                 letterSpacing: '-0.015em',
+                overflow: 'hidden',
               }}
             >
-              &ldquo;{body.length > 170 ? `${body.slice(0, 170)}...` : body}&rdquo;
+              &ldquo;{body}&rdquo;
             </div>
           </div>
 
