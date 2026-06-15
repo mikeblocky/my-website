@@ -78,35 +78,35 @@
           </div>
 
           <div class="space-y-4">
-            <p class="font-mono text-[16px] md:text-[18px] font-normal text-foreground dark:text-white leading-relaxed">
+            <p class="font-mono text-base md:text-[1.0625rem] font-normal text-foreground dark:text-white leading-relaxed">
               Hi, I'm Mike. I'm a Vietnamese artist and a Japanese student, living between drawings and long, wandering thoughts. This website is my small, personal corner of the internet—a slow space where I archive my illustrations, write down reflections, and slowly try to connect.
             </p>
 
             <!-- Typographic Archive Portals List -->
-            <div class="divide-y divide-slate-100 dark:divide-slate-900/50 pt-6">
+            <div class="grid grid-cols-1 gap-2 pt-6">
               {#each portalLinks as portal}
                 {@const Icon = portalIcons[portal.icon as keyof typeof portalIcons]}
                 <a
                   href={portal.href}
-                  class="group flex items-center justify-between py-3.5 transition-colors duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]"
+                  class="group flex items-center justify-between p-3.5 border border-slate-200/60 dark:border-slate-800/60 bg-white/50 dark:bg-slate-950/30 rounded-lg hover:border-[hsl(var(--pride-glow-val))]/30 hover:bg-white/85 dark:hover:bg-slate-900/40 hover:-translate-y-0.5 active:scale-[0.99] transition-all duration-200"
                 >
                   <div class="flex items-center gap-4 min-w-0">
-                    <div class="flex-shrink-0 w-8 h-8 rounded-lg bg-slate-50 dark:bg-slate-900/60 flex items-center justify-center border border-slate-100 dark:border-slate-900/50 group-hover:border-pink-500/20 dark:group-hover:border-pink-500/10 transition-colors duration-300">
-                      <span class="text-muted-foreground/70 group-hover:text-pink-500 dark:group-hover:text-pink-300 transition-colors duration-200">
+                    <div class="flex-shrink-0 w-8 h-8 rounded-lg bg-slate-50 dark:bg-slate-900/60 flex items-center justify-center border border-slate-100 dark:border-slate-900/50 group-hover:border-[hsl(var(--pride-glow-val))]/20 transition-colors duration-300">
+                      <span class="text-muted-foreground/70 group-hover:text-[hsl(var(--pride-glow-val))] transition-colors duration-200">
                         <svelte:component this={Icon} size={16} strokeWidth={1.5} />
                       </span>
                     </div>
                     <div class="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-4 min-w-0">
-                      <span class="font-mono text-sm font-semibold tracking-wide text-slate-800 dark:text-slate-200 group-hover:pride-text transition-colors duration-200">
+                      <span class="font-mono text-sm font-semibold tracking-wide text-slate-800 dark:text-slate-200 group-hover:text-[hsl(var(--pride-glow-val))] transition-colors duration-200">
                         {portal.label}
                       </span>
                       <span class="hidden sm:inline text-slate-300 dark:text-slate-800">—</span>
-                      <span class="font-mono text-xs text-muted-foreground truncate group-hover:text-slate-600 dark:group-hover:text-slate-400 transition-colors duration-200">
+                      <span class="hidden sm:block font-mono text-xs text-muted-foreground truncate group-hover:text-slate-600 dark:group-hover:text-slate-400 transition-colors duration-200">
                         {portal.description}
                       </span>
                     </div>
                   </div>
-                  <ArrowRight class="w-4 h-4 text-muted-foreground/50 transition-[transform,color] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-x-1 group-hover:-translate-y-0.5 group-hover:pride-text" strokeWidth={1.5} />
+                  <ArrowRight class="w-4 h-4 text-muted-foreground/50 transition-[transform,color] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-x-1 group-hover:-translate-y-0.5 group-hover:text-[hsl(var(--pride-glow-val))]" strokeWidth={1.5} />
                 </a>
               {/each}
             </div>
@@ -137,7 +137,7 @@
               <span class="pride-text transition-colors duration-200 group-hover:text-pink-500 dark:group-hover:text-pink-300">
                 <svelte:component this={item.icon} size={16} strokeWidth={1.8} />
               </span>
-              <p class="font-mono text-[16px] md:text-[18px] font-normal text-muted-foreground dark:text-gray-400">
+              <p class="font-mono text-base md:text-[1.0625rem] font-normal text-muted-foreground dark:text-gray-400">
                 {item.text}
               </p>
             </div>
@@ -150,7 +150,7 @@
       <h2 class="font-sans font-bold text-xl sm:text-2xl md:text-2xl lg:text-3xl mb-3 mt-5 text-foreground dark:text-white">
         Socials
       </h2>
-      <p class="font-mono text-[16px] md:text-[18px] font-normal text-foreground dark:text-white leading-relaxed">
+      <p class="font-mono text-base md:text-[1.0625rem] font-normal text-foreground dark:text-white leading-relaxed">
         I always accept any emails about works and personal stuffs, just email me at
         <a href="mailto:mibeblocky@gmail.com" class="pride-text hover:underline">mibeblocky@gmail.com</a>
         or message via
