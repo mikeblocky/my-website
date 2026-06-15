@@ -11,6 +11,7 @@
     "dev:next": "next dev --turbopack",
     "dev:svelte": "npm --workspace @mikeblocky/web-sveltekit run dev",
     "build": "npm --workspace @mikeblocky/web-sveltekit run build",
+    "build:vercel": "node scripts/build-sveltekit-vercel.mjs",
     "build:next": "next build",
     "build:svelte": "npm --workspace @mikeblocky/web-sveltekit run build",
     "start": "npm --workspace @mikeblocky/web-sveltekit run start",
