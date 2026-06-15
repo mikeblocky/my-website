@@ -53,7 +53,9 @@ article code {
   font-family: var(--font-mono) !important;
   font-size: 1rem;
   line-height: 1.68;
-  max-width: 78ch;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  width: 100%;
 }
 
 @media (min-width: 768px) {
@@ -62,14 +64,14 @@ article code {
   }
 }
 
-.blog-post-shell article a {
+.blog-post-shell article a:not(.article-toc-link) {
   color: hsl(var(--pride-glow-val));
   text-decoration: underline;
   text-underline-offset: 3px;
   transition: opacity 180ms ease;
 }
 
-.blog-post-shell article a:hover {
+.blog-post-shell article a:not(.article-toc-link):hover {
   opacity: 0.75;
 }
 
@@ -195,7 +197,6 @@ article code {
 .blog-post-shell article p,
 .blog-post-shell article li,
 .blog-post-shell article blockquote {
-  max-width: none;
   overflow-wrap: break-word;
   word-break: break-word;
 }
@@ -268,6 +269,14 @@ article code {
   align-items: flex-end;
   gap: 0.25rem;
   width: 100%;
+  max-height: calc(100vh - 8rem);
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: none;
+}
+
+.article-toc::-webkit-scrollbar {
+  display: none;
 }
 
 .article-toc-header {
@@ -307,7 +316,7 @@ article code {
   align-items: flex-start;
   justify-content: flex-end;
   gap: 0.875rem;
-  text-decoration: none;
+  text-decoration: none !important;
   cursor: pointer;
   width: 100%;
 }

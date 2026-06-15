@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { onMount, onDestroy } from 'svelte';
+  import { onMount, onDestroy, tick } from 'svelte';
   import { browser } from '$app/environment';
 
   export let articleId = 'content';
@@ -10,6 +10,7 @@
   let activeId = '';
   let minLevel = 2;
   let isClicking = false;
+  let tocListEl: HTMLDivElement | null = null;
 
   function toSlug(text: string) {
     return text
@@ -68,6 +69,17 @@
     setTimeout(() => (isClicking = false), 1000);
   }
 
+  // Auto-scroll TOC to keep active item visible
+  async function scrollTocToActive() {
+    await tick();
+    if (!tocListEl) return;
+    const activeEl = tocListEl.querySelector('.article-toc-link.active') as HTMLElement | null;
+    if (!activeEl) return;
+    activeEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+  $: if (activeId) scrollTocToActive();
+
   onMount(() => {
     extractSections();
     if (sections.length === 0) setTimeout(extractSections, 400);
@@ -91,7 +103,7 @@
       <span class="article-toc-label">Table of contents</span>
       <div class="article-toc-divider"></div>
     </div>
-    <div class="article-toc-list">
+    <div class="article-toc-list" bind:this={tocListEl}>
       {#each sections as section, index}
         {@const isActive = section.id === activeId}
         {@const indent = Math.max(0, section.level - minLevel)}
