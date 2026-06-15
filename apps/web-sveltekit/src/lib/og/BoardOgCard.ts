@@ -14,57 +14,22 @@ function clampText(text: string, max: number) {
   return text.length > max ? text.slice(0, max - 1) + '…' : text
 }
 
-function wrapText(text: string, charsPerLine: number, maxLines: number) {
-  const words = text.replace(/\s+/g, ' ').trim().split(' ')
-  const lines: string[] = []
-  let current = ''
-
-  for (const word of words) {
-    const next = current ? `${current} ${word}` : word
-    if (next.length <= charsPerLine) {
-      current = next
-      continue
-    }
-
-    if (current) lines.push(current)
-    current = word
-
-    if (lines.length >= maxLines) break
-  }
-
-  if (current && lines.length < maxLines) lines.push(current)
-
-  if (lines.length === maxLines) {
-    const last = lines[lines.length - 1]
-    lines[lines.length - 1] = last.length > 1 ? last.replace(/[.…]*$/, '') + '…' : '…'
-  }
-
-  return lines
-}
-
 function bodyStyle(len: number, hasImage: boolean) {
   if (hasImage) {
-    // right panel is ~560px wide
-    if (len > 360) return { fontSize: 18, lineHeight: 1.28 }
-    if (len > 280) return { fontSize: 20, lineHeight: 1.32 }
-    if (len > 200) return { fontSize: 23, lineHeight: 1.35 }
-    if (len > 120) return { fontSize: 28, lineHeight: 1.4 }
-    return { fontSize: 36, lineHeight: 1.5 }
+    if (len > 500) return { fontSize: 16, lineHeight: 1.28 }
+    if (len > 360) return { fontSize: 18, lineHeight: 1.3 }
+    if (len > 260) return { fontSize: 20, lineHeight: 1.32 }
+    if (len > 180) return { fontSize: 23, lineHeight: 1.35 }
+    if (len > 100) return { fontSize: 28, lineHeight: 1.4 }
+    return { fontSize: 34, lineHeight: 1.5 }
   }
-  // full width: 1120px - 120px padding = 1000px content
-  if (len > 560) return { fontSize: 20, lineHeight: 1.28 }
-  if (len > 430) return { fontSize: 22, lineHeight: 1.32 }
-  if (len > 300) return { fontSize: 25, lineHeight: 1.35 }
-  if (len > 190) return { fontSize: 29, lineHeight: 1.4 }
-  if (len > 100) return { fontSize: 36, lineHeight: 1.5 }
+  if (len > 700) return { fontSize: 18, lineHeight: 1.28 }
+  if (len > 560) return { fontSize: 20, lineHeight: 1.3 }
+  if (len > 420) return { fontSize: 22, lineHeight: 1.32 }
+  if (len > 280) return { fontSize: 26, lineHeight: 1.35 }
+  if (len > 160) return { fontSize: 30, lineHeight: 1.4 }
+  if (len > 80)  return { fontSize: 36, lineHeight: 1.5 }
   return { fontSize: 42, lineHeight: 1.5 }
-}
-
-// Estimate max chars that fit in the middle area before the footer gets pushed off
-function maxBodyChars(hasImage: boolean, hasTitle: boolean): number {
-  if (hasImage) return 430
-  if (hasTitle) return 560
-  return 700
 }
 
 export function boardOgCard({
@@ -72,16 +37,29 @@ export function boardOgCard({
 }: BoardOgCardProps) {
   const hasImage = !!imageUrl
   const hasTitle = !!title && title.trim().length > 0
-  const safeBody = clampText(body, maxBodyChars(hasImage, hasTitle))
+  // Hard cap only as last resort — let Satori wrap naturally within maxHeight
+  const safeBody = clampText(body, hasImage ? 800 : 1200)
   const { fontSize, lineHeight } = bodyStyle(safeBody.length, hasImage)
-  const charsPerLine = hasImage
-    ? fontSize >= 34 ? 24 : fontSize >= 28 ? 30 : fontSize >= 23 ? 37 : fontSize >= 20 ? 43 : 47
-    : fontSize >= 40 ? 40 : fontSize >= 36 ? 48 : fontSize >= 29 ? 58 : fontSize >= 25 ? 67 : 76
-  const maxLines = hasImage ? (hasTitle ? 4 : 5) : (hasTitle ? 5 : 6)
-  const bodyLines = wrapText(safeBody, charsPerLine, maxLines)
   const footerWidth = hasImage ? 520 : 980
 
-  // Info panel content (badge + text + footer) — shared between both layouts
+  // Text block renders body as a single string — Satori wraps it by width,
+  // maxHeight + overflow:hidden clips any excess without manual line splitting
+  const textBlock = {
+    type: 'div',
+    props: {
+      style: {
+        width: '100%',
+        maxHeight: hasImage ? 300 : 265,
+        fontSize,
+        fontWeight: 400,
+        color: '#334155',
+        lineHeight,
+        overflow: 'hidden',
+      },
+      children: `"${safeBody}"`,
+    },
+  }
+
   function infoPanel(rightPadding = 60) {
     return {
       type: 'div',
@@ -119,7 +97,7 @@ export function boardOgCard({
               },
             },
           },
-          // Text block
+          // Text area
           {
             type: 'div',
             props: {
@@ -138,46 +116,18 @@ export function boardOgCard({
                   type: 'div',
                   props: {
                     style: {
-                      display: 'flex',
+                      width: '100%',
                       fontSize: hasImage ? 26 : 30,
                       fontWeight: 700,
                       color: '#0f172a',
                       lineHeight: 1.3,
                       marginBottom: 14,
-                      flexShrink: 0,
-                      width: '100%',
                       overflow: 'hidden',
-                      overflowWrap: 'break-word',
-                      wordBreak: 'break-word',
                     },
                     children: clampText(title!, 90),
                   },
                 }] : []),
-                {
-                  type: 'div',
-                  props: {
-                    style: {
-                      display: 'flex',
-                      flexDirection: 'column',
-                      width: '100%',
-                      maxHeight: hasImage ? 286 : 260,
-                      fontSize,
-                      fontWeight: 400,
-                      color: '#334155',
-                      lineHeight,
-                      overflow: 'hidden',
-                      overflowWrap: 'break-word',
-                      wordBreak: 'break-word',
-                    },
-                    children: bodyLines.map((line, index) => ({
-                      type: 'div',
-                      props: {
-                        style: { display: 'flex', whiteSpace: 'pre-wrap' },
-                        children: `${index === 0 ? '"' : ''}${line}${index === bodyLines.length - 1 ? '"' : ''}`,
-                      },
-                    })),
-                  },
-                },
+                textBlock,
               ],
             },
           },
@@ -207,7 +157,6 @@ export function boardOgCard({
                       justifyContent: 'space-between',
                       alignItems: 'flex-end',
                       width: '100%',
-                      gap: 16,
                     },
                     children: [
                       {
@@ -245,14 +194,10 @@ export function boardOgCard({
   }
 
   if (hasImage) {
-    // Split layout: image panel on left, info on right
     return {
       type: 'div',
       props: {
-        style: {
-          background: accentSoft, width: '100%', height: '100%',
-          display: 'flex', padding: 40,
-        },
+        style: { background: accentSoft, width: '100%', height: '100%', display: 'flex', padding: 40 },
         children: {
           type: 'div',
           props: {
@@ -264,20 +209,13 @@ export function boardOgCard({
               borderRadius: 32, overflow: 'hidden',
             },
             children: [
-              // Left image panel
               {
                 type: 'div',
                 props: {
-                  style: {
-                    display: 'flex', width: 420, flexShrink: 0,
-                    background: accentSoft,
-                  },
+                  style: { display: 'flex', width: 420, flexShrink: 0, background: accentSoft },
                   children: {
                     type: 'img',
-                    props: {
-                      src: imageUrl,
-                      style: { width: '100%', height: '100%', objectFit: 'cover' },
-                    },
+                    props: { src: imageUrl, style: { width: '100%', height: '100%', objectFit: 'cover' } },
                   },
                 },
               },
@@ -289,14 +227,10 @@ export function boardOgCard({
     }
   }
 
-  // Text-only layout: full width card
   return {
     type: 'div',
     props: {
-      style: {
-        background: accentSoft, width: '100%', height: '100%',
-        display: 'flex', padding: 40,
-      },
+      style: { background: accentSoft, width: '100%', height: '100%', display: 'flex', padding: 40 },
       children: {
         type: 'div',
         props: {

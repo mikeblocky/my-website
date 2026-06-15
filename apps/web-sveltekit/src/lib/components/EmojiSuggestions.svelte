@@ -33,7 +33,7 @@
 <style>
   .emoji-suggestions {
     position: absolute;
-    bottom: calc(100% + 6px);
+    top: calc(100% + 4px);
     left: 0;
     z-index: 50;
     display: flex;

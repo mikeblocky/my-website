@@ -6,6 +6,7 @@
   import AttachmentUploadButton from './AttachmentUploadButton.svelte';
   import BoardThreadBubble from './BoardThreadBubble.svelte';
   import EmojiSuggestions from './EmojiSuggestions.svelte';
+  import EmojiPickerButton from './EmojiPickerButton.svelte';
   import { emojiAutocomplete } from '$lib/actions/emojiAutocomplete';
   import type { EmojiMatch, EmojiAutocompleteState } from '$lib/actions/emojiAutocomplete';
   import { MAX_ATTACHMENT_COUNT } from '$lib/images/attachment-limits';
@@ -342,6 +343,7 @@
                 placeholder="Passcode"
                 class="w-24 rounded-full border border-border bg-background px-3 py-1.5 text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-violet-300 dark:text-slate-100"
               />
+              <EmojiPickerButton getTarget={() => replyTextareaEl} accent="violet" />
               <AttachmentUploadButton
                 onFiles={(files) => files.forEach(file => {
                   handleImageUpload(file, (url) => (replyImageUrls = replyImageUrls.length >= MAX_ATTACHMENT_COUNT ? replyImageUrls : [...replyImageUrls, url]));
@@ -406,15 +408,18 @@
             compact
           />
           <div class="mt-2 flex justify-between items-center gap-2">
-            <AttachmentUploadButton
-              onFiles={(files) => files.forEach(file => {
-                handleImageUpload(file, (url) => (followUpImageUrls = followUpImageUrls.length >= MAX_ATTACHMENT_COUNT ? followUpImageUrls : [...followUpImageUrls, url]));
-              })}
-              accent="emerald"
-            />
+            <div class="flex items-center gap-3">
+              <EmojiPickerButton getTarget={() => followUpTextareaEl} accent="emerald" />
+              <AttachmentUploadButton
+                onFiles={(files) => files.forEach(file => {
+                  handleImageUpload(file, (url) => (followUpImageUrls = followUpImageUrls.length >= MAX_ATTACHMENT_COUNT ? followUpImageUrls : [...followUpImageUrls, url]));
+                })}
+                accent="emerald"
+              />
+            </div>
             <div class="flex gap-2">
-              <button 
-                type="button" 
+              <button
+                type="button"
                 on:click={() => (isFollowingUp = false)} 
                 class="text-xs h-8 px-3 rounded border border-transparent bg-transparent hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-650 cursor-pointer"
               >

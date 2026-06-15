@@ -3,6 +3,7 @@
   import { slide, fade } from 'svelte/transition';
   import { Info, Link as LinkIcon, Loader2, ChevronDown } from '@lucide/svelte';
   import EmojiSuggestions from './EmojiSuggestions.svelte';
+  import EmojiPickerButton from './EmojiPickerButton.svelte';
   import { emojiAutocomplete } from '$lib/actions/emojiAutocomplete';
   import type { EmojiMatch, EmojiAutocompleteState } from '$lib/actions/emojiAutocomplete';
   import AttachmentPreviewGrid from './AttachmentPreviewGrid.svelte';
@@ -317,12 +318,15 @@
   {/if}
 
   <div class="flex flex-col gap-3 border-t border-slate-100 dark:border-slate-900 px-4 py-4 bg-slate-50/20 dark:bg-slate-950/20 sm:flex-row sm:items-center sm:justify-between rounded-b-xl">
-    <AttachmentUploadButton
-      onFiles={(files) => files.forEach(handleImageUpload)}
-      iconSize={13}
-      className="gap-2"
-      accent="sky"
-    />
+    <div class="flex items-center gap-3">
+      <EmojiPickerButton getTarget={() => emojiTarget} accent="sky" />
+      <AttachmentUploadButton
+        onFiles={(files) => files.forEach(handleImageUpload)}
+        iconSize={13}
+        className="gap-2"
+        accent="sky"
+      />
+    </div>
 
     <div class="flex items-center gap-3">
       {#if errorMessage}

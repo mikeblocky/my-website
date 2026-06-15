@@ -1,4 +1,4 @@
-import { searchEmojis } from '$lib/data/emojis'
+import { searchEmojis, EMOJIS } from '$lib/data/emojis'
 
 export type EmojiMatch = { shortcode: string; emoji: string }
 
@@ -10,13 +10,6 @@ export type EmojiAutocompleteState = {
   selectedIndex: number
 }
 
-export type EmojiAutocompleteEvents = {
-  'emoji:open': CustomEvent<EmojiAutocompleteState>
-  'emoji:close': CustomEvent<void>
-  'emoji:select': CustomEvent<EmojiMatch>
-}
-
-// Returns the :query text immediately before the caret, or null if not in a trigger
 function getTrigger(el: HTMLInputElement | HTMLTextAreaElement): { query: string; start: number } | null {
   const pos = el.selectionStart ?? 0
   const text = el.value.slice(0, pos)
@@ -49,9 +42,8 @@ export function emojiAutocomplete(node: HTMLInputElement | HTMLTextAreaElement) 
 
   function select(match: EmojiMatch) {
     const before = node.value.slice(0, state.triggerStart)
-    const after = node.value.slice((node.selectionStart ?? 0))
+    const after = node.value.slice(node.selectionStart ?? 0)
     node.value = before + match.emoji + after
-    // Move caret after the inserted emoji
     const newPos = before.length + match.emoji.length
     node.setSelectionRange(newPos, newPos)
     node.dispatchEvent(new Event('input', { bubbles: true }))
@@ -60,10 +52,36 @@ export function emojiAutocomplete(node: HTMLInputElement | HTMLTextAreaElement) 
     node.focus()
   }
 
+  // Insert emoji at current cursor without needing an open suggestion state
+  function insertAtCursor(emoji: string) {
+    const start = node.selectionStart ?? node.value.length
+    const end = node.selectionEnd ?? start
+    node.value = node.value.slice(0, start) + emoji + node.value.slice(end)
+    const newPos = start + emoji.length
+    node.setSelectionRange(newPos, newPos)
+    node.dispatchEvent(new Event('input', { bubbles: true }))
+    node.focus()
+  }
+
   function onInput() {
+    const pos = node.selectionStart ?? 0
+    const textBefore = node.value.slice(0, pos)
+
+    // Auto-insert on completed :shortcode: (closing colon just typed)
+    const complete = textBefore.match(/:([a-zA-Z0-9_+\-]+):$/)
+    if (complete) {
+      const exact = EMOJIS.find(e => e.shortcode === complete[1])
+      if (exact) {
+        const triggerStart = pos - complete[0].length
+        state = { ...state, triggerStart }
+        select(exact)
+        return
+      }
+    }
+
+    // Partial trigger — show suggestions
     const trigger = getTrigger(node)
-    if (!trigger) { close(); return }
-    if (trigger.query.length === 0) { close(); return }
+    if (!trigger || trigger.query.length === 0) { close(); return }
     open(trigger.query, trigger.start)
   }
 
@@ -91,7 +109,6 @@ export function emojiAutocomplete(node: HTMLInputElement | HTMLTextAreaElement) 
   }
 
   function onBlur() {
-    // Small delay so click on dropdown registers first
     setTimeout(close, 150)
   }
 
@@ -99,9 +116,9 @@ export function emojiAutocomplete(node: HTMLInputElement | HTMLTextAreaElement) 
   node.addEventListener('keydown', onKeydown)
   node.addEventListener('blur', onBlur)
 
-  // Expose select so the dropdown component can call it
   ;(node as any).__emojiSelect = select
   ;(node as any).__emojiClose = close
+  ;(node as any).__emojiInsert = insertAtCursor
 
   return {
     destroy() {

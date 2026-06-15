@@ -3,6 +3,7 @@
   import AttachmentPreviewGrid from './AttachmentPreviewGrid.svelte';
   import AttachmentUploadButton from './AttachmentUploadButton.svelte';
   import EmojiSuggestions from './EmojiSuggestions.svelte';
+  import EmojiPickerButton from './EmojiPickerButton.svelte';
   import { emojiAutocomplete } from '$lib/actions/emojiAutocomplete';
   import type { EmojiMatch, EmojiAutocompleteState } from '$lib/actions/emojiAutocomplete';
   import { MAX_ATTACHMENT_COUNT } from '$lib/images/attachment-limits';
@@ -127,6 +128,7 @@
         </label>
       {/if}
 
+      <EmojiPickerButton getTarget={() => emojiTarget} accent="indigo" />
       <AttachmentUploadButton
         onFiles={(files) => files.forEach(handleImageUpload)}
         iconSize={13}

@@ -6,6 +6,7 @@
   import AttachmentUploadButton from './AttachmentUploadButton.svelte';
   import BoardThreadBubble from './BoardThreadBubble.svelte';
   import EmojiSuggestions from './EmojiSuggestions.svelte';
+  import EmojiPickerButton from './EmojiPickerButton.svelte';
   import { emojiAutocomplete } from '$lib/actions/emojiAutocomplete';
   import type { EmojiMatch, EmojiAutocompleteState } from '$lib/actions/emojiAutocomplete';
   import { MAX_ATTACHMENT_COUNT } from '$lib/images/attachment-limits';
@@ -317,6 +318,7 @@
                 placeholder="Passcode"
                 class="w-24 rounded-full border border-border bg-background px-3 py-1.5 text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-300 dark:text-slate-100 font-sans"
               />
+              <EmojiPickerButton getTarget={() => replyTextareaEl} accent="indigo" />
               <AttachmentUploadButton
                 onFiles={(files) => files.forEach(file => {
                   handleImageUpload(file, (url) => (replyImageUrls = replyImageUrls.length >= MAX_ATTACHMENT_COUNT ? replyImageUrls : [...replyImageUrls, url]));
@@ -381,12 +383,15 @@
             compact
           />
           <div class="mt-2 flex justify-between items-center gap-2">
-            <AttachmentUploadButton
-              onFiles={(files) => files.forEach(file => {
-                handleImageUpload(file, (url) => (followUpImageUrls = followUpImageUrls.length >= MAX_ATTACHMENT_COUNT ? followUpImageUrls : [...followUpImageUrls, url]));
-              })}
-              accent="emerald"
-            />
+            <div class="flex items-center gap-3">
+              <EmojiPickerButton getTarget={() => followUpTextareaEl} accent="emerald" />
+              <AttachmentUploadButton
+                onFiles={(files) => files.forEach(file => {
+                  handleImageUpload(file, (url) => (followUpImageUrls = followUpImageUrls.length >= MAX_ATTACHMENT_COUNT ? followUpImageUrls : [...followUpImageUrls, url]));
+                })}
+                accent="emerald"
+              />
+            </div>
             <div class="flex gap-2">
               <button
                 type="button"

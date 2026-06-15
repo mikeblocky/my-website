@@ -2,6 +2,7 @@
   import AttachmentPreviewGrid from './AttachmentPreviewGrid.svelte';
   import AttachmentUploadButton from './AttachmentUploadButton.svelte';
   import EmojiSuggestions from './EmojiSuggestions.svelte';
+  import EmojiPickerButton from './EmojiPickerButton.svelte';
   import { emojiAutocomplete } from '$lib/actions/emojiAutocomplete';
   import type { EmojiMatch, EmojiAutocompleteState } from '$lib/actions/emojiAutocomplete';
   import { MAX_ATTACHMENT_COUNT } from '$lib/images/attachment-limits';
@@ -112,6 +113,7 @@
   <!-- Bottom: Action Bar -->
   <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-t border-slate-100 dark:border-slate-900 px-4 py-4 bg-slate-50/20 dark:bg-slate-950/20 rounded-b-xl">
     <div class="flex flex-wrap items-center gap-x-5 gap-y-3">
+      <EmojiPickerButton getTarget={() => bodyTextareaEl} accent="violet" />
       <AttachmentUploadButton
         onFiles={(files) => files.forEach(handleImageUpload)}
         iconSize={13}
