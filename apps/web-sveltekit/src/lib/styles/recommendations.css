@@ -1,6 +1,7 @@
 .recommendation-groups,
 .zine-list {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 1rem;
 }
 
@@ -8,6 +9,7 @@
 .recommendations-client,
 .journal-shell {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 1.5rem;
 }
 
@@ -120,6 +122,7 @@
 
 .friend-card-list {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 1rem;
 }
 
@@ -186,6 +189,7 @@
 
 .friend-body {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   min-width: 0;
   flex: 1;
   gap: 0.5rem;
@@ -246,6 +250,7 @@
 
 .recommendation-card-grid {
   display: grid;
+ grid-template-columns: minmax(0, 1fr);
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 1rem;
 }
@@ -320,6 +325,7 @@
 
 .recommendation-fallback {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   place-items: center;
   aspect-ratio: 3 / 4;
   border: 1px solid rgb(226 232 240 / 0.5);

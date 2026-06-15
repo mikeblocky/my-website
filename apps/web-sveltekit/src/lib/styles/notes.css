@@ -59,6 +59,7 @@
 .simple-link-stack,
 .utensil-list {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 1rem;
 }
 
@@ -83,6 +84,7 @@
 
 .section-link-item span {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   min-width: 0;
   gap: 0.25rem;
 }
@@ -121,6 +123,7 @@
 
 .note-row article {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 0.375rem;
 }
 
@@ -151,6 +154,7 @@
 
 .weekly-reflections-list details {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 1rem;
 }
 

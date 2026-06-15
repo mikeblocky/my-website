@@ -1,10 +1,12 @@
 .blog-search-shell {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 1rem;
 }
 
 .blog-index {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 1rem;
 }
 
@@ -50,6 +52,7 @@
 
 .blog-list {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 0.75rem;
 }
 
@@ -63,6 +66,7 @@
 
 .blog-list-item article {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 0.55rem;
 }
 
@@ -137,6 +141,7 @@
 .stationery-panel,
 .activity-panel {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 0.75rem;
   padding-block: 1rem;
   padding-inline: 0;
@@ -169,12 +174,14 @@
 
 .journal-note-list header {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 0.25rem;
   margin-bottom: 0.25rem;
 }
 
 .journal-note-group {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 0.4rem;
 }
 
@@ -197,6 +204,7 @@
 
 .journal-note-grid {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 0.5rem;
 }
 
@@ -243,12 +251,14 @@
 
 .utensil-grid {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 0.75rem;
   grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
 }
 
 .utensil-grid article {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   align-content: start;
   gap: 0.5rem;
   border: 1px solid hsl(var(--border) / 0.6);
@@ -318,11 +328,13 @@
 
 .activity-panel header {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 0.4rem;
 }
 
 .activity-list {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 0.75rem;
 }
 
@@ -338,6 +350,7 @@
 
 .activity-list article > div {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 0.35rem;
 }
 
@@ -350,6 +363,7 @@
 
 .journal-empty {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 0.35rem;
   border-top: 1px solid hsl(var(--border) / 0.8);
   padding-top: 1rem;
@@ -380,6 +394,7 @@
 
 .pet-room {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 3rem;
   padding-block: 1rem;
 }
@@ -457,6 +472,7 @@
 .pet-empty-panel {
   position: relative;
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   place-items: center;
   width: 100%;
   max-width: 24rem;

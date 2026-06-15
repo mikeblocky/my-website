@@ -11,6 +11,7 @@
 /* — capture panel: grid so both rows' labels share the same column width — */
 .favorites-capture-panel {
   display: grid;
+ grid-template-columns: minmax(0, 1fr);
   grid-template-columns: max-content 1fr;
   align-items: center;
   gap: 0.5rem 0.75rem;
@@ -150,6 +151,7 @@
 
 .recommendation-block-list {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 1.5rem;
 }
 
@@ -174,6 +176,7 @@
 
 .recommendation-capture-block-inner {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 1.5rem;
 }
 

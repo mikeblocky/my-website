@@ -82,6 +82,7 @@
 .portal-icon {
   flex-shrink: 0;
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   place-items: center;
   width: 2rem;
   height: 2rem;
@@ -188,6 +189,7 @@
 
 .page-intro {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 1.5rem;
   padding-bottom: 1.5rem;
 }
@@ -201,6 +203,7 @@
 
 .section-title-block {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   width: 100%;
   gap: 0.375rem;
   overflow-wrap: break-word;
@@ -264,6 +267,7 @@
 .homepage-socials,
 .home-section-panel {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 1rem;
 }
 
