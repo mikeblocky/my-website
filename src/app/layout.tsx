@@ -194,14 +194,12 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <div className="flex flex-col min-h-dvh relative">
-            <div className="flex-1 flex flex-col">
-              <main className="w-full mx-auto mt-4 px-[clamp(0.75rem,4vw,1.5rem)] flex-1 pb-[calc(8rem+env(safe-area-inset-bottom,0px))] sm:pb-4">
-                <PageTransition>
-                  {children}
-                </PageTransition>
-              </main>
-            </div>
+          <div className="min-h-dvh relative overflow-x-hidden">
+            <main className="w-full mx-auto mt-4 px-[clamp(0.75rem,4vw,1.5rem)] pb-[calc(8rem+env(safe-area-inset-bottom,0px))] sm:pb-4">
+              <PageTransition>
+                {children}
+              </PageTransition>
+            </main>
           </div>
           <MobileAppShell />
         </ThemeProvider>
