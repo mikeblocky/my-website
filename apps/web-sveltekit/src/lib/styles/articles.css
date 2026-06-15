@@ -170,26 +170,33 @@ article code {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   gap: 2rem;
+  min-width: 0;
+  overflow-x: hidden;
 }
 
 .blog-post-shell article {
   align-self: start;
+  min-width: 0;
 }
 
 .blog-post-shell .prose-panel {
   max-width: none !important;
   width: 100%;
+  min-width: 0;
 }
 
 .blog-post-shell article {
   max-width: none !important;
   width: 100%;
+  min-width: 0;
 }
 
 .blog-post-shell article p,
 .blog-post-shell article li,
 .blog-post-shell article blockquote {
   max-width: none;
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 .blog-post-return {

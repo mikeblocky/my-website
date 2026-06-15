@@ -44,7 +44,7 @@
 </script>
 
 <div class="relative w-full">
-  <BaseContainer size="xl" paddingX="md" paddingY="lg">
+  <BaseContainer size="xl" paddingX="lg" paddingY="lg">
     <div class="flex flex-col gap-6">
       <!-- Breadcrumb Header -->
       <section class="page-intro">
@@ -82,7 +82,7 @@
 
       <!-- Main Article Area Grid -->
       <div class="blog-post-shell">
-        <article id="content" class="relative">
+        <article id="content" class="relative min-w-0 overflow-hidden">
           <!-- Desktop sidebar - absolutely positioned to the left -->
           <div class="hidden xl:block absolute right-full mr-8 2xl:mr-12 top-0 bottom-0 pointer-events-none">
             <div class="sticky top-1/2 -translate-y-1/2 pointer-events-auto flex justify-end">
