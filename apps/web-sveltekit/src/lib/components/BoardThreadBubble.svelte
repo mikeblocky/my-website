@@ -4,6 +4,9 @@
   import RichText from './RichText.svelte';
   import AttachmentPreviewGrid from './AttachmentPreviewGrid.svelte';
   import AttachmentUploadButton from './AttachmentUploadButton.svelte';
+  import EmojiSuggestions from './EmojiSuggestions.svelte';
+  import { emojiAutocomplete } from '$lib/actions/emojiAutocomplete';
+  import type { EmojiMatch, EmojiAutocompleteState } from '$lib/actions/emojiAutocomplete';
   import { MAX_ATTACHMENT_COUNT } from '$lib/images/attachment-limits';
   import { prepareImageForUpload } from '$lib/images/prepare-upload';
   import { formatBoardDate as formatDate, formatBoardDateCompact as formatDateCompact } from '$lib/boards/board-utils';
@@ -86,6 +89,23 @@
     }
   }
 
+  let emojiOpen = false;
+  let emojiResults: EmojiMatch[] = [];
+  let emojiSelectedIndex = 0;
+  let emojiQuery = '';
+  let editTextareaEl: HTMLTextAreaElement;
+
+  function onEmojiOpen(e: CustomEvent<EmojiAutocompleteState>) {
+    emojiOpen = true;
+    emojiResults = e.detail.results;
+    emojiSelectedIndex = e.detail.selectedIndex;
+    emojiQuery = e.detail.query;
+  }
+  function onEmojiClose() { emojiOpen = false; emojiResults = []; }
+  function onEmojiSelect(match: EmojiMatch) {
+    if (editTextareaEl) (editTextareaEl as any).__emojiSelect(match);
+  }
+
   function autoResize(node: HTMLTextAreaElement) {
     const update = () => {
       node.style.height = 'auto';
@@ -145,12 +165,21 @@
 
     {#if isEditing}
       <div class="space-y-3">
-        <textarea
-          bind:value={editBody}
-          use:autoResize
-          rows={Math.max(3, message.body.split('\n').length)}
-          class="min-h-[44px] w-full resize-none overflow-hidden rounded-md border bg-background px-4 py-3 text-base md:text-[17px] text-slate-900 focus:outline-none focus:ring-1 dark:text-slate-100 font-sans {themeClasses.textarea}"
-        />
+        <div class="relative">
+          <textarea
+            bind:this={editTextareaEl}
+            bind:value={editBody}
+            use:autoResize
+            use:emojiAutocomplete
+            on:emoji:open={onEmojiOpen}
+            on:emoji:close={onEmojiClose}
+            rows={Math.max(3, message.body.split('\n').length)}
+            class="min-h-[44px] w-full resize-none overflow-hidden rounded-md border bg-background px-4 py-3 text-base md:text-[17px] text-slate-900 focus:outline-none focus:ring-1 dark:text-slate-100 font-sans {themeClasses.textarea}"
+          />
+          {#if emojiOpen}
+            <EmojiSuggestions results={emojiResults} selectedIndex={emojiSelectedIndex} query={emojiQuery} onSelect={onEmojiSelect} />
+          {/if}
+        </div>
         <AttachmentPreviewGrid
           urls={editImageUrls}
           onRemove={(index) => (editImageUrls = editImageUrls.filter((_, itemIndex) => itemIndex !== index))}
