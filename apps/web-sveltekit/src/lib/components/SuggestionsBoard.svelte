@@ -138,9 +138,9 @@
           const element = document.getElementById(`suggestion-${id}`);
           if (element) {
             element.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            element.classList.add('ring-4', 'ring-teal-500/30', 'border-teal-500');
+            element.classList.add('ring-4', 'ring-sky-500/30', 'border-sky-500');
             setTimeout(() => {
-              element.classList.remove('ring-4', 'ring-teal-500/30', 'border-teal-500');
+              element.classList.remove('ring-4', 'ring-sky-500/30', 'border-sky-500');
             }, 4000);
           }
         }, 600);
@@ -362,7 +362,7 @@
   {isLoading}
   bind:isAdminMode
   bind:passcode
-  accent="teal"
+  accent="sky"
   formButtonLabel="suggest something to read, watch, or listen to"
   {notification}
   {clearNotification}
@@ -424,7 +424,7 @@
       <button
         on:click={() => (currentPage = Math.max(1, currentPage - 1))}
         disabled={currentPage === 1}
-        class="p-2 rounded-lg text-slate-500 hover:bg-teal-100 disabled:opacity-50 disabled:hover:bg-transparent dark:text-slate-400 dark:hover:bg-teal-900/30 transition-colors cursor-pointer border-0 bg-transparent"
+        class="p-2 rounded-lg text-slate-500 hover:bg-sky-100 disabled:opacity-50 disabled:hover:bg-transparent dark:text-slate-400 dark:hover:bg-sky-900/30 transition-colors cursor-pointer border-0 bg-transparent"
         aria-label="Previous page"
       >
         <ChevronLeft size={20} strokeWidth={1.8} />
@@ -437,7 +437,7 @@
       <button
         on:click={() => (currentPage = Math.min(totalPages, currentPage + 1))}
         disabled={currentPage === totalPages}
-        class="p-2 rounded-lg text-slate-500 hover:bg-teal-100 disabled:opacity-50 disabled:hover:bg-transparent dark:text-slate-400 dark:hover:bg-teal-900/30 transition-colors cursor-pointer border-0 bg-transparent"
+        class="p-2 rounded-lg text-slate-500 hover:bg-sky-100 disabled:opacity-50 disabled:hover:bg-transparent dark:text-slate-400 dark:hover:bg-sky-900/30 transition-colors cursor-pointer border-0 bg-transparent"
         aria-label="Next page"
       >
         <ChevronRight size={20} strokeWidth={1.8} />

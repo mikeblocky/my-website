@@ -99,7 +99,7 @@
         onFiles={(files) => files.forEach(handleImageUpload)}
         iconSize={13}
         className="gap-1.5 text-sm font-semibold font-sans"
-        accent="blue"
+        accent="indigo"
       >
         Add images
       </AttachmentUploadButton>

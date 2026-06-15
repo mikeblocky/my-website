@@ -17,7 +17,7 @@
   title="Suggestions"
   description="Suggest books, manga, music, or movies for me to check out next."
   currentLabel="Interact"
-  footerColor="blue"
+  footerColor="sky"
 >
   <SuggestionsBoard bind:isAdminMode bind:passcode />
 </SectionPageShell>

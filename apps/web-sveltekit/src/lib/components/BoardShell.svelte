@@ -9,7 +9,7 @@
   export let isLoading = false;
   export let isAdminMode = false;
   export let passcode = '';
-  export let accent: 'blue' | 'violet' | 'teal';
+  export let accent: 'blue' | 'violet' | 'teal' | 'yellow' | 'indigo' | 'sky';
   export let formButtonLabel: string;
   export let notification: string | null = null;
   export let clearNotification: () => void = () => {};
@@ -40,6 +40,26 @@
       toastDot: 'bg-violet-600 dark:bg-violet-400',
       toastButton: 'border-violet-100 bg-violet-50/50 text-violet-600 hover:bg-violet-100 dark:border-violet-800 dark:bg-violet-900/30 dark:text-violet-300 dark:hover:bg-violet-900/50'
     },
+    indigo: {
+      border: 'border-indigo-200/50 dark:border-indigo-800/40',
+      text: 'text-indigo-600 dark:text-indigo-400',
+      bg: 'bg-indigo-50/10 dark:bg-indigo-950/5 hover:bg-indigo-50/20 dark:hover:bg-indigo-950/10',
+      hoverBorder: 'hover:border-indigo-400',
+      toastBorder: 'border-indigo-200 dark:border-indigo-500/30',
+      toastBg: 'bg-white/95 dark:bg-[#141427]',
+      toastDot: 'bg-indigo-600 dark:bg-indigo-400',
+      toastButton: 'border-indigo-100 bg-indigo-50/50 text-indigo-600 hover:bg-indigo-100 dark:border-indigo-800 dark:bg-indigo-900/30 dark:text-indigo-300 dark:hover:bg-indigo-900/50'
+    },
+    sky: {
+      border: 'border-sky-200/50 dark:border-sky-800/40',
+      text: 'text-sky-600 dark:text-sky-400',
+      bg: 'bg-sky-50/10 dark:bg-sky-950/5 hover:bg-sky-50/20 dark:hover:bg-sky-950/10',
+      hoverBorder: 'hover:border-sky-400',
+      toastBorder: 'border-sky-200 dark:border-sky-500/30',
+      toastBg: 'bg-white/95 dark:bg-[#0d1822]',
+      toastDot: 'bg-sky-600 dark:bg-sky-400',
+      toastButton: 'border-sky-100 bg-sky-50/50 text-sky-600 hover:bg-sky-100 dark:border-sky-800 dark:bg-sky-900/30 dark:text-sky-300 dark:hover:bg-sky-900/50'
+    },
     teal: {
       border: 'border-teal-200/50 dark:border-teal-800/40',
       text: 'text-teal-600 dark:text-teal-400',
@@ -49,6 +69,16 @@
       toastBg: 'bg-white/95 dark:bg-[#101a18]',
       toastDot: 'bg-teal-600 dark:bg-teal-300',
       toastButton: 'border-teal-100 bg-teal-50/50 text-teal-700 hover:bg-teal-100 dark:border-teal-500/20 dark:bg-teal-900/30 dark:text-teal-300 dark:hover:bg-teal-900/50'
+    },
+    yellow: {
+      border: 'border-amber-200/60 dark:border-amber-700/35',
+      text: 'text-amber-700 dark:text-amber-300',
+      bg: 'bg-amber-50/25 dark:bg-amber-950/5 hover:bg-amber-50/45 dark:hover:bg-amber-950/10',
+      hoverBorder: 'hover:border-amber-400',
+      toastBorder: 'border-amber-200 dark:border-amber-500/30',
+      toastBg: 'bg-white/95 dark:bg-[#1f1608]',
+      toastDot: 'bg-amber-600 dark:bg-amber-300',
+      toastButton: 'border-amber-100 bg-amber-50/60 text-amber-700 hover:bg-amber-100 dark:border-amber-500/20 dark:bg-amber-900/30 dark:text-amber-300 dark:hover:bg-amber-900/50'
     }
   }[accent];
 
@@ -104,7 +134,7 @@
           </span>
         {/if}
         <span class="whitespace-nowrap text-sm text-muted-foreground">
-          {count} {accent === 'violet' && title.toLowerCase().includes('artwork') ? 'artworks' : 'posts'} collected
+          {count} {accent === 'yellow' && title.toLowerCase().includes('artwork') ? 'artworks' : 'posts'} collected
         </span>
       </div>
     </div>

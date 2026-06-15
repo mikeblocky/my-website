@@ -12,17 +12,19 @@
   $: description = `"${body.slice(0, 150)}${body.length > 150 ? '...' : ''}" - Suggested by ${suggestion.author || 'anonymous'}`;
   $: title = `${suggestion.title} | Media suggestions`;
   $: ogImage = `/suggestions/${id}/opengraph-image`;
+  $: twitterImage = `/suggestions/${id}/twitter-image`;
 </script>
 
 <SeoHead
   {title}
   {description}
-  path="/suggestions/{id}"
+  path={`/suggestions/${id}`}
   image={ogImage}
+  {twitterImage}
 />
 
 <div class="w-full max-w-[700px] mx-auto px-6 py-12 font-sans">
   <RedirectToBoard {id} type="suggestion" />
 </div>
 
-<SiteFooter />
+<SiteFooter color="sky" />

@@ -285,7 +285,7 @@
       onFiles={(files) => files.forEach(handleImageUpload)}
       iconSize={13}
       className="gap-2"
-      accent="teal"
+      accent="sky"
     />
 
     <div class="flex items-center gap-3">

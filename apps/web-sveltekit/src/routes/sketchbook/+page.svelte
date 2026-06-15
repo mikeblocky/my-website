@@ -22,4 +22,4 @@
 
 <SketchbookBoard bind:isAdminMode bind:passcode />
 
-<SiteFooter />
+<SiteFooter color="amber" />

@@ -31,9 +31,10 @@ export async function generatePng(
   element: Parameters<typeof satori>[0],
   width = 1200,
   height = 630
-): Promise<Uint8Array> {
+): Promise<ArrayBuffer> {
   const fonts = await getFonts()
   const svg = await satori(element, { width, height, fonts })
   const resvg = new Resvg(svg, { fitTo: { mode: 'width', value: width } })
-  return resvg.render().asPng()
+  const png = resvg.render().asPng()
+  return png.buffer.slice(png.byteOffset, png.byteOffset + png.byteLength) as ArrayBuffer
 }

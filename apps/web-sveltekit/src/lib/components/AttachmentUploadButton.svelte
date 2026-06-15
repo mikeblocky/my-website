@@ -1,7 +1,7 @@
 <script lang="ts">
   import { Image as ImageIcon } from '@lucide/svelte';
 
-  type AttachmentAccent = 'blue' | 'violet' | 'teal' | 'emerald';
+  type AttachmentAccent = 'blue' | 'violet' | 'teal' | 'emerald' | 'indigo' | 'sky';
 
   export let onFiles: (files: File[]) => void;
   export let iconSize = 12;
@@ -12,6 +12,8 @@
     blue: 'hover:text-blue-500',
     violet: 'hover:text-violet-500',
     teal: 'hover:text-teal-650 dark:hover:text-teal-300',
+    indigo: 'hover:text-indigo-500',
+    sky: 'hover:text-sky-500',
     emerald: 'hover:text-emerald-500',
   };
 

@@ -121,9 +121,9 @@
           const element = document.getElementById(`talk-${id}`);
           if (element) {
             element.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            element.classList.add('ring-4', 'ring-blue-500/30', 'border-blue-500');
+            element.classList.add('ring-4', 'ring-indigo-500/30', 'border-indigo-500');
             setTimeout(() => {
-              element.classList.remove('ring-4', 'ring-blue-500/30', 'border-blue-500');
+              element.classList.remove('ring-4', 'ring-indigo-500/30', 'border-indigo-500');
             }, 4000);
           }
         }, 600);
@@ -295,7 +295,7 @@
   {isLoading}
   bind:isAdminMode
   bind:passcode
-  accent="blue"
+  accent="indigo"
   formButtonLabel="write in the guestbook"
   {singleMode}
   {notification}
@@ -357,7 +357,7 @@
       <button
         on:click={() => (currentPage = Math.max(1, currentPage - 1))}
         disabled={currentPage === 1}
-        class="p-2 rounded-lg text-slate-500 hover:bg-blue-100 disabled:opacity-50 disabled:hover:bg-transparent dark:text-slate-400 dark:hover:bg-blue-900/30 transition-colors cursor-pointer border-0 bg-transparent"
+        class="p-2 rounded-lg text-slate-500 hover:bg-indigo-100 disabled:opacity-50 disabled:hover:bg-transparent dark:text-slate-400 dark:hover:bg-indigo-900/30 transition-colors cursor-pointer border-0 bg-transparent"
         aria-label="Previous page"
       >
         <ChevronLeft size={20} strokeWidth={1.8} />
@@ -367,7 +367,7 @@
         {#each Array.from({ length: totalPages }) as _, i}
           <button
             on:click={() => (currentPage = i + 1)}
-            class="w-8 h-8 rounded-lg text-sm font-medium transition-colors cursor-pointer border-0 {currentPage === i + 1 ? 'bg-blue-500 text-white' : 'text-slate-600 hover:bg-blue-100 dark:text-slate-400 dark:hover:bg-blue-900/30 bg-transparent'}"
+            class="w-8 h-8 rounded-lg text-sm font-medium transition-colors cursor-pointer border-0 {currentPage === i + 1 ? 'bg-indigo-500 text-white' : 'text-slate-600 hover:bg-indigo-100 dark:text-slate-400 dark:hover:bg-indigo-900/30 bg-transparent'}"
           >
             {i + 1}
           </button>
@@ -377,7 +377,7 @@
       <button
         on:click={() => (currentPage = Math.min(totalPages, currentPage + 1))}
         disabled={currentPage === totalPages}
-        class="p-2 rounded-lg text-slate-500 hover:bg-blue-100 disabled:opacity-50 disabled:hover:bg-transparent dark:text-slate-400 dark:hover:bg-blue-900/30 transition-colors cursor-pointer border-0 bg-transparent"
+        class="p-2 rounded-lg text-slate-500 hover:bg-indigo-100 disabled:opacity-50 disabled:hover:bg-transparent dark:text-slate-400 dark:hover:bg-indigo-900/30 transition-colors cursor-pointer border-0 bg-transparent"
         aria-label="Next page"
       >
         <ChevronRight size={20} strokeWidth={1.8} />

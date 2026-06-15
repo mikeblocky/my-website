@@ -4,7 +4,7 @@
   import { fade } from 'svelte/transition';
 
   export let urls: string[] = [];
-  export let theme: 'blue' | 'violet' | 'teal' | 'amber' = 'violet';
+  export let theme: 'blue' | 'violet' | 'teal' | 'amber' | 'indigo' | 'sky' = 'violet';
 
   export let activeIdx: number | null = null;
   export let showThumbnails = true;
@@ -31,7 +31,16 @@
   }
 
   $: cleanUrls = urls.filter(url => typeof url === 'string' && url.trim().length > 0);
-  $: linkColor = theme === 'blue' ? 'border-blue-500' : theme === 'violet' ? 'border-violet-500' : 'border-teal-500';
+  const linkColors = {
+    blue: 'border-blue-500',
+    violet: 'border-violet-500',
+    teal: 'border-teal-500',
+    amber: 'border-amber-500',
+    indigo: 'border-indigo-500',
+    sky: 'border-sky-500',
+  };
+
+  $: linkColor = linkColors[theme];
 
   function resetZoom() {
     scale = 1;

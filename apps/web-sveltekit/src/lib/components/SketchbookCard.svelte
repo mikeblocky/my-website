@@ -43,15 +43,15 @@
     on:click|stopPropagation
   >
     <div class="w-full p-3 flex justify-center">
-      <ImageGallery urls={[drawing.imageUrl]} theme="violet" />
+      <ImageGallery urls={[drawing.imageUrl]} theme="amber" />
     </div>
   </div>
 
   <!-- Right Column details -->
   <div class="p-5 sm:p-6 flex flex-col justify-between flex-1 min-w-0 font-sans">
-    <div class="min-w-0 space-y-3">
-      <div>
-        <h2 class="break-words text-lg font-bold text-slate-955 dark:text-slate-50 font-sans">
+    <div class="min-w-0 max-w-full space-y-3">
+      <div class="min-w-0 max-w-full">
+        <h2 class="max-w-full break-words [overflow-wrap:anywhere] text-lg font-bold text-slate-955 dark:text-slate-50 font-sans">
           {drawing.author}
         </h2>
         <p class="text-xs text-muted-foreground font-mono">
@@ -60,7 +60,7 @@
       </div>
 
       {#if drawing.body}
-        <p class="text-sm leading-relaxed text-slate-700 dark:text-slate-300 font-sans">
+        <p class="max-w-full break-words [overflow-wrap:anywhere] text-sm leading-relaxed text-slate-700 dark:text-slate-300 font-sans">
           {drawing.body}
         </p>
       {/if}
@@ -69,11 +69,11 @@
       {#if drawing.thread && drawing.thread.length > 0}
         <div class="space-y-2 border-t border-slate-200/45 dark:border-slate-850/45 pt-3">
           {#each drawing.thread as reply (reply.id)}
-            <div class="flex gap-2 items-start rounded-md border border-slate-200/30 bg-slate-100/30 p-2.5 text-xs dark:border-slate-800/30 dark:bg-slate-900/20">
-              <CornerDownRight size={13} class="text-violet-500 shrink-0 mt-0.5" />
-              <div class="space-y-0.5">
-                <span class="font-semibold text-violet-650 dark:text-violet-400">mikeblocky</span>
-                <p class="text-slate-655 dark:text-slate-300 break-words leading-relaxed">{reply.body}</p>
+            <div class="flex min-w-0 gap-2 items-start rounded-md border border-slate-200/30 bg-slate-100/30 p-2.5 text-xs dark:border-slate-800/30 dark:bg-slate-900/20">
+              <CornerDownRight size={13} class="text-amber-600 shrink-0 mt-0.5" />
+              <div class="min-w-0 max-w-full space-y-0.5">
+                <span class="font-semibold text-amber-700 dark:text-amber-300">mikeblocky</span>
+                <p class="max-w-full text-slate-655 dark:text-slate-300 break-words [overflow-wrap:anywhere] leading-relaxed">{reply.body}</p>
               </div>
             </div>
           {/each}
@@ -98,7 +98,7 @@
           <button
             type="button"
             on:click={(e) => onShare(drawing.id, e)}
-            class="flex items-center justify-center text-muted-foreground hover:text-violet-600 dark:hover:text-violet-400 transition-colors duration-150 cursor-pointer border-0 bg-transparent"
+            class="flex items-center justify-center text-muted-foreground hover:text-amber-700 dark:hover:text-amber-300 transition-colors duration-150 cursor-pointer border-0 bg-transparent"
             title={buttonFeedback[`share-${drawing.id}`] || "Share link"}
           >
             <Share2 size={13} />
@@ -107,7 +107,7 @@
           <button
             type="button"
             on:click={(e) => onSnap(drawing.id, e)}
-            class="flex items-center justify-center text-muted-foreground hover:text-violet-600 dark:hover:text-violet-400 transition-colors duration-150 cursor-pointer border-0 bg-transparent"
+            class="flex items-center justify-center text-muted-foreground hover:text-amber-700 dark:hover:text-amber-300 transition-colors duration-150 cursor-pointer border-0 bg-transparent"
             title={buttonFeedback[`snap-${drawing.id}`] || "Snap card to clipboard"}
           >
             <Camera size={13} />
@@ -116,7 +116,7 @@
           <button
             type="button"
             on:click={(e) => onDownload(drawing.imageUrl, drawing.id, e)}
-            class="flex items-center justify-center text-muted-foreground hover:text-violet-600 dark:hover:text-violet-400 transition-colors duration-150 cursor-pointer border-0 bg-transparent"
+            class="flex items-center justify-center text-muted-foreground hover:text-amber-700 dark:hover:text-amber-300 transition-colors duration-150 cursor-pointer border-0 bg-transparent"
             title="Download"
           >
             <Download size={13} />
@@ -132,7 +132,7 @@
                 isReplying = !isReplying;
                 replyBody = '';
               }}
-              class="flex items-center justify-center text-muted-foreground hover:text-violet-600 dark:hover:text-violet-400 transition-colors duration-150 cursor-pointer border-0 bg-transparent"
+              class="flex items-center justify-center text-muted-foreground hover:text-amber-700 dark:hover:text-amber-300 transition-colors duration-150 cursor-pointer border-0 bg-transparent"
               title="Reply to drawing"
             >
               <MessageSquareReply size={13} />
@@ -155,7 +155,7 @@
           <textarea
             placeholder="Mike, write feedback..."
             bind:value={replyBody}
-            class="w-full bg-background border border-slate-200 dark:border-slate-850 p-2 text-xs rounded-lg focus:outline-none resize-none h-12 focus:ring-1 focus:ring-violet-300 dark:text-slate-100 font-sans"
+            class="w-full bg-background border border-slate-200 dark:border-slate-850 p-2 text-xs rounded-lg focus:outline-none resize-none h-12 focus:ring-1 focus:ring-amber-300 dark:text-slate-100 font-sans"
           />
           <div class="flex justify-end gap-1.5">
             <button
@@ -167,7 +167,7 @@
             </button>
             <button
               type="button"
-              class="h-6 text-[10px] px-3 bg-violet-600 hover:bg-violet-750 text-white rounded border-0 font-mono cursor-pointer disabled:opacity-50"
+              class="h-6 text-[10px] px-3 bg-amber-600 hover:bg-amber-700 text-white rounded border-0 font-mono cursor-pointer disabled:opacity-50"
               disabled={!replyBody.trim()}
               on:click={handleReplyFormSubmit}
             >

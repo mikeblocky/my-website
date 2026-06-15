@@ -22,12 +22,14 @@
   const isSketchbook = type === 'sketchbook';
 
   const accentColor = isSuggestion
-    ? 'text-teal-650 dark:text-teal-400 bg-teal-50/20 dark:bg-teal-900/10 border-teal-100 dark:border-teal-900/20'
+    ? 'text-sky-600 dark:text-sky-400 bg-sky-50/20 dark:bg-sky-900/10 border-sky-100 dark:border-sky-900/20'
     : isTalk
-      ? 'text-blue-650 dark:text-blue-400 bg-blue-50/20 dark:bg-blue-900/10 border-blue-100 dark:border-blue-900/20'
-      : 'text-violet-650 dark:text-violet-400 bg-violet-50/20 dark:bg-violet-900/10 border-violet-100 dark:border-violet-900/20';
+      ? 'text-indigo-600 dark:text-indigo-400 bg-indigo-50/20 dark:bg-indigo-900/10 border-indigo-100 dark:border-indigo-900/20'
+      : isSketchbook
+        ? 'text-amber-700 dark:text-amber-300 bg-amber-50/25 dark:bg-amber-900/10 border-amber-100 dark:border-amber-900/20'
+        : 'text-violet-650 dark:text-violet-400 bg-violet-50/20 dark:bg-violet-900/10 border-violet-100 dark:border-violet-900/20';
 
-  const loaderColor = isSuggestion ? 'border-teal-500' : isTalk ? 'border-blue-500' : 'border-violet-500';
+  const loaderColor = isSuggestion ? 'border-sky-500' : isTalk ? 'border-indigo-500' : isSketchbook ? 'border-amber-500' : 'border-violet-500';
   const boardLabel = isSuggestion 
     ? 'Media suggestions' 
     : isTalk 
@@ -55,7 +57,7 @@
     <div class="pt-2">
       <a
         href={destination}
-        class="block w-full py-2.5 px-5 text-sm font-semibold rounded-md text-center transition-all duration-200 border border-transparent hover:-translate-y-0.5 active:scale-[0.98] {isSuggestion ? 'bg-teal-600 text-white hover:bg-teal-700' : isTalk ? 'bg-blue-600 text-white hover:bg-blue-700' : 'bg-violet-600 text-white hover:bg-violet-700'}"
+        class="block w-full py-2.5 px-5 text-sm font-semibold rounded-md text-center transition-all duration-200 border border-transparent hover:-translate-y-0.5 active:scale-[0.98] {isSuggestion ? 'bg-sky-600 text-white hover:bg-sky-700' : isTalk ? 'bg-indigo-600 text-white hover:bg-indigo-700' : isSketchbook ? 'bg-amber-600 text-white hover:bg-amber-700' : 'bg-violet-600 text-white hover:bg-violet-700'}"
       >
         Press to enter board
       </a>

@@ -104,9 +104,9 @@
       const element = document.getElementById(`drawing-${id}`);
       if (element) {
         element.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        element.classList.add('ring-4', 'ring-violet-500/30', 'border-violet-500');
+        element.classList.add('ring-4', 'ring-amber-500/30', 'border-amber-500');
         setTimeout(() => {
-          element.classList.remove('ring-4', 'ring-violet-500/30', 'border-violet-500');
+          element.classList.remove('ring-4', 'ring-amber-500/30', 'border-amber-500');
         }, 4000);
       }
     }
@@ -311,7 +311,7 @@
   {isLoading}
   bind:isAdminMode
   bind:passcode
-  accent="violet"
+  accent="yellow"
   formButtonLabel="open drawing canvas"
   {notification}
   {clearNotification}

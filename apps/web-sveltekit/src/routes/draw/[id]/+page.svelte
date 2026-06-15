@@ -12,17 +12,20 @@
   $: bodySnippet = prompt.body.slice(0, 150) + (prompt.body.length > 150 ? '...' : '');
   $: description = `"${bodySnippet}" — Suggested by ${author}`;
   $: title = `Prompt from ${author} | Drawing prompts`;
-  $: ogImage = '/draw/opengraph-image.jpg';
+  $: ogImage = `/draw/${id}/opengraph-image`;
+  $: twitterImage = `/draw/${id}/twitter-image`;
 </script>
 
 <SeoHead
   {title}
   {description}
-  path="/draw/{id}"
+  path={`/draw/${id}`}
+  image={ogImage}
+  {twitterImage}
 />
 
 <div class="w-full max-w-[700px] mx-auto px-6 py-12 font-sans">
   <RedirectToBoard {id} type="prompt" />
 </div>
 
-<SiteFooter />
+<SiteFooter color="violet" />

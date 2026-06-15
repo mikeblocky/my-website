@@ -13,17 +13,19 @@
   $: description = `"${bodySnippet}" — Shared by ${author}`;
   $: title = `Post from ${author} | Talk`;
   $: ogImage = `/talk/${id}/opengraph-image`;
+  $: twitterImage = `/talk/${id}/twitter-image`;
 </script>
 
 <SeoHead
   {title}
   {description}
-  path="/talk/{id}"
+  path={`/talk/${id}`}
   image={ogImage}
+  {twitterImage}
 />
 
 <div class="w-full max-w-[700px] mx-auto px-6 py-12 font-sans">
   <RedirectToBoard {id} type="talk" />
 </div>
 
-<SiteFooter />
+<SiteFooter color="indigo" />

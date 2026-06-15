@@ -17,7 +17,7 @@
   title="Draw"
   description="A prompt shelf for scenes, characters, and small image ideas."
   currentLabel="Interact"
-  footerColor="blue"
+  footerColor="violet"
 >
   <DrawBoard bind:isAdminMode bind:passcode />
 </SectionPageShell>

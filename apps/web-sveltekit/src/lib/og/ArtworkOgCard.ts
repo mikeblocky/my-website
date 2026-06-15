@@ -9,21 +9,57 @@ function clampText(text: string, max: number) {
   return text.length > max ? text.slice(0, max - 1) + '…' : text
 }
 
+function wrapText(text: string, charsPerLine: number, maxLines: number) {
+  const words = text.split(/\s+/).filter(Boolean)
+  const lines: string[] = []
+  let current = ''
+
+  for (const word of words) {
+    const next = current ? `${current} ${word}` : word
+    if (next.length <= charsPerLine) {
+      current = next
+      continue
+    }
+
+    if (current) lines.push(current)
+
+    if (word.length > charsPerLine) {
+      for (let i = 0; i < word.length; i += charsPerLine) {
+        lines.push(word.slice(i, i + charsPerLine))
+      }
+      current = ''
+    } else {
+      current = word
+    }
+  }
+
+  if (current) lines.push(current)
+
+  if (lines.length <= maxLines) return lines
+
+  const visible = lines.slice(0, maxLines)
+  visible[maxLines - 1] = clampText(visible[maxLines - 1], Math.max(2, charsPerLine - 1))
+  return visible
+}
+
 export function artworkOgCard({ imageUrl, caption, author, date }: ArtworkOgCardProps) {
   const accent = '#d97706'
   const accentSoft = '#fffbeb'
   const border = '#fcd34d'
 
   const rawCaption = caption?.trim() || null
-  const safeCaption = rawCaption ? clampText(rawCaption, 160) : null
+  const safeCaption = rawCaption ? clampText(rawCaption, 320) : null
   const captionLen = safeCaption?.length ?? 0
 
   const captionFontSize = safeCaption
-    ? (captionLen > 120 ? 22 : captionLen > 70 ? 26 : captionLen > 40 ? 30 : 36)
+    ? (captionLen > 240 ? 18 : captionLen > 170 ? 20 : captionLen > 110 ? 23 : captionLen > 60 ? 27 : 34)
     : 26
   const captionLineHeight = safeCaption
-    ? (captionLen > 120 ? 1.3 : captionLen > 70 ? 1.35 : 1.4)
+    ? (captionLen > 170 ? 1.32 : captionLen > 90 ? 1.36 : 1.4)
     : 1.4
+  const captionLines = safeCaption
+    ? wrapText(safeCaption, captionLen > 240 ? 44 : captionLen > 170 ? 40 : captionLen > 110 ? 35 : 28, 8)
+    : ['A sketch sent!']
 
   return {
     type: 'div',
@@ -57,7 +93,7 @@ export function artworkOgCard({ imageUrl, caption, author, date }: ArtworkOgCard
               props: {
                 style: {
                   display: 'flex',
-                  width: 530,
+                  width: 510,
                   flexShrink: 0,
                   // Match the white card background so any sub-pixel gap is invisible
                   background: '#ffffff',
@@ -119,18 +155,41 @@ export function artworkOgCard({ imageUrl, caption, author, date }: ArtworkOgCard
                         overflow: 'hidden',
                         marginTop: 20,
                         marginBottom: 20,
+                        minWidth: 0,
                       },
                       children: {
                         type: 'div',
                         props: {
                           style: {
+                            display: 'flex',
+                            flexDirection: 'column',
+                            width: '100%',
+                            maxHeight: 252,
                             fontSize: captionFontSize,
                             fontWeight: 400,
                             color: safeCaption ? '#334155' : '#94a3b8',
                             lineHeight: captionLineHeight,
                             overflow: 'hidden',
+                            overflowWrap: 'break-word',
+                            wordBreak: 'break-word',
                           },
-                          children: safeCaption ? `"${safeCaption}"` : 'A sketch sent!',
+                          children: captionLines.map((line, index) => ({
+                            type: 'div',
+                            props: {
+                              style: {
+                                display: 'flex',
+                                width: '100%',
+                              },
+                              children:
+                                safeCaption && captionLines.length === 1
+                                  ? `"${line}"`
+                                  : safeCaption && index === 0
+                                    ? `"${line}`
+                                    : safeCaption && index === captionLines.length - 1
+                                      ? `${line}"`
+                                      : line,
+                            },
+                          })),
                         },
                       },
                     },
@@ -143,12 +202,21 @@ export function artworkOgCard({ imageUrl, caption, author, date }: ArtworkOgCard
                         display: 'flex',
                         flexDirection: 'column',
                         flexShrink: 0,
-                        borderTopWidth: 2,
-                        borderTopStyle: 'solid',
-                        borderTopColor: '#f1f5f9',
-                        paddingTop: 18,
+                        width: 420,
                       },
                       children: [
+                        {
+                          type: 'div',
+                          props: {
+                            style: {
+                              display: 'flex',
+                              width: 420,
+                              height: 2,
+                              background: '#f1f5f9',
+                              marginBottom: 18,
+                            },
+                          },
+                        },
                         {
                           type: 'div',
                           props: {

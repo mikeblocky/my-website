@@ -13,17 +13,19 @@
     : `A beautiful sketch drawn by ${drawing.author} on the collaborative board.`;
   $: title = `Drawing by ${drawing.author} | Sketchbook`;
   $: ogImage = `/sketchbook/${id}/opengraph-image`;
+  $: twitterImage = `/sketchbook/${id}/twitter-image`;
 </script>
 
 <SeoHead
   {title}
   {description}
-  path="/sketchbook/{id}"
+  path={`/sketchbook/${id}`}
   image={ogImage}
+  {twitterImage}
 />
 
 <div class="w-full max-w-[700px] mx-auto px-6 py-12 font-sans">
   <RedirectToBoard {id} type="sketchbook" />
 </div>
 
-<SiteFooter />
+<SiteFooter color="amber" />

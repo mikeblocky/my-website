@@ -8,7 +8,7 @@
   import { prepareImageForUpload } from '$lib/images/prepare-upload';
   import { formatBoardDate as formatDate, formatBoardDateCompact as formatDateCompact } from '$lib/boards/board-utils';
 
-  type ThreadTheme = 'blue' | 'violet';
+  type ThreadTheme = 'blue' | 'violet' | 'indigo' | 'sky';
   
   export let message: {
     id: string;
@@ -54,6 +54,26 @@
       editButton: 'text-violet-500 hover:text-violet-700 dark:text-violet-400 dark:hover:text-violet-300',
       textarea: 'border-violet-200 focus:ring-violet-300 dark:border-violet-500/30',
       saveButton: 'bg-violet-600 hover:bg-violet-700 text-white'
+    },
+    indigo: {
+      adminAccent: 'text-indigo-400',
+      adminText: 'text-indigo-600 dark:text-indigo-400',
+      adminBg: 'bg-indigo-50/45 dark:bg-indigo-950/20',
+      adminBorder: 'border-indigo-200/70 dark:border-indigo-500/20',
+      ring: 'ring-indigo-500/20',
+      editButton: 'text-indigo-500 hover:text-indigo-700 dark:text-indigo-400 dark:hover:text-indigo-300',
+      textarea: 'border-indigo-200 focus:ring-indigo-300 dark:border-indigo-500/30',
+      saveButton: 'bg-indigo-600 hover:bg-indigo-700 text-white'
+    },
+    sky: {
+      adminAccent: 'text-sky-400',
+      adminText: 'text-sky-600 dark:text-sky-400',
+      adminBg: 'bg-sky-50/45 dark:bg-sky-950/20',
+      adminBorder: 'border-sky-200/70 dark:border-sky-500/20',
+      ring: 'ring-sky-500/20',
+      editButton: 'text-sky-500 hover:text-sky-700 dark:text-sky-400 dark:hover:text-sky-300',
+      textarea: 'border-sky-200 focus:ring-sky-300 dark:border-sky-500/30',
+      saveButton: 'bg-sky-600 hover:bg-sky-700 text-white'
     }
   }[theme];
 
@@ -144,7 +164,7 @@
               type="password"
               bind:value={passcode}
               placeholder="Passcode"
-              class="w-20 rounded-full border border-border bg-background px-3 py-1.5 text-xs text-slate-900 focus:outline-none focus:ring-2 dark:text-slate-100 {theme === 'violet' ? 'focus:ring-violet-300' : 'focus:ring-blue-300'}"
+              class="w-20 rounded-full border border-border bg-background px-3 py-1.5 text-xs text-slate-900 focus:outline-none focus:ring-2 dark:text-slate-100 {themeClasses.textarea}"
             />
             <AttachmentUploadButton
               onFiles={(files) => files.forEach(handleImageUpload)}

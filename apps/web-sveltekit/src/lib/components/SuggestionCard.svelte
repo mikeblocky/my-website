@@ -128,7 +128,7 @@
       <!-- Left Column: Avatar & Thread Line -->
       <div class="flex flex-col items-center shrink-0">
         <div class="w-9 sm:w-12 flex justify-center">
-          <div class="w-9 h-9 sm:w-12 sm:h-12 rounded-full border border-teal-200/30 dark:border-teal-900/30 overflow-hidden select-none">
+          <div class="w-9 h-9 sm:w-12 sm:h-12 rounded-full border border-sky-200/30 dark:border-sky-900/30 overflow-hidden select-none">
             <img src="/q.jpg" alt="Question Avatar" class="w-full h-full object-cover" />
           </div>
         </div>
@@ -141,7 +141,7 @@
       <div class="flex-1 min-w-0 space-y-3">
         <div class="space-y-1">
           <div class="flex flex-wrap items-center gap-2">
-            <span class="text-[10px] font-bold uppercase tracking-wider text-teal-600 dark:text-teal-400 border border-teal-200/50 dark:border-teal-900/50 bg-teal-50/50 dark:bg-teal-950/20 px-1.5 py-0.5 rounded font-mono">
+            <span class="text-[10px] font-bold uppercase tracking-wider text-sky-600 dark:text-sky-400 border border-sky-200/50 dark:border-sky-900/50 bg-sky-50/50 dark:bg-sky-950/20 px-1.5 py-0.5 rounded font-mono">
               {suggestion.category}
             </span>
             <span class="text-[10px] sm:text-[11px] text-muted-foreground whitespace-nowrap shrink-0 font-mono">
@@ -189,7 +189,7 @@
             {suggestion.title}
           </h3>
           <p class="text-xs text-muted-foreground font-sans">
-            suggested by <span class="font-semibold text-teal-700 dark:text-teal-300">{suggestion.author || 'anonymous'}</span>
+            suggested by <span class="font-semibold text-sky-700 dark:text-sky-300">{suggestion.author || 'anonymous'}</span>
           </p>
         </div>
 
@@ -204,20 +204,20 @@
               Best part
             </div>
             <div class="text-base md:text-[17px] leading-relaxed text-slate-700 dark:text-slate-300">
-              <RichText text={suggestion.bestPart} theme="blue" />
+              <RichText text={suggestion.bestPart} theme="sky" />
             </div>
           </div>
         {/if}
 
         {#if suggestion.note}
           <div class="text-base md:text-[17px] leading-relaxed text-slate-700 dark:text-slate-300 font-sans text-left">
-            <RichText text={suggestion.note} theme="blue" />
+            <RichText text={suggestion.note} theme="sky" />
           </div>
         {/if}
 
         <ImageGallery
           urls={suggestion.imageUrls?.length ? suggestion.imageUrls : (suggestion.imageUrl ? [suggestion.imageUrl] : [])}
-          theme="teal"
+          theme="sky"
         />
 
         {#if thread.length === 0}
@@ -225,7 +225,7 @@
             <button
               type="button"
               on:click={() => onShare(suggestion.id)}
-              class="flex items-center gap-1.5 text-xs font-mono font-medium text-muted-foreground hover:text-teal-600 dark:hover:text-teal-400 transition-colors duration-150 cursor-pointer border-0 bg-transparent"
+              class="flex items-center gap-1.5 text-xs font-mono font-medium text-muted-foreground hover:text-sky-600 dark:hover:text-sky-400 transition-colors duration-150 cursor-pointer border-0 bg-transparent"
             >
               <Share2 size={13} />
               <span>{buttonFeedback[`share-${suggestion.id}`] || 'Share'}</span>
@@ -233,7 +233,7 @@
             <button
               type="button"
               on:click={() => onSnap(suggestion.id)}
-              class="flex items-center gap-1.5 text-xs font-mono font-medium text-muted-foreground hover:text-teal-600 dark:hover:text-teal-400 transition-colors duration-150 cursor-pointer border-0 bg-transparent"
+              class="flex items-center gap-1.5 text-xs font-mono font-medium text-muted-foreground hover:text-sky-600 dark:hover:text-sky-400 transition-colors duration-150 cursor-pointer border-0 bg-transparent"
             >
               <Camera size={13} />
               <span>{buttonFeedback[`snap-${suggestion.id}`] || 'Snap'}</span>
@@ -260,7 +260,7 @@
                   replyImageUrls = [];
                   isFollowingUp = false;
                 }}
-                class="flex items-center gap-1.5 text-xs font-mono font-medium text-blue-650 dark:text-blue-455 hover:underline transition-colors duration-150 cursor-pointer border-0 bg-transparent"
+                class="flex items-center gap-1.5 text-xs font-mono font-medium text-sky-600 dark:text-sky-400 hover:underline transition-colors duration-150 cursor-pointer border-0 bg-transparent"
               >
                 <MessageSquareReply size={13} />
                 <span>Reply (Admin)</span>
@@ -279,7 +279,7 @@
             {message}
             depth={index}
             author={suggestion.author}
-            theme="blue"
+            theme="sky"
             isEditing={editingMessageId === message.id}
             bind:editBody
             bind:editImageUrls
@@ -307,7 +307,7 @@
                   <button
                     type="button"
                     on:click={() => onShare(suggestion.id)}
-                    class="flex items-center gap-1.5 text-xs font-mono font-medium text-muted-foreground hover:text-teal-650 dark:hover:text-teal-450 transition-colors duration-150 cursor-pointer border-0 bg-transparent"
+                    class="flex items-center gap-1.5 text-xs font-mono font-medium text-muted-foreground hover:text-sky-600 dark:hover:text-sky-400 transition-colors duration-150 cursor-pointer border-0 bg-transparent"
                   >
                     <Share2 size={13} />
                     <span>{buttonFeedback[`share-${suggestion.id}`] || 'Share'}</span>
@@ -315,7 +315,7 @@
                   <button
                     type="button"
                     on:click={() => onSnap(suggestion.id)}
-                    class="flex items-center gap-1.5 text-xs font-mono font-medium text-muted-foreground hover:text-teal-650 dark:hover:text-teal-450 transition-colors duration-150 cursor-pointer border-0 bg-transparent"
+                    class="flex items-center gap-1.5 text-xs font-mono font-medium text-muted-foreground hover:text-sky-600 dark:hover:text-sky-400 transition-colors duration-150 cursor-pointer border-0 bg-transparent"
                   >
                     <Camera size={13} />
                     <span>{buttonFeedback[`snap-${suggestion.id}`] || 'Snap'}</span>
@@ -342,7 +342,7 @@
                         replyImageUrls = [];
                         isFollowingUp = false;
                       }}
-                      class="flex items-center gap-1.5 text-xs font-mono font-medium text-blue-650 dark:text-blue-455 hover:underline transition-colors duration-150 cursor-pointer border-0 bg-transparent"
+                      class="flex items-center gap-1.5 text-xs font-mono font-medium text-sky-600 dark:text-sky-400 hover:underline transition-colors duration-150 cursor-pointer border-0 bg-transparent"
                     >
                       <MessageSquareReply size={13} />
                       <span>Reply (Admin)</span>
@@ -374,7 +374,7 @@
             bind:value={replyBody}
             on:input={handleInput}
             placeholder="Write your response..."
-            class="min-h-[44px] w-full resize-none overflow-hidden rounded-md border border-blue-200/70 bg-background px-4 py-3 text-base md:text-[17px] text-slate-900 focus:outline-none focus:ring-1 focus:ring-blue-300 dark:border-blue-500/30 dark:text-slate-100"
+            class="min-h-[44px] w-full resize-none overflow-hidden rounded-md border border-sky-200/70 bg-background px-4 py-3 text-base md:text-[17px] text-slate-900 focus:outline-none focus:ring-1 focus:ring-sky-300 dark:border-sky-500/30 dark:text-slate-100"
           />
           <AttachmentPreviewGrid
             urls={replyImageUrls}
@@ -388,13 +388,13 @@
                 type="password"
                 bind:value={passcode}
                 placeholder="Passcode"
-                class="w-24 rounded-full border border-border bg-background px-3 py-1.5 text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-300 dark:text-slate-100"
+                class="w-24 rounded-full border border-border bg-background px-3 py-1.5 text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-sky-300 dark:text-slate-100"
               />
               <AttachmentUploadButton
                 onFiles={(files) => files.forEach(file => {
                   handleImageUpload(file, (url) => (replyImageUrls = replyImageUrls.length >= MAX_ATTACHMENT_COUNT ? replyImageUrls : [...replyImageUrls, url]));
                 })}
-                accent="blue"
+                accent="sky"
               />
             </div>
             <div class="flex gap-2">
@@ -413,7 +413,7 @@
                 type="button"
                 disabled={isPending || !replyBody.trim()}
                 on:click={handleReplyFormSubmit}
-                class="h-8 rounded px-4 text-xs bg-blue-600 text-white hover:bg-blue-700 cursor-pointer disabled:opacity-50"
+                class="h-8 rounded px-4 text-xs bg-sky-600 text-white hover:bg-sky-700 cursor-pointer disabled:opacity-50"
               >
                 Send response
               </button>

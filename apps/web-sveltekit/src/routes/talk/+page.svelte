@@ -17,7 +17,7 @@
   title="Talk"
   description="A guestbook for small messages, questions, and replies."
   currentLabel="Interact"
-  footerColor="blue"
+  footerColor="indigo"
 >
   <TalkBoard bind:isAdminMode bind:passcode />
 </SectionPageShell>

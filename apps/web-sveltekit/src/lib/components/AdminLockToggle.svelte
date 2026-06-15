@@ -1,7 +1,7 @@
 <script lang="ts">
   import { Lock, Unlock } from '@lucide/svelte';
 
-  type AdminAccent = 'blue' | 'violet' | 'teal';
+  type AdminAccent = 'blue' | 'violet' | 'teal' | 'yellow' | 'indigo' | 'sky';
 
   export let isAdminMode = false;
   export let passcode = '';
@@ -20,10 +20,25 @@
       active: 'text-violet-600 bg-violet-50 dark:bg-violet-500/10 dark:text-violet-400',
       ring: 'focus:ring-violet-500',
     },
+    indigo: {
+      hover: 'hover:text-indigo-700 dark:hover:text-indigo-300',
+      active: 'text-indigo-600 bg-indigo-50 dark:bg-indigo-500/10 dark:text-indigo-400',
+      ring: 'focus:ring-indigo-500',
+    },
+    sky: {
+      hover: 'hover:text-sky-700 dark:hover:text-sky-300',
+      active: 'text-sky-600 bg-sky-50 dark:bg-sky-500/10 dark:text-sky-400',
+      ring: 'focus:ring-sky-500',
+    },
     teal: {
       hover: 'hover:text-teal-700 dark:hover:text-teal-350',
       active: 'text-teal-600 bg-teal-50 dark:bg-teal-950/20 dark:text-teal-400',
       ring: 'focus:ring-teal-500',
+    },
+    yellow: {
+      hover: 'hover:text-amber-700 dark:hover:text-amber-300',
+      active: 'text-amber-700 bg-amber-50 dark:bg-amber-500/10 dark:text-amber-300',
+      ring: 'focus:ring-amber-500',
     },
   };
 

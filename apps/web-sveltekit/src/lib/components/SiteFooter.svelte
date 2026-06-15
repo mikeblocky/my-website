@@ -64,6 +64,9 @@
               color === 'blue' && "hover:text-blue-500",
               color === 'green' && "hover:text-green-500",
               color === 'violet' && "hover:text-violet-500",
+              color === 'teal' && "hover:text-teal-500",
+              color === 'indigo' && "hover:text-indigo-500",
+              color === 'sky' && "hover:text-sky-500",
               color === 'amber' && "hover:text-amber-500"
             )}
           >

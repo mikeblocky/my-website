@@ -111,7 +111,7 @@
       <!-- Left Column: Avatar & Thread Line -->
       <div class="flex flex-col items-center shrink-0">
         <div class="w-9 sm:w-12 flex justify-center">
-          <div class="w-9 h-9 sm:w-12 sm:h-12 rounded-full border border-blue-200/30 dark:border-blue-900/30 overflow-hidden select-none">
+          <div class="w-9 h-9 sm:w-12 sm:h-12 rounded-full border border-indigo-200/30 dark:border-indigo-900/30 overflow-hidden select-none">
             <img src="/q.jpg" alt="Question Avatar" class="w-full h-full object-cover" />
           </div>
         </div>
@@ -128,7 +128,7 @@
           </span>
           <div class="flex items-center gap-1">
             {#if talk.notifying}
-              <Bell size={13} class="text-blue-650 dark:text-blue-450 fill-blue-500/10 mr-1 shrink-0" />
+              <Bell size={13} class="text-indigo-600 dark:text-indigo-400 fill-indigo-500/10 mr-1 shrink-0" />
             {/if}
             <span class="text-xs text-muted-foreground whitespace-nowrap shrink-0 font-sans">
               <span class="hidden sm:inline">{formatDate(talk.createdAt)}</span>
@@ -138,26 +138,26 @@
         </div>
         
         <div class="text-base md:text-[17px] text-slate-850 dark:text-slate-200 leading-relaxed font-medium mb-3 break-words font-sans">
-          <RichText text={talk.body} theme="blue" />
+          <RichText text={talk.body} theme="indigo" />
         </div>
 
         <ImageGallery 
           urls={talk.imageUrls?.length ? talk.imageUrls : (talk.imageUrl ? [talk.imageUrl] : [])} 
-          theme="blue"
+          theme="indigo"
         />
 
         {#if thread.length === 0}
           <div class="talk-actions mt-3 flex flex-wrap gap-4 opacity-100 transition-all">
             <button
               on:click={() => onShare(talk.id)}
-              class="flex items-center gap-1.5 text-xs font-mono font-medium text-muted-foreground hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-150 cursor-pointer border-0 bg-transparent"
+              class="flex items-center gap-1.5 text-xs font-mono font-medium text-muted-foreground hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors duration-150 cursor-pointer border-0 bg-transparent"
             >
               <Share2 size={13} />
               <span>{buttonFeedback[`share-${talk.id}`] || 'Share'}</span>
             </button>
             <button
               on:click={() => onSnap(talk.id)}
-              class="flex items-center gap-1.5 text-xs font-mono font-medium text-muted-foreground hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-150 cursor-pointer border-0 bg-transparent"
+              class="flex items-center gap-1.5 text-xs font-mono font-medium text-muted-foreground hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors duration-150 cursor-pointer border-0 bg-transparent"
             >
               <Camera size={13} />
               <span>{buttonFeedback[`snap-${talk.id}`] || 'Snap'}</span>
@@ -172,7 +172,7 @@
             {#if isAdminMode}
               <button
                 on:click={handleReplyClick}
-                class="flex items-center gap-1.5 text-xs font-mono font-medium text-blue-600 dark:text-blue-450 hover:underline transition-colors duration-150 cursor-pointer border-0 bg-transparent"
+                class="flex items-center gap-1.5 text-xs font-mono font-medium text-indigo-600 dark:text-indigo-400 hover:underline transition-colors duration-150 cursor-pointer border-0 bg-transparent"
               >
                 <MessageSquareReply size={13} />
                 <span>Reply (Admin)</span>
@@ -208,20 +208,20 @@
             bind:passcode
             {isPending}
             isLast={i === thread.length - 1 && !isReplying && !isFollowingUp}
-            theme="blue"
+            theme="indigo"
             {isAdminMode}
           >
             <div slot="actions" class="talk-actions mt-3 flex flex-wrap gap-4 opacity-100 transition-all">
               <button
                 on:click={() => onShare(talk.id)}
-                class="flex items-center gap-1.5 text-xs font-mono font-medium text-muted-foreground hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-150 cursor-pointer border-0 bg-transparent"
+                class="flex items-center gap-1.5 text-xs font-mono font-medium text-muted-foreground hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors duration-150 cursor-pointer border-0 bg-transparent"
               >
                 <Share2 size={13} />
                 <span>{buttonFeedback[`share-${talk.id}`] || 'Share'}</span>
               </button>
               <button
                 on:click={() => onSnap(talk.id)}
-                class="flex items-center gap-1.5 text-xs font-mono font-medium text-muted-foreground hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-150 cursor-pointer border-0 bg-transparent"
+                class="flex items-center gap-1.5 text-xs font-mono font-medium text-muted-foreground hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors duration-150 cursor-pointer border-0 bg-transparent"
               >
                 <Camera size={13} />
                 <span>{buttonFeedback[`snap-${talk.id}`] || 'Snap'}</span>
@@ -236,7 +236,7 @@
               {#if isAdminMode}
                 <button
                   on:click={handleReplyClick}
-                  class="flex items-center gap-1.5 text-xs font-mono font-medium text-blue-600 dark:text-blue-450 hover:underline transition-colors duration-150 cursor-pointer border-0 bg-transparent"
+                  class="flex items-center gap-1.5 text-xs font-mono font-medium text-indigo-600 dark:text-indigo-400 hover:underline transition-colors duration-150 cursor-pointer border-0 bg-transparent"
                 >
                   <MessageSquareReply size={13} />
                   <span>Reply (Admin)</span>
@@ -267,7 +267,7 @@
             on:input={handleInput}
             placeholder="Write your response..."
             rows={1}
-            class="min-h-[44px] w-full resize-none overflow-hidden rounded-md border border-border bg-background px-4 py-3 text-base md:text-[17px] text-slate-900 focus:outline-none focus:ring-1 focus:ring-blue-350 dark:text-slate-100 font-sans"
+            class="min-h-[44px] w-full resize-none overflow-hidden rounded-md border border-border bg-background px-4 py-3 text-base md:text-[17px] text-slate-900 focus:outline-none focus:ring-1 focus:ring-indigo-300 dark:text-slate-100 font-sans"
           />
           <AttachmentPreviewGrid
             urls={replyImageUrls}
@@ -282,13 +282,13 @@
                 type="password"
                 bind:value={passcode}
                 placeholder="Passcode"
-                class="w-24 rounded-full border border-border bg-background px-3 py-1.5 text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-350 dark:text-slate-100 font-sans"
+                class="w-24 rounded-full border border-border bg-background px-3 py-1.5 text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-300 dark:text-slate-100 font-sans"
               />
               <AttachmentUploadButton
                 onFiles={(files) => files.forEach(file => {
                   handleImageUpload(file, (url) => (replyImageUrls = replyImageUrls.length >= MAX_ATTACHMENT_COUNT ? replyImageUrls : [...replyImageUrls, url]));
                 })}
-                accent="blue"
+                accent="indigo"
               />
             </div>
             <div class="flex gap-2">
