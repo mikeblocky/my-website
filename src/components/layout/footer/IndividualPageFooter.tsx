@@ -32,7 +32,13 @@ export function IndividualPageFooter({
     
     // Get the parent path and name dynamically if not provided
     const getParentInfo = () => {
-        if (parentPageName) return { name: parentPageName, path: pathname.split('/').slice(0, -1).join('/') }
+        if (parentPageName) {
+            let path = pathname.split('/').slice(0, -1).join('/')
+            if (parentPageName === 'Journal' && path === '/blog') {
+                path = '/journal'
+            }
+            return { name: parentPageName, path }
+        }
         
         const pathParts = pathname.split('/')
         // Remove empty string and current page

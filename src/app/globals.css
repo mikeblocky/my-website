@@ -103,6 +103,35 @@
   color: hsl(var(--foreground));
 }
 
+/* ── View Transition API — circular wipe driven by JS ─────────────────────
+   Disable the default cross-fade entirely; JS animates ::view-transition-new
+   with a clip-path circle expanding from the cursor position.
+   ──────────────────────────────────────────────────────────────────────── */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+::view-transition-old(root) { z-index: 1; }
+::view-transition-new(root) { z-index: 9999; }
+
+/* ── Smooth theme transitions (fallback for browsers without View Transitions)
+   Only fires during user-initiated theme toggles (JS adds .theme-changing).
+   Keeps page-load paint instant while giving the toggle a premium feel.
+   ──────────────────────────────────────────────────────────────────────── */
+html.theme-changing *,
+html.theme-changing *::before,
+html.theme-changing *::after {
+  transition:
+    color 400ms cubic-bezier(0.22, 1, 0.36, 1),
+    background-color 480ms cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 400ms cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 480ms cubic-bezier(0.22, 1, 0.36, 1),
+    fill 400ms cubic-bezier(0.22, 1, 0.36, 1),
+    stroke 400ms cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 360ms cubic-bezier(0.22, 1, 0.36, 1) !important;
+}
+
 @layer utilities {
   .pride-gradient-text {
     background-image: linear-gradient(135deg, var(--pride-colors-repeat));

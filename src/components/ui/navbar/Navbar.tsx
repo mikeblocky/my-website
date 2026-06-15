@@ -110,20 +110,9 @@ export function Navbar() {
                     </motion.div>
                     <span className="text-[11px] font-mono tracking-wider">Open menu</span>
                 </button>
-
                 <AnimatePresence>
                     {isMenuOpen && (
                         <>
-                            {/* Backdrop */}
-                            <motion.div
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                exit={{ opacity: 0 }}
-                                transition={{ duration: 0.2 }}
-                                className="fixed inset-0 bg-background/60 backdrop-blur-sm z-50"
-                                onClick={() => setIsMenuOpen(false)}
-                            />
-
                             {/* Menu Content */}
                             <motion.div
                                 initial={{ opacity: 0, y: -10 }}

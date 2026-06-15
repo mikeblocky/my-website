@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en" class="h-full">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="/icon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+	<link
+		href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Google+Sans+Code:ital,wght,MONO@0,300..800,1;1,300..800,1&display=swap"
+		rel="stylesheet"
+	/>
+    <link
+      rel="preload"
+      as="image"
+      href="/distribution/2026/kemutai-hanashi/Illustration125c.webp?v=1"
+      type="image/webp"
+    />
+    <script>
+      (function () {
+        try {
+          var storedTheme = localStorage.getItem('theme');
+          var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+          var theme = storedTheme === 'dark' || (!storedTheme && prefersDark) ? 'dark' : 'light';
+          document.documentElement.dataset.theme = theme;
+          document.documentElement.style.colorScheme = theme;
+          if (theme === 'dark') {
+            document.documentElement.classList.add('dark');
+          }
+        } catch (error) {}
+      })();
+    </script>
+    <script>
+      (function () {
+        var reloadKey = 'chunk-load-recovery-attempted';
+        var reloadWindowMs = 30000;
+
+        function clearRuntimeCaches() {
+          var tasks = [];
+
+          if ('caches' in window) {
+            tasks.push(
+              caches.keys()
+                .then(function (keys) {
+                  return Promise.all(keys.map(function (key) {
+                    return caches.delete(key);
+                  }));
+                })
+                .catch(function () {})
+            );
+          }
+
+          if ('serviceWorker' in navigator) {
+            tasks.push(
+              navigator.serviceWorker.getRegistrations()
+                .then(function (registrations) {
+                  return Promise.all(registrations.map(function (registration) {
+                    return registration.unregister();
+                  }));
+                })
+                .catch(function () {})
+            );
+          }
+
+          return Promise.all(tasks);
+        }
+
+        function reloadWithoutCache() {
+          var now = Date.now();
+          try {
+            var url = new URL(window.location.href);
+            url.searchParams.set('__chunk_recovery', now.toString());
+            window.location.replace(url.toString());
+          } catch (error) {
+            window.location.reload();
+          }
+        }
+
+        function triggerReload() {
+          var lastReload = sessionStorage.getItem(reloadKey);
+          var now = Date.now();
+          if (!lastReload || now - parseInt(lastReload, 10) > reloadWindowMs) {
+            sessionStorage.setItem(reloadKey, now.toString());
+            clearRuntimeCaches().then(reloadWithoutCache, reloadWithoutCache);
+          }
+        }
+
+        window.addEventListener('error', function (event) {
+          var target = event.target;
+          var src = target && target.src ? target.src : '';
+          var message = event.message || '';
+          var stack = event.error && event.error.stack ? event.error.stack : '';
+
+          if (target && target.tagName === 'SCRIPT' && src.indexOf('/_app/immutable/') !== -1) {
+            triggerReload();
+          }
+
+          if (message.indexOf('ChunkLoadError') !== -1 || /loading chunk/i.test(message) || stack.indexOf('ChunkLoadError') !== -1 || /loading chunk/i.test(stack)) {
+            triggerReload();
+          }
+        }, true);
+
+        window.addEventListener('unhandledrejection', function (event) {
+          var reason = event.reason;
+          var message = reason && reason.message ? reason.message : '';
+          var stack = reason && reason.stack ? reason.stack : '';
+          if (message.indexOf('ChunkLoadError') !== -1 || /loading chunk/i.test(message) || stack.indexOf('ChunkLoadError') !== -1 || /loading chunk/i.test(stack)) {
+            triggerReload();
+          }
+        });
+      })();
+    </script>
+    <script>
+      (function () {
+        var flags = [
+          { colors: '#e25566, #f59e0b, #eab308, #22c55e, #14b8a6, #3b82f6, #6366f1, #a855f7', glow: '326 78% 72%' },
+          { colors: '#ef4444, #f97316, #eab308, #22c55e, #3b82f6, #a855f7', glow: '14 90% 63%' },
+          { colors: '#3b82f6, #ec4899, #ffffff, #78350f, #1e293b, #ef4444, #f97316, #eab308, #22c55e, #3b82f6, #a855f7', glow: '325 80% 65%' },
+          { colors: '#111827, #78350f, #ef4444, #f97316, #eab308, #22c55e, #3b82f6, #a855f7', glow: '0 85% 60%' },
+          { colors: '#d946ef, #a855f7, #3b82f6', glow: '300 80% 60%' },
+          { colors: '#ff007f, #ffcc00, #00ccff', glow: '330 100% 60%' },
+          { colors: '#60a5fa, #f472b6, #ffffff, #f472b6, #60a5fa', glow: '210 80% 70%' },
+          { colors: '#facc15, #ffffff, #a855f7, #1e293b', glow: '50 90% 60%' },
+          { colors: '#c084fc, #ffffff, #15803d', glow: '270 85% 75%' },
+          { colors: '#1e293b, #94a3b8, #ffffff, #a855f7', glow: '270 60% 50%' },
+          { colors: '#1e293b, #ffffff, #a855f7, #94a3b8', glow: '270 70% 60%' },
+          { colors: '#a855f7, #facc15, #a855f7', glow: '45 90% 60%' },
+          { colors: '#f97316, #fdba74, #ffffff, #f472b6, #db2777', glow: '340 80% 60%' },
+          { colors: '#0f766e, #2dd4bf, #4ade80, #ffffff, #60a5fa, #4f46e5, #7c3aed', glow: '165 75% 55%' },
+          { colors: '#1e293b, #94a3b8, #ffffff, #4ade80, #ffffff, #94a3b8, #1e293b', glow: '120 70% 60%' },
+          { colors: '#f43f5e, #ffffff, #a855f7, #111827, #3b82f6', glow: '340 85% 65%' },
+          { colors: '#f43f5e, #10b981, #3b82f6', glow: '335 80% 60%' },
+          { colors: '#fbcfe8, #f43f5e, #8b5cf6, #3b82f6, #93c5fd', glow: '335 80% 65%' },
+          { colors: '#15803d, #4ade80, #ffffff, #94a3b8, #111827', glow: '120 75% 55%' },
+          { colors: '#1e293b, #ffffff, #22c55e, #64748b', glow: '142 70% 50%' },
+          { colors: '#ef4444, #facc15, #3b82f6, #ffffff, #111827', glow: '0 80% 60%' },
+          { colors: '#f43f5e, #fbcfe8, #d8b4fe, #ffffff, #d8b4fe, #93c5fd, #2563eb', glow: '330 80% 65%' },
+          { colors: '#10b981, #a7f3d0, #ffffff, #fbcfe8, #f43f5e', glow: '150 75% 60%' },
+          { colors: '#ffffff, #22c55e, #111827', glow: '142 70% 50%' },
+          { colors: '#ec4899, #8b5cf6, #3b82f6', glow: '300 80% 60%' },
+          { colors: '#f43f5e, #a855f7, #22c55e', glow: '300 80% 60%' },
+          { colors: '#2563eb, #ef4444, #111827, #f59e0b', glow: '220 80% 55%' },
+          { colors: '#ec4899, #3b82f6, #22c55e, #facc15, #f97316, #a855f7', glow: '300 85% 65%' },
+          { colors: '#facc15, #a855f7, #3b82f6, #ec4899, #ffffff, #78350f, #1e293b, #ef4444, #f97316, #22c55e, #a855f7', glow: '50 90% 60%' },
+          { colors: '#111827, #ffffff, #ef4444, #f97316, #eab308, #22c55e, #3b82f6, #a855f7', glow: '0 80% 60%' }
+        ];
+        var date = new Date();
+        var activeIndex = (date.getDate() - 1) % 30;
+        var currentFlag = flags[activeIndex] || flags[1];
+        var root = document.documentElement;
+        root.style.setProperty('--pride-colors', currentFlag.colors);
+        root.style.setProperty('--pride-colors-repeat', currentFlag.colors + ', ' + currentFlag.colors.split(', ')[0]);
+        root.style.setProperty('--pride-glow-val', currentFlag.glow);
+      })();
+    </script>
+    %sveltekit.head%
+  </head>
+  <body class="h-full bg-background antialiased" data-sveltekit-preload-data="hover">
+    <div style="display: contents">%sveltekit.body%</div>
+  </body>
+</html>

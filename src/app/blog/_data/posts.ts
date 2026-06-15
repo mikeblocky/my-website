@@ -191,7 +191,7 @@ export const blogPosts: BlogPost[] = [
     {
         id: 3,
         title: "My thoughts about Chapter 67",
-        description: "Shima, Mitsuki, and the rest of the gang - my personal thoughts about everything.",
+        description: "Shima, Mitsumi, and the rest of the gang - my personal thoughts about everything.",
         date: "January 31st, 2025",
         publishedAt: "2025-01-31T00:00:00.000Z",
         readingTime: "30 min read",

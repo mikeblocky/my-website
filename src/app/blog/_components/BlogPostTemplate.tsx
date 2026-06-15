@@ -77,7 +77,7 @@ export function BlogPostTemplate({
                         title={title}
                         breadcrumbs={[
                             { href: '/', label: 'Home', emoji: '🐶' },
-                            { href: '/blog', label: 'Blog' },
+                            { href: '/journal', label: 'Journal' },
                             { label: title }
                         ]}
                         showPrideBadge={false}
@@ -149,7 +149,7 @@ export function BlogPostTemplate({
                 </StackVertical>
             </BaseContainer>
 
-            <IndividualPageFooter parentPageName='Blog' />
+            <IndividualPageFooter parentPageName='Journal' />
         </div>
     )
 }
