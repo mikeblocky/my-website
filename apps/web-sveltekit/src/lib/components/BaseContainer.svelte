@@ -20,17 +20,17 @@
 
   const paddingXs = {
     none: 'px-0',
-    sm: 'px-2 sm:px-3 md:px-4',
-    md: 'px-3 sm:px-4 md:px-6',
-    lg: 'px-4 sm:px-6 md:px-8'
+    sm: 'px-[clamp(0.5rem,2vw,1rem)]',
+    md: 'px-[clamp(0.75rem,3vw,1.5rem)]',
+    lg: 'px-[clamp(1rem,4vw,2rem)]'
   };
 
   const paddingYs = {
     none: 'py-0',
-    sm: 'py-2 sm:py-3 md:py-4',
-    md: 'py-3 sm:py-4 md:py-6',
-    lg: 'py-4 sm:py-6 md:py-8',
-    xl: 'py-6 sm:py-8 md:py-12'
+    sm: 'py-[clamp(0.5rem,2vh,1rem)]',
+    md: 'py-[clamp(0.75rem,2.5vh,1.5rem)]',
+    lg: 'py-[clamp(1rem,3vh,2rem)]',
+    xl: 'py-[clamp(1.5rem,4vh,3rem)]'
   };
 </script>
 

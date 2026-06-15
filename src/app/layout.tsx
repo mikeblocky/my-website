@@ -186,7 +186,7 @@ export default function RootLayout({
         <link rel="preload" as="image" href="/distribution/2026/kemutai-hanashi/Illustration125c.webp?v=1" type="image/webp" />
       </head>
       <body className={cn(
-        "h-full bg-background transition-colors duration-300"
+        "min-h-dvh bg-background transition-colors duration-300 overflow-x-hidden"
       )}>
         <ThemeProvider
           attribute="class"
@@ -194,9 +194,9 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <div className="flex flex-col min-h-screen relative">
+          <div className="flex flex-col min-h-dvh relative">
             <div className="flex-1 flex flex-col">
-              <main className="container mx-auto mt-4 px-4 flex-1 pb-32 sm:pb-4">
+              <main className="w-full mx-auto mt-4 px-[clamp(0.75rem,4vw,1.5rem)] flex-1 pb-[calc(8rem+env(safe-area-inset-bottom,0px))] sm:pb-4">
                 <PageTransition>
                   {children}
                 </PageTransition>
