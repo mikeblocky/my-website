@@ -27,8 +27,8 @@
           ? 'sketchbook'
           : '';
 
-  $: urlTab = $page.url.searchParams.get('tab');
-  $: if ((urlTab && tabs.some((tab) => tab.id === urlTab)) || hashTab) activeTab = hashTab || urlTab || activeTab;
+  // Only react to hash deep-links (e.g. #talk-123); URL tab init is handled by PillTabs onMount
+  $: if (hashTab) activeTab = hashTab;
 </script>
 
 <section class="interact-shell space-y-8">
