@@ -325,7 +325,7 @@
               class="min-h-[44px] w-full resize-none overflow-hidden rounded-md border border-border bg-background px-4 py-3 text-base md:text-[17px] text-slate-900 focus:outline-none focus:ring-1 focus:ring-violet-350 dark:text-slate-100 font-sans"
             />
             {#if emojiOpen && emojiTarget === replyTextareaEl}
-              <EmojiSuggestions results={emojiResults} selectedIndex={emojiSelectedIndex} query={emojiQuery} onSelect={onEmojiSelect} />
+              <EmojiSuggestions results={emojiResults} selectedIndex={emojiSelectedIndex} query={emojiQuery} onSelect={onEmojiSelect} anchorEl={replyTextareaEl} />
             {/if}
           </div>
           <AttachmentPreviewGrid
@@ -397,7 +397,7 @@
               class="min-h-[44px] w-full resize-none overflow-hidden rounded-md border border-emerald-250 bg-background px-4 py-3 text-base md:text-[17px] text-slate-900 focus:outline-none focus:ring-1 focus:ring-emerald-350 dark:border-emerald-500/30 dark:text-slate-100 font-sans"
             />
             {#if emojiOpen && emojiTarget === followUpTextareaEl}
-              <EmojiSuggestions results={emojiResults} selectedIndex={emojiSelectedIndex} query={emojiQuery} onSelect={onEmojiSelect} />
+              <EmojiSuggestions results={emojiResults} selectedIndex={emojiSelectedIndex} query={emojiQuery} onSelect={onEmojiSelect} anchorEl={followUpTextareaEl} />
             {/if}
           </div>
           <AttachmentPreviewGrid

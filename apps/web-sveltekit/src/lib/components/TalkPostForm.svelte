@@ -101,6 +101,7 @@
         selectedIndex={emojiSelectedIndex}
         query={emojiQuery}
         onSelect={onEmojiSelect}
+        anchorEl={emojiTarget}
       />
     {/if}
   </div>

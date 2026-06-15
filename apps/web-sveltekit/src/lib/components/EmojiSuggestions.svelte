@@ -1,17 +1,37 @@
 <script lang="ts">
+  import { tick } from 'svelte'
   import type { EmojiMatch } from '$lib/actions/emojiAutocomplete'
 
   export let results: EmojiMatch[] = []
   export let selectedIndex = 0
   export let onSelect: (match: EmojiMatch) => void
   export let query = ''
+  export let anchorEl: HTMLElement | null = null
+
+  let top = 0
+  let left = 0
+
+  $: if (results.length && anchorEl) {
+    tick().then(() => {
+      const rect = anchorEl!.getBoundingClientRect()
+      top = rect.bottom + 4
+      left = rect.left
+    })
+  }
+
+  function portal(node: HTMLElement) {
+    document.body.appendChild(node)
+    return { destroy() { node.remove() } }
+  }
 </script>
 
 {#if results.length > 0}
   <div
-    class="emoji-suggestions"
+    use:portal
     role="listbox"
     aria-label="Emoji suggestions"
+    class="emoji-suggestions"
+    style="top: {top}px; left: {left}px"
   >
     <span class="emoji-suggestions__hint">:{query}</span>
     {#each results as match, i}
@@ -32,10 +52,8 @@
 
 <style>
   .emoji-suggestions {
-    position: absolute;
-    top: calc(100% + 4px);
-    left: 0;
-    z-index: 50;
+    position: fixed;
+    z-index: 9999;
     display: flex;
     flex-direction: column;
     min-width: 220px;
@@ -45,7 +63,6 @@
     border-radius: 12px;
     box-shadow: 0 8px 24px rgba(0,0,0,0.10), 0 2px 6px rgba(0,0,0,0.06);
     padding: 6px;
-    overflow: hidden;
   }
 
   :global(.dark) .emoji-suggestions {

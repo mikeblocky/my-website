@@ -37,26 +37,38 @@ export function boardOgCard({
 }: BoardOgCardProps) {
   const hasImage = !!imageUrl
   const hasTitle = !!title && title.trim().length > 0
-  // Hard cap only as last resort — let Satori wrap naturally within maxHeight
   const safeBody = clampText(body, hasImage ? 800 : 1200)
   const { fontSize, lineHeight } = bodyStyle(safeBody.length, hasImage)
   const footerWidth = hasImage ? 520 : 980
 
-  // Text block renders body as a single string — Satori wraps it by width,
-  // maxHeight + overflow:hidden clips any excess without manual line splitting
+  // Explicit pixel widths so Satori wraps text correctly.
+  // Card: 1200 - 2*40 outer - 2*12 border = 1096px inner content.
+  // Text-only panel: 1096 - 2*60 padding = 976px.
+  // With-image panel: 1096 - 420 image - 44 left - 44 right padding = 588px.
+  const textWidth = hasImage ? 588 : 976
+
   const textBlock = {
     type: 'div',
     props: {
       style: {
-        width: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        width: textWidth,
         maxHeight: hasImage ? 300 : 265,
-        fontSize,
-        fontWeight: 400,
-        color: '#334155',
-        lineHeight,
         overflow: 'hidden',
       },
-      children: `"${safeBody}"`,
+      children: {
+        type: 'span',
+        props: {
+          style: {
+            fontSize,
+            fontWeight: 400,
+            color: '#334155',
+            lineHeight,
+          },
+          children: `"${safeBody}"`,
+        },
+      },
     },
   }
 

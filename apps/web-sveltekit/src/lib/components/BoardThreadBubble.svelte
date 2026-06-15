@@ -177,7 +177,7 @@
             class="min-h-[44px] w-full resize-none overflow-hidden rounded-md border bg-background px-4 py-3 text-base md:text-[17px] text-slate-900 focus:outline-none focus:ring-1 dark:text-slate-100 font-sans {themeClasses.textarea}"
           />
           {#if emojiOpen}
-            <EmojiSuggestions results={emojiResults} selectedIndex={emojiSelectedIndex} query={emojiQuery} onSelect={onEmojiSelect} />
+            <EmojiSuggestions results={emojiResults} selectedIndex={emojiSelectedIndex} query={emojiQuery} onSelect={onEmojiSelect} anchorEl={editTextareaEl} />
           {/if}
         </div>
         <AttachmentPreviewGrid
