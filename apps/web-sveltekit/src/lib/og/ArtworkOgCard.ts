@@ -18,23 +18,6 @@ export function artworkOgCard({ imageUrl, caption, author, date }: ArtworkOgCard
         background: '#f8f4ef',
       },
       children: [
-        // Ghost card (rotated behind)
-        {
-          type: 'div',
-          props: {
-            style: {
-              position: 'absolute',
-              width: 520,
-              background: '#ffffff',
-              borderRadius: 8,
-              boxShadow: '0 8px 40px rgba(0,0,0,0.18)',
-              transform: 'rotate(-4deg)',
-              padding: 16,
-              paddingBottom: 70,
-            },
-            children: '',
-          },
-        },
         // Main polaroid card
         {
           type: 'div',
@@ -45,9 +28,10 @@ export function artworkOgCard({ imageUrl, caption, author, date }: ArtworkOgCard
               width: 520,
               background: '#ffffff',
               borderRadius: 8,
-              boxShadow: '0 12px 48px rgba(0,0,0,0.22)',
-              padding: 16,
-              zIndex: 1,
+              paddingTop: 16,
+              paddingBottom: 16,
+              paddingLeft: 16,
+              paddingRight: 16,
             },
             children: [
               // Image area
@@ -80,11 +64,13 @@ export function artworkOgCard({ imageUrl, caption, author, date }: ArtworkOgCard
                     flexDirection: 'column',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    padding: '18px 12px 8px',
-                    gap: 6,
+                    paddingTop: 18,
+                    paddingBottom: 8,
+                    paddingLeft: 12,
+                    paddingRight: 12,
                   },
                   children: [
-                    caption && {
+                    ...(caption ? [{
                       type: 'div',
                       props: {
                         style: {
@@ -93,10 +79,11 @@ export function artworkOgCard({ imageUrl, caption, author, date }: ArtworkOgCard
                           color: '#334155',
                           textAlign: 'center',
                           lineHeight: 1.4,
+                          marginBottom: 6,
                         },
                         children: `"${caption}"`,
                       },
-                    },
+                    }] : []),
                     {
                       type: 'div',
                       props: {
@@ -109,7 +96,7 @@ export function artworkOgCard({ imageUrl, caption, author, date }: ArtworkOgCard
                         children: author ? `— ${author} · ${date}` : date,
                       },
                     },
-                  ].filter(Boolean),
+                  ],
                 },
               },
             ],

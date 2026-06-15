@@ -13,7 +13,7 @@ type BoardOgCardProps = {
 export function boardOgCard({
   accent, accentSoft, border, footer, label, title, body, date, imageUrl,
 }: BoardOgCardProps) {
-  const hasImage = !!imageUrl && !imageUrl.includes('image/webp')
+  const hasImage = !!imageUrl
   const hasTitle = !!title && title.trim().length > 0
   const bodyLen = body.length
   const bodyFontSize = hasImage
@@ -27,12 +27,11 @@ export function boardOgCard({
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
-        flex: 1,
+        flexGrow: 1,
         paddingRight: hasImage ? 48 : 0,
-        overflow: 'hidden',
       },
       children: [
-        hasTitle && {
+        ...(hasTitle ? [{
           type: 'div',
           props: {
             style: {
@@ -41,12 +40,11 @@ export function boardOgCard({
               fontWeight: 700,
               color: '#0f172a',
               lineHeight: 1.35,
-              letterSpacing: '-0.02em',
               marginBottom: 20,
             },
             children: title,
           },
-        },
+        }] : []),
         {
           type: 'div',
           props: {
@@ -56,13 +54,11 @@ export function boardOgCard({
               fontWeight: 400,
               color: '#334155',
               lineHeight: 1.5,
-              letterSpacing: '-0.015em',
-              overflow: 'hidden',
             },
-            children: `“${body}”`,
+            children: `"${body}"`,
           },
         },
-      ].filter(Boolean),
+      ],
     },
   }
 
@@ -72,11 +68,13 @@ export function boardOgCard({
         props: {
           style: {
             display: 'flex',
-            width: 320,
-            height: 320,
-            borderRadius: 24,
+            width: 300,
+            height: 300,
+            borderRadius: 20,
             overflow: 'hidden',
-            border: `6px solid ${border}`,
+            borderWidth: 6,
+            borderStyle: 'solid',
+            borderColor: border,
             flexShrink: 0,
           },
           children: {
@@ -109,12 +107,17 @@ export function boardOgCard({
             width: '100%',
             height: '100%',
             background: '#ffffff',
-            border: `12px solid ${accent}`,
+            borderWidth: 12,
+            borderStyle: 'solid',
+            borderColor: accent,
             borderRadius: 32,
-            padding: '50px 60px',
+            paddingTop: 50,
+            paddingBottom: 50,
+            paddingLeft: 60,
+            paddingRight: 60,
           },
           children: [
-            // Badge
+            // Badge row
             {
               type: 'div',
               props: {
@@ -123,10 +126,15 @@ export function boardOgCard({
                   type: 'div',
                   props: {
                     style: {
-                      padding: '8px 26px',
+                      paddingTop: 8,
+                      paddingBottom: 8,
+                      paddingLeft: 26,
+                      paddingRight: 26,
                       borderRadius: 999,
                       background: accentSoft,
-                      border: `2px solid ${border}`,
+                      borderWidth: 2,
+                      borderStyle: 'solid',
+                      borderColor: border,
                       color: accent,
                       fontSize: 24,
                       fontWeight: 700,
@@ -136,7 +144,7 @@ export function boardOgCard({
                 },
               },
             },
-            // Middle
+            // Middle row
             {
               type: 'div',
               props: {
@@ -148,12 +156,12 @@ export function boardOgCard({
                   marginTop: 36,
                   marginBottom: 36,
                   width: '100%',
-                  flex: 1,
+                  flexGrow: 1,
                 },
-                children: [textColumn, imageBox].filter(Boolean),
+                children: hasImage ? [textColumn, imageBox] : [textColumn],
               },
             },
-            // Footer
+            // Footer row
             {
               type: 'div',
               props: {
@@ -162,9 +170,10 @@ export function boardOgCard({
                   justifyContent: 'space-between',
                   alignItems: 'center',
                   width: '100%',
-                  borderTop: '2px solid #f1f5f9',
+                  borderTopWidth: 2,
+                  borderTopStyle: 'solid',
+                  borderTopColor: '#f1f5f9',
                   paddingTop: 25,
-                  marginTop: 'auto',
                 },
                 children: [
                   {
