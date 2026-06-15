@@ -43,8 +43,8 @@
   });
 </script>
 
-<div class="relative w-full overflow-x-hidden">
-  <BaseContainer size="xl" paddingX="none" paddingY="lg">
+<div class="relative w-full">
+  <BaseContainer size="xl" paddingX="sm" paddingY="lg">
     <div class="flex flex-col gap-6">
       <!-- Breadcrumb Header -->
       <section class="page-intro">
@@ -97,7 +97,7 @@
 
           <div
             id="blog-content-body"
-            class="prose prose-panel max-w-none pb-24 pt-2 xl:pb-0 dark:prose-invert relative {contentClassName}"
+            class="prose prose-panel max-w-none pb-24 pt-2 xl:pb-0 dark:prose-invert relative overflow-x-hidden {contentClassName}"
           >
             <slot />
           </div>

@@ -173,7 +173,6 @@ article code {
   grid-template-columns: minmax(0, 1fr);
   gap: 2rem;
   min-width: 0;
-  overflow-x: hidden;
 }
 
 .blog-post-shell article {
@@ -199,6 +198,18 @@ article code {
   max-width: none;
   overflow-wrap: break-word;
   word-break: break-word;
+}
+
+/* ── Show line rail in a 2-col grid at lg+ ─────────────────────── */
+@media (min-width: 1024px) {
+  .blog-post-shell {
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: start;
+  }
+
+  .article-line-rail {
+    display: flex;
+  }
 }
 
 .blog-post-return {
