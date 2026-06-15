@@ -9,8 +9,10 @@ export const GET: RequestHandler = async ({ params }) => {
     return new Response('Not found', { status: 404 })
   }
 
-  const body = suggestion.note || suggestion.bestPart || suggestion.title
-  const showTitle = suggestion.title && body !== suggestion.title
+  // Only use note (personal message) or fall back to title — bestPart contains tag metadata
+  const body = suggestion.note || suggestion.title
+  const showTitle = !!suggestion.note && suggestion.title !== suggestion.note
+
   const date = new Date(suggestion.createdAt).toLocaleDateString('en-US', {
     month: 'short', day: 'numeric', year: 'numeric',
   })
@@ -19,10 +21,10 @@ export const GET: RequestHandler = async ({ params }) => {
     accent: '#0ea5e9',
     accentSoft: '#f0f9ff',
     border: '#bae6fd',
-    footer: 'mikeblocky.com/interact',
     label: 'Suggestion',
     title: showTitle ? suggestion.title : '',
     body,
+    author: suggestion.author || 'anonymous',
     date,
     imageUrl: suggestion.imageUrl,
   })

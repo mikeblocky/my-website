@@ -9,8 +9,8 @@ export function artworkOgCard({ imageUrl, caption, author, date }: ArtworkOgCard
   const accent = '#d97706'
   const accentSoft = '#fffbeb'
   const border = '#fcd34d'
-
-  const byline = [author, date].filter(Boolean).join(' · ')
+  const captionText = caption && caption.trim() ? caption.trim() : null
+  const captionLen = captionText?.length ?? 0
 
   return {
     type: 'div',
@@ -38,13 +38,13 @@ export function artworkOgCard({ imageUrl, caption, author, date }: ArtworkOgCard
             overflow: 'hidden',
           },
           children: [
-            // Left: artwork image
+            // Left: artwork image (fills its column, no gap at boundary)
             {
               type: 'div',
               props: {
                 style: {
                   display: 'flex',
-                  width: 550,
+                  width: 530,
                   flexShrink: 0,
                   background: '#f8f4ef',
                 },
@@ -65,32 +65,33 @@ export function artworkOgCard({ imageUrl, caption, author, date }: ArtworkOgCard
                   display: 'flex',
                   flexDirection: 'column',
                   flexGrow: 1,
-                  paddingTop: 50,
-                  paddingBottom: 50,
-                  paddingLeft: 50,
-                  paddingRight: 50,
+                  paddingTop: 44,
+                  paddingBottom: 44,
+                  paddingLeft: 44,
+                  paddingRight: 44,
+                  overflow: 'hidden',
                 },
                 children: [
                   // Badge
                   {
                     type: 'div',
                     props: {
-                      style: { display: 'flex', alignItems: 'center' },
+                      style: { display: 'flex', alignItems: 'center', flexShrink: 0 },
                       children: {
                         type: 'div',
                         props: {
                           style: {
                             paddingTop: 8,
                             paddingBottom: 8,
-                            paddingLeft: 26,
-                            paddingRight: 26,
+                            paddingLeft: 24,
+                            paddingRight: 24,
                             borderRadius: 999,
                             background: accentSoft,
                             borderWidth: 2,
                             borderStyle: 'solid',
                             borderColor: border,
                             color: accent,
-                            fontSize: 24,
+                            fontSize: 22,
                             fontWeight: 700,
                           },
                           children: 'Sketchbook',
@@ -98,7 +99,7 @@ export function artworkOgCard({ imageUrl, caption, author, date }: ArtworkOgCard
                       },
                     },
                   },
-                  // Caption
+                  // Caption area
                   {
                     type: 'div',
                     props: {
@@ -106,27 +107,23 @@ export function artworkOgCard({ imageUrl, caption, author, date }: ArtworkOgCard
                         display: 'flex',
                         flexGrow: 1,
                         alignItems: 'center',
+                        overflow: 'hidden',
                       },
-                      children: caption
-                        ? {
-                            type: 'div',
-                            props: {
-                              style: {
-                                fontSize: caption.length > 80 ? 28 : caption.length > 40 ? 34 : 40,
-                                fontWeight: 400,
-                                color: '#334155',
-                                lineHeight: 1.5,
-                              },
-                              children: `"${caption}"`,
-                            },
-                          }
-                        : {
-                            type: 'div',
-                            props: {
-                              style: { fontSize: 34, fontWeight: 400, color: '#94a3b8', lineHeight: 1.5 },
-                              children: 'A sketchbook drawing',
-                            },
+                      children: {
+                        type: 'div',
+                        props: {
+                          style: {
+                            fontSize: captionText
+                              ? (captionLen > 80 ? 26 : captionLen > 40 ? 30 : 36)
+                              : 28,
+                            fontWeight: captionText ? 400 : 400,
+                            color: captionText ? '#334155' : '#94a3b8',
+                            lineHeight: 1.5,
+                            overflow: 'hidden',
                           },
+                          children: captionText ? `"${captionText}"` : 'A sketch sent!',
+                        },
+                      },
                     },
                   },
                   // Footer
@@ -135,26 +132,26 @@ export function artworkOgCard({ imageUrl, caption, author, date }: ArtworkOgCard
                     props: {
                       style: {
                         display: 'flex',
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
+                        flexDirection: 'column',
+                        flexShrink: 0,
                         borderTopWidth: 2,
                         borderTopStyle: 'solid',
                         borderTopColor: '#f1f5f9',
-                        paddingTop: 25,
+                        paddingTop: 20,
                       },
                       children: [
                         {
                           type: 'div',
                           props: {
-                            style: { fontSize: 26, fontWeight: 700, color: accent },
+                            style: { fontSize: 22, fontWeight: 700, color: accent },
                             children: 'mikeblocky.com/interact',
                           },
                         },
                         {
                           type: 'div',
                           props: {
-                            style: { fontSize: 22, fontWeight: 400, color: '#94a3b8' },
-                            children: byline,
+                            style: { fontSize: 18, fontWeight: 400, color: '#94a3b8', marginTop: 4 },
+                            children: author ? `by ${author} · ${date}` : date,
                           },
                         },
                       ],

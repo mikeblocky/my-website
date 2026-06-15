@@ -17,10 +17,9 @@ export const GET: RequestHandler = async ({ params }) => {
     accent: '#4f46e5',
     accentSoft: '#eef2ff',
     border: '#c7d2fe',
-    footer: 'mikeblocky.com/interact',
     label: 'Talk',
-    title: '',
     body: talk.body,
+    author: talk.author || 'anonymous',
     date,
     imageUrl: talk.imageUrl,
   })
