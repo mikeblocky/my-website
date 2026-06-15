@@ -37,7 +37,7 @@ export default async function Image({ params }: { params: Promise<{ id: string }
     )
   }
 
-  const body = suggestion.note || suggestion.bestPart || suggestion.reference?.description || suggestion.title
+  const body = suggestion.note || suggestion.bestPart || suggestion.title
   const categoryLabel = suggestion.category.charAt(0).toUpperCase() + suggestion.category.slice(1)
 
   return new ImageResponse(
