@@ -2,6 +2,9 @@
   import { Bell } from '@lucide/svelte';
   import AttachmentPreviewGrid from './AttachmentPreviewGrid.svelte';
   import AttachmentUploadButton from './AttachmentUploadButton.svelte';
+  import EmojiSuggestions from './EmojiSuggestions.svelte';
+  import { emojiAutocomplete } from '$lib/actions/emojiAutocomplete';
+  import type { EmojiMatch, EmojiAutocompleteState } from '$lib/actions/emojiAutocomplete';
   import { MAX_ATTACHMENT_COUNT } from '$lib/images/attachment-limits';
   import { prepareImageForUpload } from '$lib/images/prepare-upload';
 
@@ -45,6 +48,23 @@
     textarea.style.height = 'auto';
     textarea.style.height = `${textarea.scrollHeight}px`;
   }
+
+  let emojiOpen = false;
+  let emojiResults: EmojiMatch[] = [];
+  let emojiSelectedIndex = 0;
+  let emojiQuery = '';
+  let emojiTarget: HTMLTextAreaElement | null = null;
+
+  function onEmojiOpen(e: CustomEvent<EmojiAutocompleteState>) {
+    emojiOpen = true;
+    emojiResults = e.detail.results;
+    emojiSelectedIndex = e.detail.selectedIndex;
+    emojiQuery = e.detail.query;
+  }
+  function onEmojiClose() { emojiOpen = false; emojiResults = []; }
+  function onEmojiSelect(match: EmojiMatch) {
+    if (emojiTarget) (emojiTarget as any).__emojiSelect(match);
+  }
 </script>
 
 <form 
@@ -62,14 +82,26 @@
   </div>
 
   <!-- Middle: Message Field -->
-  <div class="px-4 py-4">
+  <div class="px-4 py-4 relative">
     <textarea
+      bind:this={emojiTarget}
       bind:value={body}
       on:input={handleInput}
+      use:emojiAutocomplete
+      on:emoji:open={onEmojiOpen}
+      on:emoji:close={onEmojiClose}
       placeholder="Let's talk about anything... (ask questions, ask for suggestions, casual chat)"
       rows={1}
       class="w-full bg-transparent py-2 text-sm text-slate-900 placeholder:text-muted-foreground/60 focus:outline-none dark:text-slate-100 dark:placeholder:text-slate-600 resize-none overflow-hidden min-h-[100px] font-sans"
     />
+    {#if emojiOpen}
+      <EmojiSuggestions
+        results={emojiResults}
+        selectedIndex={emojiSelectedIndex}
+        query={emojiQuery}
+        onSelect={onEmojiSelect}
+      />
+    {/if}
   </div>
 
   <AttachmentPreviewGrid

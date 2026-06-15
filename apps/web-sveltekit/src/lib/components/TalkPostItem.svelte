@@ -5,6 +5,9 @@
   import AttachmentPreviewGrid from './AttachmentPreviewGrid.svelte';
   import AttachmentUploadButton from './AttachmentUploadButton.svelte';
   import BoardThreadBubble from './BoardThreadBubble.svelte';
+  import EmojiSuggestions from './EmojiSuggestions.svelte';
+  import { emojiAutocomplete } from '$lib/actions/emojiAutocomplete';
+  import type { EmojiMatch, EmojiAutocompleteState } from '$lib/actions/emojiAutocomplete';
   import { MAX_ATTACHMENT_COUNT } from '$lib/images/attachment-limits';
   import { prepareImageForUpload } from '$lib/images/prepare-upload';
   import { formatBoardDate as formatDate, formatBoardDateCompact as formatDateCompact } from '$lib/boards/board-utils';
@@ -97,6 +100,27 @@
     const textarea = event.target as HTMLTextAreaElement;
     textarea.style.height = 'auto';
     textarea.style.height = `${textarea.scrollHeight}px`;
+  }
+
+  // Emoji autocomplete
+  let emojiOpen = false;
+  let emojiResults: EmojiMatch[] = [];
+  let emojiSelectedIndex = 0;
+  let emojiQuery = '';
+  let emojiTarget: HTMLTextAreaElement | null = null;
+  let replyTextareaEl: HTMLTextAreaElement;
+  let followUpTextareaEl: HTMLTextAreaElement;
+
+  function onEmojiOpen(e: CustomEvent<EmojiAutocompleteState>, el: HTMLTextAreaElement) {
+    emojiTarget = el;
+    emojiOpen = true;
+    emojiResults = e.detail.results;
+    emojiSelectedIndex = e.detail.selectedIndex;
+    emojiQuery = e.detail.query;
+  }
+  function onEmojiClose() { emojiOpen = false; emojiResults = []; }
+  function onEmojiSelect(match: EmojiMatch) {
+    if (emojiTarget) (emojiTarget as any).__emojiSelect(match);
   }
 
   $: thread = talk.thread || [];
@@ -262,13 +286,22 @@
           {/if}
         </div>
         <div class="flex-grow min-w-0">
-          <textarea
-            bind:value={replyBody}
-            on:input={handleInput}
-            placeholder="Write your response..."
-            rows={1}
-            class="min-h-[44px] w-full resize-none overflow-hidden rounded-md border border-border bg-background px-4 py-3 text-base md:text-[17px] text-slate-900 focus:outline-none focus:ring-1 focus:ring-indigo-300 dark:text-slate-100 font-sans"
-          />
+          <div class="relative">
+            <textarea
+              bind:this={replyTextareaEl}
+              bind:value={replyBody}
+              on:input={handleInput}
+              use:emojiAutocomplete
+              on:emoji:open={(e) => onEmojiOpen(e, replyTextareaEl)}
+              on:emoji:close={onEmojiClose}
+              placeholder="Write your response..."
+              rows={1}
+              class="min-h-[44px] w-full resize-none overflow-hidden rounded-md border border-border bg-background px-4 py-3 text-base md:text-[17px] text-slate-900 focus:outline-none focus:ring-1 focus:ring-indigo-300 dark:text-slate-100 font-sans"
+            />
+            {#if emojiOpen && emojiTarget === replyTextareaEl}
+              <EmojiSuggestions results={emojiResults} selectedIndex={emojiSelectedIndex} query={emojiQuery} onSelect={onEmojiSelect} />
+            {/if}
+          </div>
           <AttachmentPreviewGrid
             urls={replyImageUrls}
             onRemove={(index) => (replyImageUrls = replyImageUrls.filter((_, itemIndex) => itemIndex !== index))}
@@ -324,13 +357,22 @@
           </div>
         </div>
         <div class="flex-grow min-w-0">
-          <textarea
-            bind:value={followUpBody}
-            on:input={handleInput}
-            placeholder="Add to this discussion..."
-            rows={1}
-            class="min-h-[44px] w-full resize-none overflow-hidden rounded-md border border-emerald-200 bg-background px-4 py-3 text-base md:text-[17px] text-slate-900 focus:outline-none focus:ring-1 focus:ring-emerald-300 dark:border-emerald-500/30 dark:text-slate-100 font-sans"
-          />
+          <div class="relative">
+            <textarea
+              bind:this={followUpTextareaEl}
+              bind:value={followUpBody}
+              on:input={handleInput}
+              use:emojiAutocomplete
+              on:emoji:open={(e) => onEmojiOpen(e, followUpTextareaEl)}
+              on:emoji:close={onEmojiClose}
+              placeholder="Add to this discussion..."
+              rows={1}
+              class="min-h-[44px] w-full resize-none overflow-hidden rounded-md border border-emerald-200 bg-background px-4 py-3 text-base md:text-[17px] text-slate-900 focus:outline-none focus:ring-1 focus:ring-emerald-300 dark:border-emerald-500/30 dark:text-slate-100 font-sans"
+            />
+            {#if emojiOpen && emojiTarget === followUpTextareaEl}
+              <EmojiSuggestions results={emojiResults} selectedIndex={emojiSelectedIndex} query={emojiQuery} onSelect={onEmojiSelect} />
+            {/if}
+          </div>
           <AttachmentPreviewGrid
             urls={followUpImageUrls}
             onRemove={(index) => (followUpImageUrls = followUpImageUrls.filter((_, itemIndex) => itemIndex !== index))}

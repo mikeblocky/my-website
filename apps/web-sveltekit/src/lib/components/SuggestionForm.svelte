@@ -2,6 +2,9 @@
   import { onMount } from 'svelte';
   import { slide, fade } from 'svelte/transition';
   import { Info, Link as LinkIcon, Loader2, ChevronDown } from '@lucide/svelte';
+  import EmojiSuggestions from './EmojiSuggestions.svelte';
+  import { emojiAutocomplete } from '$lib/actions/emojiAutocomplete';
+  import type { EmojiMatch, EmojiAutocompleteState } from '$lib/actions/emojiAutocomplete';
   import AttachmentPreviewGrid from './AttachmentPreviewGrid.svelte';
   import AttachmentUploadButton from './AttachmentUploadButton.svelte';
   import { MAX_ATTACHMENT_COUNT } from '$lib/images/attachment-limits';
@@ -154,6 +157,23 @@
     }
   }
 
+  let emojiOpen = false;
+  let emojiResults: EmojiMatch[] = [];
+  let emojiSelectedIndex = 0;
+  let emojiQuery = '';
+  let emojiTarget: HTMLTextAreaElement | null = null;
+
+  function onEmojiOpen(e: CustomEvent<EmojiAutocompleteState>) {
+    emojiOpen = true;
+    emojiResults = e.detail.results;
+    emojiSelectedIndex = e.detail.selectedIndex;
+    emojiQuery = e.detail.query;
+  }
+  function onEmojiClose() { emojiOpen = false; emojiResults = []; }
+  function onEmojiSelect(match: EmojiMatch) {
+    if (emojiTarget) (emojiTarget as any).__emojiSelect(match);
+  }
+
   function handleDropdownClick(e: MouseEvent) {
     e.stopPropagation();
     isDropdownOpen = !isDropdownOpen;
@@ -262,12 +282,28 @@
     class="w-full border-b border-slate-100 dark:border-slate-900 bg-transparent px-4 py-4 text-sm font-semibold text-slate-800 placeholder:text-muted-foreground/60 focus:outline-none dark:text-slate-100"
   />
 
-  <textarea
-    bind:value={note}
-    placeholder="Why do you recommend it? Favorite tracks, key highlights, or general thoughts..."
-    rows={4}
-    class="min-h-[120px] w-full resize-none bg-transparent px-4 py-4 text-sm text-slate-850 placeholder:text-muted-foreground/60 focus:outline-none dark:text-slate-100"
-  />
+  <div class="relative">
+    <textarea
+      bind:this={emojiTarget}
+      bind:value={note}
+      use:emojiAutocomplete
+      on:emoji:open={onEmojiOpen}
+      on:emoji:close={onEmojiClose}
+      placeholder="Why do you recommend it? Favorite tracks, key highlights, or general thoughts..."
+      rows={4}
+      class="min-h-[120px] w-full resize-none bg-transparent px-4 py-4 text-sm text-slate-850 placeholder:text-muted-foreground/60 focus:outline-none dark:text-slate-100"
+    />
+    {#if emojiOpen}
+      <div class="px-4">
+        <EmojiSuggestions
+          results={emojiResults}
+          selectedIndex={emojiSelectedIndex}
+          query={emojiQuery}
+          onSelect={onEmojiSelect}
+        />
+      </div>
+    {/if}
+  </div>
 
   {#if imageUrls.length > 0}
     <div class="border-t border-slate-100 dark:border-slate-900 px-4 py-4">
