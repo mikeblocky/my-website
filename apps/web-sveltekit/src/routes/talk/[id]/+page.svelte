@@ -12,13 +12,14 @@
   $: bodySnippet = talk.body.slice(0, 150) + (talk.body.length > 150 ? '...' : '');
   $: description = `"${bodySnippet}" — Shared by ${author}`;
   $: title = `Post from ${author} | Talk`;
-  $: ogImage = talk.imageUrl || '/talk/opengraph-image.jpg';
+  $: ogImage = `/talk/${id}/opengraph-image`;
 </script>
 
 <SeoHead
   {title}
   {description}
   path="/talk/{id}"
+  image={ogImage}
 />
 
 <div class="w-full max-w-[700px] mx-auto px-6 py-12 font-sans">

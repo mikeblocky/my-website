@@ -12,13 +12,14 @@
     ? `"${drawing.body.slice(0, 150)}${drawing.body.length > 150 ? '...' : ''}" — Drawing by ${drawing.author}`
     : `A beautiful sketch drawn by ${drawing.author} on the collaborative board.`;
   $: title = `Drawing by ${drawing.author} | Sketchbook`;
-  $: ogImage = drawing.imageUrl || '/sketchbook/opengraph-image.jpg';
+  $: ogImage = `/sketchbook/${id}/opengraph-image`;
 </script>
 
 <SeoHead
   {title}
   {description}
   path="/sketchbook/{id}"
+  image={ogImage}
 />
 
 <div class="w-full max-w-[700px] mx-auto px-6 py-12 font-sans">
