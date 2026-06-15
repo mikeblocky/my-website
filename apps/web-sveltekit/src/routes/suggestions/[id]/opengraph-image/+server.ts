@@ -10,6 +10,7 @@ export const GET: RequestHandler = async ({ params }) => {
   }
 
   const body = suggestion.note || suggestion.bestPart || suggestion.title
+  const showTitle = suggestion.title && body !== suggestion.title
   const date = new Date(suggestion.createdAt).toLocaleDateString('en-US', {
     month: 'short', day: 'numeric', year: 'numeric',
   })
@@ -20,7 +21,7 @@ export const GET: RequestHandler = async ({ params }) => {
     border: '#bae6fd',
     footer: 'mikeblocky.com/interact',
     label: 'Suggestion',
-    title: suggestion.title,
+    title: showTitle ? suggestion.title : '',
     body,
     date,
     imageUrl: suggestion.imageUrl,

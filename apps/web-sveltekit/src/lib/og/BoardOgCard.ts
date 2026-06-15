@@ -111,6 +111,7 @@ export function boardOgCard({
             borderStyle: 'solid',
             borderColor: accent,
             borderRadius: 32,
+            overflow: 'hidden',
             paddingTop: 50,
             paddingBottom: 50,
             paddingLeft: 60,
