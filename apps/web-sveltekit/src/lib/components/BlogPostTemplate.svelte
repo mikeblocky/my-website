@@ -43,7 +43,7 @@
   });
 </script>
 
-<div class="relative w-full">
+<div class="relative w-full overflow-x-hidden">
   <BaseContainer size="xl" paddingX="lg" paddingY="lg">
     <div class="flex flex-col gap-6">
       <!-- Breadcrumb Header -->

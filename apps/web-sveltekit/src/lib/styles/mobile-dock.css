@@ -138,7 +138,7 @@
 }
 
 .mobile-dock-more.active .mobile-dock-icon {
-  transform: rotate(90deg) scale(1.04);
+  /* rotation now handled by inline style on the icon for smooth spring */
 }
 
 .mobile-dock-label {
@@ -167,7 +167,7 @@
 .mobile-more-backdrop {
   position: fixed;
   inset: 0;
-  z-index: 40;
+  z-index: 55;
   border: 0;
   background: rgb(0 0 0 / 0.65);
   backdrop-filter: blur(12px);
@@ -177,7 +177,7 @@
   position: fixed;
   left: 2rem;
   bottom: calc(5.25rem + env(safe-area-inset-bottom, 0px));
-  z-index: 50;
+  z-index: 60;
   display: flex;
   flex-direction: column;
   align-items: flex-start;

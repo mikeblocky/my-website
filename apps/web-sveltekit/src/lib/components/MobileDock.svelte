@@ -181,6 +181,11 @@
         class="mobile-dock-tab"
         class:active
         on:click={(e) => {
+          if (isMoreOpen) {
+            isMoreOpen = false;
+            e.preventDefault();
+            return;
+          }
           if (active) {
             e.preventDefault();
             if (!isGenerator) {
@@ -206,7 +211,11 @@
       class:active={isMoreOpen || moreActive}
     >
       <span class="mobile-dock-icon-wrap">
-        <svelte:component this={MoreHorizontal} class="mobile-dock-icon" />
+        <svelte:component
+          this={MoreHorizontal}
+          class="mobile-dock-icon mobile-dock-more-icon-inner"
+          style="transition: transform 320ms cubic-bezier(0.34,1.56,0.64,1); transform: rotate({isMoreOpen ? 90 : 0}deg);"
+        />
       </span>
       <span class="mobile-dock-label">
         More
@@ -231,7 +240,7 @@
       role="button"
       tabindex="0"
       aria-label="Close more navigation"
-      transition:fade={{ duration: 240 }}
+      transition:fade={{ duration: 200 }}
     ></div>
 
     <div
