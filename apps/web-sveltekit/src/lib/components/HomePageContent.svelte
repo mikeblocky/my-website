@@ -59,7 +59,7 @@
 <BaseContainer size="lg" paddingX="md" paddingY="lg">
   <div class="flex justify-between items-center mb-8">
     <DesktopNav />
-    <ThemeToggle />
+    <div class="ml-auto"><ThemeToggle /></div>
   </div>
 
   <StackVertical gap="lg">
