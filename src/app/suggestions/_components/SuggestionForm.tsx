@@ -6,7 +6,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { Button } from '@/components/ui/primitives/button'
 import Text from '@/components/ui/text/text'
 import { cn } from '@/lib/utils/utils'
-import { sansFont } from '@/styles/fonts/fonts'
+import { sansFont, dmSans } from '@/styles/fonts/fonts'
 import { prepareImageForUpload } from '@/lib/images/prepare-upload'
 import { MAX_ATTACHMENT_COUNT } from '@/lib/images/attachment-limits'
 import { AttachmentPreviewGrid } from '@/components/ui/attachments/AttachmentPreviewGrid'
@@ -198,7 +198,7 @@ export function SuggestionForm({
           value={formState.title}
           onChange={(event) => setFormState(state => ({ ...state, title: event.target.value }))}
           placeholder="Title (e.g. Skip and Loafer, Perfect Blue, Kid A)"
-          className={cn(sansFont.className, "min-w-0 border-b border-slate-100 dark:border-slate-900 bg-transparent px-4 py-3 text-sm font-semibold text-slate-800 placeholder:text-muted-foreground/60 focus:outline-none dark:text-slate-100 sm:border-b-0 sm:border-r rounded-tl-xl sm:rounded-tr-none rounded-tr-xl")}
+          className={cn(dmSans.className, "min-w-0 border-b border-slate-100 dark:border-slate-900 bg-transparent px-4 py-3 text-base font-semibold text-slate-800 placeholder:text-muted-foreground/60 focus:outline-none dark:text-slate-100 sm:border-b-0 sm:border-r rounded-tl-xl sm:rounded-tr-none rounded-tr-xl")}
           required
         />
         <div className="relative category-dropdown-container w-full sm:w-[150px]">
@@ -206,8 +206,8 @@ export function SuggestionForm({
             type="button"
             onClick={() => setIsDropdownOpen(!isDropdownOpen)}
             className={cn(
-              sansFont.className,
-              "flex w-full items-center justify-between bg-transparent px-4 py-3 text-sm font-semibold text-slate-700 dark:text-slate-355 focus:outline-none cursor-pointer hover:bg-slate-100/50 dark:hover:bg-slate-800/30 transition-colors h-full rounded-tr-xl sm:rounded-tl-none rounded-tl-xl"
+              dmSans.className,
+              "flex w-full items-center justify-between bg-transparent px-4 py-3 text-base font-semibold text-slate-700 dark:text-slate-355 focus:outline-none cursor-pointer hover:bg-slate-100/50 dark:hover:bg-slate-800/30 transition-colors h-full rounded-tr-xl sm:rounded-tl-none rounded-tl-xl"
             )}
           >
             <span>{categories.find(c => c.value === formState.category)?.label || formState.category}</span>
@@ -245,8 +245,8 @@ export function SuggestionForm({
                       setIsDropdownOpen(false)
                     }}
                     className={cn(
-                      sansFont.className,
-                      "flex w-full items-center px-4 py-2 text-left text-sm font-semibold transition-colors duration-150",
+                      dmSans.className,
+                      "flex w-full items-center px-4 py-2 text-left text-base font-semibold transition-colors duration-150",
                       formState.category === category.value 
                         ? "bg-slate-50 text-slate-800 dark:bg-slate-950/40 dark:text-slate-200"
                         : "text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/50"
@@ -270,13 +270,13 @@ export function SuggestionForm({
             setReference(undefined)
           }}
           placeholder="Link (optional, e.g. AniList, Spotify)"
-          className={cn(sansFont.className, "min-w-0 bg-transparent px-4 py-3 text-sm text-slate-800 placeholder:text-muted-foreground/60 focus:outline-none dark:text-slate-100")}
+          className={cn(dmSans.className, "min-w-0 bg-transparent px-4 py-3 text-base text-slate-800 placeholder:text-muted-foreground/60 focus:outline-none dark:text-slate-100")}
         />
         <button
           type="button"
           onClick={loadReference}
           disabled={!formState.referenceUrl.trim() || isReferenceLoading}
-          className="flex items-center justify-center gap-2 border-t border-slate-100 dark:border-slate-900 px-4 py-3 text-xs font-bold text-slate-700 transition-colors hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-50 dark:text-slate-350 dark:hover:bg-slate-950/30 sm:border-l sm:border-t-0"
+          className={cn(dmSans.className, "flex items-center justify-center gap-2 border-t border-slate-100 dark:border-slate-900 px-4 py-3 text-sm font-bold text-slate-700 transition-colors hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-50 dark:text-slate-355 dark:hover:bg-slate-950/30 sm:border-l sm:border-t-0")}
         >
           {isReferenceLoading ? <Loader2 size={14} className="animate-spin" /> : <LinkIcon size={14} />}
           Load info
@@ -301,7 +301,7 @@ export function SuggestionForm({
         value={formState.author}
         onChange={(event) => setFormState(state => ({ ...state, author: event.target.value }))}
         placeholder="Your name or alias (optional)"
-        className={cn(sansFont.className, "w-full border-b border-slate-100 dark:border-slate-900 bg-transparent px-4 py-3 text-sm font-semibold text-slate-800 placeholder:text-muted-foreground/60 focus:outline-none dark:text-slate-100")}
+        className={cn(dmSans.className, "w-full border-b border-slate-100 dark:border-slate-900 bg-transparent px-4 py-3 text-base font-semibold text-slate-800 placeholder:text-muted-foreground/60 focus:outline-none dark:text-slate-100")}
       />
 
       <textarea
@@ -309,7 +309,7 @@ export function SuggestionForm({
         onChange={(event) => setFormState(state => ({ ...state, note: event.target.value }))}
         placeholder="Why do you recommend it? Favorite tracks, key highlights, or general thoughts..."
         rows={4}
-        className={cn(sansFont.className, "min-h-[120px] w-full resize-none bg-transparent px-4 py-3 text-sm text-slate-800 placeholder:text-muted-foreground/60 focus:outline-none dark:text-slate-100")}
+        className={cn(dmSans.className, "min-h-[120px] w-full resize-none bg-transparent px-4 py-3 text-base text-slate-800 placeholder:text-muted-foreground/60 focus:outline-none dark:text-slate-100")}
       />
 
       <AttachmentPreviewGrid
@@ -330,12 +330,12 @@ export function SuggestionForm({
 
         <div className="flex items-center gap-3">
           {errorMessage && (
-            <Text size="xs" className="text-rose-550">{errorMessage}</Text>
+            <Text size="sm" className="text-rose-550">{errorMessage}</Text>
           )}
           <Button
             type="submit"
             disabled={isPending || !formState.title.trim() || isCooldownActive}
-            className="rounded-md pride-button h-9 px-4.5 text-xs font-semibold"
+            className={cn(dmSans.className, "rounded-md pride-button h-9 px-4.5 text-sm font-semibold")}
             title={isCooldownActive ? `You can send another suggestion in ${cooldownLabel}` : undefined}
           >
             {isCooldownActive ? cooldownLabel : isPending ? 'Sending...' : 'Send suggestion'}

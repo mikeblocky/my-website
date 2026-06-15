@@ -11,7 +11,7 @@
   import ListeningActivity from './ListeningActivity.svelte';
 
   const tabs = [
-    { id: 'essays', label: 'Articles' },
+    { id: 'essays', label: 'Blogs' },
     { id: 'notes', label: 'Daily notes' },
     { id: 'utensils', label: 'Stationery setup' },
     { id: 'activity', label: 'Activity' }
@@ -38,26 +38,32 @@
         {#if readingSeries.length}
           <section class="journal-note-group">
             <h4>Reading notes</h4>
-            {#each readingSeries as note}
-              <a href={note.href}>{note.title}</a>
-            {/each}
+            <div class="journal-note-grid">
+              {#each readingSeries as note}
+                <a href={note.href}>{note.title}</a>
+              {/each}
+            </div>
           </section>
         {/if}
         {#each monthGroups as group}
           <section class="journal-note-group">
             <h4>{group.month}</h4>
-            {#each group.days as note}
-              <a href={note.href}>
-                <span>{note.title}</span>
-                <small>{note.description}</small>
-              </a>
-            {/each}
+            <div class="journal-note-grid">
+              {#each group.days as note}
+                <a href={note.href}>
+                  <span>{note.title}</span>
+                  <small>{note.description}</small>
+                </a>
+              {/each}
+            </div>
           </section>
         {/each}
         <section class="journal-note-group">
           <h4>Learning archive</h4>
-          <a href="/learning/weekly-reflections">Weekly reflections</a>
-          <a href="/learning/learning-utensils">Learning utensils</a>
+          <div class="journal-note-grid">
+            <a href="/learning/weekly-reflections">Weekly reflections</a>
+            <a href="/learning/learning-utensils">Learning utensils</a>
+          </div>
         </section>
       </div>
     {:else if activeTab === 'utensils'}

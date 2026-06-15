@@ -100,7 +100,7 @@
   $: isFiltered = normalizedQuery || activeTheme !== 'all';
   $: countLabel = isFiltered
     ? `Showing ${filteredPosts.length} result${filteredPosts.length === 1 ? '' : 's'} for your filters.`
-    : `Showing all ${posts.length} posts.`;
+    : `Showing all ${posts.length} blogs.`;
 
   // Reset page when filters change
   $: if (normalizedQuery || activeTheme) {
@@ -134,11 +134,11 @@
       <input
         bind:value={query}
         type="text"
-        placeholder="Search titles, themes, or post content..."
-        aria-label="Search blog posts"
+        placeholder="Search blogs you want to see..."
+        aria-label="Search blogs"
         on:focus={() => (isFocused = true)}
         on:blur={() => (isFocused = false)}
-        class="w-full bg-transparent px-4 py-3 pr-12 text-base text-slate-900 placeholder:text-slate-400 focus:outline-none dark:text-slate-100 dark:placeholder:text-slate-500 font-sans"
+        class="w-full bg-transparent px-4 py-4 pr-12 text-base text-slate-900 placeholder:text-slate-400 focus:outline-none dark:text-slate-100 dark:placeholder:text-slate-500 font-sans"
         autocomplete="off"
       />
       {#if query}
@@ -154,19 +154,19 @@
     </div>
 
     <!-- Theme Filter Strip -->
-    <div class="theme-filter-strip theme-filter-strip--wrap" aria-label="Filter articles by theme">
+    <div class="theme-filter-strip theme-filter-strip--wrap" aria-label="Filter blogs by theme">
       {#each themes as theme}
         <button
           type="button"
           class:active={activeTheme === theme}
           on:click={() => (activeTheme = theme)}
         >
-          {theme === 'all' ? 'all' : theme.toLowerCase()}
+          {theme}
         </button>
       {/each}
     </div>
 
-    <span class="blog-count-label text-xs font-medium text-muted-foreground block">{countLabel}</span>
+    <span class="blog-count-label text-sm font-medium text-muted-foreground block">{countLabel}</span>
   </div>
 
   <!-- Blog entries list matching Next.js design -->

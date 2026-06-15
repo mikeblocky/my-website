@@ -26,7 +26,7 @@
       <i class="animate-spotify-bar-3"></i>
     </span>
     <span>
-      listening to: {$spotifyCurrentlyPlaying.song.toLowerCase()} — {$spotifyCurrentlyPlaying.artist.toLowerCase()}
+      listening to: {$spotifyCurrentlyPlaying.song} — {$spotifyCurrentlyPlaying.artist}
     </span>
   </a>
 {/if}

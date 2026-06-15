@@ -26,7 +26,7 @@
 </script>
 
 <label
-  class="flex cursor-pointer items-center gap-1 text-xs font-semibold text-slate-500 transition-colors select-none {accentClasses[accent]} {className}"
+  class="flex cursor-pointer items-center gap-1 font-semibold text-slate-500 transition-colors select-none {accentClasses[accent]} {!className.includes('text-') ? 'text-xs' : ''} {className}"
 >
   <input
     type="file"

@@ -14,7 +14,7 @@ import { MAX_ATTACHMENT_COUNT } from '@/lib/images/attachment-limits'
 import { prepareImageForUpload } from '@/lib/images/prepare-upload'
 import { formatBoardDate as formatDate, formatBoardDateCompact as formatDateCompact } from '@/lib/boards/board-utils'
 import { cn } from '@/lib/utils/utils'
-import { monoFont, sansFont } from '@/styles/fonts/fonts'
+import { monoFont, sansFont, dmSans } from '@/styles/fonts/fonts'
 import type { MediaSuggestion, SuggestionStatus } from '../_types/suggestion'
 import { getStatusConfig } from './suggestion-board-config'
 import { getHighQualitySuggestionImageUrl } from './suggestion-image-url'
@@ -300,14 +300,14 @@ export function SuggestionCard({
                   <Star size={13} className="fill-amber-500/20 text-amber-600 dark:text-amber-400" />
                   Best part
                 </div>
-                <div className="text-sm leading-relaxed text-slate-700 dark:text-slate-300">
+                <div className={cn(dmSans.className, "text-base md:text-[17px] leading-relaxed text-slate-700 dark:text-slate-300")}>
                   <RichText text={suggestion.bestPart} theme="blue" />
                 </div>
               </div>
             )}
 
             {suggestion.note && (
-              <div className="text-sm leading-relaxed text-slate-700 dark:text-slate-300">
+              <div className={cn(dmSans.className, "text-base md:text-[17px] leading-relaxed text-slate-700 dark:text-slate-300")}>
                 <RichText text={suggestion.note} theme="blue" />
               </div>
             )}
@@ -384,8 +384,8 @@ export function SuggestionCard({
                 }}
                 placeholder="Write your response..."
                 className={cn(
-                  sansFont.className,
-                  'min-h-[44px] w-full resize-none overflow-hidden rounded-md border border-blue-200/70 bg-background px-4 py-3 text-sm text-slate-900 focus:outline-none focus:ring-1 focus:ring-blue-300 dark:border-blue-500/30 dark:text-slate-100'
+                  dmSans.className,
+                  'min-h-[44px] w-full resize-none overflow-hidden rounded-md border border-blue-200/70 bg-background px-4 py-3 text-base md:text-[17px] text-slate-900 focus:outline-none focus:ring-1 focus:ring-blue-300 dark:border-blue-500/30 dark:text-slate-100'
                 )}
               />
               <AttachmentPreviewGrid
@@ -457,8 +457,8 @@ export function SuggestionCard({
                 }}
                 placeholder="Write your follow-up message..."
                 className={cn(
-                  sansFont.className,
-                  'min-h-[44px] w-full resize-none overflow-hidden rounded-md border border-emerald-250 bg-background px-4 py-3 text-sm text-slate-900 focus:outline-none focus:ring-1 focus:ring-emerald-300 dark:border-emerald-500/30 dark:text-slate-100'
+                  dmSans.className,
+                  'min-h-[44px] w-full resize-none overflow-hidden rounded-md border border-emerald-250 bg-background px-4 py-3 text-base md:text-[17px] text-slate-900 focus:outline-none focus:ring-1 focus:ring-emerald-300 dark:border-emerald-500/30 dark:text-slate-100'
                 )}
               />
               <AttachmentPreviewGrid

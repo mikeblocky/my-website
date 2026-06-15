@@ -32,6 +32,18 @@
 	--font-sans: "DM Sans", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 	--font-mono: "Google Sans Code", "SFMono-Regular", "Cascadia Code", Consolas, monospace;
 	--font-code: "Google Sans Code", "Cascadia Code", Consolas, monospace;
+  
+  /* Typographic scale (scaled up) */
+  --font-size-2xs: 0.75rem;     /* 12px - auxiliary metadata, dates */
+  --font-size-xs: 0.8125rem;    /* 13px - small labels, minor tags */
+  --font-size-sm: 0.9375rem;    /* 15px - button text, tabs, navigation */
+  --font-size-base: 1.0625rem;  /* 17px - default body copy */
+  --font-size-md: 1.2rem;       /* 19.2px - card headings, sub-sections */
+  --font-size-lg: 1.375rem;     /* 22px - main section headers */
+  --font-size-xl: 1.75rem;      /* 28px - page title/headers */
+  --font-size-2xl: clamp(2rem, 3.5vw, 2.5rem);  /* 32px-40px - visual hero */
+  --font-size-3xl: clamp(2.5rem, 5.5vw, 4.5rem); /* 40px-72px - brand display */
+
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-soft: cubic-bezier(0.2, 0.82, 0.22, 1);
   --ease-snap: cubic-bezier(0.22, 1, 0.36, 1);

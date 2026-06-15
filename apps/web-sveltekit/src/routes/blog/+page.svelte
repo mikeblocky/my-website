@@ -11,13 +11,13 @@
   path="/blog"
   image="/blog/opengraph-image.png"
   twitterImage="/blog/twitter-image.png"
-  description="A collection of notes and articles covering machine learning, programming, and personal thoughts."
+  description="A collection of notes and blogs covering machine learning, programming, and personal thoughts."
 />
 
 <PageIntro
   eyebrow="Journal"
   title="Blog"
-  description="A collection of notes and articles covering machine learning, programming, and personal thoughts."
+  description="A collection of notes and blogs covering machine learning, programming, and personal thoughts."
 />
 
 <BlogList posts={blogPosts} />

@@ -1,7 +1,7 @@
 'use client'
 
 import { FormEvent, useState } from 'react'
-import { sansFont } from '@/styles/fonts/fonts'
+import { sansFont, dmSans } from '@/styles/fonts/fonts'
 import { cn } from '@/lib/utils/utils'
 import { Button } from '@/components/ui/primitives/button'
 import { AttachmentPreviewGrid } from '@/components/ui/attachments/AttachmentPreviewGrid'
@@ -70,8 +70,8 @@ export function DrawPromptForm({
           onChange={(event) => setAuthor(event.target.value)}
           placeholder="Your alias (optional)"
           className={cn(
-            sansFont.className,
-            "w-full bg-transparent text-sm font-semibold text-slate-800 placeholder:text-muted-foreground/60 focus:outline-none dark:text-slate-100"
+            dmSans.className,
+            "w-full bg-transparent text-base font-semibold text-slate-800 placeholder:text-muted-foreground/60 focus:outline-none dark:text-slate-100"
           )}
         />
       </div>
@@ -88,8 +88,8 @@ export function DrawPromptForm({
           placeholder="Suggest a drawing prompt... (describe characters, actions, or series here)"
           rows={1}
           className={cn(
-            sansFont.className,
-            "w-full bg-transparent py-2 text-base text-slate-900 placeholder:text-slate-400 focus:outline-none dark:text-slate-100 dark:placeholder:text-slate-600 resize-none overflow-hidden min-h-[100px]"
+            dmSans.className,
+            "w-full bg-transparent py-2 text-base text-slate-900 placeholder:text-muted-foreground/60 focus:outline-none dark:text-slate-100 dark:placeholder:text-slate-600 resize-none overflow-hidden min-h-[100px]"
           )}
         />
       </div>
@@ -107,7 +107,7 @@ export function DrawPromptForm({
           <AttachmentUploadButton
             onFiles={(files) => files.forEach(file => handleImageUpload(file))}
             iconSize={13}
-            className={cn(sansFont.className, 'gap-1.5 text-xs font-semibold')}
+            className={cn(dmSans.className, 'gap-1.5 text-sm font-semibold')}
             accent="violet"
           >
             Add images
@@ -118,7 +118,7 @@ export function DrawPromptForm({
           type="submit" 
           size="sm"
           disabled={!body.trim() || isPending || isCooldownActive}
-          className="w-full sm:w-auto h-9 px-4.5 text-xs font-semibold rounded-md pride-button"
+          className={cn(dmSans.className, "w-full sm:w-auto h-9 px-4.5 text-sm font-semibold rounded-md pride-button")}
           title={isCooldownActive ? `You can send another prompt in ${cooldownLabel}` : undefined}
         >
           {isCooldownActive ? cooldownLabel : 'Send prompt'}

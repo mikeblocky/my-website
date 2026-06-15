@@ -261,7 +261,7 @@ article code {
 
 .article-toc-label {
   font-family: var(--font-mono);
-  font-size: 0.5625rem;
+  font-size: var(--font-size-2xs);
   letter-spacing: 0.25em;
   text-transform: uppercase;
   color: hsl(var(--muted-foreground) / 0.4);
@@ -302,7 +302,7 @@ article code {
 
 .article-toc-num {
   font-family: var(--font-mono);
-  font-size: 0.5625rem;
+  font-size: var(--font-size-2xs);
   flex-shrink: 0;
   margin-top: 0.1875rem;
   transition: color 180ms ease;
@@ -316,7 +316,7 @@ article code {
 
 .article-toc-text {
   font-family: var(--font-sans);
-  font-size: 0.75rem;
+  font-size: var(--font-size-xs);
   line-height: 1.4;
   transition: color 180ms ease;
   color: hsl(var(--muted-foreground) / 0.6);
@@ -430,7 +430,7 @@ article code {
 
 .article-mobile-toc-count {
   font-family: var(--font-mono);
-  font-size: 0.6875rem;
+  font-size: var(--font-size-xs);
   font-weight: 700;
   flex-shrink: 0;
   margin-top: 0.1875rem;
@@ -442,7 +442,7 @@ article code {
 
 .article-mobile-toc-title {
   font-family: var(--font-sans);
-  font-size: 0.875rem;
+  font-size: var(--font-size-base);
   font-weight: 600;
   color: hsl(var(--foreground));
   display: -webkit-box;
@@ -503,14 +503,14 @@ article code {
 
 .article-mobile-toc-nav-num {
   font-family: var(--font-mono);
-  font-size: 0.6875rem;
+  font-size: var(--font-size-xs);
   flex-shrink: 0;
   margin-top: 0.1875rem;
 }
 
 .article-mobile-toc-nav-label {
   font-family: var(--font-sans);
-  font-size: 0.875rem;
+  font-size: var(--font-size-base);
   font-weight: 500;
   line-height: 1.35;
   flex: 1;
@@ -531,7 +531,7 @@ article code {
 
 .article-line-rail-label {
   color: hsl(var(--muted-foreground) / 0.45);
-  font-size: 0.5625rem;
+  font-size: var(--font-size-2xs);
   letter-spacing: 0.25em;
   user-select: none;
 }
@@ -606,7 +606,7 @@ article code {
   right: 1.75rem;
   z-index: 3;
   color: hsl(var(--pride-glow-val));
-  font-size: 0.6875rem;
+  font-size: var(--font-size-xs);
   font-weight: 700;
   transform: translateY(-50%);
   pointer-events: none;
@@ -616,18 +616,10 @@ article code {
 .article-line-rail-total {
   margin-top: 0.25rem;
   color: hsl(var(--muted-foreground) / 0.4);
-  font-size: 0.625rem;
+  font-size: var(--font-size-2xs);
   text-transform: lowercase;
   user-select: none;
 }
-
-.text-size-xs { font-size: clamp(0.875rem, 0.84rem + 0.15vw, 1rem); }
-.text-size-sm { font-size: clamp(1rem, 0.95rem + 0.18vw, 1.125rem); }
-.text-size-md { font-size: clamp(1.125rem, 1.05rem + 0.22vw, 1.25rem); }
-.text-size-base { font-size: clamp(1.25rem, 1.16rem + 0.24vw, 1.375rem); }
-.text-size-lg { font-size: clamp(1.375rem, 1.28rem + 0.28vw, 1.5rem); }
-.text-size-xl { font-size: clamp(1.625rem, 1.48rem + 0.38vw, 1.875rem); }
-.text-size-2xl { font-size: clamp(2rem, 1.78rem + 0.7vw, 2.5rem); }
 
 .text-heading {
   color: hsl(var(--foreground));

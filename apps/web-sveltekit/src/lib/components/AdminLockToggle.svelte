@@ -70,14 +70,14 @@
   </button>
 
   {#if showPasscodeInput && !isAdminMode}
-    <div class="flex w-[90px] items-center overflow-hidden">
+    <div class="flex w-[110px] items-center overflow-hidden">
       <input
         type="password"
         value={passcode}
         on:input={handleInput}
         on:keydown={handleKeyDown}
         placeholder="Passcode"
-        class="w-20 rounded-md border border-slate-200 bg-background px-2 py-0.5 text-[10px] text-slate-900 focus:outline-none focus:ring-1 dark:border-slate-800 dark:text-slate-100 {styles.ring}"
+        class="w-full rounded-md border border-slate-200 bg-background px-2.5 py-1 text-xs text-slate-900 focus:outline-none focus:ring-1 dark:border-slate-800 dark:text-slate-100 {styles.ring}"
       />
     </div>
   {/if}

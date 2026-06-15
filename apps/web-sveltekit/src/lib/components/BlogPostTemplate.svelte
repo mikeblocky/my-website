@@ -14,6 +14,8 @@
   export let slug = '';
   export let themes: string[] = [];
   export let contentClassName = '';
+  export let parentLabel = 'Journal';
+  export let parentHref = '/journal';
 
   let readCount: number | null = null;
 
@@ -43,7 +45,7 @@
 
 <div class="relative w-full">
   <BaseContainer size="xl" paddingX="md" paddingY="lg">
-    <StackVertical gap="md">
+    <div class="flex flex-col gap-6">
       <!-- Breadcrumb Header -->
       <section class="page-intro">
         <div class="section-header-top">
@@ -53,7 +55,7 @@
               Home
             </a>
             <span aria-hidden="true">/</span>
-            <a href="/journal">Journal</a>
+            <a href={parentHref}>{parentLabel}</a>
             <span aria-hidden="true">/</span>
             <span class="truncate max-w-[150px] sm:max-w-[240px] md:max-w-[350px] lg:max-w-[450px] inline-block align-bottom" title={title}>{title}</span>
           </nav>
@@ -103,7 +105,7 @@
 
         <ArticleLineRail articleId="content" />
       </div>
-    </StackVertical>
+    </div>
   </BaseContainer>
 
   <SiteFooter color="blue" />

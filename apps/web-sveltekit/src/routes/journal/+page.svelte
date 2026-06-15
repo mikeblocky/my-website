@@ -12,7 +12,7 @@
   path="/journal"
   image="/blog/opengraph-image.png"
   twitterImage="/blog/twitter-image.png"
-  description="A personal collection of articles, notes, and logs that I write over time."
+  description="A personal collection of blogs, notes, and logs that I write over time."
 />
 
 <BaseContainer size="lg" paddingX="md" paddingY="lg">
@@ -20,7 +20,7 @@
     <PageIntro
       eyebrow="Journal"
       title="Journal"
-      description="A personal collection of articles, notes, and logs that I write over time."
+      description="A personal collection of blogs, notes, and logs that I write over time."
     />
 
     <JournalShell />

@@ -82,7 +82,7 @@
 
   $: getPlayerBottomOffset = () => '72px';
   $: playerBarVisible = !!$spotifyCurrentlyPlaying && !isSpotifyCollapsed;
-  $: moreMenuBottom = playerBarVisible ? '9.5rem' : '5.25rem';
+  $: moreMenuBottom = '5.25rem';
 </script>
 
 <div class="sm:hidden select-none">
@@ -93,7 +93,7 @@
       <button
         type="button"
         on:click={() => (isSpotifyCollapsed = false)}
-        class="fixed right-4 z-50 w-12 h-12 rounded-full overflow-hidden focus:outline-none bg-slate-100/70 dark:bg-slate-800/60 border border-white/20 dark:border-white/10 backdrop-blur-2xl active:scale-[0.97] transition-transform duration-180 ease-[cubic-bezier(0.22,1,0.36,1)]"
+        class="mobile-spotify-collapsed-btn"
         style="bottom: calc(1.5rem + env(safe-area-inset-bottom, 0px) + {getPlayerBottomOffset()});"
         title="Expand currently playing"
         transition:fly={{ x: 12, duration: 260, opacity: 0 }}
@@ -102,60 +102,55 @@
           <img
             src={$spotifyCurrentlyPlaying.artworkUrl}
             alt={$spotifyCurrentlyPlaying.album || 'artwork'}
-            class="w-full h-full object-cover"
             style="animation: spin 12s linear infinite"
           />
         {:else}
-          <Music class="w-4 h-4 text-muted-foreground m-auto" />
+          <Music class="mobile-spotify-fallback-icon" />
         {/if}
-        <div class="absolute inset-0 bg-emerald-500/5 mix-blend-overlay pointer-events-none"></div>
+        <div class="mobile-spotify-art-overlay"></div>
       </button>
     {:else}
       <div
-        class="fixed left-1/2 w-[calc(100%-2rem)] max-w-md z-50 -translate-x-1/2"
+        class="mobile-spotify-player-wrap"
         style="bottom: calc(1rem + env(safe-area-inset-bottom, 0px) + {getPlayerBottomOffset()});"
         transition:fly={{ y: 14, duration: 300, opacity: 0 }}
       >
-        <div
-          class="flex items-center justify-between p-2.5 rounded-2xl relative overflow-hidden bg-white/55 dark:bg-slate-950/55 backdrop-blur-2xl border border-white/[0.14] dark:border-white/[0.08]"
-        >
+        <div class="mobile-spotify-player">
           <!-- Shifting Rainbow Gradient Background Tint Overlay -->
           <div
-            class="absolute inset-0 opacity-[0.05] dark:opacity-[0.08] pointer-events-none"
+            class="mobile-spotify-rainbow"
             style="background-image: linear-gradient(135deg, var(--pride-colors-repeat)); background-size: 200% 200%; animation: pride-shift 12s ease-in-out infinite;"
           ></div>
-
+ 
           <!-- Link part (artwork & text) -->
           <a
             href={$spotifyCurrentlyPlaying.songUrl}
             target="_blank"
             rel="noopener noreferrer"
-            class="flex items-center gap-3 min-w-0 flex-1 z-10 focus:outline-none active:scale-[0.99] transition-transform duration-180 ease-[cubic-bezier(0.22,1,0.36,1)]"
           >
-            <div class="relative w-8 h-8 rounded-full overflow-hidden shrink-0 bg-slate-100 dark:bg-slate-800 border border-slate-200/20 dark:border-slate-800/20 flex items-center justify-center">
+            <div class="mobile-spotify-art">
               {#if $spotifyCurrentlyPlaying.artworkUrl}
                 <img
                   src={$spotifyCurrentlyPlaying.artworkUrl}
                   alt={$spotifyCurrentlyPlaying.album || 'artwork'}
-                  class="w-full h-full object-cover"
                   style="animation: spin 12s linear infinite"
                 />
               {:else}
-                <Music class="w-3.5 h-3.5 text-muted-foreground" />
+                <Music class="mobile-spotify-fallback-icon-small" />
               {/if}
-              <div class="absolute inset-0 bg-emerald-500/5 mix-blend-overlay pointer-events-none"></div>
+              <div class="mobile-spotify-art-overlay"></div>
             </div>
-
-            <div class="min-w-0 flex-1">
-              <p class="text-[11px] font-bold text-foreground truncate lowercase font-sans">
+ 
+            <div class="mobile-spotify-details">
+              <p class="mobile-spotify-song">
                 {$spotifyCurrentlyPlaying.song}
               </p>
-              <p class="text-[9px] text-muted-foreground truncate lowercase font-mono">
+              <p class="mobile-spotify-artist">
                 listening to: {$spotifyCurrentlyPlaying.artist}
               </p>
             </div>
           </a>
-
+ 
           <!-- Collapse button -->
           <button
             type="button"
@@ -164,10 +159,10 @@
               e.stopPropagation();
               isSpotifyCollapsed = true;
             }}
-            class="p-1 text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200 cursor-pointer z-20 focus:outline-none ml-2 active:scale-95 transition-transform duration-180 ease-[cubic-bezier(0.22,1,0.36,1)] shrink-0 border-0 bg-transparent"
+            class="mobile-spotify-close"
             title="Collapse player"
           >
-            <ChevronDown class="h-4.5 w-4.5" />
+            <ChevronDown />
           </button>
         </div>
       </div>

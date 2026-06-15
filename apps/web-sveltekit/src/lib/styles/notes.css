@@ -3,7 +3,7 @@
 .weekly-reflections-list summary span,
 .simple-link-stack,
 .utensil-list {
-  font-size: 1.0625rem;
+  font-size: var(--font-size-base);
 }
 
 @media (min-width: 768px) {
@@ -28,7 +28,7 @@
 
 .notes-group h2 {
   font-family: var(--font-mono);
-  font-size: 0.8125rem;
+  font-size: var(--font-size-xs);
   font-weight: 600;
   letter-spacing: 0.05em;
   color: hsl(var(--foreground));
@@ -37,7 +37,7 @@
 .notes-entry {
   display: block;
   font-family: var(--font-mono);
-  font-size: 0.8125rem;
+  font-size: var(--font-size-xs);
   padding: 0.5rem 0 0.5rem 1.5rem;
   color: hsl(var(--muted-foreground));
   border-left: 1px solid hsl(var(--border) / 0.5);
@@ -90,7 +90,7 @@
 .section-link-item strong,
 .note-row h2 {
   color: hsl(var(--foreground));
-  font-size: 1.125rem;
+  font-size: var(--font-size-md);
   font-weight: 500;
   line-height: 1.25;
   transition: color 200ms ease;
@@ -101,7 +101,7 @@
 .utensil-list p,
 .simple-link-stack p {
   color: hsl(var(--muted-foreground));
-  font-size: 0.875rem;
+  font-size: var(--font-size-base);
   line-height: 1.625;
 }
 
@@ -136,7 +136,7 @@
 .note-row small {
   color: hsl(var(--muted-foreground));
   font-family: var(--font-mono);
-  font-size: 0.75rem;
+  font-size: var(--font-size-2xs);
 }
 
 .note-row hr {
@@ -167,7 +167,7 @@
   position: relative;
   color: hsl(var(--foreground));
   font-family: var(--font-mono);
-  font-size: 0.9375rem;
+  font-size: var(--font-size-sm);
   font-weight: 600;
   letter-spacing: 0.025em;
   transition: color 200ms ease;
@@ -209,7 +209,7 @@
   border-left: 1px solid rgb(229 231 235 / 0.5);
   color: rgb(75 85 99 / 0.9);
   font-family: var(--font-mono);
-  font-size: 0.8125rem;
+  font-size: var(--font-size-xs);
   padding: 0.5rem 0 0.5rem 1.5rem;
   transition:
     border-color 200ms ease,

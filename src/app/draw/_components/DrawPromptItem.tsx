@@ -7,7 +7,7 @@ import { ImageGallery } from '@/components/ui/ImageGallery'
 import { StackVertical } from '@/components/layout/layout-stack/layout-stack'
 import { Button } from '@/components/ui/primitives/button'
 import { Camera, CornerDownRight, MessageSquareReply, Bell, Share2 } from 'lucide-react'
-import { sansFont, monoFont } from '@/styles/fonts/fonts'
+import { sansFont, monoFont, dmSans } from '@/styles/fonts/fonts'
 import { cn } from '@/lib/utils/utils'
 import { prepareImageForUpload } from '@/lib/images/prepare-upload'
 import { MAX_ATTACHMENT_COUNT } from '@/lib/images/attachment-limits'
@@ -186,7 +186,7 @@ export function DrawPromptItem({
           {/* Right Column: Content */}
           <div className="flex-1 min-w-0">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-1.5 gap-1 sm:gap-2">
-              <span className={cn(monoFont.className, "text-[11px] font-bold tracking-wider text-violet-600 dark:text-violet-300 truncate")}>
+              <span className={cn(dmSans.className, "text-sm font-bold tracking-wider text-violet-600 dark:text-violet-300 truncate")}>
                 {prompt.author}
               </span>
               <div className="flex items-center gap-1">
@@ -196,7 +196,7 @@ export function DrawPromptItem({
                     <span className="absolute top-0 right-0 h-2 w-2 rounded-full bg-violet-600 border-2 border-white dark:border-slate-900 animate-pulse" />
                   </div>
                 </div>
-                <span className={cn(monoFont.className, "text-[10px] sm:text-[11px] text-muted-foreground whitespace-nowrap shrink-0")}>
+                <span className={cn(dmSans.className, "text-xs text-muted-foreground whitespace-nowrap shrink-0")}>
                   <span className="hidden sm:inline">{formatDate(prompt.createdAt)}</span>
                   <span className="inline sm:hidden">{formatDateCompact(prompt.createdAt)}</span>
                 </span>
@@ -219,7 +219,7 @@ export function DrawPromptItem({
               </div>
             )}
             
-            <div className={cn(sansFont.className, "text-lg text-slate-800 dark:text-slate-200 leading-relaxed font-medium mb-3 break-words")}>
+            <div className={cn(dmSans.className, "text-lg text-slate-800 dark:text-slate-200 leading-relaxed font-medium mb-3 break-words")}>
               <RichText text={prompt.body} theme="violet" />
             </div>
 
@@ -295,7 +295,7 @@ export function DrawPromptItem({
                 }}
                 placeholder="Write your answer..."
                 rows={1}
-                className={cn(sansFont.className, "min-h-[44px] w-full resize-none overflow-hidden rounded-md border border-border bg-background px-4 py-3 text-sm text-slate-900 focus:outline-none focus:ring-1 focus:ring-violet-350 dark:text-slate-100")}
+                className={cn(dmSans.className, "min-h-[44px] w-full resize-none overflow-hidden rounded-md border border-border bg-background px-4 py-3 text-base md:text-[17px] text-slate-900 focus:outline-none focus:ring-1 focus:ring-violet-350 dark:text-slate-100")}
               />
               <AttachmentPreviewGrid
                 urls={replyImageUrls}
@@ -353,7 +353,7 @@ export function DrawPromptItem({
                 }}
                 placeholder="Ask a follow-up..."
                 rows={1}
-                className={cn(sansFont.className, "min-h-[44px] w-full resize-none overflow-hidden rounded-md border border-emerald-250 bg-background px-4 py-3 text-sm text-slate-900 focus:outline-none focus:ring-1 focus:ring-emerald-350 dark:border-emerald-500/30 dark:text-slate-100")}
+                className={cn(dmSans.className, "min-h-[44px] w-full resize-none overflow-hidden rounded-md border border-emerald-250 bg-background px-4 py-3 text-base md:text-[17px] text-slate-900 focus:outline-none focus:ring-1 focus:ring-emerald-350 dark:border-emerald-500/30 dark:text-slate-100")}
               />
               <AttachmentPreviewGrid
                 urls={followUpImageUrls}

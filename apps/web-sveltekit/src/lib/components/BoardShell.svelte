@@ -85,9 +85,9 @@
   <section class="space-y-6">
     <div class="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 border-b border-border/60 pb-3 sm:flex-nowrap">
       <div class="flex items-center gap-2">
-        <h3 class="mt-0 mb-0 text-lg font-semibold text-heading">
+        <h2 class="mt-0 mb-0 text-xl font-bold text-heading">
           {title}
-        </h3>
+        </h2>
 
         <AdminLockToggle
           bind:isAdminMode

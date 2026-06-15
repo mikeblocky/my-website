@@ -20,7 +20,7 @@
   background: transparent;
   color: hsl(var(--foreground));
   font-family: var(--font-sans);
-  font-size: 0.875rem;
+  font-size: var(--font-size-base);
   font-weight: 400;
   padding: 0.75rem 1rem;
   outline: none;
@@ -41,6 +41,7 @@
 .theme-filter-strip button {
   flex: 0 0 auto;
   font-family: var(--font-sans);
+  text-transform: lowercase;
 }
 
 .theme-filter-strip button.active {
@@ -101,7 +102,7 @@
 
 .blog-count-label {
   display: inline-block;
-  font-size: 0.75rem;
+  font-size: var(--font-size-sm);
   font-weight: 500;
   color: hsl(var(--muted-foreground));
 }
@@ -137,13 +138,14 @@
 .activity-panel {
   display: grid;
   gap: 0.75rem;
-  padding: 1rem;
+  padding-block: 1rem;
+  padding-inline: 0;
 }
 
 .blog-search-shell article span {
   color: hsl(var(--pride-glow-val));
   font-family: var(--font-mono);
-  font-size: 0.625rem;
+  font-size: var(--font-size-2xs);
   font-weight: 700;
   letter-spacing: 0.08em;
 }
@@ -152,7 +154,7 @@
 .journal-note-list h3 {
   margin: 0;
   color: hsl(var(--foreground));
-  font-size: 1.125rem;
+  font-size: var(--font-size-md);
   font-weight: 700;
 }
 
@@ -161,7 +163,7 @@
 .activity-panel p {
   margin: 0;
   color: hsl(var(--muted-foreground));
-  font-size: 0.875rem;
+  font-size: var(--font-size-base);
   line-height: 1.6;
 }
 
@@ -176,29 +178,42 @@
   gap: 0.4rem;
 }
 
-.journal-note-group h4,
-.stationery-panel h3,
-.activity-panel h3 {
+.journal-note-group h4 {
   margin: 0;
   color: hsl(var(--foreground));
-  font-size: 0.95rem;
+  font-size: var(--font-size-sm);
   font-weight: 750;
   letter-spacing: 0;
 }
 
-.journal-note-list a,
-.stationery-panel a {
+.stationery-panel h3,
+.activity-panel h3 {
+  margin: 0;
+  color: hsl(var(--foreground));
+  font-size: var(--font-size-md);
+  font-weight: 750;
+  letter-spacing: 0;
+}
+
+.journal-note-grid {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.journal-note-list a {
   display: block;
-  border: 1px solid transparent;
+  border: 1px solid hsl(var(--border) / 0.6);
   border-radius: 0.375rem;
-  color: rgb(71 85 105);
-  font-family: var(--font-mono);
-  font-size: 0.8125rem;
-  padding: 0.375rem 0.75rem;
+  background: hsl(var(--background) / 0.5);
+  color: hsl(var(--foreground));
+  font-family: var(--font-sans);
+  font-size: var(--font-size-sm);
+  padding: 0.75rem 1rem;
   transition:
     border-color 150ms ease,
     background-color 150ms ease,
-    color 150ms ease;
+    color 150ms ease,
+    transform 150ms ease;
 }
 
 .journal-note-list a span,
@@ -210,20 +225,20 @@
   margin-top: 0.1rem;
   color: hsl(var(--muted-foreground));
   font-family: var(--font-sans);
-  font-size: 0.75rem;
+  font-size: var(--font-size-2xs);
   line-height: 1.45;
 }
 
-.dark .journal-note-list a,
-.dark .stationery-panel a {
-  color: rgb(148 163 184);
+.dark .journal-note-list a {
+  background: hsl(var(--background) / 0.3);
+  color: hsl(var(--foreground));
 }
 
-.journal-note-list a:hover,
-.stationery-panel a:hover {
-  border-color: hsl(var(--pride-glow-val) / 0.2);
-  background: hsl(var(--pride-glow-val) / 0.05);
+.journal-note-list a:hover {
+  border-color: hsl(var(--pride-glow-val) / 0.3);
+  background: hsl(var(--background) / 0.75);
   color: hsl(var(--pride-glow-val));
+  transform: translateY(-1px);
 }
 
 .utensil-grid {
@@ -236,10 +251,24 @@
   display: grid;
   align-content: start;
   gap: 0.5rem;
-  border: 1px solid hsl(var(--border) / 0.55);
-  border-radius: 0.5rem;
+  border: 1px solid hsl(var(--border) / 0.6);
+  border-radius: 0.375rem;
   background: hsl(var(--background) / 0.5);
-  padding: 0.9rem;
+  padding: 1rem;
+  transition:
+    background-color 150ms ease,
+    border-color 150ms ease,
+    transform 150ms ease;
+}
+
+.dark .utensil-grid article {
+  background: hsl(var(--background) / 0.3);
+}
+
+.utensil-grid article:hover {
+  background: hsl(var(--background) / 0.75);
+  border-color: hsl(var(--pride-glow-val) / 0.3);
+  transform: translateY(-1px);
 }
 
 .utensil-grid article .interact-icon {
@@ -251,7 +280,7 @@
 .activity-list h4 {
   margin: 0;
   color: hsl(var(--foreground));
-  font-size: 0.9rem;
+  font-size: var(--font-size-sm);
   font-weight: 750;
 }
 
@@ -259,11 +288,29 @@
 .activity-list p {
   margin: 0;
   color: hsl(var(--muted-foreground));
-  font-size: 0.8125rem;
+  font-size: var(--font-size-xs);
   line-height: 1.55;
 }
 
-.utensil-grid a,
+.utensil-grid a {
+  display: inline-flex;
+  align-items: center;
+  color: hsl(var(--pride-glow-val));
+  font-family: var(--font-mono);
+  font-size: var(--font-size-2xs);
+  font-weight: 700;
+  text-decoration: none;
+  margin-top: 0.25rem;
+  transition: opacity 150ms ease;
+  width: fit-content;
+  padding-inline: 0;
+}
+
+.utensil-grid a:hover {
+  opacity: 0.8;
+  text-decoration: underline;
+}
+
 .activity-list a {
   width: fit-content;
   padding-inline: 0;
@@ -297,7 +344,7 @@
 .activity-list small {
   color: hsl(var(--pride-glow-val));
   font-family: var(--font-mono);
-  font-size: 0.625rem;
+  font-size: var(--font-size-2xs);
   font-weight: 700;
 }
 
@@ -311,13 +358,13 @@
 .journal-empty h3 {
   margin: 0;
   color: hsl(var(--foreground));
-  font-size: 1rem;
+  font-size: var(--font-size-md);
 }
 
 .journal-empty p {
   margin: 0;
   color: hsl(var(--muted-foreground));
-  font-size: 0.875rem;
+  font-size: var(--font-size-base);
 }
 
 .quiet-room {
@@ -350,7 +397,7 @@
   border-radius: 0.375rem;
   cursor: pointer;
   font-family: var(--font-mono);
-  font-size: 0.75rem;
+  font-size: var(--font-size-sm);
   font-weight: 600;
   padding: 0.5rem 1.5rem;
   transition:
@@ -371,7 +418,7 @@
   margin: 0;
   color: hsl(var(--muted-foreground));
   font-family: var(--font-mono);
-  font-size: 0.625rem;
+  font-size: var(--font-size-2xs);
 }
 
 .pet-gift-panel {
@@ -402,7 +449,7 @@
 .pet-divider span {
   color: hsl(var(--pride-glow-val));
   font-family: var(--font-mono);
-  font-size: 0.625rem;
+  font-size: var(--font-size-2xs);
   letter-spacing: 0.05em;
 }
 

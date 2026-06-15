@@ -144,7 +144,7 @@
 .mobile-dock-label {
   margin-top: 0.125rem;
   font-family: var(--font-mono);
-  font-size: 8px;
+  font-size: 10px;
   font-weight: 600;
   letter-spacing: 0.05em;
   transition:
@@ -193,7 +193,7 @@
   background: transparent;
   color: rgb(255 255 255 / 0.88) !important;
   font-family: var(--font-mono);
-  font-size: 0.875rem;
+  font-size: var(--font-size-sm);
   letter-spacing: 0.05em;
   outline: none;
   user-select: none;
@@ -230,4 +230,208 @@
 .mobile-more-menu a.active .mobile-more-icon {
   color: hsl(var(--pride-glow-val)) !important;
   transform: scale(1.08);
+}
+
+/* Responsive mobile dock height and touch targets */
+.mobile-dock {
+  height: clamp(3.5rem, 8vw, 4rem);
+}
+
+@media (min-width: 420px) {
+  .mobile-dock {
+    height: 3.85rem;
+    border-radius: 1.15rem;
+  }
+  .mobile-dock-icon {
+    width: 21px;
+    height: 21px;
+  }
+  .mobile-dock-label {
+    font-size: 11px;
+  }
+}
+
+/* ────────────────── SPOTIFY FLOATING PLAYER ────────────────── */
+.mobile-spotify-collapsed-btn {
+  position: fixed;
+  right: 1rem;
+  z-index: 35;
+  width: clamp(3.2rem, 13vw, 3.8rem);
+  height: clamp(3.2rem, 13vw, 3.8rem);
+  border-radius: 9999px;
+  overflow: hidden;
+  border: 1px solid rgb(255 255 255 / 0.14);
+  background: rgb(255 255 255 / 0.7);
+  backdrop-filter: blur(20px);
+  cursor: pointer;
+  outline: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 180ms var(--ease-emotional);
+}
+.dark .mobile-spotify-collapsed-btn {
+  border-color: rgb(255 255 255 / 0.08);
+  background: rgb(15 23 42 / 0.6);
+}
+.mobile-spotify-collapsed-btn:active {
+  transform: scale(0.95);
+}
+.mobile-spotify-collapsed-btn img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.mobile-spotify-player-wrap {
+  position: fixed;
+  left: 50%;
+  z-index: 35;
+  transform: translateX(-50%);
+  width: calc(100% - 2rem);
+  max-width: 28rem;
+}
+
+.mobile-spotify-player {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: clamp(0.7rem, 2.8vw, 0.95rem) clamp(0.85rem, 3.2vw, 1.25rem);
+  border-radius: 1rem;
+  overflow: hidden;
+  background: rgb(255 255 255 / 0.55);
+  backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgb(255 255 255 / 0.14);
+}
+.dark .mobile-spotify-player {
+  background: rgb(2 6 23 / 0.55);
+  border-color: rgb(255 255 255 / 0.08);
+}
+
+@media (min-width: 420px) {
+  .mobile-spotify-player {
+    border-radius: 1.15rem;
+  }
+}
+
+.mobile-spotify-rainbow {
+  position: absolute;
+  inset: 0;
+  opacity: 0.05;
+  pointer-events: none;
+}
+.dark .mobile-spotify-rainbow {
+  opacity: 0.08;
+}
+
+.mobile-spotify-player a {
+  display: flex;
+  align-items: center;
+  gap: clamp(0.65rem, 2.2vw, 0.95rem);
+  min-width: 0;
+  flex: 1;
+  text-decoration: none;
+  z-index: 10;
+  transition: transform 180ms var(--ease-emotional);
+}
+.mobile-spotify-player a:active {
+  transform: scale(0.99);
+}
+
+.mobile-spotify-art {
+  position: relative;
+  width: clamp(2.4rem, 10vw, 3rem);
+  height: clamp(2.4rem, 10vw, 3rem);
+  border-radius: 9999px;
+  overflow: hidden;
+  flex-shrink: 0;
+  background: rgb(241 245 249);
+  border: 1px solid rgb(255 255 255 / 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.dark .mobile-spotify-art {
+  background: rgb(30 41 59);
+}
+.mobile-spotify-art img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.mobile-spotify-art-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgb(16 185 129 / 0.05);
+  mix-blend-mode: overlay;
+  pointer-events: none;
+}
+
+.mobile-spotify-details {
+  min-width: 0;
+  flex: 1;
+  display: grid;
+  gap: 0.15rem;
+}
+
+.mobile-spotify-song {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: clamp(11.5px, 2.7vw, 13px);
+  font-weight: 700;
+  color: hsl(var(--foreground));
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-transform: lowercase;
+}
+
+.mobile-spotify-artist {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: clamp(9.5px, 2.3vw, 11px);
+  color: hsl(var(--muted-foreground));
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-transform: lowercase;
+}
+
+.mobile-spotify-close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.25rem;
+  color: rgb(100 116 139);
+  cursor: pointer;
+  z-index: 20;
+  margin-left: 0.5rem;
+  flex-shrink: 0;
+  border: 0;
+  background: transparent;
+  outline: none;
+  transition: transform 180ms var(--ease-emotional);
+}
+.dark .mobile-spotify-close {
+  color: rgb(148 163 184);
+}
+.mobile-spotify-close:active {
+  transform: scale(0.9);
+}
+.mobile-spotify-close svg {
+  width: 1.15rem;
+  height: 1.15rem;
+}
+
+.mobile-spotify-fallback-icon {
+  width: 1.25rem;
+  height: 1.25rem;
+  color: hsl(var(--muted-foreground));
+}
+.mobile-spotify-fallback-icon-small {
+  width: 1.05rem;
+  height: 1.05rem;
+  color: hsl(var(--muted-foreground));
 }

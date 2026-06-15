@@ -66,50 +66,56 @@
     }
   }
 
-  function handleInput(event: Event) {
-    const textarea = event.target as HTMLTextAreaElement;
-    textarea.style.height = 'auto';
-    textarea.style.height = `${textarea.scrollHeight}px`;
+  function autoResize(node: HTMLTextAreaElement) {
+    const update = () => {
+      node.style.height = 'auto';
+      node.style.height = `${node.scrollHeight}px`;
+    };
+    update();
+    node.addEventListener('input', update);
+    return {
+      destroy() {
+        node.removeEventListener('input', update);
+      }
+    };
   }
 </script>
 
 <div
-  class="group/bubble relative flex gap-3 sm:gap-4 text-base text-left transition-all duration-300 pl-0 pr-1 py-1 rounded-xl {isEditing ? `ring-1.5 ${themeClasses.ring} bg-slate-500/5 dark:bg-stone-500/5 p-4` : ''}"
+  class="group/bubble relative flex gap-3 sm:gap-4 text-base text-left transition-all duration-300 pl-0 pr-1 py-1 rounded-xl"
 >
-  {#if !isEditing}
-    <div class="flex flex-col items-center shrink-0">
-      <div class="w-9 sm:w-12 flex justify-center">
-        <div class="w-9 h-9 sm:w-12 sm:h-12 rounded-full border border-black/[0.04] dark:border-white/[0.04] overflow-hidden select-none">
-          <img 
-            src={isAdmin ? "/a.jpg" : "/q.jpg"} 
-            alt={isAdmin ? "Response Avatar" : "Question Avatar"} 
-            class="w-full h-full object-cover" 
-          />
-        </div>
+  <div class="flex flex-col items-center shrink-0">
+    <div class="w-9 sm:w-12 flex justify-center">
+      <div class="w-9 h-9 sm:w-12 sm:h-12 rounded-full border border-black/[0.04] dark:border-white/[0.04] overflow-hidden select-none">
+        <img 
+          src={isAdmin ? "/a.jpg" : "/q.jpg"} 
+          alt={isAdmin ? "Response Avatar" : "Question Avatar"} 
+          class="w-full h-full object-cover" 
+        />
       </div>
-      {#if !isLast}
-        <div class="w-0.5 bg-slate-200 dark:bg-slate-800 flex-grow mt-2 -mb-8 rounded-full"></div>
-      {/if}
     </div>
-  {/if}
+    {#if !isLast}
+      <div class="w-0.5 bg-slate-200 dark:bg-slate-800 flex-grow mt-2 -mb-8 rounded-full"></div>
+    {/if}
+  </div>
 
   <!-- Right Column: Message Content -->
   <div class="flex-grow min-w-0">
     {#if !isEditing}
       <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-1.5 gap-1 sm:gap-2">
-        <span class="text-[11px] font-bold tracking-wider truncate font-mono {isAdmin ? themeClasses.adminText : 'text-emerald-650 dark:text-emerald-400'}">
-          {isAdmin ? 'Response' : (author || 'anonymous')}
+        <span class="text-sm font-bold tracking-wider truncate font-sans {isAdmin ? themeClasses.adminText : 'text-emerald-650 dark:text-emerald-400'}">
+          {isAdmin ? 'mikeblocky' : (author || 'anonymous')}
         </span>
         <div class="flex items-center gap-2">
           {#if isAdmin && isAdminMode}
             <button
               on:click={onEditClick}
-              class="text-[10px] font-bold opacity-0 group-hover/bubble:opacity-100 transition-opacity cursor-pointer mr-1 shrink-0 font-mono {themeClasses.editButton}"
+              class="text-xs font-bold opacity-0 group-hover/bubble:opacity-100 transition-opacity cursor-pointer mr-1 shrink-0 font-sans {themeClasses.editButton}"
             >
               Edit
             </button>
           {/if}
-          <span class="text-[10px] text-muted-foreground whitespace-nowrap shrink-0 font-mono">
+          <span class="text-xs text-muted-foreground whitespace-nowrap shrink-0 font-sans">
             <span class="hidden sm:inline">{formatDate(message.createdAt)}</span>
             <span class="inline sm:hidden">{formatDateCompact(message.createdAt)}</span>
           </span>
@@ -121,9 +127,9 @@
       <div class="space-y-3">
         <textarea
           bind:value={editBody}
-          on:input={handleInput}
+          use:autoResize
           rows={Math.max(3, message.body.split('\n').length)}
-          class="min-h-[100px] w-full resize-none overflow-hidden rounded-lg border bg-background px-4 py-3 text-sm text-slate-900 focus:outline-none focus:ring-2 dark:text-slate-100 font-sans {themeClasses.textarea}"
+          class="min-h-[44px] w-full resize-none overflow-hidden rounded-md border bg-background px-4 py-3 text-base md:text-[17px] text-slate-900 focus:outline-none focus:ring-1 dark:text-slate-100 font-sans {themeClasses.textarea}"
         />
         <AttachmentPreviewGrid
           urls={editImageUrls}
@@ -166,7 +172,7 @@
       </div>
     {:else}
       <div>
-        <div class="text-sm text-slate-700 dark:text-slate-300 leading-relaxed break-words font-sans">
+        <div class="text-base md:text-[17px] text-slate-700 dark:text-slate-300 leading-relaxed break-words font-sans">
           <RichText text={message.body} {theme} />
         </div>
         <ImageGallery

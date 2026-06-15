@@ -7,7 +7,7 @@
 .zine-list h2 {
   margin: 0;
   color: rgb(15 23 42);
-  font-size: 1.25rem;
+  font-size: var(--font-size-lg);
   font-weight: 700;
   letter-spacing: -0.03em;
   line-height: 1.2;
@@ -52,7 +52,7 @@
 .home-activity-list small {
   color: hsl(var(--pride-glow-val));
   font-family: var(--font-mono);
-  font-size: 0.7rem;
+  font-size: var(--font-size-xs);
   font-weight: 700;
   text-transform: uppercase;
 }
@@ -99,12 +99,12 @@
 .home-blog-row > span {
   color: hsl(var(--muted-foreground));
   font-family: var(--font-mono);
-  font-size: 0.72rem;
+  font-size: var(--font-size-2xs);
 }
 
 .home-blog-row strong {
   color: hsl(var(--foreground));
-  font-size: 0.98rem;
+  font-size: var(--font-size-md);
   line-height: 1.35;
   text-wrap: balance;
 }
@@ -113,7 +113,7 @@
 .home-activity-list p {
   margin: 0;
   color: hsl(var(--muted-foreground));
-  font-size: 0.875rem;
+  font-size: var(--font-size-base);
   line-height: 1.6;
 }
 
@@ -135,7 +135,7 @@
 .home-activity-list h3 {
   margin: 0;
   color: hsl(var(--foreground));
-  font-size: 0.98rem;
+  font-size: var(--font-size-md);
   line-height: 1.3;
 }
 
@@ -156,7 +156,7 @@
 .homepage-socials p {
   margin: 0;
   color: hsl(var(--muted-foreground));
-  font-size: 0.875rem;
+  font-size: var(--font-size-base);
   line-height: 1.6;
 }
 
@@ -184,7 +184,7 @@
   gap: 1rem;
   color: hsl(var(--muted-foreground) / 0.6);
   font-family: var(--font-mono);
-  font-size: 0.875rem;
+  font-size: var(--font-size-sm);
 }
 
 .footer-social-links {
@@ -221,6 +221,6 @@
 
 .footer-inner > span {
   color: hsl(var(--pride-glow-val));
-  font-size: 0.75rem;
+  font-size: var(--font-size-2xs);
 }
 

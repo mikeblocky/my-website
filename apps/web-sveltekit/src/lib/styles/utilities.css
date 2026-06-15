@@ -177,3 +177,15 @@
 .sketchbook-soft-control:active {
   transform: scale(0.98);
 }
+
+/* Centralized Typography Scale Utilities */
+.text-size-2xs { font-size: var(--font-size-2xs); }
+.text-size-xs  { font-size: var(--font-size-xs); }
+.text-size-sm  { font-size: var(--font-size-sm); }
+.text-size-base{ font-size: var(--font-size-base); }
+.text-size-md  { font-size: var(--font-size-md); }
+.text-size-lg  { font-size: var(--font-size-lg); }
+.text-size-xl  { font-size: var(--font-size-xl); }
+.text-size-2xl { font-size: var(--font-size-2xl); }
+.text-size-3xl { font-size: var(--font-size-3xl); }
+

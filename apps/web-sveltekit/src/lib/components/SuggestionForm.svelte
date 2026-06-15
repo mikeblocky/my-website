@@ -181,14 +181,14 @@
       type="text"
       bind:value={title}
       placeholder="Title (e.g. Skip and Loafer, Your Letter, or such)"
-      class="min-w-0 border-b border-slate-100 dark:border-slate-900 bg-transparent px-4 py-3 text-sm font-semibold text-slate-800 placeholder:text-muted-foreground/60 focus:outline-none dark:text-slate-100 sm:border-b-0 sm:border-r rounded-tl-xl sm:rounded-tr-none rounded-tr-xl"
+      class="min-w-0 border-b border-slate-100 dark:border-slate-900 bg-transparent px-4 py-4 text-sm font-semibold text-slate-800 placeholder:text-muted-foreground/60 focus:outline-none dark:text-slate-100 sm:border-b-0 sm:border-r rounded-tl-xl sm:rounded-tr-none rounded-tr-xl"
       required
     />
     <div class="relative category-dropdown-container w-full sm:w-[150px]">
       <button
         type="button"
         on:click={handleDropdownClick}
-        class="flex w-full items-center justify-between bg-transparent px-4 py-3 text-sm font-semibold text-slate-700 dark:text-slate-355 focus:outline-none cursor-pointer hover:bg-slate-100/50 dark:hover:bg-slate-800/30 transition-colors h-full border-0 rounded-tr-xl sm:rounded-tl-none rounded-tl-xl"
+        class="flex w-full items-center justify-between bg-transparent px-4 py-4 text-sm font-semibold text-slate-700 dark:text-slate-355 focus:outline-none cursor-pointer hover:bg-slate-100/50 dark:hover:bg-slate-800/30 transition-colors h-full border-0 rounded-tr-xl sm:rounded-tl-none rounded-tl-xl"
       >
         <span>{categories.find(c => c.value === category)?.label || category}</span>
         <div
@@ -210,7 +210,7 @@
                 category = item.value;
                 isDropdownOpen = false;
               }}
-              class="flex w-full items-center px-4 py-2 text-left text-sm font-semibold transition-colors duration-150 cursor-pointer border-0 bg-transparent {category === item.value ? 'bg-slate-50 text-slate-800 dark:bg-slate-950/40 dark:text-slate-200' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-55 dark:hover:bg-slate-800/50'}"
+              class="flex w-full items-center px-4 py-2.5 text-left text-sm font-semibold transition-colors duration-150 cursor-pointer border-0 bg-transparent {category === item.value ? 'bg-slate-50 text-slate-800 dark:bg-slate-950/40 dark:text-slate-200' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-55 dark:hover:bg-slate-800/50'}"
             >
               {item.label}
             </button>
@@ -225,13 +225,13 @@
       type="url"
       bind:value={referenceUrl}
       placeholder="Link (optional, e.g. AniList, Spotify)"
-      class="min-w-0 bg-transparent px-4 py-3 text-sm text-slate-800 placeholder:text-muted-foreground/60 focus:outline-none dark:text-slate-100"
+      class="min-w-0 bg-transparent px-4 py-4 text-sm text-slate-800 placeholder:text-muted-foreground/60 focus:outline-none dark:text-slate-100"
     />
     <button
       type="button"
       on:click={loadReference}
       disabled={!referenceUrl.trim() || isReferenceLoading}
-      class="flex items-center justify-center gap-2 border-t border-slate-100 dark:border-slate-900 px-4 py-3 text-xs font-bold text-slate-700 transition-colors hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-50 dark:text-slate-350 dark:hover:bg-slate-955/30 sm:border-l sm:border-t-0 cursor-pointer border-0 bg-transparent"
+      class="flex items-center justify-center gap-2 border-t border-slate-100 dark:border-slate-900 px-4 py-4 text-sm font-bold text-slate-700 transition-colors hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-50 dark:text-slate-355 dark:hover:bg-slate-955/30 sm:border-l sm:border-t-0 cursor-pointer border-0 bg-transparent"
     >
       {#if isReferenceLoading}
         <Loader2 size={14} class="animate-spin" />
@@ -259,18 +259,18 @@
     type="text"
     bind:value={author}
     placeholder="Your name or alias (optional)"
-    class="w-full border-b border-slate-100 dark:border-slate-900 bg-transparent px-4 py-3 text-sm font-semibold text-slate-800 placeholder:text-muted-foreground/60 focus:outline-none dark:text-slate-100"
+    class="w-full border-b border-slate-100 dark:border-slate-900 bg-transparent px-4 py-4 text-sm font-semibold text-slate-800 placeholder:text-muted-foreground/60 focus:outline-none dark:text-slate-100"
   />
 
   <textarea
     bind:value={note}
     placeholder="Why do you recommend it? Favorite tracks, key highlights, or general thoughts..."
     rows={4}
-    class="min-h-[120px] w-full resize-none bg-transparent px-4 py-3 text-sm text-slate-850 placeholder:text-muted-foreground/60 focus:outline-none dark:text-slate-100"
+    class="min-h-[120px] w-full resize-none bg-transparent px-4 py-4 text-sm text-slate-850 placeholder:text-muted-foreground/60 focus:outline-none dark:text-slate-100"
   />
 
   {#if imageUrls.length > 0}
-    <div class="border-t border-slate-100 dark:border-slate-900 px-4 py-3">
+    <div class="border-t border-slate-100 dark:border-slate-900 px-4 py-4">
       <AttachmentPreviewGrid
         urls={imageUrls}
         onRemove={(index) => (imageUrls = imageUrls.filter((_, itemIndex) => itemIndex !== index))}
@@ -280,7 +280,7 @@
     </div>
   {/if}
 
-  <div class="flex flex-col gap-3 border-t border-slate-100 dark:border-slate-900 px-4 py-3 bg-slate-50/20 dark:bg-slate-950/20 sm:flex-row sm:items-center sm:justify-between rounded-b-xl">
+  <div class="flex flex-col gap-3 border-t border-slate-100 dark:border-slate-900 px-4 py-4 bg-slate-50/20 dark:bg-slate-950/20 sm:flex-row sm:items-center sm:justify-between rounded-b-xl">
     <AttachmentUploadButton
       onFiles={(files) => files.forEach(handleImageUpload)}
       iconSize={13}
@@ -290,12 +290,12 @@
 
     <div class="flex items-center gap-3">
       {#if errorMessage}
-        <span class="text-xs text-rose-550">{errorMessage}</span>
+        <span class="text-sm text-rose-550">{errorMessage}</span>
       {/if}
       <button
         type="submit"
         disabled={isPending || !title.trim() || isCooldownActive}
-        class="rounded-md pride-button h-9 px-4.5 text-xs font-semibold cursor-pointer disabled:opacity-50"
+        class="rounded-md pride-button h-9 px-4.5 text-sm font-semibold cursor-pointer disabled:opacity-50"
         title={isCooldownActive ? `You can send another suggestion in ${cooldownLabel}` : undefined}
       >
         {isCooldownActive ? cooldownLabel : isPending ? 'Sending...' : 'Send suggestion'}

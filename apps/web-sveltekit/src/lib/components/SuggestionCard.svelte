@@ -203,14 +203,14 @@
               <Star size={13} class="fill-amber-500/20 text-amber-600 dark:text-amber-400" />
               Best part
             </div>
-            <div class="text-sm leading-relaxed text-slate-700 dark:text-slate-300">
+            <div class="text-base md:text-[17px] leading-relaxed text-slate-700 dark:text-slate-300">
               <RichText text={suggestion.bestPart} theme="blue" />
             </div>
           </div>
         {/if}
 
         {#if suggestion.note}
-          <div class="text-sm leading-relaxed text-slate-700 dark:text-slate-300 font-sans text-left">
+          <div class="text-base md:text-[17px] leading-relaxed text-slate-700 dark:text-slate-300 font-sans text-left">
             <RichText text={suggestion.note} theme="blue" />
           </div>
         {/if}
@@ -374,7 +374,7 @@
             bind:value={replyBody}
             on:input={handleInput}
             placeholder="Write your response..."
-            class="min-h-[44px] w-full resize-none overflow-hidden rounded-md border border-blue-200/70 bg-background px-4 py-3 text-sm text-slate-900 focus:outline-none focus:ring-1 focus:ring-blue-300 dark:border-blue-500/30 dark:text-slate-100"
+            class="min-h-[44px] w-full resize-none overflow-hidden rounded-md border border-blue-200/70 bg-background px-4 py-3 text-base md:text-[17px] text-slate-900 focus:outline-none focus:ring-1 focus:ring-blue-300 dark:border-blue-500/30 dark:text-slate-100"
           />
           <AttachmentPreviewGrid
             urls={replyImageUrls}
@@ -438,7 +438,7 @@
             bind:value={followUpBody}
             on:input={handleInput}
             placeholder="Write your follow-up message..."
-            class="min-h-[44px] w-full resize-none overflow-hidden rounded-md border border-emerald-250 bg-background px-4 py-3 text-sm text-slate-900 focus:outline-none focus:ring-1 focus:ring-emerald-300 dark:border-emerald-500/30 dark:text-slate-100"
+            class="min-h-[44px] w-full resize-none overflow-hidden rounded-md border border-emerald-250 bg-background px-4 py-3 text-base md:text-[17px] text-slate-900 focus:outline-none focus:ring-1 focus:ring-emerald-300 dark:border-emerald-500/30 dark:text-slate-100"
           />
           <AttachmentPreviewGrid
             urls={followUpImageUrls}

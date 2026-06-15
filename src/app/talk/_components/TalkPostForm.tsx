@@ -1,7 +1,7 @@
 'use client'
 
 import { FormEvent, useState } from 'react'
-import { sansFont } from '@/styles/fonts/fonts'
+import { sansFont, dmSans } from '@/styles/fonts/fonts'
 import { cn } from '@/lib/utils/utils'
 import { Button } from '@/components/ui/primitives/button'
 import { Bell } from 'lucide-react'
@@ -71,8 +71,8 @@ export function TalkPostForm({
           onChange={(event) => setAuthor(event.target.value)}
           placeholder="Your alias (optional)"
           className={cn(
-            sansFont.className,
-            "w-full bg-transparent text-sm font-semibold text-slate-800 placeholder:text-muted-foreground/60 focus:outline-none dark:text-slate-100"
+            dmSans.className,
+            "w-full bg-transparent text-base font-semibold text-slate-800 placeholder:text-muted-foreground/60 focus:outline-none dark:text-slate-100"
           )}
         />
       </div>
@@ -89,8 +89,8 @@ export function TalkPostForm({
           placeholder="Let's talk about anything... (ask questions, ask for suggestions, casual chat)"
           rows={1}
           className={cn(
-            sansFont.className,
-            "w-full bg-transparent py-2 text-base text-slate-900 placeholder:text-slate-400 focus:outline-none dark:text-slate-100 dark:placeholder:text-slate-600 resize-none overflow-hidden min-h-[100px]"
+            dmSans.className,
+            "w-full bg-transparent py-2 text-base text-slate-900 placeholder:text-muted-foreground/60 focus:outline-none dark:text-slate-100 dark:placeholder:text-slate-600 resize-none overflow-hidden min-h-[100px]"
           )}
         />
       </div>
@@ -112,7 +112,7 @@ export function TalkPostForm({
                 onChange={(e) => setWantNotification(e.target.checked)}
                 className="h-4 w-4 rounded border-slate-350 text-[hsl(var(--pride-glow-val))] focus:ring-0 accent-[hsl(var(--pride-glow-val))] cursor-pointer dark:border-slate-700"
               />
-              <span className={cn(sansFont.className, "text-xs font-semibold text-slate-500 dark:text-slate-400 flex items-center gap-1.5 group-hover/notify:text-[hsl(var(--pride-glow-val))] transition-colors")}>
+              <span className={cn(dmSans.className, "text-sm font-semibold text-slate-500 dark:text-slate-400 flex items-center gap-2 group-hover/notify:text-[hsl(var(--pride-glow-val))] transition-colors")}>
                 <Bell size={13} />
                 Notify me
               </span>
@@ -122,7 +122,7 @@ export function TalkPostForm({
           <AttachmentUploadButton
             onFiles={(files) => files.forEach(file => handleImageUpload(file))}
             iconSize={13}
-            className={cn(sansFont.className, 'gap-1.5 text-xs font-semibold')}
+            className={cn(dmSans.className, 'gap-1.5 text-sm font-semibold')}
             accent="blue"
           >
             Add images
@@ -133,7 +133,7 @@ export function TalkPostForm({
           type="submit" 
           size="sm"
           disabled={!body.trim() || isPending || isCooldownActive}
-          className="w-full sm:w-auto h-9 px-4.5 text-xs font-semibold rounded-md pride-button"
+          className={cn(dmSans.className, "w-full sm:w-auto h-9 px-4.5 text-sm font-semibold rounded-md pride-button")}
           title={isCooldownActive ? `You can send another message in ${cooldownLabel}` : undefined}
         >
           {isCooldownActive ? cooldownLabel : 'Post message'}

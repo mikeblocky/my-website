@@ -2,7 +2,7 @@ import './globals.css'
 import type { Metadata } from 'next'
 import { ThemeProvider } from '@/components/ui/theme/theme-provider'
 import { cn } from '@/lib/utils/utils'
-import { monoFont, sansFont, codeFont } from '@/styles/fonts/fonts'
+import { monoFont, sansFont, dmSans, codeFont } from '@/styles/fonts/fonts'
 import { PageTransition } from '@/components/layout/page-transition/PageTransition'
 import { MobileAppShell } from '@/components/layout/mobile-app-shell/MobileAppShell'
 
@@ -45,6 +45,7 @@ export default function RootLayout({
       "h-full",
       monoFont.variable,
       sansFont.variable,
+      dmSans.variable,
       codeFont.variable
     )} suppressHydrationWarning>
       <head>

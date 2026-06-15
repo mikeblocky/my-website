@@ -123,21 +123,21 @@
       <!-- Right Column: Content -->
       <div class="flex-1 min-w-0">
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-1.5 gap-1 sm:gap-2">
-          <span class="text-[11px] font-bold tracking-wider text-slate-850 dark:text-slate-100 truncate font-mono">
+          <span class="text-sm font-bold tracking-wider text-slate-850 dark:text-slate-100 truncate font-sans">
             {talk.author || 'anonymous'}
           </span>
           <div class="flex items-center gap-1">
             {#if talk.notifying}
               <Bell size={13} class="text-blue-650 dark:text-blue-450 fill-blue-500/10 mr-1 shrink-0" />
             {/if}
-            <span class="text-[10px] sm:text-[11px] text-muted-foreground whitespace-nowrap shrink-0 font-mono">
+            <span class="text-xs text-muted-foreground whitespace-nowrap shrink-0 font-sans">
               <span class="hidden sm:inline">{formatDate(talk.createdAt)}</span>
               <span class="inline sm:hidden">{formatDateCompact(talk.createdAt)}</span>
             </span>
           </div>
         </div>
         
-        <div class="text-sm text-slate-850 dark:text-slate-200 leading-relaxed font-medium mb-3 break-words font-sans">
+        <div class="text-base md:text-[17px] text-slate-850 dark:text-slate-200 leading-relaxed font-medium mb-3 break-words font-sans">
           <RichText text={talk.body} theme="blue" />
         </div>
 
@@ -267,7 +267,7 @@
             on:input={handleInput}
             placeholder="Write your response..."
             rows={1}
-            class="min-h-[44px] w-full resize-none overflow-hidden rounded-md border border-border bg-background px-4 py-3 text-sm text-slate-900 focus:outline-none focus:ring-1 focus:ring-blue-350 dark:text-slate-100 font-sans"
+            class="min-h-[44px] w-full resize-none overflow-hidden rounded-md border border-border bg-background px-4 py-3 text-base md:text-[17px] text-slate-900 focus:outline-none focus:ring-1 focus:ring-blue-350 dark:text-slate-100 font-sans"
           />
           <AttachmentPreviewGrid
             urls={replyImageUrls}
@@ -329,7 +329,7 @@
             on:input={handleInput}
             placeholder="Add to this discussion..."
             rows={1}
-            class="min-h-[44px] w-full resize-none overflow-hidden rounded-md border border-emerald-200 bg-background px-4 py-3 text-sm text-slate-900 focus:outline-none focus:ring-1 focus:ring-emerald-300 dark:border-emerald-500/30 dark:text-slate-100 font-sans"
+            class="min-h-[44px] w-full resize-none overflow-hidden rounded-md border border-emerald-200 bg-background px-4 py-3 text-base md:text-[17px] text-slate-900 focus:outline-none focus:ring-1 focus:ring-emerald-300 dark:border-emerald-500/30 dark:text-slate-100 font-sans"
           />
           <AttachmentPreviewGrid
             urls={followUpImageUrls}

@@ -11,7 +11,7 @@ import { MAX_ATTACHMENT_COUNT } from '@/lib/images/attachment-limits'
 import { prepareImageForUpload } from '@/lib/images/prepare-upload'
 import { formatBoardDate as formatDate, formatBoardDateCompact as formatDateCompact } from '@/lib/boards/board-utils'
 import { cn } from '@/lib/utils/utils'
-import { sansFont, monoFont } from '@/styles/fonts/fonts'
+import { sansFont, monoFont, dmSans } from '@/styles/fonts/fonts'
 
 type ThreadTheme = 'blue' | 'violet'
 
@@ -102,50 +102,47 @@ export function BoardThreadBubble({
   return (
     <div
       className={cn(
-        'group/bubble relative flex gap-3 sm:gap-4 text-base text-left transition-all duration-300 pl-0 pr-1 py-1 rounded-xl',
-        isEditing && `ring-1.5 ${classes.ring} bg-slate-500/5 dark:bg-stone-500/5 p-4`
+        'group/bubble relative flex gap-3 sm:gap-4 text-base text-left transition-all duration-300 pl-0 pr-1 py-1 rounded-xl'
       )}
     >
-      {!isEditing && (
-        <div className="flex flex-col items-center shrink-0">
-          <div className="w-9 sm:w-12 flex justify-center">
-            <div className="w-9 h-9 sm:w-12 sm:h-12 rounded-full border border-black/[0.04] dark:border-white/[0.04] overflow-hidden select-none">
-              <img 
-                src={isAdmin ? "/a.jpg" : "/q.jpg"} 
-                alt={isAdmin ? "Response Avatar" : "Question Avatar"} 
-                className="w-full h-full object-cover" 
-              />
-            </div>
+      <div className="flex flex-col items-center shrink-0">
+        <div className="w-9 sm:w-12 flex justify-center">
+          <div className="w-9 h-9 sm:w-12 sm:h-12 rounded-full border border-black/[0.04] dark:border-white/[0.04] overflow-hidden select-none">
+            <img 
+              src={isAdmin ? "/a.jpg" : "/q.jpg"} 
+              alt={isAdmin ? "Response Avatar" : "Question Avatar"} 
+              className="w-full h-full object-cover" 
+            />
           </div>
-          {!isLast && (
-            <div className="w-0.5 bg-slate-200 dark:bg-slate-800 flex-grow mt-2 -mb-8 rounded-full" />
-          )}
         </div>
-      )}
+        {!isLast && (
+          <div className="w-0.5 bg-slate-200 dark:bg-slate-800 flex-grow mt-2 -mb-8 rounded-full" />
+        )}
+      </div>
 
       {/* Right Column: Message Content */}
       <div className="flex-grow min-w-0">
         {!isEditing && (
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-1.5 gap-1 sm:gap-2">
             <span className={cn(
-              monoFont.className,
-              'text-[11px] font-bold tracking-wider truncate',
+              dmSans.className,
+              'text-sm font-bold tracking-wider truncate',
               isAdmin ? classes.adminText : 'text-emerald-650 dark:text-emerald-400'
             )}>
-              {isAdmin ? 'Response' : (author || 'anonymous')}
+              {isAdmin ? 'mikeblocky' : (author || 'anonymous')}
             </span>
             <div className="flex items-center gap-2">
               {isAdmin && isAdminMode && (
                 <button
                   onClick={onEditClick}
-                  className={cn(monoFont.className, 'text-[10px] font-bold opacity-0 group-hover/bubble:opacity-100 transition-opacity cursor-pointer mr-1 shrink-0', classes.editButton)}
+                  className={cn(dmSans.className, 'text-xs font-bold opacity-0 group-hover/bubble:opacity-100 transition-opacity cursor-pointer mr-1 shrink-0', classes.editButton)}
                 >
                   Edit
                 </button>
               )}
               <span className={cn(
-                monoFont.className,
-                'text-[10px] text-muted-foreground whitespace-nowrap shrink-0'
+                dmSans.className,
+                'text-xs text-muted-foreground whitespace-nowrap shrink-0'
               )}>
                 <span className="hidden sm:inline">{formatDate(message.createdAt)}</span>
                 <span className="inline sm:hidden">{formatDateCompact(message.createdAt)}</span>
@@ -157,6 +154,12 @@ export function BoardThreadBubble({
         {isEditing ? (
           <div className="space-y-3">
             <textarea
+              ref={(el) => {
+                if (el) {
+                  el.style.height = 'auto'
+                  el.style.height = `${el.scrollHeight}px`
+                }
+              }}
               value={editBody}
               onChange={(e) => setEditBody(e.target.value)}
               onInput={(e) => {
@@ -192,7 +195,7 @@ export function BoardThreadBubble({
               }}
               rows={Math.max(3, message.body.split('\n').length)}
               autoFocus
-              className={cn(sansFont.className, 'min-h-[100px] w-full resize-none overflow-hidden rounded-lg border bg-background px-4 py-3 text-sm text-slate-900 focus:outline-none focus:ring-2 dark:text-slate-100', classes.textarea)}
+              className={cn(dmSans.className, 'min-h-[44px] w-full resize-none overflow-hidden rounded-md border bg-background px-4 py-3 text-base md:text-[17px] text-slate-900 focus:outline-none focus:ring-1 dark:text-slate-100', classes.textarea)}
             />
             <AttachmentPreviewGrid
               urls={editImageUrls}
@@ -229,7 +232,7 @@ export function BoardThreadBubble({
           </div>
         ) : (
           <>
-            <div className={cn(sansFont.className, 'text-sm text-slate-700 dark:text-slate-300 leading-relaxed break-words')}>
+            <div className={cn(dmSans.className, 'text-base md:text-[17px] text-slate-700 dark:text-slate-300 leading-relaxed break-words')}>
               <RichText text={message.body} theme={theme} />
             </div>
             <ImageGallery

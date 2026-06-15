@@ -146,8 +146,8 @@
   .listen-activity { display: grid; gap: 1.5rem; }
 
   .listen-header { display: grid; gap: 0.3rem; }
-  .listen-header h3 { margin: 0; font-size: 1.05rem; font-weight: 700; color: hsl(var(--foreground)); }
-  .listen-header p { margin: 0; font-size: 0.8125rem; color: hsl(var(--muted-foreground)); line-height: 1.55; }
+  .listen-header h3 { margin: 0; font-size: var(--font-size-md); font-weight: 700; color: hsl(var(--foreground)); }
+  .listen-header p { margin: 0; font-size: var(--font-size-base); color: hsl(var(--muted-foreground)); line-height: 1.55; }
 
   .now-playing-card {
     display: flex;
@@ -190,9 +190,8 @@
     background: hsl(142 71% 45% / 0.1);
     color: hsl(142 71% 35%);
     font-family: var(--font-mono);
-    font-size: 0.625rem;
+    font-size: var(--font-size-xs);
     font-weight: 700;
-    text-transform: lowercase;
     width: fit-content;
   }
   :global(.dark) .np-badge { color: hsl(142 71% 55%); }
@@ -200,13 +199,13 @@
   .music-bars { display: flex; align-items: flex-end; gap: 2px; height: 14px; }
   .music-bars span { width: 2px; background: hsl(142 71% 45%); border-radius: 1px; height: 4px; }
 
-  .np-title { margin: 0; font-size: 0.9375rem; font-weight: 700; color: hsl(var(--foreground)); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; transition: color 150ms ease; }
+  .np-title { margin: 0; font-size: var(--font-size-md); font-weight: 700; color: hsl(var(--foreground)); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; transition: color 150ms ease; }
   .now-playing-card:hover .np-title { color: hsl(142 71% 45%); }
-  .np-artist { margin: 0; font-size: 0.75rem; font-weight: 600; color: hsl(var(--muted-foreground)); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .np-album { margin: 0; font-family: var(--font-mono); font-size: 0.625rem; color: hsl(var(--muted-foreground)); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .np-artist { margin: 0; font-size: var(--font-size-base); font-weight: 600; color: hsl(var(--muted-foreground)); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .np-album { margin: 0; font-family: var(--font-mono); font-size: var(--font-size-sm); color: hsl(var(--muted-foreground)); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
   .np-progress { display: grid; gap: 0.25rem; padding-top: 0.25rem; }
-  .np-progress-times { display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: 0.5625rem; font-weight: 700; color: hsl(var(--muted-foreground)); }
+  .np-progress-times { display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: var(--font-size-2xs); font-weight: 700; color: hsl(var(--muted-foreground)); }
   .np-bar { height: 3px; width: 100%; background: hsl(var(--border)); border-radius: 99px; overflow: hidden; }
   .np-bar-fill { height: 100%; background: hsl(142 71% 45%); border-radius: 99px; transition: width 1s linear; }
 
@@ -221,7 +220,7 @@
     background: transparent;
     color: hsl(142 71% 35%);
     font-family: var(--font-mono);
-    font-size: 0.625rem;
+    font-size: var(--font-size-xs);
     font-weight: 600;
     cursor: pointer;
     text-decoration: none;
@@ -231,7 +230,7 @@
   .np-btn:hover { background: hsl(142 71% 45% / 0.1); }
 
   .day-group { display: grid; gap: 0.6rem; }
-  .day-label { font-family: var(--font-mono); font-size: 0.625rem; font-weight: 700; color: hsl(var(--muted-foreground)); text-transform: lowercase; letter-spacing: 0.08em; }
+  .day-label { font-family: var(--font-mono); font-size: var(--font-size-sm); font-weight: 700; color: hsl(var(--muted-foreground)); letter-spacing: 0.08em; }
 
   .track-card {
     display: flex;
@@ -254,11 +253,10 @@
   .track-card:hover .track-art { transform: scale(1.05); }
 
   .track-info { min-width: 0; display: grid; gap: 0.2rem; }
-  .track-name { margin: 0; font-size: 0.75rem; font-weight: 600; color: hsl(var(--foreground)); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; transition: color 150ms ease; }
+  .track-name { margin: 0; font-size: var(--font-size-base); font-weight: 600; color: hsl(var(--foreground)); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; transition: color 150ms ease; }
   .track-card:hover .track-name { color: hsl(var(--pride-glow-val)); }
-  .track-artist { margin: 0; font-size: 0.6875rem; color: hsl(var(--muted-foreground)); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-
-  .track-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 0.25rem 0.4rem; font-family: var(--font-mono); font-size: 0.5625rem; color: hsl(var(--muted-foreground)); margin-top: 0.1rem; }
+  .track-artist { margin: 0; font-size: var(--font-size-sm); color: hsl(var(--muted-foreground)); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .track-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 0.25rem 0.4rem; font-family: var(--font-mono); font-size: var(--font-size-2xs); color: hsl(var(--muted-foreground)); margin-top: 0.1rem; }
 
   .platform-badge {
     display: inline-flex;
@@ -283,11 +281,11 @@
     background: hsl(var(--muted) / 0.4);
     border: 1px solid hsl(var(--border) / 0.3);
     color: hsl(var(--muted-foreground));
-    font-size: 0.5625rem;
+    font-size: var(--font-size-2xs);
   }
 
-  .track-times { display: flex; flex-wrap: wrap; gap: 0.2rem; align-items: center; margin-top: 0.25rem; font-family: var(--font-mono); font-size: 0.5625rem; color: hsl(var(--muted-foreground)); }
-  .track-times-label { font-size: 0.5625rem; color: hsl(var(--muted-foreground)); margin-right: 0.1rem; }
+  .track-times { display: flex; flex-wrap: wrap; gap: 0.2rem; align-items: center; margin-top: 0.25rem; font-family: var(--font-mono); font-size: var(--font-size-2xs); color: hsl(var(--muted-foreground)); }
+  .track-times-label { font-size: var(--font-size-2xs); color: hsl(var(--muted-foreground)); margin-right: 0.1rem; }
   .time-chip { padding: 0.1rem 0.25rem; background: hsl(var(--muted) / 0.4); border: 1px solid hsl(var(--border) / 0.3); border-radius: 0.2rem; color: hsl(var(--muted-foreground)); }
 
   .preview-btn {
@@ -301,7 +299,7 @@
     border-radius: 0.25rem;
     background: none;
     cursor: pointer;
-    font-size: 0.625rem;
+    font-size: var(--font-size-2xs);
     color: hsl(var(--muted-foreground));
     transition: border-color 150ms ease, color 150ms ease, background 150ms ease;
   }
@@ -314,7 +312,7 @@
   .skeleton-item { height: 3.5rem; background: hsl(var(--muted) / 0.5); border-radius: 0.375rem; animation: pulse 1.5s ease-in-out infinite; }
   @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
 
-  .empty-state { font-size: 0.75rem; color: hsl(var(--muted-foreground)); }
+  .empty-state { font-size: var(--font-size-sm); color: hsl(var(--muted-foreground)); }
 </style>
 
 <div class="listen-activity">
@@ -342,7 +340,7 @@
 
         <p class="np-title">{currentlyPlaying.song}</p>
         <p class="np-artist">by {currentlyPlaying.artist}</p>
-        <p class="np-album">album: {currentlyPlaying.album.toLowerCase()}</p>
+        <p class="np-album">album: {currentlyPlaying.album}</p>
 
         {#if currentlyPlaying.durationMs}
           <div class="np-progress">

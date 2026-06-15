@@ -1,4 +1,4 @@
-import { IBM_Plex_Mono, Geist, Fira_Code, Reddit_Mono } from 'next/font/google'
+import { IBM_Plex_Mono, Geist, Fira_Code, DM_Sans } from 'next/font/google'
 
 export const monoFont = IBM_Plex_Mono({
     subsets: ['latin'],
@@ -11,6 +11,13 @@ export const sansFont = Geist({
     subsets: ['latin'],
     weight: ['400', '500', '600', '700'],
     variable: '--font-sans',
+    display: 'swap',
+})
+
+export const dmSans = DM_Sans({
+    subsets: ['latin'],
+    weight: ['400', '500', '700'],
+    variable: '--font-dm-sans',
     display: 'swap',
 })
 

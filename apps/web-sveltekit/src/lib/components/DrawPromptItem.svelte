@@ -124,7 +124,7 @@
       <!-- Right Column: Content -->
       <div class="flex-1 min-w-0">
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-1.5 gap-1 sm:gap-2">
-          <span class="text-[11px] font-bold tracking-wider text-violet-600 dark:text-violet-300 truncate font-mono">
+          <span class="text-sm font-bold tracking-wider text-violet-600 dark:text-violet-300 truncate font-sans">
             {prompt.author || 'anonymous'}
           </span>
           <div class="flex items-center gap-1">
@@ -134,7 +134,7 @@
                 <span class="absolute top-0 right-0 h-2 w-2 rounded-full bg-violet-600 border-2 border-white dark:border-slate-900 animate-pulse"></span>
               </div>
             </div>
-            <span class="text-[10px] sm:text-[11px] text-muted-foreground whitespace-nowrap shrink-0 font-mono">
+            <span class="text-xs text-muted-foreground whitespace-nowrap shrink-0 font-sans">
               <span class="hidden sm:inline">{formatDate(prompt.createdAt)}</span>
               <span class="inline sm:hidden">{formatDateCompact(prompt.createdAt)}</span>
             </span>
@@ -293,7 +293,7 @@
             on:input={handleInput}
             placeholder="Write your answer..."
             rows={1}
-            class="min-h-[44px] w-full resize-none overflow-hidden rounded-md border border-border bg-background px-4 py-3 text-sm text-slate-900 focus:outline-none focus:ring-1 focus:ring-violet-350 dark:text-slate-100 font-sans"
+            class="min-h-[44px] w-full resize-none overflow-hidden rounded-md border border-border bg-background px-4 py-3 text-base md:text-[17px] text-slate-900 focus:outline-none focus:ring-1 focus:ring-violet-350 dark:text-slate-100 font-sans"
           />
           <AttachmentPreviewGrid
             urls={replyImageUrls}
@@ -355,7 +355,7 @@
             on:input={handleInput}
             placeholder="Ask a follow-up..."
             rows={1}
-            class="min-h-[44px] w-full resize-none overflow-hidden rounded-md border border-emerald-250 bg-background px-4 py-3 text-sm text-slate-900 focus:outline-none focus:ring-1 focus:ring-emerald-350 dark:border-emerald-500/30 dark:text-slate-100 font-sans"
+            class="min-h-[44px] w-full resize-none overflow-hidden rounded-md border border-emerald-250 bg-background px-4 py-3 text-base md:text-[17px] text-slate-900 focus:outline-none focus:ring-1 focus:ring-emerald-350 dark:border-emerald-500/30 dark:text-slate-100 font-sans"
           />
           <AttachmentPreviewGrid
             urls={followUpImageUrls}
