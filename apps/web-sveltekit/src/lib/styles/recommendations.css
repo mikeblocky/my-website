@@ -81,6 +81,7 @@
   z-index: -1;
   border-radius: inherit;
   background: hsl(var(--pride-glow-val) / 0.1);
+  pointer-events: none;
   animation: pill-active-enter 180ms ease both;
 }
 

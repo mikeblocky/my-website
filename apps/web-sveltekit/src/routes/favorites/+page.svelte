@@ -9,7 +9,7 @@
 
   export let data;
   $: groups = Object.entries(data.recommendationGroups ?? {});
-  $: tabs = [...groups.map(([id, group]) => ({ id, label: group.label, count: group.items.length })), { id: 'generator', label: 'card generator' }];
+  $: tabs = [...groups.map(([id, group]) => ({ id, label: group.label, count: group.items.length })), { id: 'generator', label: 'Card generator' }];
   let activeTab = '';
   let RecommendationGenerator: any = null;
   let isLoadingGenerator = false;
@@ -94,11 +94,11 @@
         <div class="favorites-view-toggle" aria-label="Recommendation view mode">
           <button type="button" class:active={viewMode === 'detailed'} on:click={() => setViewMode('detailed')}>
             <LayoutList size={12} />
-            <span>detailed</span>
+            <span>Detailed</span>
           </button>
           <button type="button" class:active={viewMode === 'simplified'} on:click={() => setViewMode('simplified')}>
             <LayoutGrid size={12} />
-            <span>simplified</span>
+            <span>Simplified</span>
           </button>
         </div>
       {/if}
@@ -120,7 +120,7 @@
     {:else if activeGroup}
       <div class="favorites-capture-panel">
         <div class="favorites-capture-group">
-          <span>capture row</span>
+          <span>Capture row</span>
           <div class="favorites-capture-group-buttons">
             {#each Array(rowCount) as _, rowIdx}
               <button
@@ -137,7 +137,7 @@
 
         {#if activeGroup.items.length > 2}
           <div class="favorites-capture-group favorites-capture-group-bordered">
-            <span>capture 2 rows</span>
+            <span>Capture 2 rows</span>
             <div class="favorites-capture-group-buttons">
               {#each Array(blockCount) as _, blockIdx}
                 {@const startRow = blockIdx * 2 + 1}

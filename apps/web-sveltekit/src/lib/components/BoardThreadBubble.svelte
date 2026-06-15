@@ -138,20 +138,20 @@
           className="mt-2.5"
           compact
         />
-        <div class="flex justify-between items-center gap-2">
-          <div class="flex items-center gap-3">
+        <div class="flex flex-wrap justify-between items-center gap-2">
+          <div class="flex items-center gap-3 shrink-0">
             <input
               type="password"
               bind:value={passcode}
               placeholder="Passcode"
-              class="w-24 rounded-full border border-border bg-background px-3 py-1.5 text-xs text-slate-900 focus:outline-none focus:ring-2 dark:text-slate-100 {theme === 'violet' ? 'focus:ring-violet-300' : 'focus:ring-blue-300'}"
+              class="w-20 rounded-full border border-border bg-background px-3 py-1.5 text-xs text-slate-900 focus:outline-none focus:ring-2 dark:text-slate-100 {theme === 'violet' ? 'focus:ring-violet-300' : 'focus:ring-blue-300'}"
             />
             <AttachmentUploadButton
               onFiles={(files) => files.forEach(handleImageUpload)}
               accent={theme}
             />
           </div>
-          <div class="flex gap-2">
+          <div class="flex gap-2 shrink-0">
             <button
               type="button"
               on:click={onCancel}

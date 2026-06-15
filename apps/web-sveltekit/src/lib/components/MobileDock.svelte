@@ -240,7 +240,8 @@
       role="button"
       tabindex="0"
       aria-label="Close more navigation"
-      transition:fade={{ duration: 200 }}
+      in:fade={{ duration: 200 }}
+      out:fade={{ duration: 0 }}
     ></div>
 
     <div
@@ -254,12 +255,12 @@
             href={tab.href}
             class:active
             on:click={(e) => {
+              isMoreOpen = false;
               if (active) {
                 e.preventDefault();
                 if (!isGenerator) {
                   window.scrollTo({ top: 0, behavior: 'smooth' });
                 }
-                isMoreOpen = false;
               }
             }}
           >
