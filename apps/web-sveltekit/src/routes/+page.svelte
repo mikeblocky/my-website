@@ -3,5 +3,7 @@
   import SeoHead from '$lib/components/SeoHead.svelte';
 </script>
 
-<SeoHead />
+<SeoHead
+  description="a site where i share my thoughts and archive my artworks"
+/>
 <HomePageContent />

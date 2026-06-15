@@ -9,8 +9,6 @@
 <SeoHead
   title="LLM From Scratch — Raschka"
   path="/notes/books/llm-from-scratch-raschka"
-  image="/notes/opengraph-image.png"
-  twitterImage="/notes/twitter-image.png"
 />
 
 <PageIntro

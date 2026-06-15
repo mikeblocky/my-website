@@ -21,8 +21,6 @@
 <SeoHead
   title={data.note.title}
   path={data.note.href}
-  image="/diary/opengraph-image.png"
-  twitterImage="/diary/twitter-image.png"
   description={data.note.description}
 />
 

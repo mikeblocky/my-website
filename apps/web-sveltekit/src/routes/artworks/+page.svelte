@@ -6,7 +6,7 @@
   export let data;
 </script>
 
-<SeoHead title="artworks" path="/artworks" image="/artworks/opengraph-image.png" description="A quiet gallery archiving my character illustrations, sketches, and drawings." />
+<SeoHead title="artworks" path="/artworks" description="A quiet gallery archiving my character illustrations, sketches, and drawings." />
 
 <SectionPageShell
   title="Gallery"

@@ -11,7 +11,6 @@
 <SeoHead
   title="Sketchbook"
   path="/sketchbook"
-  image="/sketchbook/opengraph-image.jpg"
   description="A small drawing board for quick marks and visual messages."
 />
 

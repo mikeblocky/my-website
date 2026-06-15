@@ -10,7 +10,6 @@
 <SeoHead
   title="Talk"
   path="/talk"
-  image="/talk/opengraph-image.jpg"
   description="Leave a note, question, or ordinary message."
 />
 

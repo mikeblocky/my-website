@@ -9,8 +9,6 @@
 <SeoHead
   title="Daily notes"
   path="/diary/daily-notes"
-  image="/diary/opengraph-image.png"
-  twitterImage="/diary/twitter-image.png"
   description="A collection of short entries, gratitude logs, and snippets of what I learn or document each day."
 />
 

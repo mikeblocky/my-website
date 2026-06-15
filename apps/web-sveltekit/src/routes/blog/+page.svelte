@@ -9,8 +9,6 @@
 <SeoHead
   title="Blog"
   path="/blog"
-  image="/blog/opengraph-image.png"
-  twitterImage="/blog/twitter-image.png"
   description="A collection of notes and blogs covering machine learning, programming, and personal thoughts."
 />
 

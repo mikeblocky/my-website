@@ -9,8 +9,6 @@
 <SeoHead
   title="Notes"
   path="/notes"
-  image="/notes/opengraph-image.png"
-  twitterImage="/notes/twitter-image.png"
 />
 
 <SectionPageShell

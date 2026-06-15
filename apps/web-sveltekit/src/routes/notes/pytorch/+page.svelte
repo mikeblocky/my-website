@@ -8,8 +8,6 @@
 <SeoHead
   title="PyTorch References"
   path="/notes/pytorch"
-  image="/notes/opengraph-image.png"
-  twitterImage="/notes/twitter-image.png"
 />
 
 <PageIntro

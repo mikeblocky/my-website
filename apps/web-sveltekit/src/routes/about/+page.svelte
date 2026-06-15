@@ -9,8 +9,6 @@
 <SeoHead
   title="about"
   path="/about"
-  image="/about/opengraph-image.png"
-  twitterImage="/about/twitter-image.png"
   description="A quiet, personal note about this website, my path from Computer Science to Japanese literature, and the stories that shape me."
 />
 

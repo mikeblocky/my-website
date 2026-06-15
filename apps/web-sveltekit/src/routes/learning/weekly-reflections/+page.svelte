@@ -10,8 +10,6 @@
 <SeoHead
   title="Weekly Reflections"
   path="/learning/weekly-reflections"
-  image="/learning/opengraph-image.png"
-  twitterImage="/learning/twitter-image.png"
 />
 
 <PageIntro

@@ -7,8 +7,6 @@
 <SeoHead
   title="Books"
   path="/notes/books"
-  image="/notes/opengraph-image.png"
-  twitterImage="/notes/twitter-image.png"
 />
 
 <PageIntro

@@ -10,8 +10,6 @@
 <SeoHead
   title="Personal utensils"
   path="/learning/learning-utensils"
-  image="/learning/opengraph-image.png"
-  twitterImage="/learning/twitter-image.png"
 />
 
 <SectionPageShell

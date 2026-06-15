@@ -10,8 +10,6 @@
 <SeoHead
   title="Diary utensils"
   path="/diary/diary-utensils"
-  image="/diary/opengraph-image.png"
-  twitterImage="/diary/twitter-image.png"
 />
 
 <SectionPageShell

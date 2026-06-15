@@ -7,8 +7,6 @@
 <SeoHead
   title="Math References"
   path="/notes/math"
-  image="/notes/opengraph-image.png"
-  twitterImage="/notes/twitter-image.png"
 />
 
 <PageIntro

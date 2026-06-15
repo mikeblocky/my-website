@@ -24,8 +24,6 @@
 <SeoHead
   title="friends"
   path="/friends"
-  image="/friends/opengraph-image.jpg"
-  twitterImage="/friends/twitter-image.jpg"
   description="A page dedicated to wonderful friends, artists, and creators I have met online."
 />
 

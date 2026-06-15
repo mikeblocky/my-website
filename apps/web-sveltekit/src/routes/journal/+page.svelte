@@ -10,8 +10,6 @@
 <SeoHead
   title="journal"
   path="/journal"
-  image="/blog/opengraph-image.png"
-  twitterImage="/blog/twitter-image.png"
   description="A personal collection of blogs, notes, and logs that I write over time."
 />
 

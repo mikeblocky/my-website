@@ -6,7 +6,7 @@
   export let data;
 </script>
 
-<SeoHead title="zine" path="/zine" />
+<SeoHead title="zine" path="/zine" description="Collected works presented as small page-turning books." />
 
 <SectionPageShell
   title="Zine"

@@ -7,8 +7,6 @@
 <SeoHead
   title="Learning"
   path="/learning"
-  image="/learning/opengraph-image.png"
-  twitterImage="/learning/twitter-image.png"
 />
 
 <SectionPageShell

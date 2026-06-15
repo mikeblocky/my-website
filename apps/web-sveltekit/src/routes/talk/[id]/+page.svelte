@@ -19,7 +19,6 @@
   {title}
   {description}
   path="/talk/{id}"
-  image={ogImage}
 />
 
 <div class="w-full max-w-[700px] mx-auto px-6 py-12 font-sans">
