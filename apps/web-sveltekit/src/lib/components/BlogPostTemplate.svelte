@@ -44,7 +44,7 @@
 </script>
 
 <div class="relative w-full overflow-x-hidden">
-  <BaseContainer size="xl" paddingX="lg" paddingY="lg">
+  <BaseContainer size="xl" paddingX="none" paddingY="lg">
     <div class="flex flex-col gap-6">
       <!-- Breadcrumb Header -->
       <section class="page-intro">
@@ -63,7 +63,7 @@
         </div>
 
         <div class="section-title-block space-y-2 mt-4">
-          <h1 class="font-sans font-bold text-2xl sm:text-3xl md:text-3xl lg:text-4xl text-slate-900 dark:text-white mt-0 mb-4 w-full break-words">
+          <h1 class="font-sans font-bold text-xl sm:text-3xl md:text-3xl lg:text-4xl text-slate-900 dark:text-white mt-0 mb-4 w-full break-words">
             {title}
           </h1>
           <div class="flex flex-wrap items-center gap-x-2 gap-y-1.5 font-mono text-xs text-muted-foreground">
