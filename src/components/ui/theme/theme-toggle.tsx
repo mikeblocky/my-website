@@ -153,6 +153,15 @@ export function ThemeToggle({ className }: { className?: string }) {
         const y = e.clientY
         const nextTheme = isDark ? 'light' : 'dark'
 
+        // Always arm smooth per-element transitions — VTA benefits too
+        // (elements inside the new snapshot are already at final state,
+        //  but this ensures the fallback path is equally smooth)
+        document.documentElement.classList.add('theme-changing')
+        if (cleanupRef.current) clearTimeout(cleanupRef.current)
+        cleanupRef.current = setTimeout(() => {
+            document.documentElement.classList.remove('theme-changing')
+        }, 650)
+
         // View Transition API: circular clip-path wipe from click position
         if (typeof document !== 'undefined' && 'startViewTransition' in document) {
             const vt = (document as Document & { startViewTransition: (cb: () => void) => { ready: Promise<void> } })
@@ -180,13 +189,8 @@ export function ThemeToggle({ className }: { className?: string }) {
             return
         }
 
-        // Fallback: CSS class-gated transitions
-        document.documentElement.classList.add('theme-changing')
+        // Fallback: CSS class-gated transitions only
         setTheme(nextTheme)
-        if (cleanupRef.current) clearTimeout(cleanupRef.current)
-        cleanupRef.current = setTimeout(() => {
-            document.documentElement.classList.remove('theme-changing')
-        }, 700)
     }
 
     if (!mounted) {

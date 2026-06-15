@@ -123,13 +123,14 @@ html.theme-changing *,
 html.theme-changing *::before,
 html.theme-changing *::after {
   transition:
-    color 400ms cubic-bezier(0.22, 1, 0.36, 1),
-    background-color 480ms cubic-bezier(0.22, 1, 0.36, 1),
-    border-color 400ms cubic-bezier(0.22, 1, 0.36, 1),
-    box-shadow 480ms cubic-bezier(0.22, 1, 0.36, 1),
-    fill 400ms cubic-bezier(0.22, 1, 0.36, 1),
-    stroke 400ms cubic-bezier(0.22, 1, 0.36, 1),
-    opacity 360ms cubic-bezier(0.22, 1, 0.36, 1) !important;
+    color              550ms ease-in-out,
+    background-color   550ms ease-in-out,
+    border-color       550ms ease-in-out,
+    box-shadow         550ms ease-in-out,
+    fill               550ms ease-in-out,
+    stroke             550ms ease-in-out,
+    opacity            550ms ease-in-out,
+    text-decoration-color 550ms ease-in-out !important;
 }
 
 @layer utilities {
