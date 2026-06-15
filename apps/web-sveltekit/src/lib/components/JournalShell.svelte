@@ -11,7 +11,7 @@
   import ListeningActivity from './ListeningActivity.svelte';
 
   const tabs = [
-    { id: 'essays', label: 'Essays & articles' },
+    { id: 'essays', label: 'Articles' },
     { id: 'notes', label: 'Daily notes' },
     { id: 'utensils', label: 'Stationery setup' },
     { id: 'activity', label: 'Activity' }

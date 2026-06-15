@@ -6,7 +6,12 @@
   const chapters = [1, 2, 3, 4, 5, 6];
 </script>
 
-<SeoHead title="LLM From Scratch — Raschka" path="/notes/books/llm-from-scratch-raschka" />
+<SeoHead
+  title="LLM From Scratch — Raschka"
+  path="/notes/books/llm-from-scratch-raschka"
+  image="/notes/opengraph-image.png"
+  twitterImage="/notes/twitter-image.png"
+/>
 
 <PageIntro
   eyebrow="Books"

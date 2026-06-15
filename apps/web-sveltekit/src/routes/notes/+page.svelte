@@ -6,11 +6,16 @@
   export let data;
 </script>
 
-<SeoHead title="Notes" path="/notes" />
+<SeoHead
+  title="Notes"
+  path="/notes"
+  image="/notes/opengraph-image.png"
+  twitterImage="/notes/twitter-image.png"
+/>
 
 <SectionPageShell
   title="Notes"
-  description="A collection of notes from my learning journey, mostly around math and machine learning."
+  description="Notes I take while reading or studying — mostly math and machine learning stuff."
   currentLabel="Notes"
   containerSize="md"
   contentGap="md"

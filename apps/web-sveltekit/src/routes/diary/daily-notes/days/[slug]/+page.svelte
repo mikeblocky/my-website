@@ -5,13 +5,17 @@
   export let data: { note: { title: string; description: string; href: string; slug: string; date: string } };
 </script>
 
-<SeoHead title={data.note.title} path={data.note.href} />
+<SeoHead
+  title={data.note.title}
+  path={data.note.href}
+  image="/diary/opengraph-image.png"
+  twitterImage="/diary/twitter-image.png"
+/>
 
 <PageIntro
   eyebrow="Daily notes"
   title={data.note.title}
   description={data.note.description}
-  showPrideBadge={true}
 />
 
 <section class="prose-panel">

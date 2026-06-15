@@ -20,6 +20,7 @@
   {description}
   path="/draw/{id}"
   image={ogImage}
+  twitterImage="/draw/twitter-image.jpg"
 />
 
 <div class="w-full max-w-[700px] mx-auto px-6 py-12 font-sans">

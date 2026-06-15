@@ -35,17 +35,6 @@
     };
   }
 
-  function menuIconTransition(_node: Element) {
-    return {
-      duration: 180,
-      css: (t: number, u: number) => `
-        opacity: ${t};
-        filter: blur(${u * 3}px);
-        transform: scale(${0.94 + t * 0.06});
-      `
-    };
-  }
-
   onMount(() => {
     startSpotifyPolling();
 
@@ -88,17 +77,11 @@
         on:click|stopPropagation={() => (isMenuOpen = !isMenuOpen)}
       >
         <span class="desktop-menu-icon" class:active={isMenuOpen} aria-hidden="true">
-          {#key isMenuOpen}
-            {#if isMenuOpen}
-              <span class="desktop-menu-icon-glyph" transition:menuIconTransition>
-                <X size={16} strokeWidth={1.8} />
-              </span>
-            {:else}
-              <span class="desktop-menu-icon-glyph" transition:menuIconTransition>
-                <Menu size={16} strokeWidth={1.8} />
-              </span>
-            {/if}
-          {/key}
+          {#if isMenuOpen}
+            <X size={16} strokeWidth={1.8} />
+          {:else}
+            <Menu size={16} strokeWidth={1.8} />
+          {/if}
         </span>
         <span>Open menu</span>
       </button>

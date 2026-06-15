@@ -50,7 +50,7 @@
   ];
 
   const footerLinks = [
-    { href: 'mailto:me@mikeblocky.com', icon: Mail, label: 'email' },
+    { href: 'mailto:mibeblocky@gmail.com', icon: Mail, label: 'email' },
     { href: 'https://github.com/mikeblocky', icon: GitFork, label: 'github' },
     { href: 'https://x.com/mikeblocky', icon: Bird, label: 'twitter' }
   ];

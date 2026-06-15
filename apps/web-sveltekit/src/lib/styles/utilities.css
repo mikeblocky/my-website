@@ -1,0 +1,179 @@
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.pride-gradient-text {
+  color: transparent;
+  background-image: linear-gradient(135deg, var(--pride-colors-repeat));
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+.pride-gradient-line {
+  background-image: linear-gradient(135deg, var(--pride-colors));
+}
+
+.pride-icon-glow {
+  filter: drop-shadow(0 0 12px hsl(var(--pride-glow-val) / 0.18));
+}
+
+.pride-soft-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.pride-soft-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  background:
+    linear-gradient(135deg, hsl(350 85% 70% / 0.09), transparent 28%),
+    linear-gradient(225deg, transparent 42%, hsl(210 88% 72% / 0.08), transparent 70%);
+  transition: opacity var(--motion-slow) var(--ease-soft);
+}
+
+.pride-soft-card:hover::before,
+.pride-soft-card:focus-within::before {
+  opacity: 1;
+}
+
+.pride-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  width: fit-content;
+  border: 1px solid hsl(var(--pride-glow-val) / 0.24);
+  border-radius: 9999px;
+  background:
+    linear-gradient(hsl(var(--background) / 0.82), hsl(var(--background) / 0.82)) padding-box,
+    linear-gradient(135deg, var(--pride-colors)) border-box;
+  color: hsl(var(--muted-foreground));
+  box-shadow: 0 8px 24px hsl(var(--pride-glow-val) / 0.08);
+}
+
+.pride-badge-dot {
+  width: 0.4rem;
+  height: 0.4rem;
+  border-radius: 9999px;
+  background-image: linear-gradient(135deg, var(--pride-colors-repeat));
+}
+
+.pride-button {
+  border-color: transparent !important;
+  color: hsl(var(--foreground));
+  background:
+    linear-gradient(hsl(var(--background)), hsl(var(--background))) padding-box,
+    linear-gradient(135deg, var(--pride-colors)) border-box;
+  background-repeat: no-repeat, repeat;
+  background-size: 100% 100%, 200% 200%;
+  box-shadow: 0 0 10px hsl(var(--pride-glow-val) / 0.15), 0 0 18px hsl(210 88% 72% / 0.08);
+}
+
+.pride-button:hover {
+  transform: translateY(-1px) scale(1.005);
+  background:
+    linear-gradient(hsl(var(--background) / 0.94), hsl(var(--background) / 0.94)) padding-box,
+    linear-gradient(135deg, var(--pride-colors)) border-box;
+  background-repeat: no-repeat, repeat;
+  background-size: 100% 100%, 200% 200%;
+  box-shadow: 0 0 14px hsl(var(--pride-glow-val) / 0.25), 0 0 25px hsl(210 88% 72% / 0.15);
+}
+
+.pride-outline-hover:hover,
+.pride-outline-hover:focus-visible {
+  border-color: hsl(var(--pride-glow-val) / 0.55);
+  color: hsl(var(--pride-glow-val));
+  box-shadow: 0 0 0 3px hsl(var(--pride-glow-val) / 0.1);
+}
+
+.pride-text {
+  color: hsl(var(--pride-glow-val));
+}
+
+.pride-link-hover:hover,
+.pride-link-hover:focus-visible {
+  color: hsl(var(--pride-glow-val));
+}
+
+.pride-nav-link:hover,
+.pride-nav-link:focus-visible {
+  color: transparent;
+  background-image: linear-gradient(135deg, var(--pride-colors));
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+.pride-focus-within-glow {
+  border: 1px solid hsl(var(--border) / 0.6) !important;
+  transition:
+    border-color var(--motion-soft) var(--ease-soft),
+    box-shadow var(--motion-medium) var(--ease-soft);
+}
+
+.pride-focus-within-glow:focus-within {
+  border-color: hsl(var(--pride-glow-val) / 0.55) !important;
+  box-shadow:
+    0 0 0 1px hsl(var(--pride-glow-val) / 0.15),
+    0 0 15px hsl(var(--pride-glow-val) / 0.22),
+    0 0 30px hsl(217 92% 70% / 0.12),
+    0 0 45px hsl(142 76% 66% / 0.05);
+}
+
+.pride-focus-within-glow :where(input, textarea):focus,
+.pride-focus-within-glow :where(input, textarea):focus-visible {
+  outline: none;
+  box-shadow: none;
+}
+
+.sketchbook-canvas-form {
+  transition:
+    background-color var(--motion-soft) var(--ease-soft),
+    border-color var(--motion-soft) var(--ease-soft),
+    box-shadow var(--motion-medium) var(--ease-soft);
+}
+
+.sketchbook-drawing-stage {
+  background:
+    linear-gradient(180deg, hsl(var(--background) / 0.26), hsl(var(--background) / 0.12));
+}
+
+.sketchbook-tool-panel,
+.sketchbook-canvas-frame {
+  transition:
+    border-color var(--motion-soft) var(--ease-soft),
+    box-shadow var(--motion-medium) var(--ease-soft),
+    transform var(--motion-medium) var(--ease-emotional);
+}
+
+.sketchbook-tool-panel:focus-within,
+.sketchbook-tool-panel:hover,
+.sketchbook-canvas-frame:focus-within,
+.sketchbook-canvas-frame:hover {
+  border-color: hsl(var(--pride-glow-val) / 0.2);
+  box-shadow: 0 14px 38px hsl(var(--pride-glow-val) / 0.06);
+}
+
+.sketchbook-soft-control {
+  transition:
+    background-color 160ms var(--ease-soft),
+    color 160ms var(--ease-soft),
+    box-shadow 220ms var(--ease-soft),
+    transform 170ms var(--ease-emotional);
+}
+
+.sketchbook-soft-control:hover {
+  transform: translateY(-1px);
+}
+
+.sketchbook-soft-control:active {
+  transform: scale(0.98);
+}

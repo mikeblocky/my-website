@@ -4,11 +4,17 @@
   import SectionPageShell from '$lib/components/SectionPageShell.svelte';
 </script>
 
-<SeoHead title="interact" path="/interact" image="/interact/opengraph-image.jpg" />
+<SeoHead
+  title="interact"
+  path="/interact"
+  image="/interact/opengraph-image.jpg"
+  twitterImage="/interact/twitter-image.jpg"
+  description="A space to connect: send messages, draw something in the sketchbook suggest books or music, or leave drawing prompts."
+/>
 
 <SectionPageShell
   title="Interact"
-  description="A place to connect and interact: share recommendations, leave suggestions, ask questions."
+  description="A space to send messages, draw something in the sketchbook, suggest books or music, or leave drawing prompts."
   currentLabel="Interact"
   footerColor="blue"
 >

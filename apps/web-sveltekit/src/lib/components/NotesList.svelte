@@ -2,19 +2,18 @@
   export let notes: any[] = [];
 </script>
 
-<section class="notes-list">
+<div class="home-blog-list">
   {#each notes as note, index}
-    <div class="note-row">
-      <a href={note.href} target={note.href.startsWith('http') ? '_blank' : undefined} rel={note.href.startsWith('http') ? 'noreferrer' : undefined}>
-        <article>
-          <h2>{note.title}</h2>
-          <p>{note.description}</p>
-          <small>Last Updated: {note.lastUpdated}</small>
-        </article>
-      </a>
-      {#if index < notes.length - 1}
-        <hr />
-      {/if}
-    </div>
+    <a
+      href={note.href}
+      class="home-blog-row"
+      style="--entry-index: {index}"
+      target={note.href.startsWith('http') ? '_blank' : undefined}
+      rel={note.href.startsWith('http') ? 'noreferrer' : undefined}
+    >
+      <span>{note.lastUpdated}</span>
+      <strong>{note.title}</strong>
+      <p>{note.description}</p>
+    </a>
   {/each}
-</section>
+</div>

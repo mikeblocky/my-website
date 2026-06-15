@@ -2,7 +2,7 @@ import { buildSocialMetadata } from '@/lib/metadata/social'
 
 export const metadata = buildSocialMetadata({
     title: 'Diary | mikeblocky.com',
-    description: 'Personal notes, reflections, and small moments I want to keep.',
+    description: 'Daily logs, short entries, and quick notes from my day-to-day life.',
     path: '/diary',
     imagePath: '/diary/opengraph-image.png',
     twitterImagePath: '/diary/twitter-image.png',

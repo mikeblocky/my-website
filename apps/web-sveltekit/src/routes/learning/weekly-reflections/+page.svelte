@@ -7,7 +7,12 @@
   export let data;
 </script>
 
-<SeoHead title="Weekly Reflections" path="/learning/weekly-reflections" />
+<SeoHead
+  title="Weekly Reflections"
+  path="/learning/weekly-reflections"
+  image="/learning/opengraph-image.png"
+  twitterImage="/learning/twitter-image.png"
+/>
 
 <PageIntro
   eyebrow="Weekly Reflections"

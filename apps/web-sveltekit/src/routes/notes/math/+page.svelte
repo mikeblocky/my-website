@@ -4,7 +4,12 @@
   import SiteFooter from '$lib/components/SiteFooter.svelte';
 </script>
 
-<SeoHead title="Math References" path="/notes/math" />
+<SeoHead
+  title="Math References"
+  path="/notes/math"
+  image="/notes/opengraph-image.png"
+  twitterImage="/notes/twitter-image.png"
+/>
 
 <PageIntro
   eyebrow="Math"

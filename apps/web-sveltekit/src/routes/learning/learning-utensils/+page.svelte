@@ -7,7 +7,12 @@
   const utensilIcons = [Keyboard, MousePointer, BookOpen, PenLine];
 </script>
 
-<SeoHead title="Personal utensils" path="/learning/learning-utensils" />
+<SeoHead
+  title="Personal utensils"
+  path="/learning/learning-utensils"
+  image="/learning/opengraph-image.png"
+  twitterImage="/learning/twitter-image.png"
+/>
 
 <SectionPageShell
   title="Personal utensils"

@@ -25,7 +25,7 @@ export function ContentPageHeader({
     children,
     className,
     titleClassName,
-    showPrideBadge = true,
+    showPrideBadge = false,
 }: ContentPageHeaderProps) {
     return (
         <StackVertical gap="md" className={className}>

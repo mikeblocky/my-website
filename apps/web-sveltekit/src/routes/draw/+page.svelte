@@ -11,6 +11,7 @@
   title="Draw"
   path="/draw"
   image="/draw/opengraph-image.jpg"
+  twitterImage="/draw/twitter-image.jpg"
   description="Suggest a scene, character, or image idea for later drawings."
 />
 

@@ -10,7 +10,8 @@
   title="about"
   path="/about"
   image="/about/opengraph-image.png"
-  description="A small note about mikeblocky.com and the person making it."
+  twitterImage="/about/twitter-image.png"
+  description="A quiet, personal note about this website, my path from Computer Science to Japanese literature, and the stories that shape me."
 />
 
 <BaseContainer size="lg" paddingX="md" paddingY="lg">

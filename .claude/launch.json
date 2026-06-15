@@ -1,0 +1,12 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "sveltekit",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev", "--workspace=@mikeblocky/web-sveltekit"],
+      "port": 5173,
+      "autoPort": true
+    }
+  ]
+}

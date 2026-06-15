@@ -189,16 +189,16 @@ export function SuggestionForm({
 
   return (
     <form
-      className="bg-white/40 dark:bg-slate-950/20 rounded-xl border border-slate-200/50 dark:border-slate-850/50 shadow-sm flex flex-col overflow-hidden pride-focus-within-glow"
+      className="bg-white/40 dark:bg-slate-950/20 rounded-xl border border-slate-200/50 dark:border-slate-850/50 shadow-sm flex flex-col pride-focus-within-glow"
       onSubmit={handleSubmit}
     >
-      <div className="grid grid-cols-1 border-b border-slate-100 dark:border-slate-900 bg-slate-50/20 dark:bg-slate-950/20 sm:grid-cols-[1fr_150px]">
+      <div className="grid grid-cols-1 border-b border-slate-100 dark:border-slate-900 bg-slate-50/20 dark:bg-slate-950/20 sm:grid-cols-[1fr_150px] rounded-t-xl">
         <input
           type="text"
           value={formState.title}
           onChange={(event) => setFormState(state => ({ ...state, title: event.target.value }))}
-          placeholder="Title of the book, manga, film, anime, album, song..."
-          className={cn(sansFont.className, "min-w-0 border-b border-slate-100 dark:border-slate-900 bg-transparent px-4 py-3 text-sm font-semibold text-slate-800 placeholder:text-muted-foreground/60 focus:outline-none dark:text-slate-100 sm:border-b-0 sm:border-r")}
+          placeholder="Title (e.g. Skip and Loafer, Perfect Blue, Kid A)"
+          className={cn(sansFont.className, "min-w-0 border-b border-slate-100 dark:border-slate-900 bg-transparent px-4 py-3 text-sm font-semibold text-slate-800 placeholder:text-muted-foreground/60 focus:outline-none dark:text-slate-100 sm:border-b-0 sm:border-r rounded-tl-xl sm:rounded-tr-none rounded-tr-xl")}
           required
         />
         <div className="relative category-dropdown-container w-full sm:w-[150px]">
@@ -207,7 +207,7 @@ export function SuggestionForm({
             onClick={() => setIsDropdownOpen(!isDropdownOpen)}
             className={cn(
               sansFont.className,
-              "flex w-full items-center justify-between bg-transparent px-4 py-3 text-sm font-semibold text-slate-700 dark:text-slate-355 focus:outline-none cursor-pointer hover:bg-slate-100/50 dark:hover:bg-slate-800/30 transition-colors h-full"
+              "flex w-full items-center justify-between bg-transparent px-4 py-3 text-sm font-semibold text-slate-700 dark:text-slate-355 focus:outline-none cursor-pointer hover:bg-slate-100/50 dark:hover:bg-slate-800/30 transition-colors h-full rounded-tr-xl sm:rounded-tl-none rounded-tl-xl"
             )}
           >
             <span>{categories.find(c => c.value === formState.category)?.label || formState.category}</span>
@@ -269,7 +269,7 @@ export function SuggestionForm({
             setFormState(state => ({ ...state, referenceUrl: event.target.value }))
             setReference(undefined)
           }}
-          placeholder="Reference URL (optional, auto-generates if empty)"
+          placeholder="Link (optional, e.g. AniList, Spotify)"
           className={cn(sansFont.className, "min-w-0 bg-transparent px-4 py-3 text-sm text-slate-800 placeholder:text-muted-foreground/60 focus:outline-none dark:text-slate-100")}
         />
         <button
@@ -286,7 +286,7 @@ export function SuggestionForm({
       {autoReference && (
         <div className="border-b border-slate-100 dark:border-slate-900 px-4 py-2.5 bg-slate-50/10 dark:bg-slate-950/5 flex items-center gap-2 text-xs text-slate-500">
           <Info size={14} className="text-slate-500 shrink-0" />
-          <span>Smart link enabled: Will automatically search <strong>{autoReference.siteName}</strong> for <em>"{formState.title}"</em>.</span>
+          <span>Will link to <strong>{autoReference.siteName}</strong> search results for <em>"{formState.title}"</em> automatically.</span>
         </div>
       )}
 
@@ -300,14 +300,14 @@ export function SuggestionForm({
         type="text"
         value={formState.author}
         onChange={(event) => setFormState(state => ({ ...state, author: event.target.value }))}
-        placeholder="Your alias (optional)"
+        placeholder="Your name or alias (optional)"
         className={cn(sansFont.className, "w-full border-b border-slate-100 dark:border-slate-900 bg-transparent px-4 py-3 text-sm font-semibold text-slate-800 placeholder:text-muted-foreground/60 focus:outline-none dark:text-slate-100")}
       />
 
       <textarea
         value={formState.note}
         onChange={(event) => setFormState(state => ({ ...state, note: event.target.value }))}
-        placeholder="Why do you recommend it? (your thoughts, best parts, favorite tracks...)"
+        placeholder="Why do you recommend it? Favorite tracks, key highlights, or general thoughts..."
         rows={4}
         className={cn(sansFont.className, "min-h-[120px] w-full resize-none bg-transparent px-4 py-3 text-sm text-slate-800 placeholder:text-muted-foreground/60 focus:outline-none dark:text-slate-100")}
       />
@@ -320,7 +320,7 @@ export function SuggestionForm({
         compact
       />
 
-      <div className="flex flex-col gap-3 border-t border-slate-100 dark:border-slate-900 px-4 py-3 bg-slate-50/20 dark:bg-slate-950/20 sm:flex-row sm:items-center sm:justify-between">
+      <div className="flex flex-col gap-3 border-t border-slate-100 dark:border-slate-900 px-4 py-3 bg-slate-50/20 dark:bg-slate-950/20 sm:flex-row sm:items-center sm:justify-between rounded-b-xl">
         <AttachmentUploadButton
           onFiles={(files) => files.forEach(file => handleImageUpload(file))}
           iconSize={13}

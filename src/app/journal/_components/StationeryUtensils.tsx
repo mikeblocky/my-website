@@ -27,7 +27,7 @@ export function StationeryUtensils() {
             <h4 className="font-semibold text-sm text-slate-800 dark:text-slate-100">Mechanical keyboard</h4>
           </div>
           <p className="text-xs text-slate-650 dark:text-slate-400 leading-relaxed mb-3">
-            Used for rapid typing, drafting essays, and digital records.
+            Used for rapid typing, writing articles, and digital records.
           </p>
           <Link 
             href="https://www.logitech.com/en-us/products/keyboards/pop-keys-wireless-mechanical.920-010708.html"

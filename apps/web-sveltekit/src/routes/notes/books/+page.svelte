@@ -4,7 +4,12 @@
   import SiteFooter from '$lib/components/SiteFooter.svelte';
 </script>
 
-<SeoHead title="Books" path="/notes/books" />
+<SeoHead
+  title="Books"
+  path="/notes/books"
+  image="/notes/opengraph-image.png"
+  twitterImage="/notes/twitter-image.png"
+/>
 
 <PageIntro
   eyebrow="Books"

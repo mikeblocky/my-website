@@ -6,7 +6,6 @@
   import SuggestionCard from './SuggestionCard.svelte';
   import SuggestionForm from './SuggestionForm.svelte';
   import { sortByCreatedAt } from '$lib/boards/board-utils';
-  import { toPng } from 'html-to-image';
 
   export let initialItems: any[] = sortByCreatedAt(initialSuggestions);
   export let isAdminMode = false;
@@ -234,6 +233,7 @@
       element.appendChild(linkBar);
   
       try {
+        const { toPng } = await import('html-to-image');
         const dataUrl = await toPng(element, {
         backgroundColor: isDark ? '#1a1525' : '#ffffff',
         style: {
@@ -363,7 +363,7 @@
   bind:isAdminMode
   bind:passcode
   accent="teal"
-  formButtonLabel="suggest a book, manga, anime, film..."
+  formButtonLabel="suggest something to read, watch, or listen to"
   {notification}
   {clearNotification}
 >

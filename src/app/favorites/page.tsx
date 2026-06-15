@@ -4,14 +4,14 @@ import { RecommendationsClient } from './_components/RecommendationsClient'
 
 export const metadata: Metadata = {
   title: 'Favorites | mikeblocky.com',
-  description: 'A personal list of favorite manga, anime, games, and music.'
+  description: 'A collection of manga, anime, music, and games that have resonated with me.'
 }
 
 export default function FavoritesPage() {
   return (
     <SectionPageShell
       title="Favorites"
-      description="A personal shelf of favorite media I keep returning to: manga, anime, books, games, and music."
+      description="A shelf of favorite manga, anime, games, and music I keep returning to."
       currentLabel="Favorites"
       footerColor="teal"
     >

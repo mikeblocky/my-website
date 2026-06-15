@@ -1,0 +1,454 @@
+@keyframes mobile-dock-icon-pop {
+  0% {
+    transform: translateY(1px) scale(0.94);
+  }
+
+  58% {
+    transform: translateY(-2px) scale(1.12);
+  }
+
+  100% {
+    transform: translateY(0) scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .page-transition {
+    animation: page-enter 360ms var(--ease-emotional) both;
+  }
+
+  .pride-focus-within-glow:focus-within {
+    animation: gemini-glow-spread 5.8s ease-in-out infinite;
+  }
+
+  .pride-gradient-text {
+    animation: pride-shift 18s ease-in-out infinite;
+  }
+
+  .pride-gradient-line {
+    background-size: 200% 200%;
+    animation: pride-shift 16s ease-in-out infinite;
+  }
+
+  .pride-icon-glow {
+    animation: pride-glow 9s ease-in-out infinite;
+  }
+
+  .pride-badge-dot {
+    animation: pride-dot 7.5s ease-in-out infinite;
+  }
+
+  .pride-button {
+    animation: pride-border-shift 18s linear infinite, pride-glow-spread 8s ease-in-out infinite;
+    transition:
+      background-color var(--motion-soft) var(--ease-soft),
+      border-color var(--motion-soft) var(--ease-soft),
+      box-shadow var(--motion-medium) var(--ease-soft),
+      transform var(--motion-medium) var(--ease-emotional);
+  }
+
+  .mobile-dock::before {
+    animation: pride-shift 22s ease-in-out infinite;
+  }
+
+  .article-mobile-toc-tint {
+    animation: pride-shift 18s ease-in-out infinite;
+  }
+
+  .mobile-more-menu a {
+    animation: menu-item-rise 280ms var(--ease-emotional) both;
+    animation-delay: calc(var(--item-index) * 32ms);
+  }
+
+  .desktop-menu-popover a {
+    animation: menu-item-rise 260ms var(--ease-emotional) both;
+    animation-delay: calc(var(--item-index) * 28ms);
+  }
+
+  .spotify-now-playing {
+    animation: now-playing-enter 340ms var(--ease-emotional) both;
+  }
+
+  .home-logo {
+    animation: float-icon 3s ease-in-out infinite;
+  }
+
+  .home-identity {
+    animation: section-rise 420ms var(--ease-emotional) both;
+  }
+
+  .home-portals {
+    animation: section-rise 400ms var(--ease-emotional) both;
+    animation-delay: 80ms;
+  }
+
+  .next-cover {
+    animation: section-rise 460ms var(--ease-emotional) both;
+    animation-delay: 160ms;
+  }
+
+  .current-work {
+    animation: section-rise 420ms var(--ease-emotional) both;
+    animation-delay: 220ms;
+  }
+
+  .home-content-grid {
+    animation: section-rise 420ms var(--ease-emotional) both;
+    animation-delay: 260ms;
+  }
+
+  .homepage-socials {
+    animation: section-rise 400ms var(--ease-emotional) both;
+    animation-delay: 300ms;
+  }
+
+  .work-item {
+    animation: menu-item-rise 360ms var(--ease-emotional) both;
+    animation-delay: calc(260ms + var(--item-index) * 70ms);
+  }
+
+  .footer-social-links a {
+    animation: menu-item-rise 300ms var(--ease-emotional) both;
+    animation-delay: calc(340ms + var(--item-index) * 55ms);
+  }
+
+  .animate-spotify-bar-1 {
+    animation: spotify-bar-1 1.8s ease-in-out infinite;
+  }
+
+  .animate-spotify-bar-2 {
+    animation: spotify-bar-2 2.1s ease-in-out infinite;
+  }
+
+  .animate-spotify-bar-3 {
+    animation: spotify-bar-3 1.65s ease-in-out infinite;
+  }
+}
+
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    scroll-behavior: auto !important;
+    transition-duration: 1ms !important;
+  }
+
+  .animate-spotify-bar-1 {
+    height: 6px;
+  }
+
+  .animate-spotify-bar-2 {
+    height: 4px;
+  }
+
+  .animate-spotify-bar-3 {
+    height: 7px;
+  }
+}
+
+@keyframes pride-shift {
+  0%, 100% {
+    background-position: 0% 0%;
+  }
+
+  50% {
+    background-position: 100% 100%;
+  }
+}
+
+@keyframes pride-border-shift {
+  0% {
+    background-position: 0% 0%, 0% 0%;
+  }
+
+  50% {
+    background-position: 0% 0%, 100% 100%;
+  }
+
+  100% {
+    background-position: 0% 0%, 200% 200%;
+  }
+}
+
+@keyframes pride-glow-spread {
+  0%, 100% {
+    box-shadow:
+      0 0 10px hsl(var(--pride-glow-val) / 0.15),
+      0 0 18px hsl(210 88% 72% / 0.08);
+  }
+
+  50% {
+    box-shadow:
+      0 0 18px hsl(var(--pride-glow-val) / 0.32),
+      0 0 32px hsl(210 88% 72% / 0.2);
+  }
+}
+
+@keyframes pride-glow {
+  0%, 100% {
+    filter: drop-shadow(0 0 8px hsl(var(--pride-glow-val) / 0.18));
+  }
+
+  50% {
+    filter: drop-shadow(0 0 14px hsl(210 88% 72% / 0.26));
+  }
+}
+
+@keyframes pride-dot {
+  0%, 100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.25);
+  }
+}
+
+@keyframes gemini-glow-spread {
+  0%, 100% {
+    box-shadow:
+      0 0 0 1px hsl(var(--pride-glow-val) / 0.15),
+      0 0 15px hsl(var(--pride-glow-val) / 0.22),
+      0 0 30px hsl(217 92% 70% / 0.12),
+      0 0 45px hsl(142 76% 66% / 0.05);
+  }
+
+  50% {
+    box-shadow:
+      0 0 0 1px hsl(var(--pride-glow-val) / 0.25),
+      0 0 28px hsl(var(--pride-glow-val) / 0.36),
+      0 0 48px hsl(217 92% 70% / 0.22),
+      0 0 70px hsl(142 76% 66% / 0.1);
+  }
+}
+
+@keyframes gemini-border-flow {
+  0% {
+    background-position: 0% 0%, 0% 0%;
+  }
+
+  50% {
+    background-position: 0% 0%, 150% 150%;
+  }
+
+  100% {
+    background-position: 0% 0%, 300% 300%;
+  }
+}
+
+@keyframes float-icon {
+  0%, 100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+@keyframes icon-soft-pop {
+  0% {
+    transform: translateY(0) scale(1) rotate(0deg);
+  }
+
+  42% {
+    transform: translateY(-1.5px) scale(1.12) rotate(-4deg);
+  }
+
+  72% {
+    transform: translateY(0.5px) scale(0.98) rotate(2deg);
+  }
+
+  100% {
+    transform: translateY(0) scale(1) rotate(0deg);
+  }
+}
+
+@keyframes section-rise {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes stat-item-rise {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes page-enter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes loading-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.985);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes loading-sweep {
+  0% {
+    transform: translateX(-120%);
+  }
+
+  50%, 100% {
+    transform: translateX(220%);
+  }
+}
+
+@keyframes menu-item-rise {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.985);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes now-playing-enter {
+  from {
+    opacity: 0;
+    transform: translateX(0.5rem);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes theme-toggle-enter {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes theme-icon-pop {
+  0% {
+    transform: rotate(0deg) scale(1);
+  }
+
+  50% {
+    transform: rotate(180deg) scale(0.8);
+  }
+
+  100% {
+    transform: rotate(360deg) scale(1);
+  }
+}
+
+@keyframes pill-active-enter {
+  from {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes stat-grow {
+  from {
+    width: 0;
+  }
+}
+
+@keyframes spotify-bar-1 {
+  0%, 100% {
+    height: 3px;
+  }
+
+  50% {
+    height: 8px;
+  }
+}
+
+@keyframes spotify-bar-2 {
+  0%, 100% {
+    height: 7px;
+  }
+
+  50% {
+    height: 2px;
+  }
+}
+
+@keyframes spotify-bar-3 {
+  0%, 100% {
+    height: 4px;
+  }
+
+  50% {
+    height: 9px;
+  }
+}
+
+
+@keyframes panel-rise {
+  from {
+    opacity: 0;
+    transform: translateY(0.4rem);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes entry-rise {
+  from {
+    opacity: 0;
+    transform: translateY(0.35rem);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

@@ -1,0 +1,253 @@
+.desktop-nav-shell {
+  position: relative;
+  z-index: 50;
+  display: none;
+  min-width: 0;
+  align-items: center;
+  gap: 1rem;
+  font-family: var(--font-mono);
+}
+
+.desktop-nav {
+  display: none;
+  align-items: center;
+  gap: 1.25rem;
+  font-family: var(--font-mono);
+}
+
+.desktop-nav a {
+  position: relative;
+  display: block;
+  width: 100%;
+  color: hsl(var(--muted-foreground));
+  font-size: 0.875rem;
+  transition: color var(--motion-soft) var(--ease-soft);
+}
+
+.desktop-nav a::after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background-image: linear-gradient(135deg, var(--pride-colors));
+  transition: width var(--motion-medium) var(--ease-emotional);
+}
+
+.desktop-nav a:hover {
+  color: transparent;
+  background-image: linear-gradient(135deg, var(--pride-colors));
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+.desktop-nav a:hover::after {
+  width: 100%;
+}
+
+.desktop-menu-container {
+  position: relative;
+  margin-left: -0.5rem;
+}
+
+.desktop-menu-container > button {
+  position: relative;
+  z-index: 60;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.375rem;
+  border: 1px solid transparent;
+  border-radius: 0.5rem;
+  background: transparent;
+  color: hsl(var(--muted-foreground));
+  cursor: pointer;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.05em;
+  padding: 0.375rem 0.75rem;
+  transition:
+    background-color var(--motion-soft) var(--ease-soft),
+    border-color var(--motion-soft) var(--ease-soft),
+    color var(--motion-soft) var(--ease-soft),
+    transform var(--motion-soft) var(--ease-emotional);
+}
+
+.desktop-menu-icon {
+  position: relative;
+  display: grid;
+  width: 1rem;
+  height: 1rem;
+  place-items: center;
+  transition: transform 200ms var(--ease-soft);
+}
+
+.desktop-menu-icon.active {
+  transform: rotate(90deg);
+}
+
+.desktop-menu-icon svg {
+  grid-area: 1 / 1;
+}
+
+.desktop-menu-container > button:hover,
+.desktop-menu-container > button.active {
+  border-color: rgb(244 114 182 / 0.2);
+  background: rgb(244 114 182 / 0.1);
+  color: rgb(236 72 153);
+  transform: translateY(-1px);
+}
+
+.dark .desktop-menu-container > button:hover,
+.dark .desktop-menu-container > button.active {
+  color: rgb(249 168 212);
+}
+
+.desktop-menu-popover {
+  position: absolute;
+  top: 3rem;
+  left: 0.5rem;
+  z-index: 60;
+  min-width: 12.5rem;
+  overflow: hidden;
+  border: 2px solid rgb(226 232 240);
+  border-radius: 0.5rem;
+  background: rgb(255 255 255);
+}
+
+.dark .desktop-menu-popover {
+  border-color: rgb(30 41 59);
+  background: rgb(15 23 42);
+}
+
+.desktop-menu-popover a {
+  display: block;
+  padding: 0.625rem 1rem;
+  color: hsl(var(--muted-foreground));
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  transition:
+    background-color 180ms ease,
+    color 180ms ease;
+}
+
+.desktop-menu-item {
+  width: 100%;
+}
+
+.desktop-menu-popover a:hover,
+.desktop-menu-popover a:focus-visible {
+  background: rgb(236 72 153 / 0.1);
+  color: rgb(236 72 153);
+}
+
+.dark .desktop-menu-popover a:hover,
+.dark .desktop-menu-popover a:focus-visible {
+  color: rgb(249 168 212);
+}
+
+.spotify-now-playing {
+  display: none;
+  min-width: 0;
+  max-width: min(24rem, 42vw);
+  align-items: center;
+  gap: 0.375rem;
+  color: hsl(var(--muted-foreground));
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  font-weight: 500;
+  letter-spacing: 0.025em;
+  transition:
+    color 200ms ease,
+    filter 240ms ease,
+    transform 240ms ease;
+}
+
+.spotify-now-playing:hover {
+  color: hsl(var(--foreground));
+  transform: translateY(-1px);
+}
+
+.spotify-now-playing > span:last-child {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.spotify-bars {
+  display: inline-flex;
+  width: 0.625rem;
+  height: 0.625rem;
+  flex-shrink: 0;
+  align-items: flex-end;
+  gap: 1.5px;
+  padding-bottom: 0.125rem;
+}
+
+.spotify-bars i {
+  width: 1.5px;
+  border-radius: 9999px;
+  background: rgb(16 185 129);
+}
+
+.theme-toggle-shell {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  user-select: none;
+}
+
+.theme-toggle,
+.theme-toggle-placeholder {
+  display: inline-flex;
+  width: 2.25rem;
+  height: 2.25rem;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 0.5rem;
+  background: transparent;
+}
+
+.theme-toggle {
+  color: hsl(var(--muted-foreground));
+  cursor: pointer;
+  padding: 0.5rem;
+  animation: theme-toggle-enter var(--motion-soft) var(--ease-soft) both;
+  transition:
+    background-color var(--motion-soft) var(--ease-soft),
+    color var(--motion-soft) var(--ease-soft),
+    transform var(--motion-soft) var(--ease-emotional);
+}
+
+.theme-toggle:hover {
+  background: rgb(243 244 246);
+  color: hsl(var(--foreground));
+  transform: translateY(-1px);
+}
+
+.dark .theme-toggle:hover {
+  background: rgb(31 41 55);
+}
+
+.theme-toggle-icon {
+  display: flex;
+  width: 1rem;
+  height: 1rem;
+  align-items: center;
+  justify-content: center;
+  animation: theme-icon-pop 720ms var(--ease-emotional) both;
+}
+
+.theme-toggle-icon.dark-icon {
+  transform: rotate(360deg);
+}
+
+.theme-toggle-icon svg {
+  width: 1rem;
+  height: 1rem;
+}
+

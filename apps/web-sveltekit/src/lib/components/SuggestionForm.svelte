@@ -173,22 +173,22 @@
 </script>
 
 <form
-  class="bg-white/40 dark:bg-slate-950/20 rounded-xl border border-slate-200/50 dark:border-slate-850/50 shadow-sm flex flex-col text-left font-sans overflow-hidden pride-focus-within-glow"
+  class="bg-white/40 dark:bg-slate-950/20 rounded-xl border border-slate-200/50 dark:border-slate-850/50 shadow-sm flex flex-col text-left font-sans pride-focus-within-glow"
   on:submit={handleSubmit}
 >
-  <div class="grid grid-cols-1 border-b border-slate-100 dark:border-slate-900 bg-slate-50/20 dark:bg-slate-950/20 sm:grid-cols-[1fr_150px] overflow-hidden rounded-t-xl">
+  <div class="grid grid-cols-1 border-b border-slate-100 dark:border-slate-900 bg-slate-50/20 dark:bg-slate-950/20 sm:grid-cols-[1fr_150px] rounded-t-xl">
     <input
       type="text"
       bind:value={title}
-      placeholder="Title of the book, manga, film, anime, album, song..."
-      class="min-w-0 border-b border-slate-100 dark:border-slate-900 bg-transparent px-4 py-3 text-sm font-semibold text-slate-800 placeholder:text-muted-foreground/60 focus:outline-none dark:text-slate-100 sm:border-b-0 sm:border-r"
+      placeholder="Title (e.g. Skip and Loafer, Your Letter, or such)"
+      class="min-w-0 border-b border-slate-100 dark:border-slate-900 bg-transparent px-4 py-3 text-sm font-semibold text-slate-800 placeholder:text-muted-foreground/60 focus:outline-none dark:text-slate-100 sm:border-b-0 sm:border-r rounded-tl-xl sm:rounded-tr-none rounded-tr-xl"
       required
     />
     <div class="relative category-dropdown-container w-full sm:w-[150px]">
       <button
         type="button"
         on:click={handleDropdownClick}
-        class="flex w-full items-center justify-between bg-transparent px-4 py-3 text-sm font-semibold text-slate-700 dark:text-slate-355 focus:outline-none cursor-pointer hover:bg-slate-100/50 dark:hover:bg-slate-800/30 transition-colors h-full border-0"
+        class="flex w-full items-center justify-between bg-transparent px-4 py-3 text-sm font-semibold text-slate-700 dark:text-slate-355 focus:outline-none cursor-pointer hover:bg-slate-100/50 dark:hover:bg-slate-800/30 transition-colors h-full border-0 rounded-tr-xl sm:rounded-tl-none rounded-tl-xl"
       >
         <span>{categories.find(c => c.value === category)?.label || category}</span>
         <div
@@ -224,7 +224,7 @@
     <input
       type="url"
       bind:value={referenceUrl}
-      placeholder="Reference URL (optional, auto-generates if empty)"
+      placeholder="Link (optional, e.g. AniList, Spotify)"
       class="min-w-0 bg-transparent px-4 py-3 text-sm text-slate-800 placeholder:text-muted-foreground/60 focus:outline-none dark:text-slate-100"
     />
     <button
@@ -243,9 +243,9 @@
   </div>
 
   {#if autoReference}
-    <div class="border-b border-slate-100 dark:border-slate-900 px-4 py-2.5 bg-slate-50/10 dark:bg-slate-950/5 flex items-center gap-2 text-xs text-slate-505" transition:fade>
+    <div class="border-b border-slate-100 dark:border-slate-900 px-4 py-2.5 bg-slate-50/10 dark:bg-slate-950/5 flex items-center gap-2 text-xs text-slate-500" transition:fade>
       <Info size={14} class="text-slate-500 shrink-0" />
-      <span>Smart link enabled: Will automatically search <strong>{autoReference.siteName}</strong> for <em>"{title}"</em>.</span>
+      <span>Will link to <strong>{autoReference.siteName}</strong> search results for <em>"{title}"</em> automatically.</span>
     </div>
   {/if}
 
@@ -258,13 +258,13 @@
   <input
     type="text"
     bind:value={author}
-    placeholder="Your alias (optional)"
+    placeholder="Your name or alias (optional)"
     class="w-full border-b border-slate-100 dark:border-slate-900 bg-transparent px-4 py-3 text-sm font-semibold text-slate-800 placeholder:text-muted-foreground/60 focus:outline-none dark:text-slate-100"
   />
 
   <textarea
     bind:value={note}
-    placeholder="Why do you recommend it? (your thoughts, best parts, favorite tracks...)"
+    placeholder="Why do you recommend it? Favorite tracks, key highlights, or general thoughts..."
     rows={4}
     class="min-h-[120px] w-full resize-none bg-transparent px-4 py-3 text-sm text-slate-850 placeholder:text-muted-foreground/60 focus:outline-none dark:text-slate-100"
   />
@@ -280,7 +280,7 @@
     </div>
   {/if}
 
-  <div class="flex flex-col gap-3 border-t border-slate-100 dark:border-slate-900 px-4 py-3 bg-slate-50/20 dark:bg-slate-950/20 sm:flex-row sm:items-center sm:justify-between overflow-hidden rounded-b-xl">
+  <div class="flex flex-col gap-3 border-t border-slate-100 dark:border-slate-900 px-4 py-3 bg-slate-50/20 dark:bg-slate-950/20 sm:flex-row sm:items-center sm:justify-between rounded-b-xl">
     <AttachmentUploadButton
       onFiles={(files) => files.forEach(handleImageUpload)}
       iconSize={13}

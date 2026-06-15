@@ -9,6 +9,8 @@
 <SeoHead
   title={`${data.week.title} | Weekly Reflections`}
   path={data.week.href}
+  image="/learning/opengraph-image.png"
+  twitterImage="/learning/twitter-image.png"
   description={data.week.description}
 />
 

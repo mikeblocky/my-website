@@ -5,9 +5,7 @@
   import BoardShell from './BoardShell.svelte';
   import DrawPromptForm from './DrawPromptForm.svelte';
   import DrawPromptItem from './DrawPromptItem.svelte';
-  import { snapTalkCard } from '$lib/utils/snap'; // Wait, let's check if snapTalkCard works for draw as well or if there is a snapDrawCard. Actually in Next.js DrawBoard it creates a custom snap element logic. Let's see if we should write a custom snap logic inside Svelte or reuse snap.
   import { sortByCreatedAt } from '$lib/boards/board-utils';
-  import { toPng } from 'html-to-image';
 
   export let singleMode = false;
   export let initialPromptsData: any[] = sortByCreatedAt(initialPrompts);
@@ -280,6 +278,7 @@
       element.appendChild(linkBar);
   
       try {
+        const { toPng } = await import('html-to-image');
         const dataUrl = await toPng(element, {
         backgroundColor: isDark ? '#110c1c' : '#ffffff',
         style: {

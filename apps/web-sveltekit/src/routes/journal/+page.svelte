@@ -7,14 +7,20 @@
   import SiteFooter from '$lib/components/SiteFooter.svelte';
 </script>
 
-<SeoHead title="journal" path="/journal" image="/blog/opengraph-image.png" />
+<SeoHead
+  title="journal"
+  path="/journal"
+  image="/blog/opengraph-image.png"
+  twitterImage="/blog/twitter-image.png"
+  description="A personal collection of articles, notes, and logs that I write over time."
+/>
 
 <BaseContainer size="lg" paddingX="md" paddingY="lg">
   <StackVertical gap="md">
     <PageIntro
       eyebrow="Journal"
       title="Journal"
-      description="A collection of my thoughts: long-form essays, tech reflections, and daily journal pages."
+      description="A personal collection of articles, notes, and logs that I write over time."
     />
 
     <JournalShell />

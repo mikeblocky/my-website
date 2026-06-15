@@ -10,12 +10,12 @@
 <SeoHead
   title="Suggestions"
   path="/suggestions"
-  description="Suggest books, manga, movies, series, music, games, or anything else for me to try."
+  description="A place to suggest books, manga, music, or films you think I would enjoy."
 />
 
 <SectionPageShell
   title="Suggestions"
-  description="A place to leave media I should read, watch, listen to, play, or keep near."
+  description="Suggest books, manga, music, or movies for me to check out next."
   currentLabel="Interact"
   footerColor="blue"
 >

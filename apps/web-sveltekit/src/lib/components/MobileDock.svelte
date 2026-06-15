@@ -10,7 +10,6 @@
     MessageSquare,
     MoreHorizontal,
     User,
-    Book,
     Users,
     Heart,
     Music,
@@ -24,7 +23,6 @@
 
   let isMoreOpen = false;
   let isSpotifyCollapsed = false;
-  let device: 'apple' | 'material' = 'apple';
   let isGenerator = false;
 
   const mainTabs = [
@@ -62,34 +60,29 @@
     }
   }
 
-  const isTabActive = (tab: { href: string; exact?: boolean }) => {
+  // `pathname` is passed in explicitly so the reactive statements and markup
+  // that call this track it as a dependency.
+  const isTabActive = (tab: { href: string; exact?: boolean }, path: string) => {
     if (tab.exact) {
-      return pathname === tab.href;
+      return path === tab.href;
     }
-    return pathname.startsWith(tab.href);
+    return path.startsWith(tab.href);
   };
 
   onMount(() => {
     startSpotifyPolling();
-
-    // Detect device client-side
-    const ua = navigator.userAgent.toLowerCase();
-    if (/iphone|ipad|ipod|macintosh/.test(ua)) {
-      device = 'apple';
-    } else {
-      device = 'material';
-    }
   });
 
+  $: moreActive = moreTabs.some(tab => isTabActive(tab, pathname));
+
   $: activeIndex = (() => {
-    if (isMoreOpen) return 4;
-    const idx = mainTabs.findIndex(tab => isTabActive(tab));
-    return idx === -1 ? -1 : idx;
+    if (isMoreOpen || moreActive) return 4;
+    return mainTabs.findIndex(tab => isTabActive(tab, pathname));
   })();
 
-  $: getPlayerBottomOffset = () => {
-    return isMoreOpen ? '320px' : '72px';
-  };
+  $: getPlayerBottomOffset = () => '72px';
+  $: playerBarVisible = !!$spotifyCurrentlyPlaying && !isSpotifyCollapsed;
+  $: moreMenuBottom = playerBarVisible ? '9.5rem' : '5.25rem';
 </script>
 
 <div class="sm:hidden select-none">
@@ -100,7 +93,7 @@
       <button
         type="button"
         on:click={() => (isSpotifyCollapsed = false)}
-        class="fixed right-4 z-40 w-12 h-12 rounded-full overflow-hidden focus:outline-none bg-slate-100 dark:bg-slate-800 border-2 border-white/40 dark:border-slate-700/60 shadow-lg shadow-black/20 active:scale-[0.97] transition-transform duration-180 ease-[cubic-bezier(0.22,1,0.36,1)]"
+        class="fixed right-4 z-50 w-12 h-12 rounded-full overflow-hidden focus:outline-none bg-slate-100/70 dark:bg-slate-800/60 border border-white/20 dark:border-white/10 backdrop-blur-2xl active:scale-[0.97] transition-transform duration-180 ease-[cubic-bezier(0.22,1,0.36,1)]"
         style="bottom: calc(1.5rem + env(safe-area-inset-bottom, 0px) + {getPlayerBottomOffset()});"
         title="Expand currently playing"
         transition:fly={{ x: 12, duration: 260, opacity: 0 }}
@@ -119,12 +112,12 @@
       </button>
     {:else}
       <div
-        class="fixed left-1/2 w-[calc(100%-2rem)] max-w-md z-40 -translate-x-1/2"
+        class="fixed left-1/2 w-[calc(100%-2rem)] max-w-md z-50 -translate-x-1/2"
         style="bottom: calc(1rem + env(safe-area-inset-bottom, 0px) + {getPlayerBottomOffset()});"
         transition:fly={{ y: 14, duration: 300, opacity: 0 }}
       >
         <div
-          class="flex items-center justify-between p-2.5 rounded-xl relative overflow-hidden bg-white/80 dark:bg-slate-950/85 backdrop-blur-2xl border border-white/25 dark:border-white/10 shadow-lg shadow-black/5 dark:shadow-black/20"
+          class="flex items-center justify-between p-2.5 rounded-2xl relative overflow-hidden bg-white/55 dark:bg-slate-950/55 backdrop-blur-2xl border border-white/[0.14] dark:border-white/[0.08]"
         >
           <!-- Shifting Rainbow Gradient Background Tint Overlay -->
           <div
@@ -181,129 +174,58 @@
     {/if}
   {/if}
 
-  <!-- ────────────────── APPLE LIQUID GLASS TAB BAR ────────────────── -->
-  {#if device === 'apple'}
-    <nav
-      class="mobile-dock mobile-dock-apple"
-      style="bottom: calc(1rem + env(safe-area-inset-bottom, 0px));"
-    >
-      <!-- Shifting Rainbow Gradient Background Tint Overlay -->
-      <div
-        class="absolute inset-0 opacity-[0.05] dark:opacity-[0.08] pointer-events-none"
-        style="background-image: linear-gradient(135deg, var(--pride-colors-repeat)); background-size: 200% 200%; animation: pride-shift 12s ease-in-out infinite;"
-      ></div>
-      <!-- Glossy Liquid Sheen Overlay -->
-      <div class="absolute inset-0 bg-[linear-gradient(120deg,rgba(255,255,255,0.15)_0%,rgba(255,255,255,0.05)_30%,rgba(255,255,255,0)_70%)] pointer-events-none"></div>
-
-      {#each mainTabs as tab, index}
-        {@const active = isTabActive(tab) && !isMoreOpen}
-        <a
-          href={tab.href}
-          class="mobile-dock-tab"
-          class:active
-          on:click={(e) => {
-            if (active) {
-              e.preventDefault();
-              if (!isGenerator) {
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-              }
+  <!-- ────────────────── iOS LIQUID GLASS TAB BAR ────────────────── -->
+  <nav
+    class="mobile-dock"
+    style="bottom: calc(1rem + env(safe-area-inset-bottom, 0px));"
+  >
+    {#each mainTabs as tab, index}
+      {@const active = isTabActive(tab, pathname) && !isMoreOpen}
+      <a
+        href={tab.href}
+        class="mobile-dock-tab"
+        class:active
+        on:click={(e) => {
+          if (active) {
+            e.preventDefault();
+            if (!isGenerator) {
+              window.scrollTo({ top: 0, behavior: 'smooth' });
             }
-          }}
-        >
-          <span class="mobile-dock-icon-wrap">
-            <svelte:component this={tab.icon} class="mobile-dock-icon" />
-          </span>
-          <span class="mobile-dock-label">
-            {tab.label}
-          </span>
-        </a>
-      {/each}
-
-      <!-- More Tab Trigger -->
-      <button
-        type="button"
-        on:click={() => (isMoreOpen = !isMoreOpen)}
-        class="mobile-dock-tab mobile-dock-more"
-        class:active={isMoreOpen}
+          }
+        }}
       >
         <span class="mobile-dock-icon-wrap">
-          <svelte:component this={MoreHorizontal} class="mobile-dock-icon" />
+          <svelte:component this={tab.icon} class="mobile-dock-icon" />
         </span>
         <span class="mobile-dock-label">
-          More
+          {tab.label}
         </span>
-      </button>
+      </a>
+    {/each}
 
-      <!-- Sliding Liquid Active Dot -->
-      {#if activeIndex !== -1}
-        <div
-          class="absolute bottom-1 w-[4px] h-[4px] rounded-full bg-[hsl(var(--pride-glow-val))] shadow-[0_0_8px_hsl(var(--pride-glow-val)/0.9)] transition-all duration-260 ease-[cubic-bezier(0.22,1,0.36,1)]"
-          style="left: calc({activeIndex * 20}% + 10% - 2px);"
-        ></div>
-      {/if}
-    </nav>
-  {/if}
-
-  <!-- ────────────────── MATERIAL 3 EXPRESSIVE TAB BAR ────────────────── -->
-  {#if device === 'material'}
-    <nav
-      class="mobile-dock mobile-dock-material"
-      style="bottom: calc(1rem + env(safe-area-inset-bottom, 0px));"
+    <!-- More Tab Trigger -->
+    <button
+      type="button"
+      on:click={() => (isMoreOpen = !isMoreOpen)}
+      class="mobile-dock-tab mobile-dock-more"
+      class:active={isMoreOpen || moreActive}
     >
-      <!-- Shifting Rainbow Gradient Background Tint Overlay -->
+      <span class="mobile-dock-icon-wrap">
+        <svelte:component this={MoreHorizontal} class="mobile-dock-icon" />
+      </span>
+      <span class="mobile-dock-label">
+        More
+      </span>
+    </button>
+
+    <!-- Sliding Liquid Active Dot -->
+    {#if activeIndex !== -1}
       <div
-        class="absolute inset-0 opacity-[0.05] dark:opacity-[0.08] pointer-events-none"
-        style="background-image: linear-gradient(135deg, var(--pride-colors-repeat)); background-size: 200% 200%; animation: pride-shift 12s ease-in-out infinite;"
+        class="absolute bottom-1 w-[4px] h-[4px] rounded-full bg-[hsl(var(--pride-glow-val))] shadow-[0_0_8px_hsl(var(--pride-glow-val)/0.9)] transition-all duration-260 ease-[cubic-bezier(0.22,1,0.36,1)]"
+        style="left: calc({activeIndex * 20}% + 10% - 2px);"
       ></div>
-      <!-- Glossy Liquid Sheen Overlay -->
-      <div class="absolute inset-0 bg-[linear-gradient(120deg,rgba(255,255,255,0.15)_0%,rgba(255,255,255,0.05)_30%,rgba(255,255,255,0)_70%)] pointer-events-none"></div>
-
-      {#each mainTabs as tab, index}
-        {@const active = isTabActive(tab) && !isMoreOpen}
-        <a
-          href={tab.href}
-          class="mobile-dock-tab"
-          class:active
-          on:click={(e) => {
-            if (active) {
-              e.preventDefault();
-              if (!isGenerator) {
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-              }
-            }
-          }}
-        >
-          <span class="mobile-dock-icon-wrap">
-            {#if active}
-              <span class="mobile-dock-icon-pill" transition:fade={{ duration: 190 }}></span>
-            {/if}
-            <svelte:component this={tab.icon} class="mobile-dock-icon" />
-          </span>
-          <span class="mobile-dock-label">
-            {tab.label}
-          </span>
-        </a>
-      {/each}
-
-      <!-- More Tab Trigger -->
-      <button
-        type="button"
-        on:click={() => (isMoreOpen = !isMoreOpen)}
-        class="mobile-dock-tab mobile-dock-more"
-        class:active={isMoreOpen}
-      >
-        <span class="mobile-dock-icon-wrap">
-          {#if isMoreOpen}
-            <span class="mobile-dock-icon-pill" transition:fade={{ duration: 190 }}></span>
-          {/if}
-          <svelte:component this={MoreHorizontal} class="mobile-dock-icon" />
-        </span>
-        <span class="mobile-dock-label">
-          More
-        </span>
-      </button>
-    </nav>
-  {/if}
+    {/if}
+  </nav>
 
   <!-- ────────────────── MORE FLOATING OVERLAY MENU ────────────────── -->
   {#if isMoreOpen}
@@ -319,10 +241,10 @@
 
     <div
       class="mobile-more-menu"
-      style="bottom: calc(5.25rem + env(safe-area-inset-bottom, 0px));"
+      style="bottom: calc({moreMenuBottom} + env(safe-area-inset-bottom, 0px));"
     >
       {#each moreTabs as tab, index}
-        {@const active = isTabActive(tab)}
+        {@const active = isTabActive(tab, pathname)}
         <div transition:fly={{ y: 8, delay: index * 32, duration: 280, opacity: 0 }}>
           <a
             href={tab.href}

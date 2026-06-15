@@ -4,11 +4,16 @@
   import SectionPageShell from '$lib/components/SectionPageShell.svelte';
 </script>
 
-<SeoHead title="Learning" path="/learning" />
+<SeoHead
+  title="Learning"
+  path="/learning"
+  image="/learning/opengraph-image.png"
+  twitterImage="/learning/twitter-image.png"
+/>
 
 <SectionPageShell
   title="Learning"
-  description="A collection of my learning pages: weekly reflections, materials I use, and more."
+  description="Weekly reflections, resources I use, and notes from things I'm trying to learn."
   currentLabel="Learning"
   footerColor="blue"
 >

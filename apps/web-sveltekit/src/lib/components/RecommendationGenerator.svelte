@@ -3,7 +3,6 @@
   import { Plus, Trash2, Download, Copy, Upload, Check, Image as ImageIcon, LayoutGrid, Eye } from '@lucide/svelte';
   import RecommendationCard from './RecommendationCard.svelte';
   import ImageCropperModal from './ImageCropperModal.svelte';
-  import { toPng } from 'html-to-image';
 
   type Recommendation = {
     id: string;
@@ -190,6 +189,7 @@
     isExporting = true;
     await new Promise(r => setTimeout(r, 120));
     try {
+      const { toPng } = await import('html-to-image');
       const dataUrl = await toPng(el, { style: { transform: 'none' } });
       const suffix = previewMode === 'single'
         ? activeItem.title.toLowerCase().replace(/[^a-z0-9]+/g, '-')
@@ -210,6 +210,7 @@
       const el = document.getElementById('favorites-card-export-target');
       if (!el) return;
       const rowCount = Math.ceil(items.length / 2);
+      const { toPng } = await import('html-to-image');
       for (let i = 0; i < rowCount; i++) {
         activeIndex = i * 2;
         previewMode = 'row';

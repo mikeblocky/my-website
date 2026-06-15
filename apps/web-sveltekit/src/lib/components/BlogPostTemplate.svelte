@@ -101,9 +101,7 @@
           </div>
         </article>
 
-        <div>
-          <ArticleLineRail articleId="content" />
-        </div>
+        <ArticleLineRail articleId="content" />
       </div>
     </StackVertical>
   </BaseContainer>

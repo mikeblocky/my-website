@@ -1,4 +1,7 @@
-import { toPng } from 'html-to-image'
+async function renderPng(element: HTMLElement, options: Record<string, unknown>) {
+  const { toPng } = await import('html-to-image')
+  return toPng(element, options)
+}
 
 export async function snapTalkCard(id: string) {
   const element = document.getElementById(`talk-${id}`)
@@ -21,7 +24,7 @@ export async function snapTalkCard(id: string) {
   element.appendChild(linkBar)
 
   try {
-    const dataUrl = await toPng(element, {
+    const dataUrl = await renderPng(element, {
       backgroundColor: isDark ? '#1a1525' : '#ffffff',
       style: {
         borderRadius: '16px',
@@ -79,7 +82,7 @@ export async function snapSuggestionCard(id: string) {
   element.appendChild(linkBar)
 
   try {
-    const dataUrl = await toPng(element, {
+    const dataUrl = await renderPng(element, {
       backgroundColor: isDark ? '#1a1525' : '#ffffff',
       style: {
         borderRadius: '16px',
@@ -137,7 +140,7 @@ export async function snapSketchbookCard(id: string) {
   element.style.flexWrap = 'wrap'
 
   try {
-    const dataUrl = await toPng(element, {
+    const dataUrl = await renderPng(element, {
       backgroundColor: isDark ? '#1a1525' : '#ffffff',
       style: {
         borderRadius: '16px',
@@ -192,7 +195,7 @@ export async function snapDrawCard(id: string) {
   element.appendChild(linkBar)
 
   try {
-    const dataUrl = await toPng(element, {
+    const dataUrl = await renderPng(element, {
       backgroundColor: isDark ? '#110c1c' : '#ffffff',
       style: {
         borderRadius: '16px',

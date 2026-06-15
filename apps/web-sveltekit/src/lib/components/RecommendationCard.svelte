@@ -7,7 +7,7 @@
 <article class:compact class="recommendation-card pride-soft-card">
   {#if item.imageUrl}
     <div class="recommendation-media">
-      <img src={item.imageUrl} alt="" loading="lazy" />
+      <img src={item.imageUrl} alt="" loading="lazy" decoding="async" />
     </div>
   {:else}
     <div class="recommendation-fallback">{item.medium?.slice(0, 1)}</div>

@@ -20,12 +20,6 @@
   </div>
 
   <div class="section-title-block">
-    {#if showPrideBadge}
-      <span class="pride-badge px-2.5 py-1 text-[11px] font-medium">
-        <span class="pride-badge-dot"></span>
-        Happy Pride Month!
-      </span>
-    {/if}
     <h1>{title}</h1>
     {#if description}
       <p>{description}</p>

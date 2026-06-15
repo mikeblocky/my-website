@@ -5,7 +5,12 @@
   import SiteFooter from '$lib/components/SiteFooter.svelte';
 </script>
 
-<SeoHead title="LLM From Scratch - Chapter 1 Notes" path="/notes/books/llm-from-scratch-raschka/chapter-1" />
+<SeoHead
+  title="LLM From Scratch - Chapter 1 Notes"
+  path="/notes/books/llm-from-scratch-raschka/chapter-1"
+  image="/notes/opengraph-image.png"
+  twitterImage="/notes/twitter-image.png"
+/>
 
 <PageIntro
   eyebrow="LLM from Scratch"

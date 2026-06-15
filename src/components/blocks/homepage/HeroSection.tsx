@@ -74,7 +74,7 @@ export function HeroSection() {
                                 {
                                     href: "/journal",
                                     label: "Journal",
-                                    desc: "essays, daily logs & journaling tools",
+                                    desc: "articles, daily logs & journaling tools",
                                     icon: <BookOpen className="w-4 h-4 text-muted-foreground/70 group-hover:pride-text transition-colors duration-200" strokeWidth={1.5} />
                                 },
                                 {

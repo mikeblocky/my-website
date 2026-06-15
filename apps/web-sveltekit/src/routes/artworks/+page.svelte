@@ -6,11 +6,11 @@
   export let data;
 </script>
 
-<SeoHead title="artworks" path="/artworks" image="/artworks/opengraph-image.png" />
+<SeoHead title="artworks" path="/artworks" image="/artworks/opengraph-image.png" description="A quiet gallery archiving my character illustrations, sketches, and drawings." />
 
 <SectionPageShell
   title="Gallery"
-  description="A gallery of my drawings and illustrations, alongside theme distributions."
+  description="A personal archive of drawings, digital sketches, and character illustrations."
   currentLabel="Gallery"
   footerColor="blue"
 >

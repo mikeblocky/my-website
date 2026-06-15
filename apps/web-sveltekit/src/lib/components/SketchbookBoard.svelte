@@ -3,7 +3,6 @@
   import BoardShell from './BoardShell.svelte';
   import SketchbookCanvas from './SketchbookCanvas.svelte';
   import SketchbookCard from './SketchbookCard.svelte';
-  import { toPng } from 'html-to-image';
 
   export let isAdminMode = false;
   export let passcode = '';
@@ -256,6 +255,7 @@
       element.style.flexWrap = 'wrap';
   
       try {
+        const { toPng } = await import('html-to-image');
         const dataUrl = await toPng(element, {
         backgroundColor: isDark ? '#1a1525' : '#ffffff',
         style: {

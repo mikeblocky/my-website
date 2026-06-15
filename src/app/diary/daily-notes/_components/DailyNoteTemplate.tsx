@@ -19,8 +19,8 @@ export function DailyNoteTemplate({ title, children }: DailyNoteTemplateProps) {
                     title={title}
                     breadcrumbs={[
                         { href: '/', label: 'Home', emoji: '🐶' },
-                        { href: '/diary', label: 'Diary' },
-                        { href: '/diary/daily-notes', label: 'Daily notes' },
+                        { href: '/journal', label: 'Journal' },
+                        { href: '/journal?tab=notes', label: 'Daily notes' },
                         { label: title }
                     ]}
                 >

@@ -25,12 +25,13 @@
   title="friends"
   path="/friends"
   image="/friends/opengraph-image.jpg"
-  description="A small map of friendships and people around mikeblocky.com."
+  twitterImage="/friends/twitter-image.jpg"
+  description="A page dedicated to wonderful friends, artists, and creators I have met online."
 />
 
 <SectionPageShell
   title="Friends"
-  description="A directory of wonderful people, creators, and mutual friends I've built connections with along the way."
+  description="A page dedicated to wonderful friends, artists, and creators I have met online."
   currentLabel="Friends"
   footerColor="blue"
 >

@@ -5,7 +5,7 @@ import { InteractClient } from './_components/InteractClient'
 
 export const metadata: Metadata = {
 	title: 'Interact | mikeblocky.com',
-	description: 'Connect with me: leave a message in the guestbook, suggest drawing prompts, or view my social circle.'
+	description: 'A space to connect: send messages, draw something in the sketchbook, suggest books or music, or leave drawing prompts.'
 }
 
 // Cache-buster comment to force a fresh chunk hash and bypass stale local browser caches on other devices
@@ -13,7 +13,7 @@ export default function InteractPage() {
 	return (
 		<SectionPageShell
 			title="Interact"
-			description="A place to connect and interact: share recommendations, leave suggestions, ask questions."
+			description="A space to send messages, draw something in the sketchbook, suggest books or music, or leave drawing prompts."
 			currentLabel="Interact"
 		>
 			<Suspense fallback={

@@ -31,7 +31,7 @@ export function JournalClient({ posts }: JournalClientProps) {
 	const mostRecentMonth = monthGroups[0]?.month
 
 	const tabs = [
-		{ id: 'essays' as Tab, label: 'Essays & articles' },
+		{ id: 'essays' as Tab, label: 'Articles' },
 		{ id: 'notes' as Tab, label: 'Daily notes' },
 		{ id: 'utensils' as Tab, label: 'Stationery setup' },
 		{ id: 'activity' as Tab, label: 'Activity' }
@@ -60,7 +60,7 @@ export function JournalClient({ posts }: JournalClientProps) {
 						<div className="mb-4">
 							<h3 className="text-lg font-semibold text-slate-800 dark:text-slate-100">Daily journal logs</h3>
 							<p className="text-sm text-muted-foreground leading-relaxed mt-1">
-								Short entries, gratitude notes, and snapshots of what I document and learn each day.
+								Daily logs, short entries, and quick notes from my day-to-day life.
 							</p>
 						</div>
 
@@ -81,7 +81,7 @@ export function JournalClient({ posts }: JournalClientProps) {
 													monoFont.className,
 													"block py-1.5 px-3 rounded-md border border-transparent",
 													"text-xs sm:text-sm",
-													"text-slate-655 dark:text-slate-400",
+													"text-slate-600/90 dark:text-slate-400",
 													"hover:border-[hsl(var(--pride-glow-val))]/20 hover:bg-[hsl(var(--pride-glow-val))]/5 hover:pride-text",
 													"transition-all duration-150"
 												)}
@@ -121,7 +121,7 @@ export function JournalClient({ posts }: JournalClientProps) {
 																monoFont.className,
 																"block py-1.5 px-3 rounded-md border border-transparent",
 																"text-xs sm:text-sm",
-																"text-slate-655 dark:text-slate-400",
+																"text-slate-600/90 dark:text-slate-400",
 																"hover:border-[hsl(var(--pride-glow-val))]/20 hover:bg-[hsl(var(--pride-glow-val))]/5 hover:pride-text",
 																"transition-all duration-150"
 															)}

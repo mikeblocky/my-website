@@ -7,12 +7,14 @@
   // Resolve social image or default
   $: slug = data.post.slug;
   $: ogImage = `/blog/posts/${slug}/opengraph-image.${data.post.imageFormat || 'png'}`;
+  $: twitterImage = `/blog/posts/${slug}/twitter-image.${data.post.imageFormat || 'png'}`;
 </script>
 
 <SeoHead
   title={data.post.title}
   path={`/blog/${slug}`}
   image={ogImage}
+  twitterImage={twitterImage}
   description={data.post.description}
 />
 

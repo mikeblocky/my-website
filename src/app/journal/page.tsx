@@ -6,7 +6,7 @@ import { JournalClient } from './_components/JournalClient'
 
 export const metadata: Metadata = {
 	title: 'Journal | mikeblocky.com',
-	description: 'Explore my essays, daily gratitude logs, and stationery setups.'
+	description: "A personal collection of articles, notes, and logs that I write over time."
 }
 
 export default async function JournalPage() {
@@ -15,7 +15,7 @@ export default async function JournalPage() {
 	return (
 		<SectionPageShell
 			title="Journal"
-			description="A collection of my thoughts: long-form essays, tech reflections, and daily journal pages."
+			description="A personal collection of articles, notes, and logs that I write over time."
 			currentLabel="Journal"
 		>
 			<JournalClient posts={searchablePosts} />

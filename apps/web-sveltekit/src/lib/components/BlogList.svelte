@@ -154,7 +154,7 @@
     </div>
 
     <!-- Theme Filter Strip -->
-    <div class="theme-filter-strip theme-filter-strip--wrap" aria-label="Filter essays by theme">
+    <div class="theme-filter-strip theme-filter-strip--wrap" aria-label="Filter articles by theme">
       {#each themes as theme}
         <button
           type="button"

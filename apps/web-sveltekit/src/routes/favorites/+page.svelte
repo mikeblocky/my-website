@@ -1,18 +1,18 @@
 <script lang="ts">
   import PillTabs from '$lib/components/PillTabs.svelte';
   import RecommendationCard from '$lib/components/RecommendationCard.svelte';
-  import RecommendationGenerator from '$lib/components/RecommendationGenerator.svelte';
   import SeoHead from '$lib/components/SeoHead.svelte';
   import { browser } from '$app/environment';
   import { onMount } from 'svelte';
   import { LayoutGrid, LayoutList } from '@lucide/svelte';
-  import { toPng } from 'html-to-image';
   import SectionPageShell from '$lib/components/SectionPageShell.svelte';
 
   export let data;
   $: groups = Object.entries(data.recommendationGroups ?? {});
   $: tabs = [...groups.map(([id, group]) => ({ id, label: group.label, count: group.items.length })), { id: 'generator', label: 'card generator' }];
   let activeTab = '';
+  let RecommendationGenerator: any = null;
+  let isLoadingGenerator = false;
   $: if (!activeTab && groups[0]) activeTab = groups[0][0];
   $: activeGroup = activeTab === 'generator' ? null : groups.find(([id]) => id === activeTab)?.[1] ?? groups[0]?.[1];
   let viewMode: 'detailed' | 'simplified' = 'detailed';
@@ -25,6 +25,20 @@
     const stored = localStorage.getItem('mikeblocky:recommendations-view');
     if (stored === 'detailed' || stored === 'simplified') viewMode = stored;
   });
+
+  async function loadGenerator() {
+    if (RecommendationGenerator || isLoadingGenerator) return;
+    isLoadingGenerator = true;
+    try {
+      RecommendationGenerator = (await import('$lib/components/RecommendationGenerator.svelte')).default;
+    } finally {
+      isLoadingGenerator = false;
+    }
+  }
+
+  $: if (browser && activeTab === 'generator') {
+    loadGenerator();
+  }
 
   function setViewMode(mode: 'detailed' | 'simplified') {
     viewMode = mode;
@@ -40,6 +54,7 @@
     await new Promise((resolve) => setTimeout(resolve, 150));
 
     try {
+      const { toPng } = await import('html-to-image');
       const dataUrl = await toPng(element, {
         style: {
           transform: 'none'
@@ -57,11 +72,11 @@
   }
 </script>
 
-<SeoHead title="favorites" path="/favorites" />
+<SeoHead title="favorites" path="/favorites" description="A collection of manga, anime, music, and games that have resonated with me." />
 
 <SectionPageShell
   title="Favorites"
-  description="A personal shelf of favorite media I keep returning to: manga, anime, books, games, and music."
+  description="A shelf of favorite manga, anime, games, and music I keep returning to."
   currentLabel="Favorites"
   footerColor="blue"
 >
@@ -92,7 +107,16 @@
     {#key activeTab}
     <div class="smooth-panel">
     {#if activeTab === 'generator'}
-      <RecommendationGenerator />
+      {#if RecommendationGenerator}
+        <svelte:component this={RecommendationGenerator} />
+      {:else}
+        <div class="loading-surface" aria-live="polite">
+          <div>
+            <i></i>
+            <span>loading generator...</span>
+          </div>
+        </div>
+      {/if}
     {:else if activeGroup}
       <div class="favorites-capture-panel">
         <div class="favorites-capture-group">

@@ -1,7 +1,7 @@
 export const site = {
   name: 'mikeblocky.com',
   url: 'https://www.mikeblocky.com',
-  description: 'a quiet archive for drawings, zines, and wandering thoughts'
+  description: 'a corner for drawings, zines, and loose thoughts'
 };
 
 export const navLinks = [
@@ -18,37 +18,37 @@ export const portalLinks = [
   {
     href: '/about',
     label: 'About',
-    description: 'personal story, studies & inspirations',
+    description: 'who i am, what i study, what keeps me going',
     icon: 'user'
   },
   {
     href: '/artworks',
     label: 'Gallery',
-    description: 'collections of illustrations & stats',
+    description: 'illustrations i\'ve made, with counts and stats',
     icon: 'palette'
   },
   {
     href: '/journal',
     label: 'Journal',
-    description: 'essays, daily logs & journaling tools',
+    description: 'longer writing, daily logs, and journaling tools',
     icon: 'book-open'
   },
   {
     href: '/friends',
     label: 'Friends',
-    description: 'mutual connections & creative links',
+    description: 'people i know online and sites i like',
     icon: 'users'
   },
   {
     href: '/favorites',
     label: 'Favorites',
-    description: 'favorite manga, anime, games & music',
+    description: 'manga, anime, games, and music I keep coming back to',
     icon: 'heart'
   },
   {
     href: '/interact',
     label: 'Interact',
-    description: 'guestbook & drawing prompt suggests',
+    description: 'leave a note in the guestbook or suggest a drawing prompt',
     icon: 'message'
   }
 ];

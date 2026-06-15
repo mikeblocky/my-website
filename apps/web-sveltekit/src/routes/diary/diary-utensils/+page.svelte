@@ -7,7 +7,12 @@
   const utensilIcons = [Keyboard, MousePointer, BookOpen, PenLine];
 </script>
 
-<SeoHead title="Diary utensils" path="/diary/diary-utensils" />
+<SeoHead
+  title="Diary utensils"
+  path="/diary/diary-utensils"
+  image="/diary/opengraph-image.png"
+  twitterImage="/diary/twitter-image.png"
+/>
 
 <SectionPageShell
   title="Diary utensils"
@@ -16,7 +21,7 @@
   containerSize="md"
   contentGap="md"
 >
-  <section class="smooth-panel stationery-panel">
+  <section class="stationery-panel">
     <header>
       <h3>Journaling stationery</h3>
       <p>The physical and digital tools behind notes, diary pages, and quiet drafts.</p>

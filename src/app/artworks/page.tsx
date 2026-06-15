@@ -6,7 +6,7 @@ import { GalleryClient } from './_components/GalleryClient'
 
 export const metadata: Metadata = {
 	title: 'Gallery | mikeblocky.com',
-	description: 'A small gallery of my artworks and their statistical themes breakdown.'
+	description: 'A quiet gallery archiving my character illustrations, sketches, and drawings.'
 }
 
 export default async function ArtworksPage() {
@@ -16,7 +16,7 @@ export default async function ArtworksPage() {
 	return (
 		<SectionPageShell
 			title="Gallery"
-			description="A gallery of my drawings and illustrations, alongside theme distributions."
+			description="A personal archive of drawings, digital sketches, and character illustrations."
 			currentLabel="Gallery"
 			containerSize="lg"
 		>

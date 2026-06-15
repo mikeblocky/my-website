@@ -64,7 +64,7 @@ export const journalActivities: ActivityItem[] = [
 export const stationeryUtensils: UtensilItem[] = [
   {
     title: 'Mechanical keyboard',
-    description: 'Used for rapid typing, drafting essays, and digital records.',
+    description: 'Used for rapid typing, writing articles, and digital records.',
     href: 'https://www.logitech.com/en-us/products/keyboards/pop-keys-wireless-mechanical.920-010708.html',
     label: 'logitech pop keys'
   },

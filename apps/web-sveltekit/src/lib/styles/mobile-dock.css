@@ -1,0 +1,233 @@
+.mobile-dock {
+  position: fixed;
+  left: 50%;
+  bottom: calc(1rem + env(safe-area-inset-bottom, 0px));
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  width: calc(100% - 2rem);
+  max-width: 28rem;
+  height: 3.5rem;
+  overflow: hidden;
+  border: 1px solid rgb(255 255 255 / 0.14);
+  border-radius: 1rem;
+  background: rgb(255 255 255 / 0.55);
+  box-shadow: none;
+  backdrop-filter: blur(20px) saturate(180%);
+  transform: translateX(-50%);
+  user-select: none;
+  transition:
+    border-color 220ms var(--ease-soft),
+    background-color 220ms var(--ease-soft),
+    transform 260ms var(--ease-soft);
+}
+
+.dark .mobile-dock {
+  border-color: rgb(255 255 255 / 0.08);
+  background: rgb(2 6 23 / 0.55);
+  box-shadow: none;
+}
+
+.mobile-dock::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: 0.05;
+  pointer-events: none;
+  background-image: linear-gradient(135deg, var(--pride-colors-repeat));
+  background-size: 200% 200%;
+}
+
+.dark .mobile-dock::before {
+  opacity: 0.08;
+}
+
+.mobile-dock a,
+.mobile-dock button {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding-block: 0.25rem;
+  border: 0;
+  background: transparent;
+  color: rgb(100 116 139);
+  cursor: pointer;
+  text-align: center;
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    color 220ms var(--ease-snap),
+    transform 220ms var(--ease-snap);
+}
+
+.dark .mobile-dock a,
+.dark .mobile-dock button {
+  color: rgb(241 245 249);
+}
+
+.mobile-dock a.active {
+  color: hsl(var(--pride-glow-val));
+}
+
+/* Hover styles are gated to pointers that actually hover. On touch screens a
+   tap leaves a sticky :hover, which made the just-tapped tab stay highlighted
+   alongside the genuinely active one (e.g. Interact + More both lit). */
+@media (hover: hover) {
+  .mobile-dock a:hover,
+  .mobile-dock button:hover {
+    color: hsl(var(--pride-glow-val));
+  }
+}
+
+.mobile-dock a:active,
+.mobile-dock button:active {
+  transform: translateY(1px) scale(0.97);
+}
+
+.mobile-dock-tab.active {
+  color: hsl(var(--pride-glow-val));
+}
+
+.mobile-dock-icon-wrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2.7rem;
+  height: 1.65rem;
+  border-radius: 999px;
+  transform: translateY(0) scale(1);
+  transition:
+    transform 260ms var(--ease-snap),
+    filter 260ms var(--ease-soft);
+}
+
+.mobile-dock-icon {
+  position: relative;
+  z-index: 1;
+  width: 19px;
+  height: 19px;
+  stroke-width: 2;
+  transition:
+    transform 260ms var(--ease-snap),
+    color 220ms var(--ease-snap),
+    filter 260ms var(--ease-soft);
+}
+
+
+.mobile-dock-tab.active .mobile-dock-icon-wrap {
+  transform: translateY(-1px) scale(1.06);
+  filter: drop-shadow(0 0 9px hsl(var(--pride-glow-val) / 0.22));
+}
+
+@media (hover: hover) {
+  .mobile-dock-tab:hover .mobile-dock-icon-wrap {
+    transform: translateY(-1px) scale(1.06);
+    filter: drop-shadow(0 0 9px hsl(var(--pride-glow-val) / 0.22));
+  }
+}
+
+.mobile-dock-tab.active .mobile-dock-icon {
+  animation: mobile-dock-icon-pop 360ms var(--ease-snap);
+}
+
+.mobile-dock-more.active .mobile-dock-icon {
+  transform: rotate(90deg) scale(1.04);
+}
+
+.mobile-dock-label {
+  margin-top: 0.125rem;
+  font-family: var(--font-mono);
+  font-size: 8px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  transition:
+    color 220ms var(--ease-snap),
+    opacity 220ms var(--ease-soft),
+    transform 260ms var(--ease-snap);
+}
+
+.mobile-dock-tab.active .mobile-dock-label {
+  transform: translateY(-1px);
+}
+
+@media (hover: hover) {
+  .mobile-dock-tab:hover .mobile-dock-label {
+    transform: translateY(-1px);
+  }
+}
+
+
+.mobile-more-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  border: 0;
+  background: rgb(0 0 0 / 0.65);
+  backdrop-filter: blur(12px);
+}
+
+.mobile-more-menu {
+  position: fixed;
+  left: 2rem;
+  bottom: calc(5.25rem + env(safe-area-inset-bottom, 0px));
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1.125rem;
+}
+
+.mobile-more-menu a {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem;
+  border: 0;
+  background: transparent;
+  color: rgb(255 255 255 / 0.88) !important;
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  letter-spacing: 0.05em;
+  outline: none;
+  user-select: none;
+  text-shadow: 0 1px 16px rgb(0 0 0 / 0.45);
+  transition:
+    color 190ms var(--ease-snap),
+    opacity 220ms var(--ease-soft),
+    transform 220ms var(--ease-snap),
+    filter 220ms var(--ease-soft);
+}
+
+.mobile-more-menu a:hover,
+.mobile-more-menu a.active {
+  color: hsl(var(--pride-glow-val)) !important;
+  filter: drop-shadow(0 0 12px hsl(var(--pride-glow-val) / 0.22));
+  transform: translateX(0.25rem);
+}
+
+.mobile-more-menu a:active {
+  transform: scale(0.95);
+}
+
+.mobile-more-icon {
+  width: 19px;
+  height: 19px;
+  flex-shrink: 0;
+  color: rgb(255 255 255 / 0.7) !important;
+  transition:
+    color 190ms var(--ease-snap),
+    transform 220ms var(--ease-snap);
+}
+
+.mobile-more-menu a:hover .mobile-more-icon,
+.mobile-more-menu a.active .mobile-more-icon {
+  color: hsl(var(--pride-glow-val)) !important;
+  transform: scale(1.08);
+}

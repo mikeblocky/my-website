@@ -344,7 +344,7 @@ export function SuggestionsBoard({
       passcode={passcode}
       setPasscode={setPasscode}
       accent="teal"
-      formButtonLabel="suggest a book, manga, anime, film..."
+      formButtonLabel="suggest something to read, watch, or listen to"
       formComponent={
         <SuggestionForm
           onSubmit={handleSubmit}

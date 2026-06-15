@@ -251,6 +251,8 @@
         <img 
           src={cleanUrls[0]} 
           alt="Attachment" 
+          loading="lazy"
+          decoding="async"
           class="w-full h-auto max-h-[550px] object-contain rounded-md transition-transform duration-500 group-hover:scale-[1.01]"
         />
         <div class="gallery-zoom-overlay absolute inset-0 bg-black/0 transition-colors duration-300 group-hover:bg-black/5 flex items-center justify-center pointer-events-none">
@@ -275,6 +277,8 @@
             <img 
               src={url} 
               alt={`Attachment ${idx + 1}`} 
+              loading="lazy"
+              decoding="async"
               class="w-full h-auto rounded-md transition-transform duration-500 group-hover:scale-[1.02]"
             />
             
