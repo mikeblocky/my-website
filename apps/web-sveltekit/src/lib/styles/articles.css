@@ -18,32 +18,47 @@ article code {
   font-weight: 700;
   letter-spacing: -0.02em;
   line-height: 1.25;
-  margin-top: 1.5em;
-  margin-bottom: 0.75em;
+  margin-top: 1.05em;
+  margin-bottom: 0.38em;
   overflow-wrap: break-word;
   word-break: break-word;
 }
 
 .blog-post-shell article h1 {
   font-size: clamp(1.5rem, 1.2rem + 1.5vw, 2.25rem);
-  margin-top: 2rem;
-  margin-bottom: 1rem;
+  margin-top: 1.45rem;
+  margin-bottom: 0.65rem;
 }
 .blog-post-shell article h2 {
   font-size: clamp(1.25rem, 1rem + 1.2vw, 1.875rem);
-  margin-top: 1.5rem;
-  margin-bottom: 0.75rem;
+  margin-top: 1.1rem;
+  margin-bottom: 0.45rem;
 }
 .blog-post-shell article h3 {
   font-size: clamp(1.125rem, 0.95rem + 0.8vw, 1.5rem);
-  margin-top: 1.25rem;
-  margin-bottom: 0.5rem;
+  margin-top: 0.95rem;
+  margin-bottom: 0.35rem;
 }
 .blog-post-shell article h4 {
   font-size: clamp(1rem, 0.9rem + 0.5vw, 1.25rem);
   font-weight: 600;
-  margin-top: 1rem;
-  margin-bottom: 0.5rem;
+  margin-top: 0.8rem;
+  margin-bottom: 0.3rem;
+}
+
+.blog-post-shell article p + h1,
+.blog-post-shell article p + h2,
+.blog-post-shell article p + h3,
+.blog-post-shell article p + h4,
+.blog-post-shell article ul + h1,
+.blog-post-shell article ul + h2,
+.blog-post-shell article ul + h3,
+.blog-post-shell article ul + h4,
+.blog-post-shell article ol + h1,
+.blog-post-shell article ol + h2,
+.blog-post-shell article ol + h3,
+.blog-post-shell article ol + h4 {
+  margin-top: 0.9rem;
 }
 
 .blog-post-shell article p {
@@ -134,15 +149,23 @@ article code {
 }
 
 .blog-post-shell article hr {
-  margin: 2em 0;
+  margin: 1rem 0;
   border: none;
   border-top: 1px solid hsl(var(--border) / 0.5);
 }
 
 .blog-post-shell article img {
+  display: block;
   max-width: 100%;
   border-radius: 0.5rem;
-  margin: 1.5em 0;
+  margin: 1.5em auto;
+}
+
+.blog-post-shell article p.image-caption {
+  text-align: center;
+  margin-top: -0.75rem;
+  font-size: 0.95rem;
+  color: hsl(var(--muted-foreground));
 }
 
 .blog-post-shell article strong {
@@ -172,10 +195,19 @@ article code {
 
 .blog-post-shell {
   display: grid;
- grid-template-columns: minmax(0, 1fr);
   grid-template-columns: minmax(0, 1fr);
   gap: 2rem;
   min-width: 0;
+  width: 100%;
+}
+
+.blog-post-intro .section-title-block {
+  max-width: none;
+}
+
+.blog-post-intro h1 {
+  max-width: none;
+  text-wrap: balance;
 }
 
 .blog-post-shell article {
@@ -189,6 +221,10 @@ article code {
   min-width: 0;
 }
 
+.blog-post-shell .prose-panel :where(p, ul, ol, li, blockquote, h1, h2, h3, h4, pre, table) {
+  max-width: none;
+}
+
 .blog-post-shell article {
   max-width: none !important;
   width: 100%;
@@ -200,18 +236,6 @@ article code {
 .blog-post-shell article blockquote {
   overflow-wrap: break-word;
   word-break: break-word;
-}
-
-/* ── Show line rail in a 2-col grid at lg+ ─────────────────────── */
-@media (min-width: 1024px) {
-  .blog-post-shell {
-    grid-template-columns: minmax(0, 1fr) auto;
-    align-items: start;
-  }
-
-  .article-line-rail {
-    display: flex;
-  }
 }
 
 .blog-post-return {
@@ -244,33 +268,13 @@ article code {
   transform: translateY(-1px);
 }
 
-/* ── Article ToC: gutter float (absolutely outside article, sticky scroll) ── */
-.article-toc-gutter {
-  display: none;
-  position: absolute;
-  right: calc(100% + 2.5rem);
-  top: 0;
-  bottom: 0;
-  width: 12rem;
-  pointer-events: none;
-}
-
-.article-toc-sticky {
-  position: sticky;
-  top: 50vh;
-  transform: translateY(-50%);
-  pointer-events: auto;
-  display: flex;
-  justify-content: flex-end;
-}
-
 .article-toc {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
   gap: 0.25rem;
   width: 100%;
-  max-height: calc(100vh - 8rem);
+  max-height: calc(100vh - 7rem);
   overflow-y: auto;
   overflow-x: hidden;
   scrollbar-width: none;
@@ -550,11 +554,12 @@ article code {
 .article-line-rail {
   display: none;
   position: sticky;
-  top: calc(50vh - 200px);
+  top: 6rem;
   align-self: start;
-  height: fit-content;
+  height: calc(100vh - 7rem);
   flex-direction: column;
   align-items: flex-end;
+  justify-content: center;
   gap: 1rem;
   font-family: var(--font-mono);
 }

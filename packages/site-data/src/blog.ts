@@ -13,6 +13,18 @@ export type BlogPost = {
 
 export const blogPosts: BlogPost[] = [
   {
+    id: 23,
+    title:
+      'Interview with Misaki Takamatsu of Skip and Loafer: The story began with Ryotaro Shiba, and reaches toward the human relationships that emerge after the shine wears away',
+    description:
+      'A translation of an interview with Misaki Takamatsu about the roots of Skip and Loafer, Shima and Mitsumi, and relationships that begin after the polished surface comes off.',
+    date: 'June 21st, 2026',
+    publishedAt: '2026-06-21T00:00:00.000Z',
+    readingTime: '15 min read',
+    slug: 'takamatsu-interview-translation-2',
+    themes: ['Skip and Loafer', 'Translation']
+  },
+  {
     id: 22,
     title: 'The day we walked',
     description:

@@ -10,6 +10,7 @@
   let activeId = '';
   let minLevel = 2;
   let isClicking = false;
+  let tocEl: HTMLDivElement | null = null;
   let tocListEl: HTMLDivElement | null = null;
 
   function toSlug(text: string) {
@@ -72,10 +73,20 @@
   // Auto-scroll TOC to keep active item visible
   async function scrollTocToActive() {
     await tick();
-    if (!tocListEl) return;
+    if (!tocEl || !tocListEl) return;
     const activeEl = tocListEl.querySelector('.article-toc-link.active') as HTMLElement | null;
     if (!activeEl) return;
-    activeEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+    const tocRect = tocEl.getBoundingClientRect();
+    const activeRect = activeEl.getBoundingClientRect();
+    const overTop = activeRect.top - tocRect.top;
+    const overBottom = activeRect.bottom - tocRect.bottom;
+
+    if (overTop < 0) {
+      tocEl.scrollTop += overTop - 12;
+    } else if (overBottom > 0) {
+      tocEl.scrollTop += overBottom + 12;
+    }
   }
 
   $: if (activeId) scrollTocToActive();
@@ -98,7 +109,7 @@
 </script>
 
 {#if sections.length > 0}
-  <div class="article-toc">
+  <div class="article-toc" bind:this={tocEl}>
     <div class="article-toc-header">
       <span class="article-toc-label">Table of contents</span>
       <div class="article-toc-divider"></div>
