@@ -369,7 +369,7 @@
               use:emojiAutocomplete
               on:emoji:open={(e) => onEmojiOpen(e, followUpTextareaEl)}
               on:emoji:close={onEmojiClose}
-              placeholder="Add to this discussion..."
+              placeholder="Reply..."
               rows={1}
               class="min-h-[44px] w-full resize-none overflow-hidden rounded-md border border-emerald-200 bg-background pl-4 pr-11 py-3 text-base md:text-[17px] text-slate-900 focus:outline-none focus:ring-1 focus:ring-emerald-300 dark:border-emerald-500/30 dark:text-slate-100 font-sans"
             />

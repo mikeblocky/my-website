@@ -330,7 +330,7 @@ export function TalkPostItem({
                   e.currentTarget.style.height = 'auto';
                   e.currentTarget.style.height = `${e.currentTarget.scrollHeight}px`;
                 }}
-                placeholder="Add to this discussion..."
+                placeholder="Reply..."
                 rows={1}
                 className={cn(dmSans.className, "min-h-[44px] w-full resize-none overflow-hidden rounded-md border border-emerald-250 bg-background px-4 py-3 text-base md:text-[17px] text-slate-900 focus:outline-none focus:ring-1 focus:ring-emerald-350 dark:border-emerald-500/30 dark:text-slate-100")}
               />
