@@ -135,7 +135,7 @@
   bottom: -2px;
   width: 0;
   height: 1px;
-  background-image: linear-gradient(135deg, var(--pride-colors));
+  background: hsl(var(--site-blue));
   transition: width 200ms ease;
 }
 

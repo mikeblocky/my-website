@@ -22,7 +22,6 @@
   <section class="stationery-panel">
     <header>
       <h3>Journaling stationery</h3>
-      <p>The physical and digital tools behind notes, diary pages, and quiet drafts.</p>
     </header>
 
     <div class="utensil-grid">

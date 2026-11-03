@@ -155,7 +155,7 @@
 }
 
 .portal-row:hover .portal-icon {
-  border-color: rgb(236 72 153 / 0.2);
+  border-color: hsl(var(--site-blue) / 0.2);
 }
 
 .portal-row:hover .portal-arrow {
@@ -178,7 +178,7 @@
   z-index: 1;
   height: 0.25rem;
   opacity: 0.7;
-  background-image: linear-gradient(135deg, var(--pride-colors));
+  background: hsl(var(--site-blue));
 }
 
 .next-cover img {

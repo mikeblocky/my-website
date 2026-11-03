@@ -1,9 +1,11 @@
 <script lang="ts">
   import ThemeToggle from './ThemeToggle.svelte';
+  import { reveal } from '../actions/reveal';
 
   export let eyebrow = '';
   export let title: string;
   export let description = '';
+  export let showDescription = false;
   export let showPrideBadge = false;
 </script>
 
@@ -19,9 +21,9 @@
     <ThemeToggle />
   </div>
 
-  <div class="section-title-block">
+  <div class="section-title-block" use:reveal>
     <h1>{title}</h1>
-    {#if description}
+    {#if showDescription && description}
       <p>{description}</p>
     {/if}
   </div>

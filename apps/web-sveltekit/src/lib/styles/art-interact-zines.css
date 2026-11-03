@@ -246,7 +246,7 @@
 .stat-color-orange { background: rgb(249 115 22); }
 .stat-color-blue { background: rgb(59 130 246); }
 .stat-color-green { background: rgb(34 197 94); }
-.stat-color-pink { background: rgb(236 72 153); }
+.stat-color-pink { background: hsl(var(--site-blue)); }
 .stat-color-yellow { background: rgb(234 179 8); }
 .stat-color-purple { background: rgb(168 85 247); }
 

@@ -53,7 +53,6 @@
           <section class="art-section">
             <header>
               <h2>{section.title}</h2>
-              <p>{section.items.length} works</p>
             </header>
             <div class="art-masonry">
               {#each section.items as item, iIdx}
@@ -71,7 +70,7 @@
                     alt={`${section.title} artwork ${iIdx + 1}`}
                     loading="lazy"
                   />
-                  <span><Maximize2 size={14} strokeWidth={1.8} /> view</span>
+                  <span aria-hidden="true"><Maximize2 size={14} strokeWidth={1.8} /></span>
                 </button>
               {/each}
             </div>

@@ -7,9 +7,10 @@
   let theme: 'light' | 'dark' = 'light';
   let mounted = false;
   let rotateDegree = 0;
-  let transitionTimer: number | undefined;
+
   let iconEl: HTMLDivElement | undefined;
   let iconAnim: Animation | undefined;
+  let themeTransition: ViewTransition | undefined;
 
   // Mirrors the framer-motion icon animation from the Next.js ThemeToggle:
   //   animate={{ rotate: isDark ? 360 : 0, scale: [1, 0.8, 1] }}
@@ -21,6 +22,7 @@
   // scale "pulse" (shrink to 0.8 half-way, back to 1) in the same animation. The
   // resting rotation lives in the inline style so the icon settles correctly.
   function spinIcon(fromDeg: number, toDeg: number) {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     const midDeg = (fromDeg + toDeg) / 2;
     // Cancel any in-flight spin so rapid toggles don't stack conflicting
     // transform animations on the icon.
@@ -37,39 +39,32 @@
 
   function applyTheme(nextTheme: 'light' | 'dark') {
     if (theme === nextTheme && mounted) return;
-
-    window.clearTimeout(transitionTimer);
-
     const root = document.documentElement;
     const fromDeg = rotateDegree;
-    theme = nextTheme;
-    rotateDegree = nextTheme === 'dark' ? 360 : 0;
-
-    // Port of next-themes' `disableTransitionOnChange`: suppress every CSS
-    // transition while the `dark` class is swapped so the palette flips
-    // instantly. The previous approach animated color/background on every
-    // element, which promotes text to temporary GPU layers and renders it
-    // blurry for the duration of the transition.
-    const killTransitions = document.createElement('style');
-    killTransitions.appendChild(
-      document.createTextNode('*,*::before,*::after{transition:none !important}')
-    );
-    document.head.appendChild(killTransitions);
-
-    root.classList.toggle('dark', nextTheme === 'dark');
-    root.dataset.theme = nextTheme;
-    root.style.colorScheme = nextTheme;
-    localStorage.setItem('theme', nextTheme);
-
-    // Force the browser to commit the new palette while transitions are off…
-    void window.getComputedStyle(document.body).opacity;
-    // …then restore transitions on the next tick for normal hover/focus motion.
-    transitionTimer = window.setTimeout(() => killTransitions.remove(), 1);
-
-    // Only spin on a real user toggle, not on the initial mount sync
-    // (framer-motion's `initial={false}` skips the first render). The icon spin
-    // is a Web Animations API run, so it is unaffected by the transition kill.
-    if (mounted) spinIcon(fromDeg, rotateDegree);
+    const update = () => {
+      theme = nextTheme;
+      rotateDegree = nextTheme === 'dark' ? 360 : 0;
+      root.classList.toggle('dark', nextTheme === 'dark');
+      root.dataset.theme = nextTheme;
+      root.style.colorScheme = nextTheme;
+      try { localStorage.setItem('theme', nextTheme); } catch {}
+      if (mounted) spinIcon(fromDeg, rotateDegree);
+    };
+    if (!mounted || !document.startViewTransition ||
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      update();
+      return;
+    }
+    themeTransition?.skipTransition();
+    root.classList.add('theme-crossfade');
+    const transition = document.startViewTransition(update);
+    themeTransition = transition;
+    void transition.finished.catch(() => {}).finally(() => {
+      if (themeTransition === transition) {
+        root.classList.remove('theme-crossfade');
+        themeTransition = undefined;
+      }
+    });
   }
 
   onMount(() => {

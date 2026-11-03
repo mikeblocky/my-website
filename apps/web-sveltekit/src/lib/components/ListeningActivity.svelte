@@ -147,9 +147,7 @@
 
   .listen-header { display: grid; gap: 0.3rem; }
   .listen-header h3 { margin: 0; font-size: var(--font-size-md); font-weight: 700; color: hsl(var(--foreground)); }
-  .listen-header p { margin: 0; font-size: var(--font-size-base); color: hsl(var(--muted-foreground)); line-height: 1.55; }
-
-  .now-playing-card {
+.now-playing-card {
     display: flex;
     flex-direction: column;
     gap: 1.25rem;
@@ -318,7 +316,6 @@
 <div class="listen-activity">
   <div class="listen-header">
     <h3>Listening activity</h3>
-    <p>A live log of the music and tracks I am hearing on Spotify.</p>
   </div>
 
   {#if currentlyPlaying}

@@ -86,7 +86,6 @@
 {#if selectedZine}
   <div class="zine-library">
     <aside class="zine-bookshelf">
-      <p class="zine-shelf-label">bookshelf</p>
       <div class="zine-shelf-list">
         {#each zines as zine}
           <button
@@ -106,7 +105,6 @@
       <header class="zine-reader-header">
         <p class="zine-reader-eyebrow">{selectedZine.year} · {selectedZine.orientation}</p>
         <h2 class="zine-reader-title">{selectedZine.title}</h2>
-        <p class="zine-reader-subtitle">{selectedZine.subtitle}</p>
       </header>
 
       <div class="zine-book-wrap">
@@ -362,17 +360,7 @@
     flex-direction: column;
     gap: 0.75rem;
   }
-
-  .zine-shelf-label {
-    margin: 0;
-    font-family: var(--font-mono);
-    font-size: 0.625rem;
-    letter-spacing: 0.12em;
-    text-transform: lowercase;
-    color: hsl(var(--muted-foreground));
-  }
-
-  .zine-shelf-list {
+.zine-shelf-list {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
@@ -446,16 +434,7 @@
     letter-spacing: -0.02em;
     color: hsl(var(--foreground));
   }
-
-  .zine-reader-subtitle {
-    margin: 0;
-    font-size: 0.875rem;
-    line-height: 1.6;
-    color: hsl(var(--muted-foreground));
-    max-width: 42rem;
-  }
-
-  .zine-book-wrap {
+.zine-book-wrap {
     display: flex;
     justify-content: flex-start;
   }

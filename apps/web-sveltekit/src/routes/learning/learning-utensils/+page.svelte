@@ -22,7 +22,6 @@
   <section class="smooth-panel stationery-panel">
     <header>
       <h3>Learning and drawing setup</h3>
-      <p>The everyday desk pieces that support reading, experiments, sketches, and small drafts.</p>
     </header>
 
     <div class="utensil-grid">

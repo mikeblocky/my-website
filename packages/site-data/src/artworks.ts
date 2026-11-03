@@ -23,6 +23,7 @@ export type DrawingStat = {
 };
 
 export const artworkSectionsConfig = [
+  { title: '15 days of Kemutai Hanashi (2026)', folder: '15-days-of-kemutai-hanashi-2026' },
   { title: 'Kemutai Hanashi', folder: 'kemutai-hanashi' },
   { title: 'Skip and Loafer', folder: 'skip-and-loafer' }
 ];

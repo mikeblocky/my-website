@@ -1,5 +1,6 @@
 <script lang="ts">
   import { onMount } from 'svelte';
+  import { cubicOut } from 'svelte/easing';
   import { Menu, X } from '@lucide/svelte';
   import { portalLinks } from '$lib/site';
   import {
@@ -14,10 +15,10 @@
 
   function menuPanelTransition(_node: Element) {
     return {
-      duration: 200,
+      duration: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 300,
+      easing: cubicOut,
       css: (t: number, u: number) => `
         opacity: ${t};
-        filter: blur(${u * 4}px);
         transform: translateY(${u * -10}px);
       `
     };
@@ -26,10 +27,10 @@
   function menuItemTransition(_node: Element, params: { delay?: number } = {}) {
     return {
       delay: params.delay ?? 0,
-      duration: 200,
+      duration: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 300,
+      easing: cubicOut,
       css: (t: number, u: number) => `
         opacity: ${t};
-        filter: blur(${u * 3}px);
         transform: translateY(${u * -10}px);
       `
     };

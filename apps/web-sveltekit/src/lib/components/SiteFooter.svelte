@@ -88,7 +88,7 @@
               href={social.href}
               target={social.href.startsWith('mailto:') ? undefined : '_blank'}
               rel={social.href.startsWith('mailto:') ? undefined : 'noreferrer'}
-              class="block pride-text -m-2 p-2 hover:bg-pink-400/10 rounded-md hover:shadow-md hover:shadow-pink-500/5 transition-all duration-200"
+              class="block pride-text -m-2 p-2 hover:bg-blue-500/10 rounded-md hover:shadow-md hover:shadow-blue-500/5 transition-all duration-200"
             >
               <svelte:component this={social.icon} class="w-3 h-3 sm:w-4 sm:h-4" />
             </a>

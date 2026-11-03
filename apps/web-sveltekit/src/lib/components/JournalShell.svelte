@@ -33,7 +33,6 @@
       <div class="journal-note-list">
         <header>
           <h3>Daily journal logs</h3>
-          <p>Short entries, gratitude notes, and snapshots of what I document and learn each day.</p>
         </header>
         {#if readingSeries.length}
           <section class="journal-note-group">
@@ -70,7 +69,6 @@
       <div class="stationery-panel">
         <header>
           <h3>Journaling stationery</h3>
-          <p>The physical and digital tools behind notes, diary pages, and drafts.</p>
         </header>
         <div class="utensil-grid">
           {#each stationeryUtensils as item, index}

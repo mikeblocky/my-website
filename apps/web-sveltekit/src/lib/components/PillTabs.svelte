@@ -1,14 +1,13 @@
 <script lang="ts" context="module">
-  export type TabItem = {
-    id: string;
-    label: string;
-    count?: number;
-  };
+  export type TabItem = { id: string; label: string; count?: number };
 </script>
 
 <script lang="ts">
   import { browser } from '$app/environment';
   import { onMount, tick } from 'svelte';
+  import { fly } from 'svelte/transition';
+  import { cubicOut } from 'svelte/easing';
+  import { Check, ChevronDown } from '@lucide/svelte';
 
   export let tabs: TabItem[] = [];
   export let activeTab = tabs[0]?.id ?? '';
@@ -16,159 +15,145 @@
   export let storageKey = '';
   export let syncUrl = false;
 
-  let scroller: HTMLDivElement;
-  let canScrollLeft = false;
-  let canScrollRight = false;
+  let root: HTMLDivElement;
+  let trigger: HTMLButtonElement;
+  let open = false;
+  let reducedMotion = false;
+  let focusedIndex = 0;
+  $: selected = tabs.find(tab => tab.id === activeTab) ?? tabs[0];
+  const valid = (value: string | null) => tabs.some(tab => tab.id === value);
 
-  function isValidTab(value: string) {
-    return tabs.some((tab) => tab.id === value);
+  async function focusOption(index: number) {
+    focusedIndex = (index + tabs.length) % tabs.length;
+    await tick();
+    root?.querySelectorAll<HTMLButtonElement>('[role="option"]')[focusedIndex]?.focus();
   }
 
-  function updateScrollState() {
-    if (!scroller) return;
-    const { scrollLeft, scrollWidth, clientWidth } = scroller;
-    // 1px tolerance so sub-pixel rounding doesn't leave a stuck indicator.
-    canScrollLeft = scrollLeft > 1;
-    canScrollRight = scrollLeft + clientWidth < scrollWidth - 1;
+  async function showOptions() {
+    if (!tabs.length) return;
+    open = true;
+    await focusOption(Math.max(0, tabs.findIndex(tab => tab.id === activeTab)));
   }
 
-  function scrollActiveIntoView() {
-    if (!scroller) return;
-    const el = scroller.querySelector<HTMLElement>('button[aria-selected="true"]');
-    el?.scrollIntoView({ inline: 'nearest', block: 'nearest' });
+  async function closeOptions() {
+    open = false;
+    await tick();
+    trigger?.focus();
   }
 
   function setTab(id: string) {
     activeTab = id;
-
-    if (!browser) return;
-    if (storageKey) localStorage.setItem(storageKey, id);
-
-    if (syncUrl) {
-      const url = new URL(window.location.href);
-      url.searchParams.set('tab', id);
-      window.history.replaceState({}, '', url);
+    if (browser) {
+      if (storageKey) { try { localStorage.setItem(storageKey, id); } catch {} }
+      if (syncUrl) {
+        const url = new URL(window.location.href);
+        url.searchParams.set('tab', id);
+        window.history.replaceState({}, '', url);
+      }
     }
+    void closeOptions();
+  }
 
-    tick().then(scrollActiveIntoView);
+  function keydown(event: KeyboardEvent) {
+    if (!root?.contains(event.target as Node)) return;
+    if (event.key === 'Escape' && open) { event.preventDefault(); void closeOptions(); }
+    else if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+      event.preventDefault();
+      if (!open) void showOptions();
+      else void focusOption(focusedIndex + (event.key === 'ArrowDown' ? 1 : -1));
+    } else if (open && (event.key === 'Home' || event.key === 'End')) {
+      event.preventDefault();
+      void focusOption(event.key === 'Home' ? 0 : tabs.length - 1);
+    } else if (event.key === 'Tab') open = false;
   }
 
   onMount(() => {
     const urlTab = syncUrl ? new URL(window.location.href).searchParams.get('tab') : null;
-    const storedTab = storageKey ? localStorage.getItem(storageKey) : null;
-    const nextTab = urlTab && isValidTab(urlTab) ? urlTab : storedTab && isValidTab(storedTab) ? storedTab : '';
-
-    if (nextTab) activeTab = nextTab;
-
-    tick().then(() => {
-      updateScrollState();
-      scrollActiveIntoView();
-    });
-
-    const ro = new ResizeObserver(updateScrollState);
-    if (scroller) ro.observe(scroller);
-    window.addEventListener('resize', updateScrollState);
-    return () => {
-      ro.disconnect();
-      window.removeEventListener('resize', updateScrollState);
-    };
+    let storedTab: string | null = null;
+    try { storedTab = storageKey ? localStorage.getItem(storageKey) : null; } catch {}
+    if (valid(urlTab)) activeTab = urlTab!;
+    else if (valid(storedTab)) activeTab = storedTab!;
+    const preference = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const syncPreference = () => { reducedMotion = preference.matches; };
+    syncPreference();
+    preference.addEventListener('change', syncPreference);
+    return () => preference.removeEventListener('change', syncPreference);
   });
 </script>
 
-<div class="pill-tabs-wrap" class:can-scroll-left={canScrollLeft} class:can-scroll-right={canScrollRight}>
-  <div
-    class="pill-tabs"
-    role="tablist"
-    aria-label={ariaLabel}
-    bind:this={scroller}
-    on:scroll={updateScrollState}
+<svelte:window
+  on:keydown={keydown}
+  on:pointerdown={(event) => { if (open && !root?.contains(event.target as Node)) open = false; }}
+/>
+
+<div class="section-picker" bind:this={root}>
+  <button
+    type="button"
+    class="section-picker-trigger"
+    class:expanded={open}
+    bind:this={trigger}
+    aria-label={`${ariaLabel}: ${selected?.label ?? 'Select section'}`}
+    aria-haspopup="listbox"
+    aria-expanded={open}
+    disabled={!tabs.length}
+    on:click={() => { if (open) void closeOptions(); else void showOptions(); }}
   >
-    {#each tabs as tab}
-      <button
-        type="button"
-        role="tab"
-        aria-selected={activeTab === tab.id}
-        class:active={activeTab === tab.id}
-        on:click={() => setTab(tab.id)}
-      >
-        {#if activeTab === tab.id}
-          <span class="pill-active-bg" aria-hidden="true"></span>
-        {/if}
-        <span>{tab.label}</span>
-        {#if typeof tab.count === 'number'}
-          <small>{tab.count}</small>
-        {/if}
-      </button>
-    {/each}
-  </div>
+    <span>{selected?.label ?? 'Select section'}</span>
+    {#if typeof selected?.count === 'number'}<small>{selected.count}</small>{/if}
+    <ChevronDown size={16} strokeWidth={1.6} aria-hidden="true" />
+  </button>
+  {#if open}
+    <div class="section-picker-menu" role="listbox" aria-label={ariaLabel}
+      in:fly={{ y: -5, duration: reducedMotion ? 0 : 220, easing: cubicOut }}
+      out:fly={{ y: -3, duration: reducedMotion ? 0 : 120, easing: cubicOut }}>
+      {#each tabs as tab, index}
+        <button type="button" role="option" aria-selected={activeTab === tab.id}
+          tabindex={focusedIndex === index ? 0 : -1}
+          class:selected={activeTab === tab.id}
+          on:focus={() => focusedIndex = index}
+          on:click={() => setTab(tab.id)}>
+          <span>{tab.label}</span>
+          {#if typeof tab.count === 'number'}<small>{tab.count}</small>{/if}
+          <span class="section-picker-check" aria-hidden="true">{#if activeTab === tab.id}<Check size={15} strokeWidth={1.8} />{/if}</span>
+        </button>
+      {/each}
+    </div>
+  {/if}
 </div>
 
 <style>
-  .pill-tabs-wrap {
-    position: relative;
-    /* When used as a flex child (e.g. the favorites toolbar), allow the inner
-       scroller to shrink below its content width instead of overflowing. */
-    min-width: 0;
-    max-width: 100%;
-    flex: 1 1 auto;
+  .section-picker { position: relative; width: fit-content; max-width: 100%; z-index: 30; }
+  .section-picker-trigger {
+    display: flex; align-items: center; gap: 1.25rem; min-height: 44px;
+    min-width: 12rem; max-width: 100%; padding: 0.7rem 0.9rem;
+    border: 1px solid hsl(var(--border)); border-radius: 0.75rem;
+    background: hsl(var(--background)); color: hsl(var(--foreground));
+    font-size: var(--font-size-sm); font-weight: 500; cursor: pointer;
+    transition: border-color 200ms ease, background-color 200ms ease, box-shadow 300ms var(--ease-out);
   }
-
-  /* Override the global wrapping behaviour: keep tabs on one line and let the
-     row scroll horizontally whenever it overflows, on any screen size. */
-  .pill-tabs {
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    overscroll-behavior-x: contain;
-    -webkit-overflow-scrolling: touch;
-    scroll-behavior: smooth;
-    scrollbar-width: none; /* Firefox */
-    scroll-padding-inline: 1.25rem;
-    /* A little side padding so the fade overlays never clip the first/last pill. */
-    padding-block: 2px;
+  .section-picker-trigger > span { flex: 1; text-align: left; }
+  .section-picker-trigger :global(svg) { flex-shrink: 0; transition: transform 300ms var(--ease-out); }
+  .section-picker-trigger.expanded :global(svg) { transform: rotate(180deg); }
+  .section-picker-trigger:hover, .section-picker-trigger.expanded { border-color: hsl(var(--site-blue) / 0.5); }
+  .section-picker-menu {
+    position: absolute; top: calc(100% + 0.5rem); left: 0;
+    min-width: 100%; width: max-content; max-width: calc(100vw - 3rem);
+    max-height: min(24rem, 60dvh); overflow-y: auto;
+    padding: 0.35rem; border: 1px solid hsl(var(--border)); border-radius: 0.9rem;
+    background: hsl(var(--background)); box-shadow: 0 12px 40px hsl(220 35% 10% / 0.14);
   }
-
-  .pill-tabs::-webkit-scrollbar {
-    display: none; /* Chrome/Safari */
+  .section-picker-menu button {
+    display: flex; align-items: center; gap: 1rem; width: 100%; min-height: 44px;
+    border: 0; border-radius: 0.55rem; padding: 0.75rem;
+    background: transparent; color: hsl(var(--foreground)); text-align: left;
+    font-size: var(--font-size-sm); cursor: pointer;
+    transition: background-color 180ms ease, color 180ms ease;
   }
-
-  .pill-tabs :global(button) {
-    flex: 0 0 auto;
+  .section-picker-menu button > span:first-child { flex: 1; }
+  .section-picker-menu button:hover, .section-picker-menu button:focus-visible, .section-picker-menu button.selected {
+    background: hsl(var(--site-blue) / 0.08); color: hsl(var(--site-blue));
   }
-
-  /* Edge fade indicators — only visible when there's more to scroll toward. */
-  .pill-tabs-wrap::before,
-  .pill-tabs-wrap::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    width: 2.5rem;
-    pointer-events: none;
-    opacity: 0;
-    transition: opacity 180ms ease;
-    z-index: 2;
-  }
-
-  .pill-tabs-wrap::before {
-    left: 0;
-    background: linear-gradient(to right, hsl(var(--background)), hsl(var(--background) / 0));
-  }
-
-  /* Right side: a fade plus a chevron hint to signal "more tabs this way". */
-  .pill-tabs-wrap::after {
-    right: 0;
-    background:
-      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='9 18 15 12 9 6'/%3E%3C/svg%3E"),
-      linear-gradient(to left, hsl(var(--background)) 35%, hsl(var(--background) / 0));
-    background-repeat: no-repeat, no-repeat;
-    background-position: right 0.4rem center, center;
-  }
-
-  .pill-tabs-wrap.can-scroll-left::before {
-    opacity: 1;
-  }
-
-  .pill-tabs-wrap.can-scroll-right::after {
-    opacity: 1;
-  }
+  .section-picker-check { display: grid; place-items: center; width: 16px; }
+  small { color: hsl(var(--muted-foreground)); font-variant-numeric: tabular-nums; }
+  @media (max-width: 639px) { .section-picker, .section-picker-trigger { width: 100%; } .section-picker-menu { width: 100%; } }
 </style>

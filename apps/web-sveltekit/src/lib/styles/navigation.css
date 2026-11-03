@@ -31,16 +31,13 @@
   left: 0;
   width: 0;
   height: 1px;
-  background-image: linear-gradient(135deg, var(--pride-colors));
+  background: hsl(var(--site-blue));
   transition: width var(--motion-medium) var(--ease-emotional);
 }
 
 .desktop-nav a:hover {
-  color: transparent;
-  background-image: linear-gradient(135deg, var(--pride-colors));
-  background-size: 200% 200%;
-  -webkit-background-clip: text;
-  background-clip: text;
+  color: hsl(var(--site-blue));
+
 }
 
 .desktop-nav a:hover::after {
@@ -95,15 +92,15 @@
 
 .desktop-menu-container > button:hover,
 .desktop-menu-container > button.active {
-  border-color: rgb(244 114 182 / 0.2);
-  background: rgb(244 114 182 / 0.1);
-  color: rgb(236 72 153);
+  border-color: hsl(var(--site-blue) / 0.2);
+  background: hsl(var(--site-blue) / 0.1);
+  color: hsl(var(--site-blue));
   transform: translateY(-1px);
 }
 
 .dark .desktop-menu-container > button:hover,
 .dark .desktop-menu-container > button.active {
-  color: rgb(249 168 212);
+  color: hsl(var(--site-blue));
 }
 
 .desktop-menu-popover {
@@ -140,13 +137,13 @@
 
 .desktop-menu-popover a:hover,
 .desktop-menu-popover a:focus-visible {
-  background: rgb(236 72 153 / 0.1);
-  color: rgb(236 72 153);
+  background: hsl(var(--site-blue) / 0.1);
+  color: hsl(var(--site-blue));
 }
 
 .dark .desktop-menu-popover a:hover,
 .dark .desktop-menu-popover a:focus-visible {
-  color: rgb(249 168 212);
+  color: hsl(var(--site-blue));
 }
 
 .spotify-now-playing {

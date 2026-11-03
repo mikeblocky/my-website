@@ -934,11 +934,6 @@
   /* Export background (mirrors official-bg-preview) */
   :global(.gen-export-target.exporting) {
     background-image:
-      radial-gradient(circle at 10% 10%, hsl(350 85% 72% / 0.14), transparent 45rem),
-      radial-gradient(circle at 30% 30%, hsl(52 92% 70% / 0.11), transparent 40rem),
-      radial-gradient(circle at 50% 50%, hsl(142 76% 66% / 0.09), transparent 40rem),
-      radial-gradient(circle at 75% 70%, hsl(206 90% 72% / 0.13), transparent 45rem),
-      radial-gradient(circle at 95% 90%, hsl(272 75% 70% / 0.08), transparent 55rem),
       linear-gradient(rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.95)),
       url('/distribution/2026/kemutai-hanashi/Illustration125c.webp?v=1') !important;
     background-size: cover !important;
@@ -947,11 +942,6 @@
   }
   :global(.dark .gen-export-target.exporting) {
     background-image:
-      radial-gradient(circle at 10% 10%, hsl(350 85% 72% / 0.09), transparent 45rem),
-      radial-gradient(circle at 30% 30%, hsl(52 92% 70% / 0.07), transparent 40rem),
-      radial-gradient(circle at 50% 50%, hsl(142 76% 66% / 0.06), transparent 40rem),
-      radial-gradient(circle at 75% 70%, hsl(206 90% 72% / 0.09), transparent 45rem),
-      radial-gradient(circle at 95% 90%, hsl(272 75% 70% / 0.05), transparent 55rem),
       linear-gradient(rgba(7, 12, 22, 0.95), rgba(7, 12, 22, 0.95)),
       url('/distribution/2026/kemutai-hanashi/Illustration125c.webp?v=1') !important;
     background-size: cover !important;

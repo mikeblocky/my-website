@@ -12,34 +12,77 @@
   }
 }
 
+/* Native navigation keeps outgoing content visible while the next page arrives. */
+@media (prefers-reduced-motion: no-preference) {
+  .route-crossfade .page-transition,
+  .route-crossfade .section-title-block {
+    animation: none;
+  }
+
+  ::view-transition-old(root) {
+    animation: route-leave 240ms var(--ease-soft) both;
+    mix-blend-mode: normal;
+    z-index: 2;
+  }
+
+  ::view-transition-new(root) {
+    animation: none;
+    mix-blend-mode: normal;
+    z-index: 1;
+  }
+
+  html.theme-crossfade::view-transition-old(root) {
+    animation-duration: 380ms;
+  }
+
+  html.theme-crossfade::view-transition-group(navigation-dock) {
+    animation-duration: 380ms;
+  }
+
+  .theme-crossfade *, .theme-crossfade *::before, .theme-crossfade *::after {
+    transition-property: none !important;
+  }
+
+  .mobile-dock { view-transition-name: navigation-dock; }
+  ::view-transition-group(navigation-dock) { animation-duration: 340ms; }
+
+  .smooth-panel {
+    animation: section-rise 480ms var(--ease-out) both;
+  }
+
+  :where(.friend-card, .recommendation-card, .section-link-item, .home-blog-row) {
+    transition: transform 380ms var(--ease-soft), border-color 220ms ease,
+      background-color 240ms ease, box-shadow 380ms var(--ease-soft);
+  }
+
+  :where(.friend-card, .recommendation-card, .section-link-item):hover {
+    transform: translateY(-2px);
+  }
+
+  :where(button, .sanctuary-text-link, .section-link-item):active {
+    translate: 0 1px;
+  }
+}
+
+@keyframes route-leave {
+  to { opacity: 0; }
+}
+
 @media (prefers-reduced-motion: no-preference) {
   .page-transition {
-    animation: page-enter 360ms var(--ease-emotional) both;
+    animation: none;
   }
 
-  .pride-focus-within-glow:focus-within {
-    animation: gemini-glow-spread 5.8s ease-in-out infinite;
-  }
-
-  .pride-gradient-text {
+.pride-gradient-text {
     animation: pride-shift 18s ease-in-out infinite;
   }
 
-  .pride-gradient-line {
-    background-size: 200% 200%;
-    animation: pride-shift 16s ease-in-out infinite;
-  }
-
-  .pride-icon-glow {
+.pride-icon-glow {
     animation: pride-glow 9s ease-in-out infinite;
   }
 
-  .pride-badge-dot {
-    animation: pride-dot 7.5s ease-in-out infinite;
-  }
+.pride-button {
 
-  .pride-button {
-    animation: pride-border-shift 18s linear infinite, pride-glow-spread 8s ease-in-out infinite;
     transition:
       background-color var(--motion-soft) var(--ease-soft),
       border-color var(--motion-soft) var(--ease-soft),
@@ -47,11 +90,7 @@
       transform var(--motion-medium) var(--ease-emotional);
   }
 
-  .mobile-dock::before {
-    animation: pride-shift 22s ease-in-out infinite;
-  }
-
-  .article-mobile-toc-tint {
+.article-mobile-toc-tint {
     animation: pride-shift 18s ease-in-out infinite;
   }
 
@@ -212,7 +251,7 @@
       0 0 0 1px hsl(var(--pride-glow-val) / 0.15),
       0 0 15px hsl(var(--pride-glow-val) / 0.22),
       0 0 30px hsl(217 92% 70% / 0.12),
-      0 0 45px hsl(142 76% 66% / 0.05);
+      0 0 45px hsl(var(--site-blue) / 0.05);
   }
 
   50% {
@@ -220,7 +259,7 @@
       0 0 0 1px hsl(var(--pride-glow-val) / 0.25),
       0 0 28px hsl(var(--pride-glow-val) / 0.36),
       0 0 48px hsl(217 92% 70% / 0.22),
-      0 0 70px hsl(142 76% 66% / 0.1);
+      0 0 70px hsl(var(--site-blue) / 0.1);
   }
 }
 
@@ -268,7 +307,7 @@
 
 @keyframes section-rise {
   from {
-    opacity: 0;
+    opacity: 1;
     transform: translateY(6px);
   }
 
@@ -280,7 +319,7 @@
 
 @keyframes stat-item-rise {
   from {
-    opacity: 0;
+    opacity: 1;
     transform: translateY(10px);
   }
 
@@ -431,7 +470,7 @@
 
 @keyframes panel-rise {
   from {
-    opacity: 0;
+    opacity: 1;
     transform: translateY(0.4rem);
   }
 
@@ -443,7 +482,7 @@
 
 @keyframes entry-rise {
   from {
-    opacity: 0;
+    opacity: 1;
     transform: translateY(0.35rem);
   }
 

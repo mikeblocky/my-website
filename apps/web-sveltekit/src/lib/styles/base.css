@@ -1,14 +1,13 @@
 .bg-dot-pattern {
     background-color: transparent;
-    background-image: radial-gradient(rgba(139, 92, 246, 0.1) 1px, transparent 1px);
+    background-image: radial-gradient(hsl(var(--site-blue) / 0.08) 1px, transparent 1px);
     background-size: 25px 25px;
     background-position: -19px -19px;
 }
 
 :root {
-  --pride-colors: #e25566, #f59e0b, #22c55e, #3b82f6, #a855f7;
-  --pride-colors-repeat: #e25566, #f59e0b, #22c55e, #3b82f6, #a855f7, #e25566;
-  --pride-glow-val: 326 78% 72%;
+  --site-blue: 217 85% 44%;
+  --pride-glow-val: var(--site-blue);
   --background: 0 0% 100%;
   --foreground: 240 10% 3.9%;
   --card: 0 0% 100%;
@@ -44,10 +43,10 @@
   --font-size-2xl: clamp(2rem, 3.5vw, 2.5rem);  /* 32px-40px - visual hero */
   --font-size-3xl: clamp(2.5rem, 5.5vw, 4.5rem); /* 40px-72px - brand display */
 
-  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out: cubic-bezier(0.25, 0.8, 0.25, 1);
   --ease-soft: cubic-bezier(0.2, 0.82, 0.22, 1);
-  --ease-snap: cubic-bezier(0.22, 1, 0.36, 1);
-  --ease-emotional: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-snap: cubic-bezier(0.45, 0, 0.1, 1);
+  --ease-emotional: cubic-bezier(0.45, 0, 0.1, 1);
   --motion-soft: 220ms;
   --motion-medium: 340ms;
   --motion-slow: 520ms;
@@ -55,6 +54,7 @@
 }
 
 .dark {
+  --site-blue: 213 94% 70%;
   --background: 222 47% 5%;
   --foreground: 210 20% 85%;
   --card: 222 47% 5%;
@@ -106,37 +106,15 @@ body {
   color: hsl(var(--foreground));
   font-family: var(--font-sans);
   transition:
-    background-color 140ms var(--ease-soft),
-    color 140ms var(--ease-soft);
+    background-color 260ms var(--ease-soft),
+    color 220ms var(--ease-soft);
 }
 
-/* Fixed gradient layer — composited once, never repaints on scroll */
-body::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-  pointer-events: none;
-  background-color: hsl(var(--background));
-  background-image:
-    radial-gradient(ellipse 70% 55% at 5% 10%,  hsl(350 85% 72% / 0.13), transparent),
-    radial-gradient(ellipse 55% 65% at 95% 5%,  hsl(206 90% 72% / 0.11), transparent),
-    radial-gradient(ellipse 55% 55% at 5%  92%, hsl(52  92% 70% / 0.07), transparent),
-    radial-gradient(ellipse 70% 55% at 95% 90%, hsl(272 75% 70% / 0.09), transparent);
-  transition: background-color 140ms var(--ease-soft);
-}
-
-.dark body::before {
-  background-color: hsl(var(--background));
-  background-image:
-    radial-gradient(ellipse 70% 55% at 5% 10%,  hsl(350 85% 72% / 0.07), transparent),
-    radial-gradient(ellipse 55% 65% at 95% 5%,  hsl(206 90% 72% / 0.07), transparent),
-    radial-gradient(ellipse 55% 55% at 5%  92%, hsl(52  92% 70% / 0.04), transparent),
-    radial-gradient(ellipse 70% 55% at 95% 90%, hsl(272 75% 70% / 0.05), transparent);
-}
+/* Plain page ground; shared blue accents live on controls and links. */
+body::before { content: none; }
 
 ::selection {
-  background: hsl(326 78% 72% / 0.28);
+  background: hsl(var(--site-blue) / 0.22);
   color: hsl(var(--foreground));
 }
 

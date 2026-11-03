@@ -148,7 +148,6 @@
       <!-- Title block -->
       <div class="kemutai-title-block">
         <h1>Kemutai Hanashi</h1>
-        <p>An ongoing artwork series dedicated to Kemutai Hanashi</p>
       </div>
     </div>
   </div>
@@ -252,15 +251,7 @@
     margin-bottom: 0.75rem;
     text-shadow: 0 2px 24px rgba(0, 0, 0, 0.4);
   }
-
-  .kemutai-title-block p {
-    font-size: 1.1rem;
-    color: rgba(255, 255, 255, 0.65);
-    margin: 0 auto;
-    max-width: 40rem;
-  }
-
-  .kemutai-shore {
+.kemutai-shore {
     position: relative;
     background: linear-gradient(to bottom, #1a3a4a, #0e2233);
     width: 100%;
