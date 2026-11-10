@@ -59,6 +59,14 @@ mkdirSync(rootVercel, { recursive: true });
 cpSync(appOutput, rootOutput, { recursive: true, verbatimSymlinks: true });
 normalizeFunctionHandlers(resolve(rootOutput, 'functions'));
 verifyArtworkOutput(rootOutput);
+// Build Output API routes make the browser policy explicit for hashed assets.
+const outputConfigPath = join(rootOutput, 'config.json');
+const outputConfig = JSON.parse(readFileSync(outputConfigPath, 'utf8'));
+outputConfig.routes = [
+  { src: '/artwork-previews/(.*)', headers: { 'Cache-Control': 'public, max-age=31536000, immutable' }, continue: true },
+  ...(outputConfig.routes ?? [])
+];
+writeFileSync(outputConfigPath, `${JSON.stringify(outputConfig, null, 2)}\n`);
 
 console.log(`Copied SvelteKit Vercel output to ${rootOutput}`);
 

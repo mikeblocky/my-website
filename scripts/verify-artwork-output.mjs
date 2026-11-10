@@ -16,7 +16,7 @@ export function verifyArtworkOutput(outputDirectory) {
   const pending = [payload];
   while (pending.length) {
     const value = pending.pop();
-    if (typeof value === 'string' && /^\/artworks\/.+\.(?:png|jpe?g|webp|avif)$/i.test(value)) urls.add(value);
+    if (typeof value === 'string' && /^\/(?:artworks|artwork-previews)\/.+\.(?:png|jpe?g|webp|avif)$/i.test(value)) urls.add(value);
     else if (value && typeof value === 'object') pending.push(...Object.values(value));
   }
   const items = [...urls];
@@ -25,7 +25,7 @@ export function verifyArtworkOutput(outputDirectory) {
     const assetPath = join(outputDirectory, 'static', decodeURIComponent(src.slice(1)));
     if (!existsSync(assetPath)) throw new Error(`Gallery asset is missing from deployment: ${src}`);
   }
-  console.log(`Verified prerendered gallery: ${items.length} artworks with published image files.`);
+  console.log(`Verified prerendered gallery: ${items.length} gallery image assets with published files.`);
 }
 
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {

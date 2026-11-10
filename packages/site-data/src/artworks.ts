@@ -5,6 +5,8 @@ import { getPublicAssetRoot } from './asset-root';
 
 export type ArtworkItem = {
   src: string;
+  previewSrc?: string;
+  viewerSrc?: string;
   isPortrait: boolean;
   width: number;
   height: number;
@@ -44,6 +46,10 @@ export function getArtworkItems(folder: string): ArtworkItem[] {
     return [];
   }
 
+  const manifestPath = path.join(getPublicAssetRoot(), 'artwork-previews', 'manifest.json');
+  const previews: Record<string, { previewSrc: string; viewerSrc: string }> = fs.existsSync(manifestPath)
+    ? JSON.parse(fs.readFileSync(manifestPath, 'utf8')) : {};
+
   const items = fs
     .readdirSync(folderPath)
     .filter((fileName) => /\.(png|jpe?g|webp|avif)$/i.test(fileName))
@@ -56,6 +62,7 @@ export function getArtworkItems(folder: string): ArtworkItem[] {
 
       return {
         src: `/artworks/${folder}/${encodeURIComponent(fileName)}`,
+        ...previews[`/artworks/${folder}/${encodeURIComponent(fileName)}`],
         isPortrait: height > width,
         width,
         height

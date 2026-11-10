@@ -2,7 +2,7 @@
   import { ArrowLeft, ArrowRight, Maximize2 } from '@lucide/svelte';
   import { onMount } from 'svelte';
   export let title: string;
-  export let items: { src: string; width: number; height: number }[] = [];
+  export let items: { src: string; previewSrc?: string; width: number; height: number }[] = [];
   export let onOpen: (index: number) => void;
   let track: HTMLDivElement;
   let current = 0;
@@ -23,7 +23,7 @@
   let requested: number | null = null;
   let preparing = false;
   function prepare(index: number) {
-    const src = items[index]?.src;
+    const src = items[index]?.previewSrc ?? items[index]?.src;
     if (!src) return Promise.resolve();
     let promise = decoded.get(src);
     if (!promise) {
@@ -35,7 +35,7 @@
   }
   function warmNeighbors(index: number) {
     if (!ready || !items.length) return;
-    for (const distance of [-3, -2, -1, 0, 1, 2, 3]) void prepare((index + distance + items.length) % items.length);
+    for (const distance of [0, -1, 1, -2, 2]) void prepare((index + distance + items.length) % items.length);
   }
   onMount(() => { ready = true; warmNeighbors(current); });
   async function go(index: number) {
@@ -113,7 +113,7 @@
         {@const item = card.item}
         {@const index = card.index}
         <button type="button" class="art-carousel-card" class:selected={index === current} class:distant={Math.abs(card.offset) > 3} style={`--art-ratio: ${item.width / item.height}; --offset: ${Math.max(-4, Math.min(4, card.offset))}; --depth: ${Math.min(4, Math.abs(card.offset))}; z-index: ${10 - Math.abs(card.offset)};`} tabindex={Math.abs(card.offset) <= 3 ? 0 : -1} aria-hidden={Math.abs(card.offset) > 3} aria-label={`Open ${title} artwork ${index + 1} of ${items.length}`} on:click={() => select(index)}>
-          {#if Math.abs(card.offset) <= 5}<img src={item.src} width={item.width} height={item.height} alt={`${title} artwork ${index + 1}`} loading={Math.abs(card.offset) <= 1 ? 'eager' : 'lazy'} decoding="async" draggable="false" />{/if}
+          {#if Math.abs(card.offset) <= 3}<img src={item.previewSrc ?? item.src} width={item.width} height={item.height} alt={`${title} artwork ${index + 1}`} loading={Math.abs(card.offset) <= 1 ? 'eager' : 'lazy'} decoding="async" draggable="false" />{/if}
           <span class="art-carousel-open" aria-hidden="true"><Maximize2 size={15} /></span>
         </button>
       {/each}

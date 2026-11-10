@@ -5,6 +5,8 @@
 
   type ArtworkItem = {
     src: string;
+    previewSrc?: string;
+    viewerSrc?: string;
     width: number;
     height: number;
     isPortrait?: boolean;
@@ -32,7 +34,7 @@
   let activeTab = 'illustrations';
   let activeIdx: number | null = null;
 
-  $: allUrls = sections.flatMap((sec) => sec.items.map((item) => item.src));
+  $: allUrls = sections.flatMap((sec) => sec.items.map((item) => item.viewerSrc ?? item.src));
   $: total = stats.reduce((sum, item) => sum + item.value, 0);
 </script>
 

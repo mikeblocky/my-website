@@ -42,6 +42,25 @@
 
   $: linkColor = linkColors[theme];
 
+  let mounted = false;
+  const warmedImages = new Map<string, HTMLImageElement>();
+  $: if (mounted && activeIdx !== null) warmAdjacent(activeIdx, cleanUrls);
+  function warmAdjacent(index: number, sources: string[]) {
+    for (const offset of [-1, 1]) {
+      const src = sources[(index + offset + sources.length) % sources.length];
+      if (!src || warmedImages.has(src)) continue;
+      const image = new Image();
+      image.decoding = 'async';
+      image.src = src;
+      warmedImages.set(src, image);
+    }
+    // Keep only the nearby decoded images in memory; HTTP cache retains the rest.
+    for (const src of warmedImages.keys()) {
+      if (![sources[index], sources[(index + 1) % sources.length], sources[(index - 1 + sources.length) % sources.length]].includes(src)) warmedImages.delete(src);
+    }
+  }
+
+
   function resetZoom() {
     scale = 1;
     translateX = 0;
@@ -252,6 +271,7 @@
   }
 
   onMount(() => {
+    mounted = true;
     window.addEventListener('keydown', handleKeyDown);
     window.addEventListener('wheel', handleWheel, { capture: true, passive: false });
     return () => {

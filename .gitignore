@@ -52,3 +52,6 @@ BlogPostContent.tsx
 
 # Local public feed snapshots and dev edits
 apps/web-sveltekit/.dev-data/
+
+# Generated, content-addressed gallery images
+/public/artwork-previews/

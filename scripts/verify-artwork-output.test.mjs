@@ -34,3 +34,10 @@ test('accepts serialized gallery data with published assets', t => {
   writeFileSync(join(directory, 'static/artworks/test/one.jpg'), 'fixture');
   assert.doesNotThrow(() => verifyArtworkOutput(directory));
 });
+
+test('rejects missing optimized previews even when the original is published', t => {
+  const directory = fixture(t, { data: ['/artworks/test/one.jpg', '/artwork-previews/hash-640.webp'] });
+  mkdirSync(join(directory, 'static/artworks/test'), { recursive: true });
+  writeFileSync(join(directory, 'static/artworks/test/one.jpg'), 'fixture');
+  assert.throws(() => verifyArtworkOutput(directory), /missing from deployment.*artwork-previews/);
+});
