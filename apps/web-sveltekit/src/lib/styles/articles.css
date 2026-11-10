@@ -25,22 +25,22 @@ article code {
 }
 
 .blog-post-shell article h1 {
-  font-size: clamp(1.5rem, 1.2rem + 1.5vw, 2.25rem);
+  font-size: var(--font-size-2xl);
   margin-top: 1.45rem;
   margin-bottom: 0.65rem;
 }
 .blog-post-shell article h2 {
-  font-size: clamp(1.25rem, 1rem + 1.2vw, 1.875rem);
+  font-size: var(--font-size-xl);
   margin-top: 1.1rem;
   margin-bottom: 0.45rem;
 }
 .blog-post-shell article h3 {
-  font-size: clamp(1.125rem, 0.95rem + 0.8vw, 1.5rem);
+  font-size: var(--font-size-lg);
   margin-top: 0.95rem;
   margin-bottom: 0.35rem;
 }
 .blog-post-shell article h4 {
-  font-size: clamp(1rem, 0.9rem + 0.5vw, 1.25rem);
+  font-size: var(--font-size-md);
   font-weight: 600;
   margin-top: 0.8rem;
   margin-bottom: 0.3rem;
@@ -66,7 +66,7 @@ article code {
   margin-bottom: 1rem;
   color: hsl(var(--foreground));
   font-family: var(--font-mono) !important;
-  font-size: 1rem;
+  font-size: var(--font-size-base);
   line-height: 1.68;
   overflow-wrap: break-word;
   word-break: break-word;
@@ -75,7 +75,7 @@ article code {
 
 @media (min-width: 768px) {
   .blog-post-shell article p {
-    font-size: 1.125rem;
+    font-size: var(--font-size-md);
   }
 }
 
@@ -106,13 +106,13 @@ article code {
 .blog-post-shell article li {
   color: hsl(var(--foreground));
   font-family: var(--font-mono) !important;
-  font-size: 1rem;
+  font-size: var(--font-size-base);
   line-height: 1.68;
 }
 
 @media (min-width: 768px) {
   .blog-post-shell article li {
-    font-size: 1.125rem;
+    font-size: var(--font-size-md);
   }
 }
 
@@ -141,7 +141,7 @@ article code {
 
 .blog-post-shell article pre code {
   font-family: var(--font-code);
-  font-size: 0.875rem;
+  font-size: var(--font-size-sm);
   line-height: 1.7;
   color: hsl(220 15% 80%);
   background: transparent;
@@ -164,7 +164,7 @@ article code {
 .blog-post-shell article p.image-caption {
   text-align: center;
   margin-top: -0.75rem;
-  font-size: 0.95rem;
+  font-size: var(--font-size-base);
   color: hsl(var(--muted-foreground));
 }
 
@@ -178,7 +178,7 @@ article code {
   border-collapse: collapse;
   margin: 1.5em 0;
   font-family: var(--font-mono);
-  font-size: 0.875rem;
+  font-size: var(--font-size-sm);
 }
 
 .blog-post-shell article th,
@@ -253,7 +253,7 @@ article code {
   border-top: 1px solid hsl(var(--border) / 0.55);
   padding-top: 1.5rem;
   color: hsl(var(--muted-foreground));
-  font-size: 0.75rem;
+  font-size: var(--font-size-2xs);
 }
 
 .blog-post-return a {
@@ -665,6 +665,6 @@ article code {
   text-wrap: balance;
 }
 
-.text-heading-h1 { font-size: clamp(1.5rem, 1.18rem + 1vw, 2.25rem); }
-.text-heading-h2 { font-size: clamp(1.25rem, 1.05rem + 0.75vw, 1.875rem); }
-.text-heading-h3 { font-size: clamp(1.125rem, 1rem + 0.55vw, 1.5rem); }
+.text-heading-h1 { font-size: var(--font-size-2xl); }
+.text-heading-h2 { font-size: var(--font-size-xl); }
+.text-heading-h3 { font-size: var(--font-size-lg); }

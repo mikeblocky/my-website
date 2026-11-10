@@ -390,7 +390,7 @@
   }
 
   .zine-shelf-title {
-    font-size: 0.875rem;
+    font-size: var(--font-size-sm);
     font-weight: 600;
     color: hsl(var(--foreground));
     line-height: 1.3;
@@ -398,7 +398,7 @@
 
   .zine-shelf-meta {
     font-family: var(--font-mono);
-    font-size: 0.5625rem;
+    font-size: var(--font-size-2xs);
     letter-spacing: 0.1em;
     text-transform: lowercase;
     color: hsl(var(--muted-foreground));
@@ -420,7 +420,7 @@
   .zine-reader-eyebrow {
     margin: 0;
     font-family: var(--font-mono);
-    font-size: 0.625rem;
+    font-size: var(--font-size-2xs);
     letter-spacing: 0.12em;
     text-transform: lowercase;
     color: hsl(var(--pride-glow-val));
@@ -429,7 +429,7 @@
 
   .zine-reader-title {
     margin: 0;
-    font-size: 1.5rem;
+    font-size: var(--font-size-lg);
     font-weight: 700;
     letter-spacing: -0.02em;
     color: hsl(var(--foreground));
@@ -585,7 +585,7 @@
     justify-content: center;
     width: 100%;
     height: 100%;
-    font-size: 0.75rem;
+    font-size: var(--font-size-2xs);
     color: hsl(var(--muted-foreground) / 0.4);
   }
 
@@ -606,7 +606,7 @@
   .zine-page-count {
     margin: 0;
     font-family: var(--font-mono);
-    font-size: 0.625rem;
+    font-size: var(--font-size-2xs);
     letter-spacing: 0.12em;
     text-transform: lowercase;
     color: hsl(var(--muted-foreground));
@@ -645,7 +645,7 @@
     padding: 0 1.125rem;
     height: 2.25rem;
     font-family: var(--font-mono);
-    font-size: 0.625rem;
+    font-size: var(--font-size-2xs);
     letter-spacing: 0.12em;
     text-transform: lowercase;
   }
@@ -693,7 +693,7 @@
 
   .zine-fs-count {
     font-family: var(--font-mono);
-    font-size: 0.625rem;
+    font-size: var(--font-size-2xs);
     letter-spacing: 0.1em;
     text-transform: lowercase;
     color: hsl(var(--muted-foreground));
@@ -735,7 +735,7 @@
     padding: 0 0.75rem;
     height: 1.75rem;
     font-family: var(--font-mono);
-    font-size: 0.625rem;
+    font-size: var(--font-size-2xs);
     letter-spacing: 0.1em;
     text-transform: lowercase;
     background: hsl(var(--muted) / 0.5);

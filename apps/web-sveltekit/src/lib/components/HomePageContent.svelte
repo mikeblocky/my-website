@@ -1,12 +1,9 @@
 <script lang="ts">
   import {
     ArrowRight,
-    Bird,
     Book,
     BookOpen,
-    GitFork,
     Heart,
-    Mail,
     MessageSquare,
     Palette,
     PenTool,
@@ -15,6 +12,14 @@
     Users
   } from '@lucide/svelte';
   import { portalLinks } from '$lib/site';
+  import HomePixelBackground from './HomePixelBackground.svelte';
+  import WorldClocks from './WorldClocks.svelte';
+  import SiteFooter from './SiteFooter.svelte';
+  let backgroundPaused = false;
+  import type { BlogPost } from '@mikeblocky/site-data';
+  export let artworks: { src: string; label: string; width: number; height: number }[] = [];
+  export let artworkCount = 0;
+  export let recentPosts: BlogPost[] = [];
   import BaseContainer from './BaseContainer.svelte';
   import { reveal } from '../actions/reveal';
 
@@ -47,28 +52,35 @@
     }
   ];
 
-  const footerLinks = [
-    { href: 'mailto:mibeblocky@gmail.com', icon: Mail, label: 'email' },
-    { href: 'https://github.com/mikeblocky', icon: GitFork, label: 'github' },
-    { href: 'https://x.com/mikeblocky', icon: Bird, label: 'twitter' }
-  ];
 </script>
 <BaseContainer size="lg" paddingX="md" paddingY="lg">
   <div class="sanctuary-home">
+    <HomePixelBackground {artworks} paused={backgroundPaused} />
 
-    <section class="sanctuary-intro" aria-labelledby="home-title" use:reveal>
-      <img class="sanctuary-mark" src="/icon.svg" alt="" width="48" height="48" />
-      <h1 id="home-title">mikeblocky.com</h1>
-      <p class="sanctuary-lead">Hi, I'm Mike. I'm a Vietnamese artist and a Japanese student.</p>
-    </section>
-
-    <figure class="sanctuary-art" use:reveal={80}>
-      <a href="/artworks" aria-label="Explore Mike's illustrations">
-        <div class="sanctuary-art-crop">
-          <img src="/image-cover.png" alt="A drawing of Shima and Mitsumi from January 2025, featuring a quiet sky and soft colors." fetchpriority="high" />
+    <header class="home-hero">
+      <div class="sanctuary-intro" aria-labelledby="home-title" use:reveal>
+        <div class="home-heading-row">
+          <img class="sanctuary-mark" data-pixel-glow src="/icon.svg" alt="" width="40" height="40" />
+          <h1 id="home-title" data-pixel-glow>mikeblocky.com</h1>
         </div>
-      </a>
-    </figure>
+        <p class="sanctuary-lead">Hi, I'm Mike. I'm a Vietnamese artist and a Japanese student.</p>
+      </div>
+      <p class="home-about-note">I draw the characters and everyday moments that stay with me. This is where I collect those drawings, write about the stories I love, and keep a little space for the people I meet along the way.</p>
+      <nav class="home-quick-links" aria-label="Start exploring">
+        <a data-pixel-glow href="/artworks">gallery <span class="home-link-count">{artworkCount} works</span><ArrowRight size={15} /></a>
+        <a data-pixel-glow href="/journal">journal <ArrowRight size={15} /></a>
+        <a data-pixel-glow href="/interact">say hello <MessageSquare size={15} /></a>
+      </nav>
+    </header>
+
+    <section class="home-recent" aria-labelledby="recent-title">
+      <div class="sanctuary-section-heading"><h2 id="recent-title">From the journal</h2><a href="/journal">All writing <ArrowRight size={15} /></a></div>
+      {#each recentPosts.slice(0, 2) as post}
+        <a class="home-journal-note" title={post.title} href={`/blog/posts/${post.slug}`}>
+          <span>{post.themes[0]} · {post.readingTime}</span><h3>{post.title}</h3><p>{post.description}</p><ArrowRight size={18} aria-hidden="true" />
+        </a>
+      {/each}
+    </section>
 
     <section class="sanctuary-explore" id="explore" aria-labelledby="explore-title">
       <div class="sanctuary-section-heading" use:reveal>
@@ -78,9 +90,9 @@
         {#each portalLinks as portal, index}
           {@const Icon = portalIcons[portal.icon as keyof typeof portalIcons]}
           <div use:reveal={(index % 2) * 70}>
-            <a href={portal.href} class="sanctuary-portal">
+            <a href={portal.href} class="sanctuary-portal" data-pixel-glow>
               <span class="sanctuary-portal-icon"><svelte:component this={Icon} size={19} strokeWidth={1.5} /></span>
-              <span class="sanctuary-portal-copy"><strong>{portal.label}</strong></span>
+              <span class="sanctuary-portal-copy"><strong>{portal.label}</strong><span>{portal.description}</span></span>
               <ArrowRight class="sanctuary-arrow" size={17} strokeWidth={1.5} />
             </a>
           </div>
@@ -88,19 +100,23 @@
       </nav>
     </section>
 
+    <div class="home-support">
     <section class="sanctuary-ongoings" aria-labelledby="ongoings-title">
       <div class="sanctuary-section-heading" use:reveal>
-        <h2 id="ongoings-title">Current ongoings</h2>
+        <h2 id="ongoings-title">Currently</h2>
       </div>
       <div class="sanctuary-work-list">
         {#each currentWork as item, index}
           <div class="sanctuary-work" use:reveal={index * 60}>
-            <span class="pride-text"><svelte:component this={item.icon} size={18} strokeWidth={1.5} /></span>
+            <span class="pride-text" data-pixel-glow><svelte:component this={item.icon} size={18} strokeWidth={1.5} /></span>
             <p>{item.text}</p>
           </div>
         {/each}
       </div>
     </section>
+
+      <WorldClocks compact />
+    </div>
 
     <section class="sanctuary-socials" aria-labelledby="socials-title" use:reveal>
       <h2 id="socials-title">Contact</h2>
@@ -108,15 +124,8 @@
       <a class="sanctuary-text-link" href="mailto:mibeblocky@gmail.com">mibeblocky@gmail.com <ArrowRight size={16} /></a>
     </section>
 
-    <footer class="sanctuary-footer">
-      <span>© {new Date().getFullYear()} mikeblocky.com</span>
-      <div>
-        {#each footerLinks as link}
-          <a href={link.href} aria-label={link.label} target={link.href.startsWith('mailto:') ? undefined : '_blank'} rel={link.href.startsWith('mailto:') ? undefined : 'noreferrer'}>
-            <svelte:component this={link.icon} size={17} strokeWidth={1.5} />
-          </a>
-        {/each}
-      </div>
-    </footer>
+    <SiteFooter spacing="none">
+      <button slot="controls" class="home-motion-toggle" type="button" aria-pressed={backgroundPaused} on:click={() => backgroundPaused = !backgroundPaused}>{backgroundPaused ? 'play background' : 'pause background'}</button>
+    </SiteFooter>
   </div>
 </BaseContainer>

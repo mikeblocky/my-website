@@ -397,17 +397,17 @@
 .phone-menu-backdrop { position: fixed; inset: 0; z-index: 70; border: 0; background: hsl(var(--foreground) / .08); backdrop-filter: blur(3px); }
 .phone-menu-panel { position: fixed; bottom: calc(86px + env(safe-area-inset-bottom, 0px)); right: max(20px, env(safe-area-inset-right, 0px)); z-index: 71; width: min(248px, calc(100vw - 40px)); max-height: calc(100dvh - 120px - env(safe-area-inset-bottom, 0px)); overflow-y: auto; border-radius: 24px; padding: 10px; transform-origin: bottom right; }
 .phone-menu-panel nav { display: grid; gap: 2px; }
-.phone-menu-panel nav a { display: flex; align-items: center; gap: 12px; min-height: 44px; padding: 10px 14px; border-radius: 14px; font-size: .85rem; text-transform: capitalize; color: hsl(var(--muted-foreground)); transition: background-color 200ms ease, color 200ms ease, translate 300ms cubic-bezier(.22,1,.36,1); }
+.phone-menu-panel nav a { display: flex; align-items: center; gap: 12px; min-height: 44px; padding: 10px 14px; border-radius: 14px; font-size: var(--font-size-sm); text-transform: none; color: hsl(var(--muted-foreground)); transition: background-color 200ms ease, color 200ms ease, translate 300ms cubic-bezier(.22,1,.36,1); }
 .phone-menu-panel nav a.active, .phone-menu-panel nav a:hover { color: hsl(var(--site-blue)); background: hsl(var(--site-blue) / .08); }
 .phone-menu-panel nav a:active { translate: 3px 0; }
-.phone-menu-theme { display: flex; justify-content: space-between; align-items: center; padding: 10px 12px 2px; margin-top: 6px; font-size: .75rem; color: hsl(var(--muted-foreground)); }
+.phone-menu-theme { display: flex; justify-content: space-between; align-items: center; padding: 10px 12px 2px; margin-top: 6px; font-size: var(--font-size-2xs); color: hsl(var(--muted-foreground)); }
 .phone-menu-theme > div > :not(button) { display: none; }
 .phone-music { position: fixed; bottom: calc(20px + env(safe-area-inset-bottom, 0px)); left: 16px; z-index: 65; display: flex; align-items: center; gap: 9px; width: min(260px, calc(100vw - 104px)); min-height: 54px; border-radius: 18px; padding: 7px 10px; }
 .phone-music img { border-radius: 10px; object-fit: cover; }
 .phone-music > span:not(.music-meter) { min-width: 0; flex: 1; }
 .phone-music strong, .phone-music small { display: block; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
-.phone-music strong { font-size: .75rem; font-weight: 600; }
-.phone-music small { font-size: .65rem; color: hsl(var(--muted-foreground)); margin-top: 3px; }
+.phone-music strong { font-size: var(--font-size-2xs); font-weight: 600; }
+.phone-music small { font-size: var(--font-size-2xs); color: hsl(var(--muted-foreground)); margin-top: 3px; }
 @media (prefers-reduced-motion: reduce) { .phone-menu-trigger, .phone-menu-panel nav a { transition: none; } }
 
 .phone-menu-trigger { touch-action: none; user-select: none; -webkit-user-select: none; view-transition-name: phone-navigation-button; transition: left 280ms cubic-bezier(.22,1,.36,1), top 280ms cubic-bezier(.22,1,.36,1), background-color 280ms ease, color 280ms ease; }
@@ -415,6 +415,19 @@
 .phone-menu-trigger.dragging { transition: none !important; cursor: grabbing; scale: 1.06; }
 .phone-menu-panel { backdrop-filter: none; -webkit-backdrop-filter: none; background: hsl(var(--background)); }
 .phone-menu-backdrop { backdrop-filter: none; }
-.phone-position-tools { display: grid; gap: 6px; padding: 10px 12px 4px; color: hsl(var(--muted-foreground)); font-size: .65rem; }
-.phone-position-tools button { border: 0; background: transparent; color: hsl(var(--site-blue)); padding: 4px 0; text-align: left; cursor: pointer; font-size: .7rem; }
 ::view-transition-old(phone-navigation-button), ::view-transition-new(phone-navigation-button) { animation: none; }
+
+/* Match the desktop rail: one centered icon column and lowercase labels. */
+.phone-menu-panel nav a { display: grid; grid-template-columns: 24px minmax(0,1fr); align-items: center; }
+.phone-menu-panel nav a > svg { justify-self: center; }
+.phone-menu-theme { justify-content: center; gap: 12px; }
+
+.phone-menu-footer { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 4px 10px 0; }
+.phone-menu-footer .phone-menu-theme { padding: 0; margin: 0; gap: 8px; }
+
+/* A translucent resting button, then a darker open state and page scrim. */
+.phone-menu-trigger { background: hsl(var(--background) / .72); border-color: hsl(var(--border) / .5); box-shadow: none; backdrop-filter: none; -webkit-backdrop-filter: none; }
+.phone-menu-trigger.open { background: hsl(222 30% 4% / .92); color: hsl(210 30% 96%); border-color: hsl(215 20% 70% / .3); }
+.phone-menu-backdrop { background: hsl(222 65% 3% / .22); }
+
+.phone-reset-position { border: 0; background: transparent; color: hsl(var(--site-blue)); padding: 0; min-height: 44px; font: inherit; font-size: var(--font-size-xs); cursor: pointer; }

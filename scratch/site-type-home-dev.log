@@ -1,0 +1,17 @@
+
+> @mikeblocky/web-sveltekit@0.1.0 predev
+> node ../../scripts/generate-artwork-previews.mjs
+
+Artwork previews: 46 works; cards 1.6 MB versus 170.5 MB originals.
+
+> @mikeblocky/web-sveltekit@0.1.0 dev
+> vite dev --host 127.0.0.1
+
+Port 5173 is in use, trying another one...
+Port 5174 is in use, trying another one...
+
+  VITE v7.3.5  ready in 7003 ms
+
+  ➜  Local:   http://127.0.0.1:5175/
+(node:43864) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)

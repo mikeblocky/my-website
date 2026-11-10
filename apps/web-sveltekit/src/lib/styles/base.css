@@ -8,11 +8,11 @@
 :root {
   --site-blue: 217 85% 44%;
   --pride-glow-val: var(--site-blue);
-  --background: 0 0% 100%;
+  --background: 42 18% 94%;
   --foreground: 240 10% 3.9%;
-  --card: 0 0% 100%;
+  --card: 42 18% 94%;
   --card-foreground: 240 10% 3.9%;
-  --popover: 0 0% 100%;
+  --popover: 42 18% 94%;
   --popover-foreground: 240 10% 3.9%;
   --primary: 240 5.9% 10%;
   --primary-foreground: 0 0% 98%;
@@ -32,16 +32,17 @@
 	--font-mono: "Google Sans Code", "SFMono-Regular", "Cascadia Code", Consolas, monospace;
 	--font-code: "Google Sans Code", "Cascadia Code", Consolas, monospace;
   
-  /* Typographic scale (scaled up) */
-  --font-size-2xs: 0.75rem;     /* 12px - auxiliary metadata, dates */
-  --font-size-xs: 0.8125rem;    /* 13px - small labels, minor tags */
-  --font-size-sm: 0.9375rem;    /* 15px - button text, tabs, navigation */
-  --font-size-base: 1.0625rem;  /* 17px - default body copy */
-  --font-size-md: 1.2rem;       /* 19.2px - card headings, sub-sections */
-  --font-size-lg: 1.375rem;     /* 22px - main section headers */
-  --font-size-xl: 1.75rem;      /* 28px - page title/headers */
-  --font-size-2xl: clamp(2rem, 3.5vw, 2.5rem);  /* 32px-40px - visual hero */
-  --font-size-3xl: clamp(2.5rem, 5.5vw, 4.5rem); /* 40px-72px - brand display */
+  /* Shared scale: metadata 12–13px, controls 14px, body 16px,
+     card titles 18px, sections 22px, pages 32–40px. */
+  --font-size-2xs: 0.75rem;
+  --font-size-xs: 0.8125rem;
+  --font-size-sm: 0.875rem;
+  --font-size-base: 1rem;
+  --font-size-md: 1.125rem;
+  --font-size-lg: 1.375rem;
+  --font-size-xl: 1.875rem;
+  --font-size-2xl: clamp(2rem, 3.5vw, 2.5rem);
+  --font-size-3xl: clamp(2.25rem, 5vw, 3.5rem);
 
   --ease-out: cubic-bezier(0.25, 0.8, 0.25, 1);
   --ease-soft: cubic-bezier(0.2, 0.82, 0.22, 1);
@@ -91,6 +92,7 @@ body {
 }
 
 html {
+  background-color: hsl(var(--background));
   scroll-behavior: smooth;
   text-size-adjust: 100%;
 }
@@ -105,6 +107,8 @@ body {
   background-color: hsl(var(--background));
   color: hsl(var(--foreground));
   font-family: var(--font-sans);
+  font-size: var(--font-size-base);
+  line-height: 1.6;
   transition:
     background-color 260ms var(--ease-soft),
     color 220ms var(--ease-soft);
@@ -162,3 +166,9 @@ textarea:focus, [contenteditable='true']:focus {
 
 input:not([type='checkbox']):not([type='radio']):not([type='range']):focus,
 textarea:focus, [contenteditable='true']:focus { border-color: transparent !important; }
+
+/* A persistent paper tone keeps light pages from jumping to pure white. */
+body::after { content: ''; position: fixed; inset: 0; z-index: 90; pointer-events: none; background: hsl(40 22% 64%); opacity: 0; transition: opacity 520ms var(--ease-soft); }
+html:not(.dark) body::after { opacity: .045; }
+html:not(.dark).light-page-settling body::after { opacity: .14; transition-duration: 160ms; }
+@media (prefers-reduced-motion: reduce) { body::after { transition: none; } }

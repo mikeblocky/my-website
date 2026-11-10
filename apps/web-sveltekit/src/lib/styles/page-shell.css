@@ -32,7 +32,7 @@
 .page-intro h1 {
   margin: 0;
   color: rgb(15 23 42);
-  font-size: clamp(1.75rem, 1.4rem + 1.1vw, 2.5rem);
+  font-size: var(--font-size-2xl);
   font-weight: 700;
   letter-spacing: -0.03em;
   line-height: 1.1;
@@ -51,7 +51,7 @@
   max-width: 65ch;
   margin: 0;
   color: hsl(var(--muted-foreground));
-  font-size: 1rem;
+  font-size: var(--font-size-base);
   line-height: 1.65;
   text-wrap: pretty;
 }
@@ -111,7 +111,7 @@
 .portal-text strong {
   color: rgb(30 41 59);
   font-family: var(--font-mono);
-  font-size: 0.875rem;
+  font-size: var(--font-size-sm);
   font-weight: 600;
   letter-spacing: 0.025em;
   transition: color 200ms ease;
@@ -134,7 +134,7 @@
   min-width: 0;
   overflow: hidden;
   color: hsl(var(--muted-foreground));
-  font-size: 0.75rem;
+  font-size: var(--font-size-2xs);
   text-overflow: ellipsis;
   white-space: nowrap;
   transition: color 200ms ease;
@@ -216,7 +216,7 @@
   gap: 0.5rem;
   min-width: 0;
   color: hsl(var(--muted-foreground));
-  font-family: var(--font-mono);
+  font-family: var(--font-code);
   font-size: var(--font-size-sm);
 }
 
@@ -279,7 +279,7 @@
   margin: 0;
   color: hsl(var(--foreground));
   font-family: var(--font-sans);
-  font-size: 1rem;
+  font-size: var(--font-size-base);
   line-height: 1.65;
 }
 

@@ -351,7 +351,7 @@
   }
 
   .cropper-title {
-    font-size: 0.875rem;
+    font-size: var(--font-size-sm);
     font-weight: 700;
     color: hsl(var(--foreground));
     font-family: var(--font-sans);
@@ -411,7 +411,7 @@
     align-items: center;
     gap: 0.5rem;
     pointer-events: none;
-    font-size: 0.625rem;
+    font-size: var(--font-size-2xs);
     letter-spacing: 0.1em;
     text-transform: lowercase;
     color: hsl(var(--muted-foreground));
@@ -488,7 +488,7 @@
   }
 
   .cropper-zoom-label {
-    font-size: 0.5625rem;
+    font-size: var(--font-size-2xs);
     color: hsl(var(--muted-foreground));
     font-family: var(--font-mono);
     width: 2rem;
@@ -502,7 +502,7 @@
   }
 
   .cropper-ar-label {
-    font-size: 0.5625rem;
+    font-size: var(--font-size-2xs);
     text-transform: lowercase;
     letter-spacing: 0.1em;
     color: hsl(var(--muted-foreground));
@@ -520,7 +520,7 @@
     padding: 0.25rem 0.625rem;
     border-radius: 0.25rem;
     border: 1px solid hsl(var(--border));
-    font-size: 0.625rem;
+    font-size: var(--font-size-2xs);
     letter-spacing: 0.05em;
     font-weight: 600;
     text-transform: lowercase;
@@ -551,7 +551,7 @@
   }
 
   .cropper-btn {
-    font-size: 0.6875rem;
+    font-size: var(--font-size-2xs);
     font-weight: 700;
     text-transform: lowercase;
     padding: 0 1rem;

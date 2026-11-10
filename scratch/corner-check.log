@@ -1,0 +1,817 @@
+
+> nextjs-site@0.1.0 check:svelte
+> npm --workspace @mikeblocky/web-sveltekit run check
+
+
+> @mikeblocky/web-sveltekit@0.1.0 check
+> svelte-kit sync && svelte-check --tsconfig ./tsconfig.json
+
+(node:32168) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+The following Vite config options will be overridden by SvelteKit:
+  - root
+Loading svelte-check in workspace: c:\my-website\apps\web-sveltekit
+Getting Svelte diagnostics...
+
+c:\my-website\apps\web-sveltekit\src\lib\components\ImageGallery.svelte:330:5
+Warn: Self-closing HTML tags for non-void elements are ambiguous — use `<button ...></button>` rather than `<button ... />`
+https://svelte.dev/e/element_invalid_self_closing_tag (svelte)
+    <!-- Close target -->
+    <button
+      type="button"
+      aria-label="Close lightbox backdrop"
+      class="absolute inset-0 z-10 bg-transparent border-0 outline-none cursor-default"
+      on:click={(e) => { if (scale === 1) { e.stopPropagation(); closeLightbox(); } }}
+    />
+
+c:\my-website\apps\web-sveltekit\src\lib\components\ImageGallery.svelte:385:9
+Warn: Non-interactive element `<div>` should not be assigned mouse or keyboard event listeners
+https://svelte.dev/e/a11y_no_noninteractive_element_interactions (svelte)
+        <!-- Interactive Zoom/Pan container wrapper -->
+        <div
+          on:mousedown|stopPropagation={handleMouseDown}
+          on:mousemove|stopPropagation={handleMouseMove}
+          on:mouseup|stopPropagation={handleMouseUp}
+          on:mouseleave|stopPropagation={handleMouseUp}
+          on:touchstart|stopPropagation={handleTouchStart}
+          on:touchmove|stopPropagation={handleTouchMove}
+          on:touchend|stopPropagation={handleTouchEnd}
+          on:dblclick|stopPropagation={handleDoubleClick}
+          style="transform: scale({scale}) translate({(translateX + dragDismissX) / scale}px, {(translateY + dragDismissY) / scale}px); cursor: {scale > 1 ? (isDragging ? 'grabbing' : 'grab') : 'zoom-in'}; transition: {isDragging || isDraggingDismiss ? 'none' : 'transform 0.22s cubic-bezier(0.16, 1, 0.3, 1)'}"
+          class="relative max-h-[88dvh] max-w-[92vw] flex items-center justify-center pointer-events-auto select-none"
+          role="img"
+          aria-label={`Expanded attachment ${activeIdx + 1}`}
+        >
+          <img
+            src={cleanUrls[activeIdx]} 
+            alt={`Expanded Attachment ${activeIdx + 1}`} 
+            class="max-h-[88dvh] max-w-[92vw] h-auto w-auto object-contain pointer-events-none transition-opacity duration-300 ease-out shadow-none {isLightboxLoading ? 'opacity-0' : 'opacity-100'}"
+            on:load={() => (isLightboxLoading = false)}
+          />
+        </div>
+
+c:\my-website\apps\web-sveltekit\src\lib\components\SiteFooter.svelte:48:5
+Warn: Self-closing HTML tags for non-void elements are ambiguous — use `<div ...></div>` rather than `<div ... />`
+https://svelte.dev/e/element_invalid_self_closing_tag (svelte)
+  <div class="relative w-full mb-8">
+    <div class={cn(
+      "absolute inset-0 w-full h-[1px] bg-gradient-to-r pride-gradient-line opacity-80",
+      color === 'blue' && "dark:opacity-90",
+      color === 'green' && "dark:via-green-400/30"
+    )} />
+  </div>
+
+c:\my-website\apps\web-sveltekit\src\lib\components\SiteFooter.svelte:106:3
+Warn: Self-closing HTML tags for non-void elements are ambiguous — use `<div ...></div>` rather than `<div ... />`
+https://svelte.dev/e/element_invalid_self_closing_tag (svelte)
+  <!-- Bottom spacer -->
+  <div class={bottomSpacerClass} />
+</footer>
+
+c:\my-website\apps\web-sveltekit\src\lib\components\BoardShell.svelte:9:14
+Warn: Component has unused export property 'isLoading'. If it is for external reference only, please consider using `export const isLoading`
+https://svelte.dev/e/export_let_unused (svelte)
+  export let isRefreshing = false;
+  export let isLoading = false;
+  export let isAdminMode = false;
+
+c:\my-website\apps\web-sveltekit\src\lib\components\BoardThreadBubble.svelte:173:11
+Warn: Self-closing HTML tags for non-void elements are ambiguous — use `<textarea ...></textarea>` rather than `<textarea ... />`
+https://svelte.dev/e/element_invalid_self_closing_tag (svelte)
+        <div class="relative">
+          <textarea
+            bind:this={editTextareaEl}
+            bind:value={editBody}
+            use:autoResize
+            use:emojiAutocomplete
+            on:emoji:open={onEmojiOpen}
+            on:emoji:close={onEmojiClose}
+            rows={Math.max(3, message.body.split('\n').length)}
+            class="min-h-[44px] w-full resize-none overflow-hidden rounded-md border bg-background pl-4 pr-11 py-3 text-base md:text-[17px] text-slate-900 focus:outline-none focus:ring-1 dark:text-slate-100 font-sans {themeClasses.textarea}"
+          />
+          <div class="absolute right-2 top-1/2 -translate-y-1/2">
+
+c:\my-website\apps\web-sveltekit\src\lib\components\BoardThreadBubble.svelte:25:14
+Warn: Component has unused export property 'depth'. If it is for external reference only, please consider using `export const depth`
+https://svelte.dev/e/export_let_unused (svelte)
+  };
+  export let depth: number;
+  export let author = 'anonymous';
+
+c:\my-website\apps\web-sveltekit\src\lib\components\DrawPromptForm.svelte:90:5
+Warn: Self-closing HTML tags for non-void elements are ambiguous — use `<textarea ...></textarea>` rather than `<textarea ... />`
+https://svelte.dev/e/element_invalid_self_closing_tag (svelte)
+  <div class="px-4 py-4 relative">
+    <textarea
+      bind:this={bodyTextareaEl}
+      bind:value={body}
+      on:input={handleInput}
+      use:emojiAutocomplete
+      on:emoji:open={onEmojiOpen}
+      on:emoji:close={onEmojiClose}
+      placeholder="Suggest a drawing prompt... (describe characters, actions, or series here)"
+      rows={1}
+      class="w-full bg-transparent py-2 pr-9 text-sm text-slate-900 placeholder:text-muted-foreground/60 focus:outline-none dark:text-slate-100 dark:placeholder:text-slate-600 resize-none overflow-hidden min-h-[100px] font-sans"
+    />
+    <div class="absolute right-3 top-1/2 -translate-y-1/2">
+
+c:\my-website\apps\web-sveltekit\src\lib\components\DrawPromptItem.svelte:316:13
+Warn: Self-closing HTML tags for non-void elements are ambiguous — use `<textarea ...></textarea>` rather than `<textarea ... />`
+https://svelte.dev/e/element_invalid_self_closing_tag (svelte)
+          <div class="relative">
+            <textarea
+              bind:this={replyTextareaEl}
+              bind:value={replyBody}
+              on:input={handleInput}
+              use:emojiAutocomplete
+              on:emoji:open={(e) => onEmojiOpen(e, replyTextareaEl)}
+              on:emoji:close={onEmojiClose}
+              placeholder="Write your answer..."
+              rows={1}
+              class="min-h-[44px] w-full resize-none overflow-hidden rounded-md border border-border bg-background pl-4 pr-11 py-3 text-base md:text-[17px] text-slate-900 focus:outline-none focus:ring-1 focus:ring-violet-350 dark:text-slate-100 font-sans"
+            />
+            <div class="absolute right-2 top-1/2 -translate-y-1/2">
+
+c:\my-website\apps\web-sveltekit\src\lib\components\DrawPromptItem.svelte:390:13
+Warn: Self-closing HTML tags for non-void elements are ambiguous — use `<textarea ...></textarea>` rather than `<textarea ... />`
+https://svelte.dev/e/element_invalid_self_closing_tag (svelte)
+          <div class="relative">
+            <textarea
+              bind:this={followUpTextareaEl}
+              bind:value={followUpBody}
+              on:input={handleInput}
+              use:emojiAutocomplete
+              on:emoji:open={(e) => onEmojiOpen(e, followUpTextareaEl)}
+              on:emoji:close={onEmojiClose}
+              placeholder="Ask a follow-up..."
+              rows={1}
+              class="min-h-[44px] w-full resize-none overflow-hidden rounded-md border border-emerald-250 bg-background pl-4 pr-11 py-3 text-base md:text-[17px] text-slate-900 focus:outline-none focus:ring-1 focus:ring-emerald-350 dark:border-emerald-500/30 dark:text-slate-100 font-sans"
+            />
+            <div class="absolute right-2 top-1/2 -translate-y-1/2">
+
+c:\my-website\apps\web-sveltekit\src\lib\components\ImageCropperModal.svelte:208:1
+Warn: Visible, non-interactive element `<div>` with a click event must be accompanied by a keyboard event handler. Consider whether an interactive element such as `<button type="button">` or `<a>` might be more appropriate
+https://svelte.dev/e/a11y_click_events_have_key_events (svelte)
+
+<div use:portal class="cropper-overlay" transition:fade={{ duration: 180 }} on:click|self={() => dispatch('close')} role="dialog" aria-modal="true" tabindex="-1">
+  <div class="cropper-modal" transition:scale={{ duration: 220, start: 0.95 }}>
+    <!-- Header -->
+    <div class="cropper-header">
+      <span class="cropper-title">crop cover image</span>
+      <button type="button" class="cropper-close" on:click={() => dispatch('close')}>
+        <X size={16} />
+      </button>
+    </div>
+
+    <!-- Workspace -->
+    <div
+      bind:this={containerEl}
+      class="cropper-workspace"
+      on:mousedown={handleMouseDown}
+      on:touchstart={handleTouchStart}
+      on:wheel={handleWheel}
+      role="img"
+      aria-label="Crop area"
+    >
+      {#if isLoading || !imgW}
+        <div class="cropper-loading">
+          <div class="cropper-spinner"></div>
+          <span>loading cover...</span>
+        </div>
+      {:else}
+        <!-- Image -->
+        <img
+          src={imageSrc}
+          alt="Crop source"
+          class="cropper-img"
+          style="
+            width: {baseImgW}px;
+            height: {baseImgH}px;
+            transform: translate({offsetX}px, {offsetY}px) scale({zoom});
+            left: 50%;
+            top: 50%;
+            margin-left: {-baseImgW / 2}px;
+            margin-top: {-baseImgH / 2}px;
+          "
+        />
+        <!-- Overlays -->
+        <div class="cropper-overlay-mask" style="left:0;top:0;width:{containerW}px;height:{frameY}px"></div>
+        <div class="cropper-overlay-mask" style="left:0;top:{frameY + frameH}px;width:{containerW}px;bottom:0"></div>
+        <div class="cropper-overlay-mask" style="left:0;top:{frameY}px;width:{frameX}px;height:{frameH}px"></div>
+        <div class="cropper-overlay-mask" style="left:{frameX + frameW}px;top:{frameY}px;right:0;height:{frameH}px"></div>
+        <!-- Crop frame -->
+        <div class="cropper-frame" style="left:{frameX}px;top:{frameY}px;width:{frameW}px;height:{frameH}px">
+          <div class="cropper-grid">
+            {#each Array(9) as _, i}
+              <div class="cropper-grid-cell"
+                style="border-right: {i % 3 !== 2 ? '1px solid rgba(255,255,255,0.2)' : 'none'};
+                       border-bottom: {i < 6 ? '1px solid rgba(255,255,255,0.2)' : 'none'}"
+              ></div>
+            {/each}
+          </div>
+        </div>
+      {/if}
+    </div>
+
+    <!-- Controls -->
+    {#if !isLoading && imgW}
+      <div class="cropper-controls">
+        <!-- Zoom -->
+        <div class="cropper-zoom-row">
+          <ZoomOut size={14} class="text-slate-400" />
+          <input
+            type="range" min="1" max="3" step="0.01"
+            bind:value={zoom}
+            class="cropper-zoom-slider"
+          />
+          <ZoomIn size={14} class="text-slate-400" />
+          <span class="cropper-zoom-label">{Math.round(zoom * 100)}%</span>
+        </div>
+
+        <!-- Aspect ratio -->
+        <div class="cropper-ar-section">
+          <span class="cropper-ar-label">aspect ratio</span>
+          <div class="cropper-ar-presets">
+            {#each ASPECT_RATIO_PRESETS as preset}
+              <button
+                type="button"
+                class="cropper-ar-btn"
+                class:active={aspectRatio === preset.key}
+                on:click={() => (aspectRatio = preset.key)}
+              >{preset.label}</button>
+            {/each}
+          </div>
+        </div>
+      </div>
+    {/if}
+
+    <!-- Footer -->
+    <div class="cropper-footer">
+      <button type="button" class="cropper-btn cropper-btn-outline" on:click={() => dispatch('close')}>cancel</button>
+      <button type="button" class="cropper-btn cropper-btn-primary" on:click={handleSave} disabled={isLoading || !imgW}>
+        crop & save cover
+      </button>
+    </div>
+  </div>
+</div>
+
+c:\my-website\apps\web-sveltekit\src\lib\components\ImageCropperModal.svelte:219:5
+Warn: Non-interactive element `<div>` should not be assigned mouse or keyboard event listeners
+https://svelte.dev/e/a11y_no_noninteractive_element_interactions (svelte)
+    <!-- Workspace -->
+    <div
+      bind:this={containerEl}
+      class="cropper-workspace"
+      on:mousedown={handleMouseDown}
+      on:touchstart={handleTouchStart}
+      on:wheel={handleWheel}
+      role="img"
+      aria-label="Crop area"
+    >
+      {#if isLoading || !imgW}
+        <div class="cropper-loading">
+          <div class="cropper-spinner"></div>
+          <span>loading cover...</span>
+        </div>
+      {:else}
+        <!-- Image -->
+        <img
+          src={imageSrc}
+          alt="Crop source"
+          class="cropper-img"
+          style="
+            width: {baseImgW}px;
+            height: {baseImgH}px;
+            transform: translate({offsetX}px, {offsetY}px) scale({zoom});
+            left: 50%;
+            top: 50%;
+            margin-left: {-baseImgW / 2}px;
+            margin-top: {-baseImgH / 2}px;
+          "
+        />
+        <!-- Overlays -->
+        <div class="cropper-overlay-mask" style="left:0;top:0;width:{containerW}px;height:{frameY}px"></div>
+        <div class="cropper-overlay-mask" style="left:0;top:{frameY + frameH}px;width:{containerW}px;bottom:0"></div>
+        <div class="cropper-overlay-mask" style="left:0;top:{frameY}px;width:{frameX}px;height:{frameH}px"></div>
+        <div class="cropper-overlay-mask" style="left:{frameX + frameW}px;top:{frameY}px;right:0;height:{frameH}px"></div>
+        <!-- Crop frame -->
+        <div class="cropper-frame" style="left:{frameX}px;top:{frameY}px;width:{frameW}px;height:{frameH}px">
+          <div class="cropper-grid">
+            {#each Array(9) as _, i}
+              <div class="cropper-grid-cell"
+                style="border-right: {i % 3 !== 2 ? '1px solid rgba(255,255,255,0.2)' : 'none'};
+                       border-bottom: {i < 6 ? '1px solid rgba(255,255,255,0.2)' : 'none'}"
+              ></div>
+            {/each}
+          </div>
+        </div>
+      {/if}
+    </div>
+
+c:\my-website\apps\web-sveltekit\src\lib\components\ImageCropperModal.svelte:465:3
+Warn: Do not use empty rulesets (css)
+
+  .cropper-grid-cell { }
+
+c:\my-website\apps\web-sveltekit\src\lib\components\SketchbookCanvas.svelte:382:5
+Warn: Self-closing HTML tags for non-void elements are ambiguous — use `<textarea ...></textarea>` rather than `<textarea ... />`
+https://svelte.dev/e/element_invalid_self_closing_tag (svelte)
+  <div class="px-4 py-2">
+    <textarea
+      placeholder="Caption your artwork... (optional)"
+      bind:value={caption}
+      maxlength={MAX_BODY_LENGTH}
+      on:input={(e) => {
+        e.currentTarget.style.height = 'auto';
+        e.currentTarget.style.height = `${e.currentTarget.scrollHeight}px`;
+      }}
+      rows={1}
+      class="w-full bg-transparent py-2 text-base text-slate-900 placeholder:text-slate-400 focus:outline-none dark:text-slate-100 dark:placeholder:text-slate-600 resize-none overflow-hidden min-h-[82px] font-sans"
+    />
+  </div>
+
+c:\my-website\apps\web-sveltekit\src\lib\components\SketchbookCanvas.svelte:466:13
+Warn: Self-closing HTML tags for non-void elements are ambiguous — use `<div ...></div>` rather than `<div ... />`
+https://svelte.dev/e/element_invalid_self_closing_tag (svelte)
+          <div class="w-8 h-8 rounded-full bg-white dark:bg-slate-900 flex items-center justify-center border border-slate-200/60 dark:border-slate-800/60 shadow-inner shrink-0 relative overflow-hidden">
+            <div
+              class="rounded-full transition-all"
+              style="width: {Math.max(2, Math.min(brushSize, 20))}px; height: {Math.max(2, Math.min(brushSize, 20))}px; background-color: {isDrawingTool === 'eraser' ? '#cbd5e1' : brushColor};"
+            />
+          </div>
+
+c:\my-website\apps\web-sveltekit\src\lib\components\SketchbookCanvas.svelte:509:9
+Warn: Self-closing HTML tags for non-void elements are ambiguous — use `<canvas ...></canvas>` rather than `<canvas ... />`
+https://svelte.dev/e/element_invalid_self_closing_tag (svelte)
+      <div class="sketchbook-canvas-frame relative w-full max-w-[400px] aspect-square rounded-xl overflow-hidden border-2 border-slate-100 dark:border-slate-900 shadow-sm shadow-black/5 dark:shadow-black/20 order-2 md:order-2 shrink-0">
+        <canvas
+          bind:this={canvasRef}
+          width={600}
+          height={600}
+          class="absolute inset-0 w-full h-full shadow-[inset_0_2px_8px_rgba(0,0,0,0.06)]"
+        />
+        <canvas
+
+c:\my-website\apps\web-sveltekit\src\lib\components\SketchbookCanvas.svelte:515:9
+Warn: Self-closing HTML tags for non-void elements are ambiguous — use `<canvas ...></canvas>` rather than `<canvas ... />`
+https://svelte.dev/e/element_invalid_self_closing_tag (svelte)
+        />
+        <canvas
+          bind:this={tempCanvasRef}
+          width={600}
+          height={600}
+          on:pointerdown={startDrawing}
+          on:pointermove={draw}
+          on:pointerup={stopDrawing}
+          on:pointercancel={stopDrawing}
+          class="absolute inset-0 w-full h-full cursor-crosshair touch-none z-10"
+        />
+      </div>
+
+c:\my-website\apps\web-sveltekit\src\lib\components\SketchbookCanvas.svelte:531:13
+Warn: Self-closing HTML tags for non-void elements are ambiguous — use `<button ...></button>` rather than `<button ... />`
+https://svelte.dev/e/element_invalid_self_closing_tag (svelte)
+          {#each PRESETS as color}
+            <button
+              type="button"
+              on:click={() => (brushColor = color.hex)}
+              class="w-[22px] h-[22px] rounded-full border border-slate-250 dark:border-slate-800 relative transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] scale-100 hover:scale-110 shadow-sm cursor-pointer {brushColor === color.hex ? 'ring-2 ring-[hsl(var(--pride-glow-val))] ring-offset-2 dark:ring-offset-slate-900 scale-105 shadow-md shadow-[hsl(var(--pride-glow-val))/0.12]' : ''}"
+              style="background-color: {color.hex};"
+              title={color.name}
+            />
+          {/each}
+
+c:\my-website\apps\web-sveltekit\src\lib\components\SketchbookCanvas.svelte:9:14
+Warn: Component has unused export property 'showNotification'. If it is for external reference only, please consider using `export const showNotification`
+https://svelte.dev/e/export_let_unused (svelte)
+  export let cooldownLabel = '';
+  export let showNotification: (msg: string) => void;
+  export let active = true;
+
+c:\my-website\apps\web-sveltekit\src\lib\components\PageIntro.svelte:8:14
+Warn: Component has unused export property 'showPrideBadge'. If it is for external reference only, please consider using `export const showPrideBadge`
+https://svelte.dev/e/export_let_unused (svelte)
+  export let showDescription = false;
+  export let showPrideBadge = false;
+</script>
+
+c:\my-website\apps\web-sveltekit\src\lib\components\RecommendationGenerator.svelte:249:15
+Warn: Visible, non-interactive element `<span>` with a click event must be accompanied by a keyboard event handler. Consider whether an interactive element such as `<button type="button">` or `<a>` might be more appropriate
+https://svelte.dev/e/a11y_click_events_have_key_events (svelte)
+            {#if items.length > 1}
+              <span
+                class="gen-tab-remove"
+                role="button"
+                tabindex="-1"
+                on:click|stopPropagation={() => removeItem(idx)}
+              >&times;</span>
+            {/if}
+
+c:\my-website\apps\web-sveltekit\src\lib\components\RecommendationGenerator.svelte:439:17
+Warn: Visible, non-interactive element `<div>` with a click event must be accompanied by a keyboard event handler. Consider whether an interactive element such as `<button type="button">` or `<a>` might be more appropriate
+https://svelte.dev/e/a11y_click_events_have_key_events (svelte)
+              {#if isSameRow}
+                <div
+                  class="gen-card-wrap"
+                  class:active={activeIndex === idx && !isExporting}
+                  on:click={() => (activeIndex = idx)}
+                  role="button"
+                  tabindex="-1"
+                >
+                  <RecommendationCard item={buildFull(item)} viewMode="detailed" />
+                  {#if activeIndex === idx && !isExporting}
+                    <div class="gen-editing-badge">editing</div>
+                  {/if}
+                </div>
+              {/if}
+
+c:\my-website\apps\web-sveltekit\src\lib\components\RecommendationGenerator.svelte:457:15
+Warn: Visible, non-interactive element `<div>` with a click event must be accompanied by a keyboard event handler. Consider whether an interactive element such as `<button type="button">` or `<a>` might be more appropriate
+https://svelte.dev/e/a11y_click_events_have_key_events (svelte)
+            {#each items as item, idx}
+              <div
+                class="gen-card-wrap"
+                class:active={activeIndex === idx && !isExporting}
+                on:click={() => (activeIndex = idx)}
+                role="button"
+                tabindex="-1"
+              >
+                <RecommendationCard item={buildFull(item)} viewMode="detailed" />
+                {#if activeIndex === idx && !isExporting}
+                  <div class="gen-editing-badge">editing</div>
+                {/if}
+              </div>
+            {/each}
+
+c:\my-website\apps\web-sveltekit\src\lib\components\SketchbookCard.svelte:41:3
+Warn: Visible, non-interactive element `<div>` with a click event must be accompanied by a keyboard event handler. Consider whether an interactive element such as `<button type="button">` or `<a>` might be more appropriate
+https://svelte.dev/e/a11y_click_events_have_key_events (svelte)
+  <!-- Drawing Image on the Left -->
+  <div 
+    class="relative bg-white dark:bg-slate-950 shrink-0 border-slate-200/60 dark:border-slate-800/60 h-64 sm:h-auto w-full sm:w-64 md:w-80 border-b sm:border-b-0 sm:border-r flex flex-col justify-center overflow-hidden" 
+    on:click|stopPropagation
+  >
+    <div class="w-full p-3 flex justify-center">
+      <ImageGallery urls={[drawing.imageUrl]} theme="amber" />
+    </div>
+  </div>
+
+c:\my-website\apps\web-sveltekit\src\lib\components\SketchbookCard.svelte:41:3
+Warn: `<div>` with a click handler must have an ARIA role
+https://svelte.dev/e/a11y_no_static_element_interactions (svelte)
+  <!-- Drawing Image on the Left -->
+  <div 
+    class="relative bg-white dark:bg-slate-950 shrink-0 border-slate-200/60 dark:border-slate-800/60 h-64 sm:h-auto w-full sm:w-64 md:w-80 border-b sm:border-b-0 sm:border-r flex flex-col justify-center overflow-hidden" 
+    on:click|stopPropagation
+  >
+    <div class="w-full p-3 flex justify-center">
+      <ImageGallery urls={[drawing.imageUrl]} theme="amber" />
+    </div>
+  </div>
+
+c:\my-website\apps\web-sveltekit\src\lib\components\SketchbookCard.svelte:128:11
+Warn: Visible, non-interactive element `<div>` with a click event must be accompanied by a keyboard event handler. Consider whether an interactive element such as `<button type="button">` or `<a>` might be more appropriate
+https://svelte.dev/e/a11y_click_events_have_key_events (svelte)
+        {#if isAdminMode}
+          <div class="flex items-center gap-2.5" on:click|stopPropagation>
+            <button
+              type="button"
+              on:click={() => {
+                isReplying = !isReplying;
+                replyBody = '';
+              }}
+              class="flex items-center justify-center text-muted-foreground hover:text-amber-700 dark:hover:text-amber-300 transition-colors duration-150 cursor-pointer border-0 bg-transparent"
+              title="Reply to drawing"
+            >
+              <MessageSquareReply size={13} />
+            </button>
+            <button
+              type="button"
+              on:click={(e) => onDeleteDrawing(drawing.id, e)}
+              class="flex items-center justify-center text-muted-foreground hover:text-red-500 dark:hover:text-red-400 transition-colors duration-150 cursor-pointer border-0 bg-transparent"
+              title="Delete Artwork"
+            >
+              <Trash2 size={13} />
+            </button>
+          </div>
+        {/if}
+
+c:\my-website\apps\web-sveltekit\src\lib\components\SketchbookCard.svelte:128:11
+Warn: `<div>` with a click handler must have an ARIA role
+https://svelte.dev/e/a11y_no_static_element_interactions (svelte)
+        {#if isAdminMode}
+          <div class="flex items-center gap-2.5" on:click|stopPropagation>
+            <button
+              type="button"
+              on:click={() => {
+                isReplying = !isReplying;
+                replyBody = '';
+              }}
+              class="flex items-center justify-center text-muted-foreground hover:text-amber-700 dark:hover:text-amber-300 transition-colors duration-150 cursor-pointer border-0 bg-transparent"
+              title="Reply to drawing"
+            >
+              <MessageSquareReply size={13} />
+            </button>
+            <button
+              type="button"
+              on:click={(e) => onDeleteDrawing(drawing.id, e)}
+              class="flex items-center justify-center text-muted-foreground hover:text-red-500 dark:hover:text-red-400 transition-colors duration-150 cursor-pointer border-0 bg-transparent"
+              title="Delete Artwork"
+            >
+              <Trash2 size={13} />
+            </button>
+          </div>
+        {/if}
+
+c:\my-website\apps\web-sveltekit\src\lib\components\SketchbookCard.svelte:154:9
+Warn: Visible, non-interactive element `<div>` with a click event must be accompanied by a keyboard event handler. Consider whether an interactive element such as `<button type="button">` or `<a>` might be more appropriate
+https://svelte.dev/e/a11y_click_events_have_key_events (svelte)
+      {#if isReplying && isAdminMode}
+        <div class="flex flex-col gap-2 pt-2 border-t border-slate-200/30 dark:border-slate-800/30" on:click|stopPropagation>
+          <textarea
+            placeholder="Mike, write feedback..."
+            bind:value={replyBody}
+            class="w-full bg-background border border-slate-200 dark:border-slate-850 p-2 text-xs rounded-lg focus:outline-none resize-none h-12 focus:ring-1 focus:ring-amber-300 dark:text-slate-100 font-sans"
+          />
+          <div class="flex justify-end gap-1.5">
+            <button
+              type="button"
+              class="h-6 text-[10px] px-2 font-mono rounded border border-transparent bg-transparent hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-500 cursor-pointer"
+              on:click={() => (isReplying = false)}
+            >
+              Cancel
+            </button>
+            <button
+              type="button"
+              class="h-6 text-[10px] px-3 bg-amber-600 hover:bg-amber-700 text-white rounded border-0 font-mono cursor-pointer disabled:opacity-50"
+              disabled={!replyBody.trim()}
+              on:click={handleReplyFormSubmit}
+            >
+              Send
+            </button>
+          </div>
+        </div>
+      {/if}
+
+c:\my-website\apps\web-sveltekit\src\lib\components\SketchbookCard.svelte:154:9
+Warn: `<div>` with a click handler must have an ARIA role
+https://svelte.dev/e/a11y_no_static_element_interactions (svelte)
+      {#if isReplying && isAdminMode}
+        <div class="flex flex-col gap-2 pt-2 border-t border-slate-200/30 dark:border-slate-800/30" on:click|stopPropagation>
+          <textarea
+            placeholder="Mike, write feedback..."
+            bind:value={replyBody}
+            class="w-full bg-background border border-slate-200 dark:border-slate-850 p-2 text-xs rounded-lg focus:outline-none resize-none h-12 focus:ring-1 focus:ring-amber-300 dark:text-slate-100 font-sans"
+          />
+          <div class="flex justify-end gap-1.5">
+            <button
+              type="button"
+              class="h-6 text-[10px] px-2 font-mono rounded border border-transparent bg-transparent hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-500 cursor-pointer"
+              on:click={() => (isReplying = false)}
+            >
+              Cancel
+            </button>
+            <button
+              type="button"
+              class="h-6 text-[10px] px-3 bg-amber-600 hover:bg-amber-700 text-white rounded border-0 font-mono cursor-pointer disabled:opacity-50"
+              disabled={!replyBody.trim()}
+              on:click={handleReplyFormSubmit}
+            >
+              Send
+            </button>
+          </div>
+        </div>
+      {/if}
+
+c:\my-website\apps\web-sveltekit\src\lib\components\SketchbookCard.svelte:155:11
+Warn: Self-closing HTML tags for non-void elements are ambiguous — use `<textarea ...></textarea>` rather than `<textarea ... />`
+https://svelte.dev/e/element_invalid_self_closing_tag (svelte)
+        <div class="flex flex-col gap-2 pt-2 border-t border-slate-200/30 dark:border-slate-800/30" on:click|stopPropagation>
+          <textarea
+            placeholder="Mike, write feedback..."
+            bind:value={replyBody}
+            class="w-full bg-background border border-slate-200 dark:border-slate-850 p-2 text-xs rounded-lg focus:outline-none resize-none h-12 focus:ring-1 focus:ring-amber-300 dark:text-slate-100 font-sans"
+          />
+          <div class="flex justify-end gap-1.5">
+
+c:\my-website\apps\web-sveltekit\src\lib\components\SketchbookCard.svelte:9:14
+Warn: Component has unused export property 'passcode'. If it is for external reference only, please consider using `export const passcode`
+https://svelte.dev/e/export_let_unused (svelte)
+  export let likedList: string[] = [];
+  export let passcode = '';
+  export let isPending = false;
+
+c:\my-website\apps\web-sveltekit\src\lib\components\SketchbookCard.svelte:10:14
+Warn: Component has unused export property 'isPending'. If it is for external reference only, please consider using `export const isPending`
+https://svelte.dev/e/export_let_unused (svelte)
+  export let passcode = '';
+  export let isPending = false;
+  export let buttonFeedback: Record<string, string> = {};
+
+c:\my-website\apps\web-sveltekit\src\lib\components\SuggestionCard.svelte:373:11
+Warn: Self-closing HTML tags for non-void elements are ambiguous — use `<textarea ...></textarea>` rather than `<textarea ... />`
+https://svelte.dev/e/element_invalid_self_closing_tag (svelte)
+        <div class="flex-1 min-w-0 font-sans">
+          <textarea
+            bind:value={replyBody}
+            on:input={handleInput}
+            placeholder="Write your response..."
+            class="min-h-[44px] w-full resize-none overflow-hidden rounded-md border border-sky-200/70 bg-background px-4 py-3 text-base md:text-[17px] text-slate-900 focus:outline-none focus:ring-1 focus:ring-sky-300 dark:border-sky-500/30 dark:text-slate-100"
+          />
+          <AttachmentPreviewGrid
+
+c:\my-website\apps\web-sveltekit\src\lib\components\SuggestionCard.svelte:437:11
+Warn: Self-closing HTML tags for non-void elements are ambiguous — use `<textarea ...></textarea>` rather than `<textarea ... />`
+https://svelte.dev/e/element_invalid_self_closing_tag (svelte)
+        <div class="flex-1 min-w-0 font-sans">
+          <textarea
+            bind:value={followUpBody}
+            on:input={handleInput}
+            placeholder="Write your follow-up message..."
+            class="min-h-[44px] w-full resize-none overflow-hidden rounded-md border border-emerald-250 bg-background px-4 py-3 text-base md:text-[17px] text-slate-900 focus:outline-none focus:ring-1 focus:ring-emerald-300 dark:border-emerald-500/30 dark:text-slate-100"
+          />
+          <AttachmentPreviewGrid
+
+c:\my-website\apps\web-sveltekit\src\lib\components\SuggestionForm.svelte:287:5
+Warn: Self-closing HTML tags for non-void elements are ambiguous — use `<textarea ...></textarea>` rather than `<textarea ... />`
+https://svelte.dev/e/element_invalid_self_closing_tag (svelte)
+  <div class="relative">
+    <textarea
+      bind:this={emojiTarget}
+      bind:value={note}
+      use:emojiAutocomplete
+      on:emoji:open={onEmojiOpen}
+      on:emoji:close={onEmojiClose}
+      placeholder="Why do you recommend it? Favorite tracks, key highlights, or general thoughts..."
+      rows={4}
+      class="min-h-[120px] w-full resize-none bg-transparent pl-4 pr-11 py-4 text-sm text-slate-850 placeholder:text-muted-foreground/60 focus:outline-none dark:text-slate-100"
+    />
+    <div class="absolute right-3 top-1/2 -translate-y-1/2">
+
+c:\my-website\apps\web-sveltekit\src\lib\components\TalkPostForm.svelte:87:5
+Warn: Self-closing HTML tags for non-void elements are ambiguous — use `<textarea ...></textarea>` rather than `<textarea ... />`
+https://svelte.dev/e/element_invalid_self_closing_tag (svelte)
+  <div class="px-4 py-4 relative">
+    <textarea
+      bind:this={emojiTarget}
+      bind:value={body}
+      on:input={handleInput}
+      use:emojiAutocomplete
+      on:emoji:open={onEmojiOpen}
+      on:emoji:close={onEmojiClose}
+      placeholder="Let's talk about anything... (ask questions, ask for suggestions, casual chat)"
+      rows={1}
+      class="w-full bg-transparent py-2 pr-9 text-sm text-slate-900 placeholder:text-muted-foreground/60 focus:outline-none dark:text-slate-100 dark:placeholder:text-slate-600 resize-none overflow-hidden min-h-[100px] font-sans"
+    />
+    <div class="absolute right-3 top-1/2 -translate-y-1/2">
+
+c:\my-website\apps\web-sveltekit\src\lib\components\TalkPostItem.svelte:291:13
+Warn: Self-closing HTML tags for non-void elements are ambiguous — use `<textarea ...></textarea>` rather than `<textarea ... />`
+https://svelte.dev/e/element_invalid_self_closing_tag (svelte)
+          <div class="relative">
+            <textarea
+              bind:this={replyTextareaEl}
+              bind:value={replyBody}
+              on:input={handleInput}
+              use:emojiAutocomplete
+              on:emoji:open={(e) => onEmojiOpen(e, replyTextareaEl)}
+              on:emoji:close={onEmojiClose}
+              placeholder="Write your response..."
+              rows={1}
+              class="min-h-[44px] w-full resize-none overflow-hidden rounded-md border border-border bg-background pl-4 pr-11 py-3 text-base md:text-[17px] text-slate-900 focus:outline-none focus:ring-1 focus:ring-indigo-300 dark:text-slate-100 font-sans"
+            />
+            <div class="absolute right-2 top-1/2 -translate-y-1/2">
+
+c:\my-website\apps\web-sveltekit\src\lib\components\TalkPostItem.svelte:365:13
+Warn: Self-closing HTML tags for non-void elements are ambiguous — use `<textarea ...></textarea>` rather than `<textarea ... />`
+https://svelte.dev/e/element_invalid_self_closing_tag (svelte)
+          <div class="relative">
+            <textarea
+              bind:this={followUpTextareaEl}
+              bind:value={followUpBody}
+              on:input={handleInput}
+              use:emojiAutocomplete
+              on:emoji:open={(e) => onEmojiOpen(e, followUpTextareaEl)}
+              on:emoji:close={onEmojiClose}
+              placeholder="Reply..."
+              rows={1}
+              class="min-h-[44px] w-full resize-none overflow-hidden rounded-md border border-emerald-200 bg-background pl-4 pr-11 py-3 text-base md:text-[17px] text-slate-900 focus:outline-none focus:ring-1 focus:ring-emerald-300 dark:border-emerald-500/30 dark:text-slate-100 font-sans"
+            />
+            <div class="absolute right-2 top-1/2 -translate-y-1/2">
+
+c:\my-website\apps\web-sveltekit\src\lib\components\ZineBookshelf.svelte:238:5
+Warn: Elements with the 'toolbar' interactive role must have a tabindex value
+https://svelte.dev/e/a11y_interactive_supports_focus (svelte)
+    <!-- Floating controls bar -->
+    <div
+      class="zine-fs-controls"
+      role="toolbar"
+      on:click|stopPropagation
+      on:keydown|stopPropagation
+    >
+      <button
+        type="button"
+        class="zine-fs-btn icon"
+        disabled={!canGoPrev}
+        aria-label="Previous"
+        on:click={goPrev}
+      >
+        <ChevronLeft size={16} />
+      </button>
+      <span class="zine-fs-count">
+        {showSpread ? 'spread' : 'page'} {currentSpread} of {spreadCount}
+      </span>
+      <button
+        type="button"
+        class="zine-fs-btn icon"
+        disabled={!canGoNext}
+        aria-label="Next"
+        on:click={goNext}
+      >
+        <ChevronRight size={16} />
+      </button>
+      <button
+        type="button"
+        class="zine-fs-btn close"
+        aria-label="Minimize"
+        on:click={() => (isFullscreen = false)}
+      >
+        <X size={12} />
+        <span>minimize</span>
+      </button>
+    </div>
+
+c:\my-website\apps\web-sveltekit\src\routes\artworks\kemutai-hanashi\+page.svelte:287:3
+Warn: Unused CSS selector ".kemutai-lightbox"
+https://svelte.dev/e/css_unused_selector (svelte)
+  /* Lightbox */
+  .kemutai-lightbox {
+    position: fixed;
+
+c:\my-website\apps\web-sveltekit\src\routes\artworks\kemutai-hanashi\+page.svelte:297:3
+Warn: Unused CSS selector ".kemutai-lightbox-backdrop"
+https://svelte.dev/e/css_unused_selector (svelte)
+
+  .kemutai-lightbox-backdrop {
+    position: absolute;
+
+c:\my-website\apps\web-sveltekit\src\routes\artworks\kemutai-hanashi\+page.svelte:305:3
+Warn: Unused CSS selector ".kemutai-lightbox-inner"
+https://svelte.dev/e/css_unused_selector (svelte)
+
+  .kemutai-lightbox-inner {
+    position: relative;
+
+c:\my-website\apps\web-sveltekit\src\routes\artworks\kemutai-hanashi\+page.svelte:315:3
+Warn: Unused CSS selector ".kemutai-lightbox-close"
+https://svelte.dev/e/css_unused_selector (svelte)
+
+  .kemutai-lightbox-close {
+    position: absolute;
+
+c:\my-website\apps\web-sveltekit\src\routes\artworks\kemutai-hanashi\+page.svelte:332:3
+Warn: Unused CSS selector ".kemutai-lightbox-close:hover"
+https://svelte.dev/e/css_unused_selector (svelte)
+
+  .kemutai-lightbox-close:hover {
+    background: rgba(255, 255, 255, 0.2);
+
+c:\my-website\apps\web-sveltekit\src\routes\artworks\kemutai-hanashi\+page.svelte:336:3
+Warn: Unused CSS selector ".kemutai-lightbox-figure"
+https://svelte.dev/e/css_unused_selector (svelte)
+
+  .kemutai-lightbox-figure {
+    display: flex;
+
+c:\my-website\apps\web-sveltekit\src\routes\artworks\kemutai-hanashi\+page.svelte:344:3
+Warn: Unused CSS selector ".kemutai-lightbox-figure img"
+https://svelte.dev/e/css_unused_selector (svelte)
+
+  .kemutai-lightbox-figure img {
+    max-width: 80vw;
+
+c:\my-website\apps\web-sveltekit\src\routes\artworks\kemutai-hanashi\+page.svelte:353:3
+Warn: Unused CSS selector ".kemutai-lightbox-figure figcaption"
+https://svelte.dev/e/css_unused_selector (svelte)
+
+  .kemutai-lightbox-figure figcaption {
+    color: rgba(255, 255, 255, 0.6);
+
+c:\my-website\apps\web-sveltekit\src\routes\artworks\kemutai-hanashi\+page.svelte:359:3
+Warn: Unused CSS selector ".kemutai-lightbox-nav"
+https://svelte.dev/e/css_unused_selector (svelte)
+
+  .kemutai-lightbox-nav {
+    background: rgba(255, 255, 255, 0.1);
+
+c:\my-website\apps\web-sveltekit\src\routes\artworks\kemutai-hanashi\+page.svelte:374:3
+Warn: Unused CSS selector ".kemutai-lightbox-nav:hover"
+https://svelte.dev/e/css_unused_selector (svelte)
+
+  .kemutai-lightbox-nav:hover {
+    background: rgba(255, 255, 255, 0.22);
+
+====================================
+svelte-check found 0 errors and 49 warnings in 17 files
+(node:27152) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)

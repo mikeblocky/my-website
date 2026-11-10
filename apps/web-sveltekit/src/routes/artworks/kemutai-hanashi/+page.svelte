@@ -204,7 +204,7 @@
     align-items: center;
     gap: 0.5rem;
     font-family: var(--font-mono);
-    font-size: 0.8rem;
+    font-size: var(--font-size-xs);
     color: rgba(255, 255, 255, 0.55);
   }
 
@@ -244,7 +244,7 @@
 
   .kemutai-title-block h1 {
     animation: kemutai-enter-up 1050ms cubic-bezier(0.22, 1, 0.36, 1) 120ms both;
-    font-size: clamp(2rem, 6vw, 4rem);
+    font-size: var(--font-size-3xl);
     font-weight: 700;
     color: #fff;
     letter-spacing: -0.02em;
@@ -353,7 +353,7 @@
   .kemutai-lightbox-figure figcaption {
     color: rgba(255, 255, 255, 0.6);
     font-family: var(--font-mono);
-    font-size: 0.8rem;
+    font-size: var(--font-size-xs);
   }
 
   .kemutai-lightbox-nav {

@@ -116,7 +116,7 @@
   margin-bottom: 1.5rem;
   color: hsl(var(--muted-foreground) / 0.65);
   font-family: var(--font-mono);
-  font-size: 0.75rem;
+  font-size: var(--font-size-2xs);
 }
 
 .section-footer-nav a {
@@ -201,7 +201,7 @@
 
   .home-identity h1,
   .page-intro h1 {
-    font-size: 1.875rem;
+    font-size: var(--font-size-xl);
   }
 
   .next-cover {
@@ -243,7 +243,7 @@
 
   .home-identity h1,
   .page-intro h1 {
-    font-size: 2.25rem;
+    font-size: var(--font-size-2xl);
   }
 
   .next-cover {
@@ -275,7 +275,7 @@
 @media (min-width: 1024px) {
   .home-identity h1,
   .page-intro h1 {
-    font-size: 3rem;
+    font-size: var(--font-size-3xl);
   }
 }
 
@@ -307,7 +307,7 @@
 }
 
 .blog-post-shell {
-  font-size: 1.125rem;
+  font-size: var(--font-size-md);
 }
 
 .blog-post-shell article h1,
@@ -319,45 +319,45 @@
 }
 
 .blog-post-shell article h1 {
-  font-size: clamp(2.25rem, 1.75rem + 1.4vw, 3.2rem);
+  font-size: var(--font-size-3xl);
 }
 
 .blog-post-shell article h2 {
-  font-size: clamp(1.65rem, 1.35rem + 0.8vw, 2.2rem);
+  font-size: var(--font-size-2xl);
   padding-bottom: 0.25em;
 }
 
 .blog-post-shell article h3 {
-  font-size: clamp(1.35rem, 1.16rem + 0.45vw, 1.65rem);
+  font-size: var(--font-size-xl);
 }
 
 .blog-post-shell article h4 {
-  font-size: 1.2rem;
+  font-size: var(--font-size-md);
 }
 
 .blog-post-shell article p {
   margin-top: 0;
   margin-bottom: 1rem !important;
-  font-size: 1rem;
+  font-size: var(--font-size-base);
   line-height: 1.68;
 }
 
 @media (min-width: 768px) {
   .blog-post-shell article p {
-    font-size: 1.125rem;
+    font-size: var(--font-size-md);
   }
 }
 
 .blog-post-shell article li,
 .blog-post-shell article blockquote {
-  font-size: 1rem;
+  font-size: var(--font-size-base);
   line-height: 1.68;
 }
 
 @media (min-width: 768px) {
   .blog-post-shell article li,
   .blog-post-shell article blockquote {
-    font-size: 1.125rem;
+    font-size: var(--font-size-md);
   }
 }
 

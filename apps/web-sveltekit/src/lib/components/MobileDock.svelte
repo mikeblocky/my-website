@@ -89,7 +89,7 @@
 <svelte:window on:keydown={(event) => { if (event.key === 'Escape') open = false; }} />
 <div class="phone-navigation">
   {#if open}
-    <button class="phone-menu-backdrop" type="button" aria-label="Close navigation" on:click={() => open = false} transition:fade={{duration: reducedMotion || navigating ? 0 : 140}}></button>
+    <button class="phone-menu-backdrop" type="button" aria-label="Close navigation" on:click={() => open = false} transition:fade={{duration: reducedMotion || navigating ? 0 : 180}}></button>
     <div class="phone-menu-panel" id="phone-menu" bind:this={panel} use:measurePanel style:left={positioned ? `${panelX}px` : undefined} style:top={positioned ? `${Math.max(margin, panelY)}px` : undefined} style:bottom={positioned ? 'auto' : undefined} style:right={positioned ? 'auto' : undefined} transition:fly={{y: 12, duration: reducedMotion || navigating ? 0 : 240, easing: cubicOut}}>
       <nav aria-label="Mobile navigation">
         {#each navLinks as link, index}
@@ -98,8 +98,10 @@
           </a>
         {/each}
       </nav>
-      <div class="phone-menu-theme"><span>Appearance</span><ThemeToggle /></div>
-      <div class="phone-position-tools"><span>Drag to any of the four corners</span><button type="button" on:click={resetPosition}>Reset position</button></div>
+      <div class="phone-menu-footer">
+        <button class="phone-reset-position" type="button" on:click={resetPosition}>reset position</button>
+        <div class="phone-menu-theme"><ThemeToggle /></div>
+      </div>
     </div>
   {/if}
   {#if $spotifyCurrentlyPlaying}

@@ -256,7 +256,7 @@
   }
 
   .track-name {
-    font-size: 0.7rem;
+    font-size: var(--font-size-2xs);
     font-weight: 600;
     color: hsl(var(--foreground));
     white-space: nowrap;
@@ -265,7 +265,7 @@
   }
 
   .artist-name {
-    font-size: 0.65rem;
+    font-size: var(--font-size-2xs);
     color: hsl(var(--muted-foreground));
     white-space: nowrap;
     overflow: hidden;
@@ -308,7 +308,7 @@
   }
 
   .click-hint {
-    font-size: 0.6rem;
+    font-size: var(--font-size-2xs);
     color: hsl(var(--muted-foreground));
     margin: 0.4rem 0 0;
     text-align: center;

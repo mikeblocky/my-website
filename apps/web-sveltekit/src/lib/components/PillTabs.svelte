@@ -10,6 +10,7 @@
   export let ariaLabel = 'Section';
   export let storageKey = '';
   export let syncUrl = false;
+  export let native = false;
 
   function setTab(event: Event) {
     activeTab = (event.currentTarget as HTMLSelectElement).value;
@@ -31,7 +32,7 @@
   });
 </script>
 
-<select class="section-picker-native site-native-select" aria-label={ariaLabel} value={activeTab} on:change={setTab} disabled={!tabs.length}>
+<select class="section-picker-native" class:site-native-select={!native} aria-label={ariaLabel} value={activeTab} on:change={setTab} disabled={!tabs.length}>
   {#each tabs as tab}
     <option value={tab.id}>{tab.label}{typeof tab.count === 'number' ? ` (${tab.count})` : ''}</option>
   {/each}

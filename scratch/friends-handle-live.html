@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="en" class="h-full">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="/icon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+	<link
+		href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=Google+Sans+Code:wght@400;500;600&display=swap"
+		rel="stylesheet"
+	/>
+    <script type="29f3fbbe2448af5dc7244e4e-text/javascript">
+      (function () {
+        try {
+          var storedTheme = localStorage.getItem('theme');
+          var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+          var theme = storedTheme === 'dark' || (!storedTheme && prefersDark) ? 'dark' : 'light';
+          document.documentElement.dataset.theme = theme;
+          document.documentElement.style.colorScheme = theme;
+          if (theme === 'dark') {
+            document.documentElement.classList.add('dark');
+          }
+        } catch (error) {}
+      })();
+    </script>
+    <script type="29f3fbbe2448af5dc7244e4e-text/javascript">
+      (function () {
+        var reloadKey = 'chunk-load-recovery-attempted';
+        var reloadWindowMs = 30000;
+
+        function clearRuntimeCaches() {
+          var tasks = [];
+
+          if ('caches' in window) {
+            tasks.push(
+              caches.keys()
+                .then(function (keys) {
+                  return Promise.all(keys.map(function (key) {
+                    return caches.delete(key);
+                  }));
+                })
+                .catch(function () {})
+            );
+          }
+
+          if ('serviceWorker' in navigator) {
+            tasks.push(
+              navigator.serviceWorker.getRegistrations()
+                .then(function (registrations) {
+                  return Promise.all(registrations.map(function (registration) {
+                    return registration.unregister();
+                  }));
+                })
+                .catch(function () {})
+            );
+          }
+
+          return Promise.all(tasks);
+        }
+
+        function reloadWithoutCache() {
+          var now = Date.now();
+          try {
+            var url = new URL(window.location.href);
+            url.searchParams.set('__chunk_recovery', now.toString());
+            window.location.replace(url.toString());
+          } catch (error) {
+            window.location.reload();
+          }
+        }
+
+        function triggerReload() {
+          var lastReload = sessionStorage.getItem(reloadKey);
+          var now = Date.now();
+          if (!lastReload || now - parseInt(lastReload, 10) > reloadWindowMs) {
+            sessionStorage.setItem(reloadKey, now.toString());
+            clearRuntimeCaches().then(reloadWithoutCache, reloadWithoutCache);
+          }
+        }
+
+        window.addEventListener('error', function (event) {
+          var target = event.target;
+          var src = target && target.src ? target.src : '';
+          var message = event.message || '';
+          var stack = event.error && event.error.stack ? event.error.stack : '';
+
+          if (target && target.tagName === 'SCRIPT' && src.indexOf('/_app/immutable/') !== -1) {
+            triggerReload();
+          }
+
+          if (message.indexOf('ChunkLoadError') !== -1 || /loading chunk/i.test(message) || stack.indexOf('ChunkLoadError') !== -1 || /loading chunk/i.test(stack)) {
+            triggerReload();
+          }
+        }, true);
+
+        window.addEventListener('unhandledrejection', function (event) {
+          var reason = event.reason;
+          var message = reason && reason.message ? reason.message : '';
+          var stack = reason && reason.stack ? reason.stack : '';
+          if (message.indexOf('ChunkLoadError') !== -1 || /loading chunk/i.test(message) || stack.indexOf('ChunkLoadError') !== -1 || /loading chunk/i.test(stack)) {
+            triggerReload();
+          }
+        });
+      })();
+    </script>
+<link href="./_app/immutable/entry/start.1fGB87U3.js" rel="modulepreload">
+		<link href="./_app/immutable/chunks/DNqzVgiP.js" rel="modulepreload">
+		<link href="./_app/immutable/chunks/qXfOa3_K.js" rel="modulepreload">
+		<link href="./_app/immutable/chunks/gPMrmGf0.js" rel="modulepreload">
+		<link href="./_app/immutable/entry/app.PdaOEVkH.js" rel="modulepreload">
+		<link href="./_app/immutable/chunks/CVx2-2dr.js" rel="modulepreload">
+		<link href="./_app/immutable/chunks/DsnmJJEf.js" rel="modulepreload">
+		<link href="./_app/immutable/chunks/CJOhhLs7.js" rel="modulepreload">
+		<link href="./_app/immutable/chunks/6zLFzPBJ.js" rel="modulepreload">
+		<link href="./_app/immutable/chunks/SIdYbfAv.js" rel="modulepreload">
+		<link href="./_app/immutable/chunks/Cexd3Pbw.js" rel="modulepreload">
+		<link href="./_app/immutable/nodes/0.CzcslDfT.js" rel="modulepreload">
+		<link href="./_app/immutable/chunks/DMTAUN6J.js" rel="modulepreload">
+		<link href="./_app/immutable/chunks/WMmElTm3.js" rel="modulepreload">
+		<link href="./_app/immutable/chunks/t0wHGdvn.js" rel="modulepreload">
+		<link href="./_app/immutable/chunks/DzpC_QNw.js" rel="modulepreload">
+		<link href="./_app/immutable/chunks/3Tl5pK8v.js" rel="modulepreload">
+		<link href="./_app/immutable/chunks/rtcJYeS-.js" rel="modulepreload">
+		<link href="./_app/immutable/chunks/Ccw7PXcW.js" rel="modulepreload">
+		<link href="./_app/immutable/chunks/VmF_np5Z.js" rel="modulepreload">
+		<link href="./_app/immutable/chunks/lRveb5x1.js" rel="modulepreload">
+		<link href="./_app/immutable/chunks/dnDnV0fg.js" rel="modulepreload">
+		<link href="./_app/immutable/chunks/BeNzJWKH.js" rel="modulepreload">
+		<link href="./_app/immutable/chunks/BDGW4iST.js" rel="modulepreload">
+		<link href="./_app/immutable/chunks/BY82YBMt.js" rel="modulepreload">
+		<link href="./_app/immutable/chunks/CRXTRDEx.js" rel="modulepreload">
+		<link href="./_app/immutable/nodes/17.DxYQuh0k.js" rel="modulepreload">
+		<link href="./_app/immutable/chunks/D8RmDR2w.js" rel="modulepreload">
+		<link href="./_app/immutable/chunks/mySaIMQJ.js" rel="modulepreload">
+		<link href="./_app/immutable/chunks/BnQq5GQC.js" rel="modulepreload">
+		<link href="./_app/immutable/chunks/VQdU5-kK.js" rel="modulepreload">
+		<link href="./_app/immutable/chunks/DxYymdc_.js" rel="modulepreload">
+		<link href="./_app/immutable/chunks/BYJCgTjh.js" rel="modulepreload">
+		<link href="./_app/immutable/chunks/BEkkU_Ko.js" rel="modulepreload">
+		<link href="./_app/immutable/chunks/C7DQOB4F.js" rel="modulepreload">
+		<link href="./_app/immutable/chunks/BcyrSznU.js" rel="modulepreload">
+		<link href="./_app/immutable/chunks/DMHu-CxX.js" rel="modulepreload">
+		<link href="./_app/env.js" rel="modulepreload">
+		<!--1t153bb--><meta name="description" content="Friends, artists, and creators in Mike's corner of the internet."/> <link rel="canonical" href="https://www.mikeblocky.com/friends"/> <meta property="og:site_name" content="mikeblocky.com"/> <meta property="og:type" content="website"/> <meta property="og:title" content="friends | mikeblocky.com"/> <meta property="og:description" content="Friends, artists, and creators in Mike's corner of the internet."/> <meta property="og:url" content="https://www.mikeblocky.com/friends"/> <meta property="og:image" content="https://www.mikeblocky.com/api/thumbnail?title=friends"/> <meta property="og:image:width" content="1200"/> <meta property="og:image:height" content="630"/> <meta property="og:image:alt" content="friends"/> <meta name="twitter:card" content="summary_large_image"/> <meta name="twitter:image" content="https://www.mikeblocky.com/api/thumbnail?title=friends"/><!----><title>friends | mikeblocky.com</title>
+		<link href="./_app/immutable/assets/0.BemRh1wM.css" rel="stylesheet">
+		<link href="./_app/immutable/assets/PillTabs.CRDVWdE-.css" rel="stylesheet">
+		<link href="./_app/immutable/assets/17.BeUMY8p_.css" rel="stylesheet">
+  </head>
+  <body class="h-full bg-background antialiased" data-sveltekit-preload-data="hover">
+    <div style="display: contents"><!--[--><!--[0--><!--[--><div class="site-navigation-layout"><!--[-1--><!--]--> <aside class="site-sidebar" aria-label="Site navigation"><a class="sidebar-identity" href="/" aria-label="Mike's homepage"><img src="/mike-avatar.jpg" width="40" height="40" alt="Mike"/> <span class="sidebar-label"><strong>Mike</strong><small>mikeblocky.com</small></span></a> <button class="sidebar-mobile-toggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="sidebar-primary-links"><span class="sidebar-icon"><!--[--><svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="lucide-icon lucide lucide-menu"><!--[--><!----><path d="M4 5h16"><!----></path><!----><!----><path d="M4 12h16"><!----></path><!----><!----><path d="M4 19h16"><!----></path><!----><!--]--><!----></svg><!--]--></span><span class="sidebar-label">Menu</span></button> <nav class="sidebar-links" id="sidebar-primary-links" aria-label="Primary navigation"><!--[0--><span class="sidebar-selection" aria-hidden="true" style="transform: translateY(192px);"></span><!--]--> <!--[--><a href="/" aria-label="home" title="home" style="--nav-order: 0"><span class="sidebar-icon"><!--[--><svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="lucide-icon lucide lucide-house"><!--[--><!----><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"><!----></path><!----><!----><path d="M3 10a2 2 0 0 1 .709-1.528l7-6a2 2 0 0 1 2.582 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"><!----></path><!----><!--]--><!----></svg><!--]--></span> <span class="sidebar-label">home</span></a><a href="/about" aria-label="about" title="about" style="--nav-order: 1"><span class="sidebar-icon"><!--[--><svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="lucide-icon lucide lucide-user"><!--[--><!----><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"><!----></path><!----><!----><circle cx="12" cy="7" r="4"><!----></circle><!----><!--]--><!----></svg><!--]--></span> <span class="sidebar-label">about</span></a><a href="/artworks" aria-label="artworks" title="artworks" style="--nav-order: 2"><span class="sidebar-icon"><!--[--><svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="lucide-icon lucide lucide-palette"><!--[--><!----><path d="M12 22a1 1 0 0 1 0-20 10 9 0 0 1 10 9 5 5 0 0 1-5 5h-2.25a1.75 1.75 0 0 0-1.4 2.8l.3.4a1.75 1.75 0 0 1-1.4 2.8z"><!----></path><!----><!----><circle cx="13.5" cy="6.5" r=".5" fill="currentColor"><!----></circle><!----><!----><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"><!----></circle><!----><!----><circle cx="6.5" cy="12.5" r=".5" fill="currentColor"><!----></circle><!----><!----><circle cx="8.5" cy="7.5" r=".5" fill="currentColor"><!----></circle><!----><!--]--><!----></svg><!--]--></span> <span class="sidebar-label">artworks</span></a><a href="/journal" aria-label="journal" title="journal" style="--nav-order: 3"><span class="sidebar-icon"><!--[--><svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="lucide-icon lucide lucide-book-open"><!--[--><!----><path d="M12 7v14"><!----></path><!----><!----><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"><!----></path><!----><!--]--><!----></svg><!--]--></span> <span class="sidebar-label">journal</span></a><a href="/friends" aria-current="page" aria-label="friends" title="friends" style="--nav-order: 4" class="active"><span class="sidebar-icon"><!--[--><svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="lucide-icon lucide lucide-users"><!--[--><!----><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"><!----></path><!----><!----><path d="M16 3.128a4 4 0 0 1 0 7.744"><!----></path><!----><!----><path d="M22 21v-2a4 4 0 0 0-3-3.87"><!----></path><!----><!----><circle cx="9" cy="7" r="4"><!----></circle><!----><!--]--><!----></svg><!--]--></span> <span class="sidebar-label">friends</span></a><a href="/favorites" aria-label="favorites" title="favorites" style="--nav-order: 5"><span class="sidebar-icon"><!--[--><svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="lucide-icon lucide lucide-heart"><!--[--><!----><path d="M2 9.5a5.5 5.5 0 0 1 9.591-3.676.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5c0 2.29-1.5 4-3 5.5l-5.492 5.313a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5"><!----></path><!----><!--]--><!----></svg><!--]--></span> <span class="sidebar-label">favorites</span></a><a href="/interact" aria-label="interact" title="interact" style="--nav-order: 6"><span class="sidebar-icon"><!--[--><svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="lucide-icon lucide lucide-message-circle"><!--[--><!----><path d="M2.992 16.342a2 2 0 0 1 .094 1.167l-1.065 3.29a1 1 0 0 0 1.236 1.168l3.413-.998a2 2 0 0 1 1.099.092 10 10 0 1 0-4.777-4.719"><!----></path><!----><!--]--><!----></svg><!--]--></span> <span class="sidebar-label">interact</span></a><!--]--></nav> <div class="sidebar-bottom"><div class="flex items-center gap-3 sm:gap-4 select-none"><!--[-1--><span class="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-transparent" aria-hidden="true"></span><!--]--></div><!----> <button class="sidebar-collapse" type="button" aria-label="Collapse navigation" aria-expanded="true"><!--[--><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="lucide-icon lucide lucide-panel-left-close"><!--[--><!----><rect width="18" height="18" x="3" y="3" rx="2"><!----></rect><!----><!----><path d="M9 3v18"><!----></path><!----><!----><path d="m16 15-3-3 3-3"><!----></path><!----><!--]--><!----></svg><!--]--><span class="sidebar-label">Collapse</span></button></div></aside><!----> <div class="site-frame min-h-dvh relative overflow-x-hidden"><main class="w-full mx-auto mt-4 px-[clamp(0.75rem,4vw,1.5rem)] pb-[calc(8rem+env(safe-area-inset-bottom,0px))] sm:pb-4"><div class="page-transition"><!--[--><!--[--><!----> <div class="mx-auto w-full max-w-4xl px-[clamp(0.75rem,3vw,1.5rem)] py-[clamp(1rem,3vh,2rem)]"><!--[--><div class="flex flex-col space-y-4 sm:space-y-8"><!--[--><section class="page-intro"><div class="section-header-top"><nav class="breadcrumb" aria-label="Breadcrumb"><a href="/" class="breadcrumb-home"><img src="/icon.svg" alt="" width="18" height="18" aria-hidden="true"/>Home</a> <!--[0--><span aria-hidden="true">/</span> <span>Friends</span><!--]--></nav></div> <div class="section-title-block"><h1>Friends</h1> <!--[-1--><!--]--></div></section><!----> <!--[--><section class="friends-circle svelte-1ggmuka"><select class="section-picker-native site-native-select svelte-1s5nor1" aria-label="Friend groups"><!--[--><option value="all" selected="">Everyone (12)</option><option value="developed">Mutuals &amp; close friends (2)</option><option value="budding">Budding connections (2)</option><option value="growing">Growing bonds (3)</option><option value="upcoming">Future plans to connect (5)</option><!--]--></select><!----> <div class="connection-map svelte-1ggmuka" aria-label="People connected to Mike"><!----><div class="connection-world svelte-1ggmuka"><div class="connection-orbit svelte-1ggmuka"><svg class="connection-threads svelte-1ggmuka" viewBox="0 0 800 460" preserveAspectRatio="none" fill="none" aria-hidden="true"><!--[--><path d="M400 230 Q400 190.4 400 64.39999999999999" class="svelte-1ggmuka active"></path><path d="M400 230 Q458.5 195.70539401013622 556 86.58619313329694" class="svelte-1ggmuka"></path><path d="M400 230 Q501.3249722427793 210.2 670.1999259807449 147.2" class="svelte-1ggmuka"></path><path d="M400 230 Q517 230 712 229.99999999999997" class="svelte-1ggmuka"></path><path d="M400 230 Q501.3249722427793 249.8 670.1999259807449 312.79999999999995" class="svelte-1ggmuka"></path><path d="M400 230 Q458.5 264.2946059898638 556 373.413806866703" class="svelte-1ggmuka"></path><path d="M400 230 Q400 269.6 400 395.59999999999997" class="svelte-1ggmuka"></path><path d="M400 230 Q341.5 264.2946059898638 243.99999999999994 373.413806866703" class="svelte-1ggmuka upcoming"></path><path d="M400 230 Q298.67502775722073 249.8 129.8000740192552 312.80000000000007" class="svelte-1ggmuka upcoming"></path><path d="M400 230 Q283 230 88 230.00000000000003" class="svelte-1ggmuka upcoming"></path><path d="M400 230 Q298.6750277572207 210.2 129.80007401925513 147.19999999999996" class="svelte-1ggmuka upcoming"></path><path d="M400 230 Q341.49999999999994 195.70539401013622 243.99999999999986 86.58619313329699" class="svelte-1ggmuka upcoming"></path><!--]--></svg> <!--[--><button class="connection-person svelte-1ggmuka chosen" style="left: 50%; top: 14%;" type="button" aria-label="Read about @eljcfran" aria-pressed="true" aria-controls="friend-detail"><span class="connection-avatar svelte-1ggmuka"><span aria-hidden="true" class="svelte-1ggmuka">el</span><img src="https://unavatar.io/twitter/eljcfran" alt="" loading="lazy" class="svelte-1ggmuka"/></span> <span class="connection-name svelte-1ggmuka">@eljcfran</span></button><button class="connection-person svelte-1ggmuka" style="left: 69.5%; top: 18.823085463760208%;" type="button" aria-label="Read about @daisukihotaru" aria-pressed="false" aria-controls="friend-detail"><span class="connection-avatar svelte-1ggmuka"><span aria-hidden="true" class="svelte-1ggmuka">da</span><img src="https://unavatar.io/twitter/daisukihotaru" alt="" loading="lazy" class="svelte-1ggmuka"/></span> <span class="connection-name svelte-1ggmuka">@daisukihotaru</span></button><button class="connection-person svelte-1ggmuka" style="left: 83.77499074759311%; top: 32%;" type="button" aria-label="Read about @multiplee_" aria-pressed="false" aria-controls="friend-detail"><span class="connection-avatar svelte-1ggmuka"><span aria-hidden="true" class="svelte-1ggmuka">mu</span><img src="https://unavatar.io/twitter/multiplee_" alt="" loading="lazy" class="svelte-1ggmuka"/></span> <span class="connection-name svelte-1ggmuka">@multiplee_</span></button><button class="connection-person svelte-1ggmuka" style="left: 89%; top: 50%;" type="button" aria-label="Read about @beyondlaboira" aria-pressed="false" aria-controls="friend-detail"><span class="connection-avatar svelte-1ggmuka"><span aria-hidden="true" class="svelte-1ggmuka">be</span><img src="https://unavatar.io/twitter/beyondlaboira" alt="" loading="lazy" class="svelte-1ggmuka"/></span> <span class="connection-name svelte-1ggmuka">@beyondlaboira</span></button><button class="connection-person svelte-1ggmuka" style="left: 83.77499074759311%; top: 68%;" type="button" aria-label="Read about @thatyamakun" aria-pressed="false" aria-controls="friend-detail"><span class="connection-avatar svelte-1ggmuka"><span aria-hidden="true" class="svelte-1ggmuka">th</span><img src="https://unavatar.io/twitter/thatyamakun" alt="" loading="lazy" class="svelte-1ggmuka"/></span> <span class="connection-name svelte-1ggmuka">@thatyamakun</span></button><button class="connection-person svelte-1ggmuka" style="left: 69.5%; top: 81.17691453623979%;" type="button" aria-label="Read about @goinghostie" aria-pressed="false" aria-controls="friend-detail"><span class="connection-avatar svelte-1ggmuka"><span aria-hidden="true" class="svelte-1ggmuka">go</span><img src="https://unavatar.io/twitter/goinghostie" alt="" loading="lazy" class="svelte-1ggmuka"/></span> <span class="connection-name svelte-1ggmuka">@goinghostie</span></button><button class="connection-person svelte-1ggmuka" style="left: 50%; top: 86%;" type="button" aria-label="Read about @octobersfilm" aria-pressed="false" aria-controls="friend-detail"><span class="connection-avatar svelte-1ggmuka"><span aria-hidden="true" class="svelte-1ggmuka">oc</span><img src="https://unavatar.io/twitter/octobersfilm" alt="" loading="lazy" class="svelte-1ggmuka"/></span> <span class="connection-name svelte-1ggmuka">@octobersfilm</span></button><button class="connection-person svelte-1ggmuka" style="left: 30.499999999999993%; top: 81.17691453623979%;" type="button" aria-label="Read about @to_nikaku" aria-pressed="false" aria-controls="friend-detail"><span class="connection-avatar svelte-1ggmuka"><span aria-hidden="true" class="svelte-1ggmuka">to</span><img src="https://unavatar.io/twitter/to_nikaku" alt="" loading="lazy" class="svelte-1ggmuka"/></span> <span class="connection-name svelte-1ggmuka">@to_nikaku</span></button><button class="connection-person svelte-1ggmuka" style="left: 16.2250092524069%; top: 68.00000000000001%;" type="button" aria-label="Read about @skipsyourloafer" aria-pressed="false" aria-controls="friend-detail"><span class="connection-avatar svelte-1ggmuka"><span aria-hidden="true" class="svelte-1ggmuka">sk</span><img src="https://unavatar.io/twitter/skipsyourloafer" alt="" loading="lazy" class="svelte-1ggmuka"/></span> <span class="connection-name svelte-1ggmuka">@skipsyourloafer</span></button><button class="connection-person svelte-1ggmuka" style="left: 11%; top: 50.00000000000001%;" type="button" aria-label="Read about @lilatheduckk" aria-pressed="false" aria-controls="friend-detail"><span class="connection-avatar svelte-1ggmuka"><span aria-hidden="true" class="svelte-1ggmuka">li</span><img src="https://unavatar.io/twitter/lilatheduckk" alt="" loading="lazy" class="svelte-1ggmuka"/></span> <span class="connection-name svelte-1ggmuka">@lilatheduckk</span></button><button class="connection-person svelte-1ggmuka" style="left: 16.225009252406892%; top: 31.999999999999996%;" type="button" aria-label="Read about @kuusand" aria-pressed="false" aria-controls="friend-detail"><span class="connection-avatar svelte-1ggmuka"><span aria-hidden="true" class="svelte-1ggmuka">ku</span><img src="https://unavatar.io/twitter/kuusand" alt="" loading="lazy" class="svelte-1ggmuka"/></span> <span class="connection-name svelte-1ggmuka">@kuusand</span></button><button class="connection-person svelte-1ggmuka" style="left: 30.499999999999982%; top: 18.823085463760215%;" type="button" aria-label="Read about @maomao_2605" aria-pressed="false" aria-controls="friend-detail"><span class="connection-avatar svelte-1ggmuka"><span aria-hidden="true" class="svelte-1ggmuka">ma</span><img src="https://unavatar.io/twitter/maomao_2605" alt="" loading="lazy" class="svelte-1ggmuka"/></span> <span class="connection-name svelte-1ggmuka">@maomao_2605</span></button><!--]--></div></div><!----> <div class="connection-center svelte-1ggmuka"><img src="/mike-avatar.jpg" alt="Mike" width="64" height="64" class="svelte-1ggmuka"/><strong class="svelte-1ggmuka">Mike</strong></div> <button class="orbit-pause svelte-1ggmuka" type="button" aria-label="Pause orbit" aria-pressed="false"><!--[--><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="lucide-icon lucide lucide-pause"><!--[--><!----><rect x="14" y="3" width="5" height="18" rx="1"><!----></rect><!----><!----><rect x="5" y="3" width="5" height="18" rx="1"><!----></rect><!----><!--]--><!----></svg><!--]--><span>Pause</span></button></div> <div id="friend-detail" class="connection-detail svelte-1ggmuka" aria-live="polite"><!--[0--><!----><div><article class="friend-note svelte-1u9eyja"><header class="svelte-1u9eyja"><div class="svelte-1u9eyja"><h2 class="svelte-1u9eyja">@eljcfran</h2><span class="svelte-1u9eyja">Mutual</span></div><a href="https://x.com/eljcfran" target="_blank" rel="noopener noreferrer" aria-label="Visit @eljcfran on X" class="svelte-1u9eyja">Profile <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="lucide-icon lucide lucide-arrow-up-right"><!--[--><!----><path d="M7 7h10v10"><!----></path><!----><!----><path d="M7 17 17 7"><!----></path><!----><!--]--><!----></svg><!----></a></header> <p class="svelte-1u9eyja">A wonderful artist and one of the few people I can talk to about the simple rhythm of everyday life. Her kindness and her growth as a creator are things I deeply admire. She was the one who reached out first, drawn to my art and music, and our connection grew with a speed that surprised me. I value the foundation we’ve built, and I’m committed to being more present and open so this bond can continue to deepen naturally.</p></article><!----></div><!----><!--]--></div></section><!--]--><!--]--></div><!----> <footer class="relative mt-auto w-full pt-12"><div class="relative w-full mb-8"><div class="absolute inset-0 w-full h-[1px] bg-gradient-to-r pride-gradient-line opacity-80 dark:opacity-90"></div></div> <div class="w-full max-w-screen-md mx-auto px-4 flex flex-col items-center gap-4 sm:gap-6 text-sm text-muted-foreground/60 font-mono"><!--[0--><div class="flex flex-wrap items-center justify-center gap-x-3"><!--[--><a href="/" class="transition-colors duration-200 hover:text-blue-500">Homepage</a> <!--[-1--><!--]--><!--]--></div><!--]--> <div class="flex items-center justify-center gap-6 sm:gap-8"><div class="flex items-center gap-6"><!--[--><div class="hover:-translate-y-0.5 active:scale-95 transition-all duration-200"><a href="/cdn-cgi/l/email-protection#2a474f6a4743414f48464549415304494547" class="block pride-text -m-2 p-2 hover:bg-blue-500/10 rounded-md hover:shadow-md hover:shadow-blue-500/5 transition-all duration-200"><!--[--><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="lucide-icon lucide lucide-mail w-3 h-3 sm:w-4 sm:h-4"><!--[--><!----><path d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7"><!----></path><!----><!----><rect x="2" y="4" width="20" height="16" rx="2"><!----></rect><!----><!--]--><!----></svg><!--]--></a></div><div class="hover:-translate-y-0.5 active:scale-95 transition-all duration-200"><a href="https://github.com/mikeblocky" target="_blank" rel="noreferrer" class="block pride-text -m-2 p-2 hover:bg-blue-500/10 rounded-md hover:shadow-md hover:shadow-blue-500/5 transition-all duration-200"><!--[--><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="lucide-icon lucide lucide-git-fork w-3 h-3 sm:w-4 sm:h-4"><!--[--><!----><circle cx="12" cy="18" r="3"><!----></circle><!----><!----><circle cx="6" cy="6" r="3"><!----></circle><!----><!----><circle cx="18" cy="6" r="3"><!----></circle><!----><!----><path d="M18 9v2c0 .6-.4 1-1 1H7c-.6 0-1-.4-1-1V9"><!----></path><!----><!----><path d="M12 12v3"><!----></path><!----><!--]--><!----></svg><!--]--></a></div><div class="hover:-translate-y-0.5 active:scale-95 transition-all duration-200"><a href="https://x.com/mikeblocky" target="_blank" rel="noreferrer" class="block pride-text -m-2 p-2 hover:bg-blue-500/10 rounded-md hover:shadow-md hover:shadow-blue-500/5 transition-all duration-200"><!--[--><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="lucide-icon lucide lucide-bird w-3 h-3 sm:w-4 sm:h-4"><!--[--><!----><path d="M16 7h.01"><!----></path><!----><!----><path d="M3.4 18H12a8 8 0 0 0 8-8V7a4 4 0 0 0-7.28-2.3L2 20"><!----></path><!----><!----><path d="m20 7 2 .5-2 .5"><!----></path><!----><!----><path d="M10 18v3"><!----></path><!----><!----><path d="M14 17.75V21"><!----></path><!----><!----><path d="M7 18a6 6 0 0 0 3.84-10.61"><!----></path><!----><!--]--><!----></svg><!--]--></a></div><!--]--></div> <span class="pride-text text-[10px] sm:text-xs">© 2026 mikeblocky.com</span></div></div> <div class="h-8"></div></footer><!----><!--]--></div><!----><!--]--><!--]--></div></main></div></div> <div class="phone-navigation"><!--[-1--><!--]--> <!--[-1--><!--]--> <button class="phone-menu-trigger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="phone-menu"><span class="phone-trigger-icon"><!--[--><svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="lucide-icon lucide lucide-menu"><!--[--><!----><path d="M4 5h16"><!----></path><!----><!----><path d="M4 12h16"><!----></path><!----><!----><path d="M4 19h16"><!----></path><!----><!--]--><!----></svg><!--]--></span></button></div><!----><!--]--><!--]--> <!--[-1--><!--]--><!--]-->
+			
+			<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script type="29f3fbbe2448af5dc7244e4e-text/javascript">
+				{
+					
+					__sveltekit_183qgbe = {
+						base: new URL(".", location).pathname.slice(0, -1),
+						env: null
+					};
+
+					const element = document.currentScript.parentElement;
+
+					import("./_app/env.js").then(({ env }) => {
+						__sveltekit_183qgbe.env = env;
+
+						Promise.all([
+							import("./_app/immutable/entry/start.1fGB87U3.js"),
+							import("./_app/immutable/entry/app.PdaOEVkH.js")
+						]).then(([kit, app]) => {
+							kit.start(app, element, {
+									node_ids: [0, 17],
+									data: [null,{type:"data",data:{friendGroups:[{id:"developed",title:"Developed",description:"Connections with a steady shape and a little history.",friends:[{username:"eljcfran",description:"A wonderful artist and one of the few people I can talk to about the simple rhythm of everyday life. Her kindness and her growth as a creator are things I deeply admire. She was the one who reached out first, drawn to my art and music, and our connection grew with a speed that surprised me. I value the foundation we’ve built, and I’m committed to being more present and open so this bond can continue to deepen naturally."},{username:"daisukihotaru",description:"Someone I truly love chatting with. Her dedication to A Condition Called Love is impressive, and her support was a huge reason my work reached so many people. Even though our conversations aren't as constant as they once were, I value the healthy, respectful closeness we share. I want to keep growing as a person so I can continue to meet her warmth with my own as our friendship evolves."}]},{id:"budding",title:"Budding",description:"New conversations that still feel tender and open.",friends:[{username:"multiplee_",description:"A fellow fan of Kemutai Hanashi! We talk a lot in the server, which is a really fun coincidence. I'm still getting to know them, and since I usually take a while before adding people on Discord, I'm just taking things slow. But if it goes, then it goes—I'm happy to see where it leads."},{username:"beyondlaboira",description:"A fellow fan of Kemutai Hanashi whom I first noticed on Tumblr. We’ve been talking a bit more lately and sharing thoughts on the server, bringing us a little closer. Really, they are one of the most wonderful people I've ever met, and I'm so glad to connect with them—it's actually my first time getting to know someone in the nonbinary/aroace spectrum. Through them, I've seen so many things I didn't know before, alongside a shared love for art. I know how hard it must have been, and I'm truly happy that they came out and found acceptance. I hope that one day we can bridge the remaining gap and build a comfortable friendship."}]},{id:"growing",title:"Growing",description:"Friendships slowly gathering more ordinary rhythm.",friends:[{username:"thatyamakun",description:"She's one of the most dedicated Witch Hat Atelier fans, and someone I genuinely appreciate. She was actually among the first to notice and support my Kemutai Hanashi work, which meant a lot to me. I hope we can slowly move past the creator-fan stage and build a real, comfortable connection over time."},{username:"goinghostie",description:"A fellow fan of Hoshiai no Sora and other niche series. We crossed paths back in early 2025, and lately, we've been interacting more frequently through sharing fanart. I really value having them around in my circle, and I'm hoping we can make our chats feel even more casual and natural as we go."},{username:"octobersfilm",description:"A wonderful writer whose outlook on art and life really resonates with me. She was actually one of the very few people I felt brave enough to reach out to first. I'd love to visit Indonesia someday and meet her in person, turning our online chats into a casual, warm conversation over coffee."}]},{id:"upcoming",title:"Upcoming",description:"People I hope to know with more patience and courage.",friends:[{username:"to_nikaku",description:"An incredibly talented artist whose passion for her craft, and her quirks, like her love for dishwashers, is genuinely inspiring. When she followed me back after I shared some late-night reflections, it was a moment where I felt truly seen. It’s an experience I value deeply."},{username:"skipsyourloafer",description:"It was such a surprise to be recognized for my random Mika and Mukai drawings through him. We mainly connect through our art, but I’m eager to see what lies beyond that. Having a connection all the way in Sweden makes the world feel a little smaller and less lonely."},{username:"lilatheduckk",description:"I admire her thoughts and her fan fiction immensely. We connected after I translated an interview for her, but I sometimes worry that I’m the one doing all the leaning. I want to move toward a more organic, no-pressure friendship where we just exist in each other’s worlds."},{username:"kuusand",description:"One of my very first supporters. I even created an artwork just for her because of how much her early encouragement meant. Lately, the connection has felt a bit \"heavy,\" and I’ve been overthinking it. I want to lift that weight and find a way for us to connect naturally and casually again."},{username:"maomao_2605",description:"A creator I’ve admired from afar for a long time. Her \"nerdy\" passion for Fruits Basket and Haikyuu is infectious. We haven’t officially talked yet, and she feels a bit like a distant star, but I’m determined to find the right moment to finally start a conversation."}]}]},uses:{}}],
+									form: null,
+									error: null
+								});
+						});
+					});
+				}
+			</script>
+		</div>
+  <script src="/cdn-cgi/scripts/7d0fa10a/cloudflare-static/rocket-loader.min.js" data-cf-settings="29f3fbbe2448af5dc7244e4e-|49" defer></script></body>
+</html>

@@ -12,9 +12,9 @@
   .friend-note { border-top: 1px solid hsl(var(--border) / .65); padding: 1.5rem 0 .5rem; }
   header { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
   header > div { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; }
-  h2 { margin: 0; color: hsl(var(--foreground)); font-size: 1rem; font-weight: 600; }
-  header span { color: hsl(var(--muted-foreground)); font-size: .65rem; padding: 3px 8px; background: hsl(var(--muted) / .6); border-radius: 999px; }
-  a { display: inline-flex; align-items: center; gap: 4px; color: hsl(var(--muted-foreground)); font-size: .7rem; flex-shrink: 0; }
+  h2 { margin: 0; color: hsl(var(--foreground)); font-size: var(--font-size-md); font-weight: 600; }
+  header span { color: hsl(var(--muted-foreground)); font-size: var(--font-size-2xs); padding: 3px 8px; background: hsl(var(--muted) / .6); border-radius: 999px; }
+  a { display: inline-flex; align-items: center; gap: 4px; color: hsl(var(--muted-foreground)); font-size: var(--font-size-2xs); flex-shrink: 0; }
   a:hover { color: hsl(var(--site-blue)); }
-  p { margin: 1.2rem 0 0; font-size: .9rem; line-height: 1.75; color: hsl(var(--muted-foreground)); text-wrap: pretty; }
+  p { margin: 1.2rem 0 0; font-size: var(--font-size-base); line-height: 1.65; color: hsl(var(--muted-foreground)); text-wrap: pretty; }
 </style>

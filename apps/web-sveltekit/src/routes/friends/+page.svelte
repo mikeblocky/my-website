@@ -41,7 +41,7 @@
   $: if (activeTab !== previousTab) { thoughtUsername = ''; previousTab = activeTab; }
   function selectFriend(event: MouseEvent, username: string) {
     selectedUsername = username;
-    if (thoughtUsername === username) { thoughtUsername = ''; return; }
+    if (thoughtUsername === username && !window.matchMedia('(max-width: 560px), (pointer: coarse)').matches) { thoughtUsername = ''; return; }
     const map = mapElement.getBoundingClientRect();
     const person = (event.currentTarget as HTMLElement).getBoundingClientRect();
     const anchorX = person.left + person.width / 2 - map.left;
@@ -54,6 +54,7 @@
     thoughtUsername = username;
   }
   function dismissOutside(event: PointerEvent) {
+    if (window.matchMedia('(max-width: 560px), (pointer: coarse)').matches) return;
     if (!(event.target instanceof Element) || event.target.closest('.connection-person, .thought-cloud, .friend-controls')) return;
     thoughtUsername = '';
   }
@@ -66,12 +67,12 @@
   });
 </script>
 
-<svelte:window on:pointerdown={dismissOutside} on:keydown={(event) => { if (event.key === 'Escape') thoughtUsername = ''; }} on:resize={() => thoughtUsername = ''} />
+<svelte:window on:pointerdown={dismissOutside} on:keydown={(event) => { if (event.key === 'Escape') thoughtUsername = ''; }} on:resize={() => { if (!window.matchMedia('(max-width: 560px), (pointer: coarse)').matches) thoughtUsername = ''; }} />
 
 <SeoHead title="friends" path="/friends" description="Friends, artists, and creators in Mike's corner of the internet." />
 <SectionPageShell title="Friends" currentLabel="Friends" footerColor="blue">
   <section class="friends-circle">
-    <PillTabs bind:activeTab {tabs} ariaLabel="Friend groups" storageKey="mikeblocky:friends-tab" syncUrl />
+    <PillTabs bind:activeTab {tabs} ariaLabel="Friend groups" storageKey="mikeblocky:friends-tab" syncUrl native />
     <div class="connection-map" bind:this={mapElement} class:has-thought={!!thoughtUsername} class:paused style={`margin-bottom: ${thoughtUsername ? Math.max(16, thoughtY + thoughtHeight - 460 + 24) : 16}px;`} aria-label="People connected to Mike">
       {#key activeTab}<div class="connection-world"><div class="connection-orbit">
       <svg class="connection-threads" viewBox="0 0 800 460" preserveAspectRatio="none" fill="none" aria-hidden="true">
@@ -116,11 +117,12 @@
 <style>
   .phone-friends { display: none; }
   .friend-controls { display: grid; grid-template-columns: 44px minmax(0, 1fr) 44px; gap: 8px; margin-bottom: 16px; }
-  .friend-controls button, .friend-controls select { min-height: 44px; border: 1px solid hsl(var(--border)); border-radius: 14px; background: hsl(var(--background)); color: hsl(var(--foreground)); font: inherit; font-size: .8rem; }
+  .friend-controls button, .friend-controls select { min-height: 44px; border: 1px solid hsl(var(--border)); border-radius: 14px; background: hsl(var(--background)); color: hsl(var(--foreground)); font: inherit; font-size: var(--font-size-xs); }
   .friend-controls button { display: grid; place-items: center; cursor: pointer; }
   .friend-controls select { width: 100%; padding-inline: 12px; }
   @media (max-width: 560px) {
     .phone-friends { display: block; }
+    .friends-circle :global(select) { font-size: var(--font-size-base); }
     .connection-map { margin-bottom: 1rem !important; }
     .desktop-thoughts, .thought-dots { display: none; }
     .connection-person { min-width: 48px; min-height: 48px; }
@@ -134,17 +136,17 @@
   .connection-threads path.upcoming { stroke-dasharray: 3 5; }
   .connection-center { position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%); display: grid; justify-items: center; gap: 8px; padding: 14px; background: hsl(var(--background)); border-radius: 50%; }
   .connection-center img { width: 64px; height: 64px; border-radius: 50%; box-shadow: 0 0 0 7px hsl(var(--background)), 0 0 0 8px hsl(var(--border) / .65); }
-  .connection-center strong { font-size: .8rem; font-weight: 600; }
+  .connection-center strong { font-size: var(--font-size-xs); font-weight: 600; }
   .connection-person { position: absolute; transform: translate(-50%,-50%); display: grid; justify-items: center; gap: 9px; padding: 4px; border: 0; background: transparent; cursor: pointer; color: hsl(var(--muted-foreground)); }
   .connection-avatar { position: relative; display: grid; place-items: center; width: 48px; height: 48px; border-radius: 50%; background: hsl(var(--muted)); box-shadow: 0 0 0 5px hsl(var(--background)); transition: transform 420ms cubic-bezier(.34,1.56,.64,1), box-shadow 220ms ease; }
-  .connection-avatar > span { text-transform: uppercase; font-size: .7rem; }
+  .connection-avatar > span { text-transform: uppercase; font-size: var(--font-size-2xs); }
   .connection-avatar img { position: absolute; inset: 0; width: 100%; height: 100%; border-radius: inherit; object-fit: cover; }
   .connection-person:hover .connection-avatar, .connection-person:focus-visible .connection-avatar { transform: translateY(-3px) scale(1.08); }
   .connection-person.chosen .connection-avatar { box-shadow: 0 0 0 4px hsl(var(--background)), 0 0 0 5px hsl(var(--site-blue) / .55); }
   .connection-person.chosen .connection-name, .connection-person:hover .connection-name { color: hsl(var(--site-blue)); }
-  .connection-name { max-width: 108px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: .65rem; line-height: 1.4; background: hsl(var(--background)); padding-inline: 3px; }
+  .connection-name { max-width: 108px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: var(--font-size-2xs); line-height: 1.4; background: hsl(var(--background)); padding-inline: 3px; }
   .connection-detail { max-width: 40rem; margin-inline: auto; }
-  @media (max-width: 560px) { .connection-map { height: 430px; margin-inline: -8px; } .connection-avatar { width: 38px; height: 38px; } .connection-center img { width: 52px; height: 52px; } .connection-name { max-width: 83px; font-size: .58rem; } .connection-person { gap: 7px; } }
+  @media (max-width: 560px) { .connection-map { height: 430px; margin-inline: -8px; } .connection-avatar { width: 38px; height: 38px; } .connection-center img { width: 52px; height: 52px; } .connection-name { max-width: 83px; font-size: var(--font-size-2xs); } .connection-person { gap: 7px; } }
   @media (prefers-reduced-motion: reduce) { .connection-avatar, .connection-threads path { transition: none; } }
   /* Tilt the plane into depth, then counter-rotate portraits to keep them readable. */
   .connection-map { perspective: 850px; perspective-origin: 50% 50%; }
@@ -159,7 +161,7 @@
   .connection-map:has(.connection-person:focus-visible) .connection-orbit, .connection-map:has(.connection-person:focus-visible) .connection-person { animation-play-state: paused; }
   @media (hover: hover) { .connection-map:hover .connection-orbit, .connection-map:hover .connection-person { animation-play-state: paused; } }
   .connection-center { z-index: 2; background: hsl(var(--background) / .95); box-shadow: 0 8px 25px hsl(var(--foreground) / .04); }
-  .orbit-pause { position: absolute; left: 50%; transform: translateX(-50%); bottom: 0; display: inline-flex; align-items: center; gap: 5px; border: 0; border-radius: 8px; background: transparent; color: hsl(var(--muted-foreground)); min-height: 36px; padding: 6px 9px; font-size: .65rem; cursor: pointer; }
+  .orbit-pause { position: absolute; left: 50%; transform: translateX(-50%); bottom: 0; display: inline-flex; align-items: center; gap: 5px; border: 0; border-radius: 8px; background: transparent; color: hsl(var(--muted-foreground)); min-height: 36px; padding: 6px 9px; font-size: var(--font-size-2xs); cursor: pointer; }
   .orbit-pause:hover { background: hsl(var(--muted)); }
   @keyframes world-orbit { from { transform: rotateZ(0deg); } to { transform: rotateZ(360deg); } }
   @keyframes portrait-facing { from { transform: translate(-50%,-50%) rotateZ(8deg) rotateX(-38deg); } to { transform: translate(-50%,-50%) rotateZ(-352deg) rotateX(-38deg); } }

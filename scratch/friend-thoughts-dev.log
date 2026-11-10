@@ -1,0 +1,160 @@
+
+> @mikeblocky/web-sveltekit@0.1.0 predev
+> node ../../scripts/generate-artwork-previews.mjs
+
+Artwork previews: 46 works; cards 1.6 MB versus 170.5 MB originals.
+
+> @mikeblocky/web-sveltekit@0.1.0 dev
+> vite dev --host 127.0.0.1
+
+Port 5173 is in use, trying another one...
+
+  VITE v7.3.5  ready in 14592 ms
+
+  ➜  Local:   http://127.0.0.1:5174/
+(node:38596) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+12:56:16 AM [vite] (client) page reload build/prerendered/about.html
+12:56:16 AM [vite] (client) page reload build/prerendered/artworks.html
+12:56:16 AM [vite] (client) page reload build/prerendered/favorites.html
+12:56:16 AM [vite] (client) page reload build/prerendered/friends.html
+12:56:16 AM [vite] (client) page reload build/prerendered/notes.html
+12:56:16 AM [vite] (client) page reload build/prerendered/zine.html
+12:56:16 AM [vite] (client) page reload build/prerendered/artworks/kemutai-hanashi.html
+12:56:16 AM [vite] (client) page reload build/prerendered/diary/daily-notes/days/april-26.html
+12:56:16 AM [vite] (client) page reload build/prerendered/diary/daily-notes/days/witch-hat-atelier-reading.html
+12:56:16 AM [vite] (client) page reload build/prerendered/learning/weekly-reflections.html
+12:56:16 AM [vite] (client) page reload build/prerendered/learning/weekly-reflections/week-1.html
+12:56:16 AM [vite] (client) page reload build/prerendered/learning/weekly-reflections/week-2.html
+12:56:16 AM [vite] (client) page reload build/prerendered/learning/weekly-reflections/week-3.html
+12:56:16 AM [vite] (client) page reload build/prerendered/learning/weekly-reflections/week-4.html
+12:56:16 AM [vite] (client) page reload build/prerendered/learning/weekly-reflections/week-5.html
+12:56:16 AM [vite] (client) page reload build/prerendered/learning/weekly-reflections/week-6.html
+12:56:16 AM [vite] (client) page reload build/prerendered/learning/weekly-reflections/week-7.html
+12:56:22 AM [vite] (client) page reload build/prerendered/about.html
+12:56:22 AM [vite] (client) page reload build/prerendered/artworks.html
+12:56:22 AM [vite] (client) page reload build/prerendered/favorites.html
+12:56:22 AM [vite] (client) page reload build/prerendered/friends.html
+12:56:22 AM [vite] (client) page reload build/prerendered/index.html
+12:56:22 AM [vite] (client) page reload build/prerendered/notes.html
+12:56:23 AM [vite] (client) page reload build/prerendered/zine.html
+12:56:26 AM [vite] (client) page reload build/prerendered/artworks/kemutai-hanashi.html
+12:56:26 AM [vite] (client) page reload build/prerendered/learning/weekly-reflections.html
+12:56:31 AM [vite] (client) page reload build/prerendered/learning/weekly-reflections/week-1.html
+12:56:31 AM [vite] (client) page reload build/prerendered/learning/weekly-reflections/week-2.html
+12:56:31 AM [vite] (client) page reload build/prerendered/learning/weekly-reflections/week-3.html
+12:56:31 AM [vite] (client) page reload build/prerendered/learning/weekly-reflections/week-4.html
+12:56:32 AM [vite] (client) page reload build/prerendered/learning/weekly-reflections/week-5.html
+12:56:32 AM [vite] (client) page reload build/prerendered/learning/weekly-reflections/week-6.html
+12:56:32 AM [vite] (client) page reload build/prerendered/learning/weekly-reflections/week-7.html
+12:56:39 AM [vite] (client) page reload build/prerendered/diary/daily-notes/days/april-26.html
+12:56:39 AM [vite] (client) page reload build/prerendered/diary/daily-notes/days/witch-hat-atelier-reading.html
+1:20:24 AM [vite] (client) page reload build/prerendered/about.html
+1:20:24 AM [vite] (client) page reload build/prerendered/artworks.html
+1:20:24 AM [vite] (client) page reload build/prerendered/favorites.html
+1:20:24 AM [vite] (client) page reload build/prerendered/friends.html
+1:20:24 AM [vite] (client) page reload build/prerendered/index.html
+1:20:24 AM [vite] (client) page reload build/prerendered/notes.html
+1:20:24 AM [vite] (client) page reload build/prerendered/zine.html
+1:20:24 AM [vite] (client) page reload build/prerendered/artworks/kemutai-hanashi.html
+1:20:24 AM [vite] (client) page reload build/prerendered/diary/daily-notes/days/april-26.html
+1:20:24 AM [vite] (client) page reload build/prerendered/diary/daily-notes/days/witch-hat-atelier-reading.html
+1:20:24 AM [vite] (client) page reload build/prerendered/learning/weekly-reflections.html
+1:20:24 AM [vite] (client) page reload build/prerendered/learning/weekly-reflections/week-1.html
+1:20:24 AM [vite] (client) page reload build/prerendered/learning/weekly-reflections/week-2.html
+1:20:24 AM [vite] (client) page reload build/prerendered/learning/weekly-reflections/week-3.html
+1:20:24 AM [vite] (client) page reload build/prerendered/learning/weekly-reflections/week-4.html
+1:20:24 AM [vite] (client) page reload build/prerendered/learning/weekly-reflections/week-5.html
+1:20:24 AM [vite] (client) page reload build/prerendered/learning/weekly-reflections/week-6.html
+1:20:24 AM [vite] (client) page reload build/prerendered/learning/weekly-reflections/week-7.html
+1:20:42 AM [vite] (client) page reload build/prerendered/about.html
+1:20:42 AM [vite] (client) page reload build/prerendered/artworks.html
+1:20:42 AM [vite] (client) page reload build/prerendered/favorites.html
+1:20:42 AM [vite] (client) page reload build/prerendered/friends.html
+1:20:42 AM [vite] (client) page reload build/prerendered/index.html
+1:20:42 AM [vite] (client) page reload build/prerendered/notes.html
+1:20:42 AM [vite] (client) page reload build/prerendered/zine.html
+1:20:47 AM [vite] (client) page reload build/prerendered/learning/weekly-reflections.html
+1:20:47 AM [vite] (client) page reload build/prerendered/artworks/kemutai-hanashi.html
+1:20:52 AM [vite] (client) page reload build/prerendered/learning/weekly-reflections/week-1.html
+1:20:52 AM [vite] (client) page reload build/prerendered/learning/weekly-reflections/week-2.html
+1:20:52 AM [vite] (client) page reload build/prerendered/learning/weekly-reflections/week-3.html
+1:20:52 AM [vite] (client) page reload build/prerendered/learning/weekly-reflections/week-4.html
+1:20:52 AM [vite] (client) page reload build/prerendered/learning/weekly-reflections/week-5.html
+1:20:52 AM [vite] (client) page reload build/prerendered/learning/weekly-reflections/week-6.html
+1:20:52 AM [vite] (client) page reload build/prerendered/learning/weekly-reflections/week-7.html
+1:20:52 AM [vite] (client) page reload build/prerendered/diary/daily-notes/days/april-26.html
+1:20:52 AM [vite] (client) page reload build/prerendered/diary/daily-notes/days/witch-hat-atelier-reading.html
+1:36:54 AM [vite] (client) page reload src/app.html
+1:54:31 AM [vite] (client) page reload build/prerendered/about.html
+1:54:31 AM [vite] (client) page reload build/prerendered/artworks.html
+1:54:31 AM [vite] (client) page reload build/prerendered/favorites.html
+1:54:31 AM [vite] (client) page reload build/prerendered/friends.html
+1:54:31 AM [vite] (client) page reload build/prerendered/index.html
+1:54:31 AM [vite] (client) page reload build/prerendered/notes.html
+1:54:31 AM [vite] (client) page reload build/prerendered/zine.html
+1:54:31 AM [vite] (client) page reload build/prerendered/artworks/kemutai-hanashi.html
+1:54:31 AM [vite] (client) page reload build/prerendered/diary/daily-notes/days/april-26.html
+1:54:31 AM [vite] (client) page reload build/prerendered/diary/daily-notes/days/witch-hat-atelier-reading.html
+1:54:31 AM [vite] (client) page reload build/prerendered/learning/weekly-reflections.html
+1:54:31 AM [vite] (client) page reload build/prerendered/learning/weekly-reflections/week-1.html
+1:54:31 AM [vite] (client) page reload build/prerendered/learning/weekly-reflections/week-2.html
+1:54:31 AM [vite] (client) page reload build/prerendered/learning/weekly-reflections/week-3.html
+1:54:31 AM [vite] (client) page reload build/prerendered/learning/weekly-reflections/week-4.html
+1:54:31 AM [vite] (client) page reload build/prerendered/learning/weekly-reflections/week-5.html
+1:54:31 AM [vite] (client) page reload build/prerendered/learning/weekly-reflections/week-6.html
+1:54:31 AM [vite] (client) page reload build/prerendered/learning/weekly-reflections/week-7.html
+1:54:37 AM [vite] (client) page reload build/prerendered/about.html
+1:54:37 AM [vite] (client) page reload build/prerendered/artworks.html
+1:54:37 AM [vite] (client) page reload build/prerendered/favorites.html
+1:54:37 AM [vite] (client) page reload build/prerendered/friends.html
+1:54:37 AM [vite] (client) page reload build/prerendered/index.html
+1:54:37 AM [vite] (client) page reload build/prerendered/notes.html
+1:54:37 AM [vite] (client) page reload build/prerendered/zine.html
+1:54:39 AM [vite] (client) page reload build/prerendered/artworks/kemutai-hanashi.html
+1:54:39 AM [vite] (client) page reload build/prerendered/learning/weekly-reflections.html
+1:54:40 AM [vite] (client) page reload build/prerendered/learning/weekly-reflections/week-1.html
+1:54:40 AM [vite] (client) page reload build/prerendered/learning/weekly-reflections/week-2.html
+1:54:40 AM [vite] (client) page reload build/prerendered/learning/weekly-reflections/week-3.html
+1:54:40 AM [vite] (client) page reload build/prerendered/learning/weekly-reflections/week-5.html
+1:54:40 AM [vite] (client) page reload build/prerendered/learning/weekly-reflections/week-6.html
+1:54:40 AM [vite] (client) page reload build/prerendered/learning/weekly-reflections/week-7.html
+1:54:40 AM [vite] (client) page reload build/prerendered/learning/weekly-reflections/week-4.html
+1:54:44 AM [vite] (client) page reload build/prerendered/diary/daily-notes/days/april-26.html
+1:54:44 AM [vite] (client) page reload build/prerendered/diary/daily-notes/days/witch-hat-atelier-reading.html
+1:59:54 AM [vite] (client) page reload build/prerendered/about.html
+1:59:54 AM [vite] (client) page reload build/prerendered/artworks.html
+1:59:54 AM [vite] (client) page reload build/prerendered/favorites.html
+1:59:54 AM [vite] (client) page reload build/prerendered/friends.html
+1:59:54 AM [vite] (client) page reload build/prerendered/index.html
+1:59:54 AM [vite] (client) page reload build/prerendered/notes.html
+1:59:54 AM [vite] (client) page reload build/prerendered/zine.html
+1:59:54 AM [vite] (client) page reload build/prerendered/artworks/kemutai-hanashi.html
+1:59:54 AM [vite] (client) page reload build/prerendered/diary/daily-notes/days/april-26.html
+1:59:54 AM [vite] (client) page reload build/prerendered/diary/daily-notes/days/witch-hat-atelier-reading.html
+1:59:54 AM [vite] (client) page reload build/prerendered/learning/weekly-reflections.html
+1:59:54 AM [vite] (client) page reload build/prerendered/learning/weekly-reflections/week-1.html
+1:59:54 AM [vite] (client) page reload build/prerendered/learning/weekly-reflections/week-2.html
+1:59:54 AM [vite] (client) page reload build/prerendered/learning/weekly-reflections/week-3.html
+1:59:54 AM [vite] (client) page reload build/prerendered/learning/weekly-reflections/week-5.html
+1:59:54 AM [vite] (client) page reload build/prerendered/learning/weekly-reflections/week-6.html
+1:59:54 AM [vite] (client) page reload build/prerendered/learning/weekly-reflections/week-7.html
+1:59:54 AM [vite] (client) page reload build/prerendered/learning/weekly-reflections/week-4.html
+1:59:59 AM [vite] (client) page reload build/prerendered/about.html
+1:59:59 AM [vite] (client) page reload build/prerendered/artworks.html
+1:59:59 AM [vite] (client) page reload build/prerendered/index.html
+1:59:59 AM [vite] (client) page reload build/prerendered/friends.html
+1:59:59 AM [vite] (client) page reload build/prerendered/notes.html
+1:59:59 AM [vite] (client) page reload build/prerendered/zine.html
+1:59:59 AM [vite] (client) page reload build/prerendered/favorites.html
+2:00:00 AM [vite] (client) page reload build/prerendered/artworks/kemutai-hanashi.html
+2:00:00 AM [vite] (client) page reload build/prerendered/learning/weekly-reflections.html
+2:00:01 AM [vite] (client) page reload build/prerendered/learning/weekly-reflections/week-1.html
+2:00:01 AM [vite] (client) page reload build/prerendered/learning/weekly-reflections/week-2.html
+2:00:01 AM [vite] (client) page reload build/prerendered/learning/weekly-reflections/week-3.html
+2:00:01 AM [vite] (client) page reload build/prerendered/learning/weekly-reflections/week-4.html
+2:00:01 AM [vite] (client) page reload build/prerendered/learning/weekly-reflections/week-5.html
+2:00:01 AM [vite] (client) page reload build/prerendered/learning/weekly-reflections/week-6.html
+2:00:02 AM [vite] (client) page reload build/prerendered/learning/weekly-reflections/week-7.html
+2:00:04 AM [vite] (client) page reload build/prerendered/diary/daily-notes/days/april-26.html
+2:00:05 AM [vite] (client) page reload build/prerendered/diary/daily-notes/days/witch-hat-atelier-reading.html

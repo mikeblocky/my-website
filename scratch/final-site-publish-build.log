@@ -1,0 +1,1377 @@
+
+> nextjs-site@0.1.0 build
+> npm run sync:blog-social-images && npm --workspace @mikeblocky/web-sveltekit run build
+
+
+> nextjs-site@0.1.0 sync:blog-social-images
+> node scripts/sync-blog-social-images.mjs
+
+Synced 50 blog social image files to public/blog/posts.
+
+> @mikeblocky/web-sveltekit@0.1.0 prebuild
+> node ../../scripts/generate-artwork-previews.mjs
+
+Artwork previews: 54 works; cards 1.9 MB versus 261.6 MB originals.
+
+> @mikeblocky/web-sveltekit@0.1.0 build
+> vite build
+
+vite v7.3.5 building ssr environment for production...
+transforming...
+1:58:26 AM [vite-plugin-svelte] src/lib/components/PageIntro.svelte:8:13 Component has unused export property 'showPrideBadge'. If it is for external reference only, please consider using `export const showPrideBadge`
+https://svelte.dev/e/export_let_unused
+ 6:   export let description = '';
+ 7:   export let showDescription = false;
+ 8:   export let showPrideBadge = false;
+                               ^
+ 9: </script>
+10: 
+1:58:26 AM [vite-plugin-svelte] src/routes/notes/pytorch/content.mdx:184:3 Screenreaders already announce `<img>` elements as an image
+https://svelte.dev/e/a11y_img_redundant_alt
+182: <p>From PyTorch:</p>
+183: <p><code>inference_mode()</code> is <code>torch.no_grad()</code> on steroids.</p>
+184: <p><img src="/pytorch/inference_mode.png" alt="inference-mode image"></p>
+                                                                          ^
+185: <p><em>Screenshot taken from PyTorch’s official tweet made on Sep 25, 2021. <a
+186:   href="https://x.com/PyTorch/status/1437838236529868803"
+1:58:27 AM [vite-plugin-svelte] src/lib/components/ImageGallery.svelte:362:4 Self-closing HTML tags for non-void elements are ambiguous — use `<button ...></button>` rather than `<button ... />`
+https://svelte.dev/e/element_invalid_self_closing_tag
+360:   >
+361:     <!-- Close target -->
+362:     <button
+           ^
+363:       type="button"
+364:       aria-label="Close lightbox backdrop" on:click|stopPropagation={closeLightbox}
+1:58:27 AM [vite-plugin-svelte] src/lib/components/ImageGallery.svelte:413:8 Non-interactive element `<div>` should not be assigned mouse or keyboard event listeners
+https://svelte.dev/e/a11y_no_noninteractive_element_interactions
+411: 
+412:         <!-- Interactive Zoom/Pan container wrapper -->
+413:         <div
+                  ^
+414:           on:mousedown|stopPropagation={handleMouseDown}
+415:           on:mousemove|stopPropagation={handleMouseMove}
+1:58:27 AM [vite-plugin-svelte] src/lib/components/BoardShell.svelte:9:13 Component has unused export property 'isLoading'. If it is for external reference only, please consider using `export const isLoading`
+https://svelte.dev/e/export_let_unused
+ 7:   export let count: number;
+ 8:   export let isRefreshing = false;
+ 9:   export let isLoading = false;
+                          ^
+10:   export let isAdminMode = false;
+11:   export let passcode = '';
+1:58:27 AM [vite-plugin-svelte] src/lib/components/DrawPromptForm.svelte:90:4 Self-closing HTML tags for non-void elements are ambiguous — use `<textarea ...></textarea>` rather than `<textarea ... />`
+https://svelte.dev/e/element_invalid_self_closing_tag
+88:   <!-- Middle: Prompt Field -->
+89:   <div class="px-4 py-4 relative">
+90:     <textarea
+          ^
+91:       bind:this={bodyTextareaEl}
+92:       bind:value={body}
+1:58:27 AM [vite-plugin-svelte] src/lib/components/DrawPromptItem.svelte:316:12 Self-closing HTML tags for non-void elements are ambiguous — use `<textarea ...></textarea>` rather than `<textarea ... />`
+https://svelte.dev/e/element_invalid_self_closing_tag
+314:         <div class="flex-1 min-w-0">
+315:           <div class="relative">
+316:             <textarea
+                   ^
+317:               bind:this={replyTextareaEl}
+318:               bind:value={replyBody}
+1:58:27 AM [vite-plugin-svelte] src/lib/components/DrawPromptItem.svelte:390:12 Self-closing HTML tags for non-void elements are ambiguous — use `<textarea ...></textarea>` rather than `<textarea ... />`
+https://svelte.dev/e/element_invalid_self_closing_tag
+388:         <div class="flex-1 min-w-0">
+389:           <div class="relative">
+390:             <textarea
+                   ^
+391:               bind:this={followUpTextareaEl}
+392:               bind:value={followUpBody}
+1:58:28 AM [vite-plugin-svelte] src/lib/components/SketchbookCard.svelte:41:2 Visible, non-interactive element `<div>` with a click event must be accompanied by a keyboard event handler. Consider whether an interactive element such as `<button type="button">` or `<a>` might be more appropriate
+https://svelte.dev/e/a11y_click_events_have_key_events
+39: >
+40:   <!-- Drawing Image on the Left -->
+41:   <div 
+            ^
+42:     class="relative bg-white dark:bg-slate-950 shrink-0 border-slate-200/60 dark:border-slate-800/60 h-64 sm:h-auto w-full sm:w-64 md:w-80 border-b sm:border-b-0 sm:border-r flex flex-col justify-center overflow-hidden" 
+43:     on:click|stopPropagation
+1:58:28 AM [vite-plugin-svelte] src/lib/components/SketchbookCard.svelte:41:2 `<div>` with a click handler must have an ARIA role
+https://svelte.dev/e/a11y_no_static_element_interactions
+39: >
+40:   <!-- Drawing Image on the Left -->
+41:   <div 
+            ^
+42:     class="relative bg-white dark:bg-slate-950 shrink-0 border-slate-200/60 dark:border-slate-800/60 h-64 sm:h-auto w-full sm:w-64 md:w-80 border-b sm:border-b-0 sm:border-r flex flex-col justify-center overflow-hidden" 
+43:     on:click|stopPropagation
+1:58:28 AM [vite-plugin-svelte] src/lib/components/SketchbookCard.svelte:128:10 Visible, non-interactive element `<div>` with a click event must be accompanied by a keyboard event handler. Consider whether an interactive element such as `<button type="button">` or `<a>` might be more appropriate
+https://svelte.dev/e/a11y_click_events_have_key_events
+126:         <!-- Admin moderation controls -->
+127:         {#if isAdminMode}
+128:           <div class="flex items-center gap-2.5" on:click|stopPropagation>
+                     ^
+129:             <button
+130:               type="button"
+1:58:28 AM [vite-plugin-svelte] src/lib/components/SketchbookCard.svelte:128:10 `<div>` with a click handler must have an ARIA role
+https://svelte.dev/e/a11y_no_static_element_interactions
+126:         <!-- Admin moderation controls -->
+127:         {#if isAdminMode}
+128:           <div class="flex items-center gap-2.5" on:click|stopPropagation>
+                     ^
+129:             <button
+130:               type="button"
+1:58:28 AM [vite-plugin-svelte] src/lib/components/SketchbookCard.svelte:154:8 Visible, non-interactive element `<div>` with a click event must be accompanied by a keyboard event handler. Consider whether an interactive element such as `<button type="button">` or `<a>` might be more appropriate
+https://svelte.dev/e/a11y_click_events_have_key_events
+152:       <!-- Admin inline reply form in gallery card -->
+153:       {#if isReplying && isAdminMode}
+154:         <div class="flex flex-col gap-2 pt-2 border-t border-slate-200/30 dark:border-slate-800/30" on:click|stopPropagation>
+                   ^
+155:           <textarea
+156:             placeholder="Mike, write feedback..."
+1:58:28 AM [vite-plugin-svelte] src/lib/components/SketchbookCard.svelte:154:8 `<div>` with a click handler must have an ARIA role
+https://svelte.dev/e/a11y_no_static_element_interactions
+152:       <!-- Admin inline reply form in gallery card -->
+153:       {#if isReplying && isAdminMode}
+154:         <div class="flex flex-col gap-2 pt-2 border-t border-slate-200/30 dark:border-slate-800/30" on:click|stopPropagation>
+                   ^
+155:           <textarea
+156:             placeholder="Mike, write feedback..."
+1:58:28 AM [vite-plugin-svelte] src/lib/components/SketchbookCard.svelte:155:10 Self-closing HTML tags for non-void elements are ambiguous — use `<textarea ...></textarea>` rather than `<textarea ... />`
+https://svelte.dev/e/element_invalid_self_closing_tag
+153:       {#if isReplying && isAdminMode}
+154:         <div class="flex flex-col gap-2 pt-2 border-t border-slate-200/30 dark:border-slate-800/30" on:click|stopPropagation>
+155:           <textarea
+                 ^
+156:             placeholder="Mike, write feedback..."
+157:             bind:value={replyBody}
+1:58:28 AM [vite-plugin-svelte] src/lib/components/SketchbookCard.svelte:9:13 Component has unused export property 'passcode'. If it is for external reference only, please consider using `export const passcode`
+https://svelte.dev/e/export_let_unused
+ 7:   export let isAdminMode = false;
+ 8:   export let likedList: string[] = [];
+ 9:   export let passcode = '';
+                         ^
+10:   export let isPending = false;
+11:   export let buttonFeedback: Record<string, string> = {};
+1:58:28 AM [vite-plugin-svelte] src/lib/components/SketchbookCard.svelte:10:13 Component has unused export property 'isPending'. If it is for external reference only, please consider using `export const isPending`
+https://svelte.dev/e/export_let_unused
+ 8:   export let likedList: string[] = [];
+ 9:   export let passcode = '';
+10:   export let isPending = false;
+                          ^
+11:   export let buttonFeedback: Record<string, string> = {};
+12:   export let onLike: (id: string, e: MouseEvent) => void;
+1:58:28 AM [vite-plugin-svelte] src/lib/components/SuggestionCard.svelte:373:10 Self-closing HTML tags for non-void elements are ambiguous — use `<textarea ...></textarea>` rather than `<textarea ... />`
+https://svelte.dev/e/element_invalid_self_closing_tag
+371:         </div>
+372:         <div class="flex-1 min-w-0 font-sans">
+373:           <textarea
+                 ^
+374:             bind:value={replyBody}
+375:             on:input={handleInput}
+1:58:28 AM [vite-plugin-svelte] src/lib/components/SuggestionCard.svelte:437:10 Self-closing HTML tags for non-void elements are ambiguous — use `<textarea ...></textarea>` rather than `<textarea ... />`
+https://svelte.dev/e/element_invalid_self_closing_tag
+435:         </div>
+436:         <div class="flex-1 min-w-0 font-sans">
+437:           <textarea
+                 ^
+438:             bind:value={followUpBody}
+439:             on:input={handleInput}
+1:58:28 AM [vite-plugin-svelte] src/lib/components/SketchbookCanvas.svelte:382:4 Self-closing HTML tags for non-void elements are ambiguous — use `<textarea ...></textarea>` rather than `<textarea ... />`
+https://svelte.dev/e/element_invalid_self_closing_tag
+380:   <!-- Caption textarea -->
+381:   <div class="px-4 py-2">
+382:     <textarea
+           ^
+383:       placeholder="Caption your artwork... (optional)"
+384:       bind:value={caption}
+1:58:28 AM [vite-plugin-svelte] src/lib/components/SketchbookCanvas.svelte:466:12 Self-closing HTML tags for non-void elements are ambiguous — use `<div ...></div>` rather than `<div ... />`
+https://svelte.dev/e/element_invalid_self_closing_tag
+464:           />
+465:           <div class="w-8 h-8 rounded-full bg-white dark:bg-slate-900 flex items-center justify-center border border-slate-200/60 dark:border-slate-800/60 shadow-inner shrink-0 relative overflow-hidden">
+466:             <div
+                   ^
+467:               class="rounded-full transition-all"
+468:               style="width: {Math.max(2, Math.min(brushSize, 20))}px; height: {Math.max(2, Math.min(brushSize, 20))}px; background-color: {isDrawingTool === 'eraser' ? '#cbd5e1' : brushColor};"
+1:58:28 AM [vite-plugin-svelte] src/lib/components/SketchbookCanvas.svelte:509:8 Self-closing HTML tags for non-void elements are ambiguous — use `<canvas ...></canvas>` rather than `<canvas ... />`
+https://svelte.dev/e/element_invalid_self_closing_tag
+507:       <!-- Center Panel: Canvas -->
+508:       <div class="sketchbook-canvas-frame relative w-full max-w-[400px] aspect-square rounded-xl overflow-hidden border-2 border-slate-100 dark:border-slate-900 shadow-sm shadow-black/5 dark:shadow-black/20 order-2 md:order-2 shrink-0">
+509:         <canvas
+               ^
+510:           bind:this={canvasRef}
+511:           width={600}
+1:58:28 AM [vite-plugin-svelte] src/lib/components/SketchbookCanvas.svelte:515:8 Self-closing HTML tags for non-void elements are ambiguous — use `<canvas ...></canvas>` rather than `<canvas ... />`
+https://svelte.dev/e/element_invalid_self_closing_tag
+513:           class="absolute inset-0 w-full h-full shadow-[inset_0_2px_8px_rgba(0,0,0,0.06)]"
+514:         />
+515:         <canvas
+               ^
+516:           bind:this={tempCanvasRef}
+517:           width={600}
+1:58:28 AM [vite-plugin-svelte] src/lib/components/SketchbookCanvas.svelte:531:12 Self-closing HTML tags for non-void elements are ambiguous — use `<button ...></button>` rather than `<button ... />`
+https://svelte.dev/e/element_invalid_self_closing_tag
+529:         <div class="grid grid-cols-5 md:flex md:flex-col md:justify-between md:items-center md:h-full gap-2.5 md:gap-3 w-full h-full bg-slate-100/45 dark:bg-slate-950/55 px-2 py-3 rounded-lg border border-slate-200/30 dark:border-slate-800/40">
+530:           {#each PRESETS as color}
+531:             <button
+                   ^
+532:               type="button"
+533:               on:click={() => (brushColor = color.hex)}
+1:58:28 AM [vite-plugin-svelte] src/lib/components/SketchbookCanvas.svelte:9:13 Component has unused export property 'showNotification'. If it is for external reference only, please consider using `export const showNotification`
+https://svelte.dev/e/export_let_unused
+ 7:   export let isCooldownActive = false;
+ 8:   export let cooldownLabel = '';
+ 9:   export let showNotification: (msg: string) => void;
+                                                        ^
+10:   export let active = true;
+11:   export let embedded = false;
+1:58:28 AM [vite-plugin-svelte] src/lib/components/SuggestionForm.svelte:287:4 Self-closing HTML tags for non-void elements are ambiguous — use `<textarea ...></textarea>` rather than `<textarea ... />`
+https://svelte.dev/e/element_invalid_self_closing_tag
+285: 
+286:   <div class="relative">
+287:     <textarea
+           ^
+288:       bind:this={emojiTarget}
+289:       bind:value={note}
+1:58:28 AM [vite-plugin-svelte] src/lib/components/TalkPostForm.svelte:87:4 Self-closing HTML tags for non-void elements are ambiguous — use `<textarea ...></textarea>` rather than `<textarea ... />`
+https://svelte.dev/e/element_invalid_self_closing_tag
+85:   <!-- Middle: Message Field -->
+86:   <div class="px-4 py-4 relative">
+87:     <textarea
+          ^
+88:       bind:this={emojiTarget}
+89:       bind:value={body}
+1:58:28 AM [vite-plugin-svelte] src/lib/components/TalkPostItem.svelte:291:12 Self-closing HTML tags for non-void elements are ambiguous — use `<textarea ...></textarea>` rather than `<textarea ... />`
+https://svelte.dev/e/element_invalid_self_closing_tag
+289:         <div class="flex-grow min-w-0">
+290:           <div class="relative">
+291:             <textarea
+                   ^
+292:               bind:this={replyTextareaEl}
+293:               bind:value={replyBody}
+1:58:28 AM [vite-plugin-svelte] src/lib/components/TalkPostItem.svelte:365:12 Self-closing HTML tags for non-void elements are ambiguous — use `<textarea ...></textarea>` rather than `<textarea ... />`
+https://svelte.dev/e/element_invalid_self_closing_tag
+363:         <div class="flex-grow min-w-0">
+364:           <div class="relative">
+365:             <textarea
+                   ^
+366:               bind:this={followUpTextareaEl}
+367:               bind:value={followUpBody}
+1:58:32 AM [vite-plugin-svelte] src/lib/components/BoardThreadBubble.svelte:173:10 Self-closing HTML tags for non-void elements are ambiguous — use `<textarea ...></textarea>` rather than `<textarea ... />`
+https://svelte.dev/e/element_invalid_self_closing_tag
+171:       <div class="space-y-3">
+172:         <div class="relative">
+173:           <textarea
+                 ^
+174:             bind:this={editTextareaEl}
+175:             bind:value={editBody}
+1:58:32 AM [vite-plugin-svelte] src/lib/components/BoardThreadBubble.svelte:25:13 Component has unused export property 'depth'. If it is for external reference only, please consider using `export const depth`
+https://svelte.dev/e/export_let_unused
+23:     imageUrls?: string[];
+24:   };
+25:   export let depth: number;
+                              ^
+26:   export let author = 'anonymous';
+27:   export let isEditing = false;
+1:58:47 AM [vite-plugin-svelte] src/routes/blog/posts/flowers-interview/content.mdx:38:3 Screenreaders already announce `<img>` elements as an image
+https://svelte.dev/e/a11y_img_redundant_alt
+36: <p><strong>Takamatsu:</strong> And they said, “Probably the rocks.” (laughs)</p>
+37: <p><strong>Kodama:</strong> The rocks?! (laughs) Yes, it’s a scenic spot called Megane-iwa (Spectacles Rock). That’s the kind of thing you can’t find just by looking up materials in a library.</p>
+38: <p><img src="/blog/flowers-interview/1.png" alt="Image 1">
+                                                              ^
+39: <em>The meeting of Kaoru and Sentarō, which Takamatsu-sensei described as being ‘like a religious painting.’ From Kids on the Slope.</em></p>
+40: <p><strong>Takamatsu:</strong> That’s something I would have never known. It’s so interesting to hear a story that could only come from someone who lived back then.</p>
+1:58:47 AM [vite-plugin-svelte] src/routes/blog/posts/flowers-interview/content.mdx:46:3 Screenreaders already announce `<img>` elements as an image
+https://svelte.dev/e/a11y_img_redundant_alt
+44: <p><strong>Kodama:</strong> I love it! <em>Skip and Loafer</em>, at first glance, has this heartwarming, warm, and gentle image, but the way the characters’ emotions plummet is incredible.</p>
+45: <p><strong>Takamatsu:</strong> Thank you very much.</p>
+46: <p><img src="/blog/flowers-interview/2.jpg" alt="Image 2">
+                                                              ^
+47: <em>The sci-fi story “Kanaria-tachi no Fune” (The Boat of Canaries), which depicts a desperate struggle for survival in another world.</em></p>
+48: <p><strong>Interviewer:</strong> Kodama-sensei, what scene from <em>Skip and Loafer</em> left a particular impression on you?</p>
+1:58:47 AM [vite-plugin-svelte] src/routes/blog/posts/flowers-interview/content.mdx:56:3 Screenreaders already announce `<img>` elements as an image
+https://svelte.dev/e/a11y_img_redundant_alt
+54: <p><strong>Takamatsu:</strong> You’re praising me so much… (laughs). That’s what I always think. It shines in various ways… that’s the feeling I get.</p>
+55: <p><strong>Kodama:</strong> Everyone thinks so!</p>
+56: <p><img src="/blog/flowers-interview/3.webp" alt="Image 3">
+                                                               ^
+57: <em>A glimpse of the ‘local realism’ that Kodama-sensei is particular about. From Ao no Hana: The Forest of Pottery.</em></p>
+58: <hr>
+1:58:47 AM [vite-plugin-svelte] src/routes/blog/posts/flowers-interview/content.mdx:93:3 Screenreaders already announce `<img>` elements as an image
+https://svelte.dev/e/a11y_img_redundant_alt
+91: <p><strong>Kodama:</strong> Becoming good friends with the people you’re interviewing is very important, isn’t it? I think I have good luck, too. At my research locations, I always meet kind people who are eager to teach me. At the end of the final volume of <em>Apollon</em>, there was an illustration of the Owara festival as a preview for <em>Baby</em>, and through that illustration, I connected with an active dancer on social media, who then let me interview them… that kind of thing happened.</p>
+92: <p><strong>Takamatsu:</strong> You really attract good fortune! It must be a reflection of your wonderful character!</p>
+93: <p><img src="/blog/flowers-interview/4.jpeg" alt="Image 4">
+                                                               ^
+94: <em>A famous scene where they go to eat gyoza and reaffirm their friendship. From “Skip and Loafer.”</em></p>
+95: <hr>
+1:58:47 AM [vite-plugin-svelte] src/routes/blog/posts/flowers-interview/content.mdx:108:3 Screenreaders already announce `<img>` elements as an image
+https://svelte.dev/e/a11y_img_redundant_alt
+106: <p><strong>Takamatsu:</strong> That does happen. So it’s the same for you, sensei.</p>
+107: <p><strong>Kodama:</strong> (Laughs) Things like that happen quite a lot, yes.</p>
+108: <p><img src="/blog/flowers-interview/5.jpg" alt="Image 5">
+                                                               ^
+109: <em>“Skip and Loafer,” for which a second season of the TV anime has also been decided.</em></p>
+110: <hr>
+1:58:47 AM [vite-plugin-svelte] src/routes/blog/posts/flowers-interview/content.mdx:123:3 Screenreaders already announce `<img>` elements as an image
+https://svelte.dev/e/a11y_img_redundant_alt
+121: <p><strong>Kodama:</strong> In <em>Apollon</em>, there are things Kaoru says even though he likes Ritsuko, and scenes where Sentarō and Kaoru, knowing it’s not the other’s fault, push each other into a corner and get overwhelmed and lash out. It’s the same in <em>Baby</em>, right? There’s a scene where a character gets angry precisely because they love the other person, and in <em>Ao no Hana</em> they break up even though they love each other…</p>
+122: <p><strong>Takamatsu:</strong> You’ve read them so closely… thank you so much!</p>
+123: <p><img src="/blog/flowers-interview/6.png" alt="Image 6">
+                                                               ^
+124: <em>Maruo, skillfully playing the guitar. From “Kids on the Slope.”</em></p>
+125: <hr>
+1:58:47 AM [vite-plugin-svelte] src/routes/blog/posts/flowers-interview/content.mdx:136:3 Screenreaders already announce `<img>` elements as an image
+https://svelte.dev/e/a11y_img_redundant_alt
+134: <p><strong>Kodama:</strong> Yes! Speak through the piano, confess through the piano, and get rejected… that kind of youth I wish I had. Hikaru from <em>Baby</em> was a character created based on the premise of “what if there was a boy living there…,” so I’m not that invested in him, but with Kaoru, I might be projecting a little bit of the youth I wanted to live, plus it’d be nice if he could play piano, and it’d be great if he were a genius (laughs), he’s a character packed full of those kinds of dreams.</p>
+135: <p><strong>Takamatsu:</strong> That’s great. A great story (laughs)!</p>
+136: <p><img src="/blog/flowers-interview/7.jpg" alt="Image 7">
+                                                               ^
+137: <em>Mika, whose complexes led her to adopt a sarcastic tone, but… From “Skip and Loafer”.</em></p>
+138: <hr>
+1:58:47 AM [vite-plugin-svelte] src/routes/blog/posts/flowers-interview/content.mdx:165:3 Screenreaders already announce `<img>` elements as an image
+https://svelte.dev/e/a11y_img_redundant_alt
+163: <p><strong>Kodama:</strong> It’s my 25th anniversary… I’m a bit surprised myself at how long it’s been. Since my debut, the first two magazines I worked for went out of publication, and I had a blank period for some years after that… so I’m truly grateful to have been able to draw continuously for <em>flowers</em> where I re-debuted. It’s because I’ve continued that I’m able to meet with you like this, Takamatsu-sensei, and talk so much, so I’m truly happy. Thank you very much!</p>
+164: <p><strong>Takamatsu:</strong> The pleasure was all mine, thank you very much!</p>
+165: <p><img src="/blog/flowers-interview/8.jpg" alt="Image 8">
+                                                               ^
+166: <em>Tsukina, From “The Wolf’s Daughter”.</em></p>
+167: <hr>
+1:58:47 AM [vite-plugin-svelte] src/routes/blog/posts/flowers-interview/content.mdx:174:3 Screenreaders already announce `<img>` elements as an image
+https://svelte.dev/e/a11y_img_redundant_alt
+172: <p><strong>(Illustration 2: “‘Skip and Loafer’” as drawn by Yuki Kodama)</strong>
+173: Handwritten text: “Yuki Kodama-sensei,” “Thank you for the conversation ♡,” “I’m looking forward to more of ‘The Wolf’s Daughter’!”</p>
+174: <p><img src="/blog/flowers-interview/9.png" alt="Image 9">
+                                                               ^
+175: <em>Fan art for each other manga, drawn by Takamatsu-sensei and Kodama-sensei</em></p>
+176: <hr>
+1:58:47 AM [vite-plugin-svelte] src/routes/blog/posts/flowers-interview/content.mdx:199:3 Screenreaders already announce `<img>` elements as an image
+https://svelte.dev/e/a11y_img_redundant_alt
+197: <h3 id="special-present"><strong>Special present!!!</strong></h3>
+198: <p><strong>Autographed books by Yuki Kodama-sensei & Misaki Takamatsu-sensei for 1 winner</strong></p>
+199: <p><img src="/blog/flowers-interview/10.png" alt="Image 10">
+                                                                 ^
+200: <em>Special present!</em></p>
+201: <p><strong>How to Enter:</strong></p>
+1:58:47 AM [vite-plugin-svelte] src/routes/blog/posts/my-thoughts-about-chapter-67/content.mdx:35:0 `<h2>` element should contain text
+https://svelte.dev/e/a11y_missing_content
+33: </blockquote>
+34: <p>2024 was my year of discipline and preliminaries. 2025 is the year where there will be multiple echelons of elevations in my knowledge fabric. Watch this space.</p>
+35: <h2 id><br /></h2>
+                      ^
+36: <h3 id="resources">Resources</h3>
+37: <ol>
+1:58:47 AM [vite-plugin-svelte] src/routes/blog/posts/my-2025-resolution/content.mdx:35:0 `<h2>` element should contain text
+https://svelte.dev/e/a11y_missing_content
+33: </blockquote>
+34: <p>2024 was my year of discipline and preliminaries. 2025 is the year where there will be multiple echelons of elevations in my knowledge fabric. Watch this space.</p>
+35: <h2 id><br /></h2>
+                      ^
+36: <h3 id="resources">Resources</h3>
+37: <ol>
+1:58:47 AM [vite-plugin-svelte] src/routes/blog/posts/takamatsu-autograph-taiwan/content.mdx:95:3 Screenreaders already announce `<img>` elements as an image
+https://svelte.dev/e/a11y_img_redundant_alt
+93: <hr>
+94: <h3 id="memories-captured-a-group-photo-with-the-wonderful-fans-"><strong>Memories captured: A group photo with the wonderful fans!</strong> 📸</h3>
+95: <p><img
+     ^
+96:   src="/blog/takamatsu-interview-taiwan-tour/9.jpg"
+97:   alt="Group photo with all the fans"
+1:58:48 AM [vite-plugin-svelte] src/routes/blog/posts/shima-mitsumi-nao-thoughts/content.mdx:32:0 `<h2>` element should contain text
+https://svelte.dev/e/a11y_missing_content
+30: <p>you wonder how the beach will look like when you are happy, and when you are sad. and when you are in that sadness feeling, everything is full of messy, not even a seashell, a grain of sand and grass looks beautifully there, but rather than spikey. it may be comfortable at first, but the more you see it, the painful it gets. it’s just what life is made to be, messy, unorganized. but that isn’t meant to be, at that moment, this messiness is also a call to action. our desires are strong, we don’t want to live like that way, so we stand up, and run to somewhere further, to somewhere that we think it can bring happiness to us. like nao, like anyone grappling with life’s messiness, doesn’t want to stay amidst the overgrown weeds forever. maybe she could might hurt, but her path is no longer dictated by others. there’s no turning back, only forward. only moving forward, then you know how the life isn’t just messy that much, and the weeds never seem to be like the way it was before, and that seashell isn’t much matter now.</p>
+31: <p>while past pains cannot be erased, they can be reframed. the fading color of the seashell echoes the slow healing process—how time softens the sharp edges of grief, turning once-vivid memories into something faint, less consuming, and more manageable. this mirrors her potential for growth, as she seeks new experiences and colors to bring meaning to her life. life is full of different colors, so just go and find it, maybe bring that color to heal the sadness, the grief of time, of emotions, of memories. it worth more than just looking at beach and do nothing.</p>
+32: <h2 id><br /></h2>
+                      ^
+33: <h3 id="resources">Resources</h3>
+34: <ol>
+1:58:54 AM [vite-plugin-svelte] src/routes/artworks/kemutai-hanashi/+page.svelte:287:2 Unused CSS selector ".kemutai-lightbox"
+https://svelte.dev/e/css_unused_selector
+285: 
+286:   /* Lightbox */
+287:   .kemutai-lightbox {
+                        ^
+288:     position: fixed;
+289:     inset: 0;
+1:58:54 AM [vite-plugin-svelte] src/routes/artworks/kemutai-hanashi/+page.svelte:297:2 Unused CSS selector ".kemutai-lightbox-backdrop"
+https://svelte.dev/e/css_unused_selector
+295:   }
+296: 
+297:   .kemutai-lightbox-backdrop {
+                                 ^
+298:     position: absolute;
+299:     inset: 0;
+1:58:54 AM [vite-plugin-svelte] src/routes/artworks/kemutai-hanashi/+page.svelte:305:2 Unused CSS selector ".kemutai-lightbox-inner"
+https://svelte.dev/e/css_unused_selector
+303:   }
+304: 
+305:   .kemutai-lightbox-inner {
+                              ^
+306:     position: relative;
+307:     z-index: 1;
+1:58:54 AM [vite-plugin-svelte] src/routes/artworks/kemutai-hanashi/+page.svelte:315:2 Unused CSS selector ".kemutai-lightbox-close"
+https://svelte.dev/e/css_unused_selector
+313:   }
+314: 
+315:   .kemutai-lightbox-close {
+                              ^
+316:     position: absolute;
+317:     top: -2.5rem;
+1:58:54 AM [vite-plugin-svelte] src/routes/artworks/kemutai-hanashi/+page.svelte:332:2 Unused CSS selector ".kemutai-lightbox-close:hover"
+https://svelte.dev/e/css_unused_selector
+330:   }
+331: 
+332:   .kemutai-lightbox-close:hover {
+                                    ^
+333:     background: rgba(255, 255, 255, 0.2);
+334:   }
+1:58:54 AM [vite-plugin-svelte] src/routes/artworks/kemutai-hanashi/+page.svelte:336:2 Unused CSS selector ".kemutai-lightbox-figure"
+https://svelte.dev/e/css_unused_selector
+334:   }
+335: 
+336:   .kemutai-lightbox-figure {
+                               ^
+337:     display: flex;
+338:     flex-direction: column;
+1:58:54 AM [vite-plugin-svelte] src/routes/artworks/kemutai-hanashi/+page.svelte:344:2 Unused CSS selector ".kemutai-lightbox-figure img"
+https://svelte.dev/e/css_unused_selector
+342:   }
+343: 
+344:   .kemutai-lightbox-figure img {
+                                   ^
+345:     max-width: 80vw;
+346:     max-height: 80vh;
+1:58:54 AM [vite-plugin-svelte] src/routes/artworks/kemutai-hanashi/+page.svelte:353:2 Unused CSS selector ".kemutai-lightbox-figure figcaption"
+https://svelte.dev/e/css_unused_selector
+351:   }
+352: 
+353:   .kemutai-lightbox-figure figcaption {
+                                          ^
+354:     color: rgba(255, 255, 255, 0.6);
+355:     font-family: var(--font-mono);
+1:58:54 AM [vite-plugin-svelte] src/routes/artworks/kemutai-hanashi/+page.svelte:359:2 Unused CSS selector ".kemutai-lightbox-nav"
+https://svelte.dev/e/css_unused_selector
+357:   }
+358: 
+359:   .kemutai-lightbox-nav {
+                            ^
+360:     background: rgba(255, 255, 255, 0.1);
+361:     border: 1px solid rgba(255, 255, 255, 0.2);
+1:58:54 AM [vite-plugin-svelte] src/routes/artworks/kemutai-hanashi/+page.svelte:374:2 Unused CSS selector ".kemutai-lightbox-nav:hover"
+https://svelte.dev/e/css_unused_selector
+372:   }
+373: 
+374:   .kemutai-lightbox-nav:hover {
+                                  ^
+375:     background: rgba(255, 255, 255, 0.22);
+376:   }
+1:58:54 AM [vite-plugin-svelte] src/lib/components/RecommendationGenerator.svelte:249:14 Visible, non-interactive element `<span>` with a click event must be accompanied by a keyboard event handler. Consider whether an interactive element such as `<button type="button">` or `<a>` might be more appropriate
+https://svelte.dev/e/a11y_click_events_have_key_events
+247:             {item.title || `card #${idx + 1}`}
+248:             {#if items.length > 1}
+249:               <span
+                         ^
+250:                 class="gen-tab-remove"
+251:                 role="button"
+1:58:54 AM [vite-plugin-svelte] src/lib/components/RecommendationGenerator.svelte:439:16 Visible, non-interactive element `<div>` with a click event must be accompanied by a keyboard event handler. Consider whether an interactive element such as `<button type="button">` or `<a>` might be more appropriate
+https://svelte.dev/e/a11y_click_events_have_key_events
+437:               {@const isSameRow = Math.floor(idx / 2) === Math.floor(activeIndex / 2)}
+438:               {#if isSameRow}
+439:                 <div
+                          ^
+440:                   class="gen-card-wrap"
+441:                   class:active={activeIndex === idx && !isExporting}
+1:58:54 AM [vite-plugin-svelte] src/lib/components/RecommendationGenerator.svelte:457:14 Visible, non-interactive element `<div>` with a click event must be accompanied by a keyboard event handler. Consider whether an interactive element such as `<button type="button">` or `<a>` might be more appropriate
+https://svelte.dev/e/a11y_click_events_have_key_events
+455:           <div class="gen-grid" class:force-2col={isExporting}>
+456:             {#each items as item, idx}
+457:               <div
+                        ^
+458:                 class="gen-card-wrap"
+459:                 class:active={activeIndex === idx && !isExporting}
+1:58:54 AM [vite-plugin-svelte] src/lib/components/ZineBookshelf.svelte:238:4 Elements with the 'toolbar' interactive role must have a tabindex value
+https://svelte.dev/e/a11y_interactive_supports_focus
+236:   >
+237:     <!-- Floating controls bar -->
+238:     <div
+              ^
+239:       class="zine-fs-controls"
+240:       role="toolbar"
+(node:31904) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+1:58:54 AM [vite-plugin-svelte] src/lib/components/ImageCropperModal.svelte:208:0 Visible, non-interactive element `<div>` with a click event must be accompanied by a keyboard event handler. Consider whether an interactive element such as `<button type="button">` or `<a>` might be more appropriate
+https://svelte.dev/e/a11y_click_events_have_key_events
+206: </script>
+207: 
+208: <div use:portal class="cropper-overlay" transition:fade={{ duration: 180 }} on:click|self={() => dispatch('close')} role="dialog" aria-modal="true" tabindex="-1">
+           ^
+209:   <div class="cropper-modal" transition:scale={{ duration: 220, start: 0.95 }}>
+210:     <!-- Header -->
+1:58:54 AM [vite-plugin-svelte] src/lib/components/ImageCropperModal.svelte:219:4 Non-interactive element `<div>` should not be assigned mouse or keyboard event listeners
+https://svelte.dev/e/a11y_no_noninteractive_element_interactions
+217: 
+218:     <!-- Workspace -->
+219:     <div
+              ^
+220:       bind:this={containerEl}
+221:       class="cropper-workspace"
+✓ 4077 modules transformed.
+rendering chunks...
+vite v7.3.5 building client environment for production...
+(node:31904) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+transforming...
+1:59:10 AM [vite-plugin-svelte] src/lib/components/PageIntro.svelte:8:13 Component has unused export property 'showPrideBadge'. If it is for external reference only, please consider using `export const showPrideBadge`
+https://svelte.dev/e/export_let_unused
+ 6:   export let description = '';
+ 7:   export let showDescription = false;
+ 8:   export let showPrideBadge = false;
+                               ^
+ 9: </script>
+10: 
+1:59:12 AM [vite-plugin-svelte] src/routes/notes/pytorch/content.mdx:184:3 Screenreaders already announce `<img>` elements as an image
+https://svelte.dev/e/a11y_img_redundant_alt
+182: <p>From PyTorch:</p>
+183: <p><code>inference_mode()</code> is <code>torch.no_grad()</code> on steroids.</p>
+184: <p><img src="/pytorch/inference_mode.png" alt="inference-mode image"></p>
+                                                                          ^
+185: <p><em>Screenshot taken from PyTorch’s official tweet made on Sep 25, 2021. <a
+186:   href="https://x.com/PyTorch/status/1437838236529868803"
+1:59:12 AM [vite-plugin-svelte] src/lib/components/ImageGallery.svelte:362:4 Self-closing HTML tags for non-void elements are ambiguous — use `<button ...></button>` rather than `<button ... />`
+https://svelte.dev/e/element_invalid_self_closing_tag
+360:   >
+361:     <!-- Close target -->
+362:     <button
+           ^
+363:       type="button"
+364:       aria-label="Close lightbox backdrop" on:click|stopPropagation={closeLightbox}
+1:59:12 AM [vite-plugin-svelte] src/lib/components/ImageGallery.svelte:413:8 Non-interactive element `<div>` should not be assigned mouse or keyboard event listeners
+https://svelte.dev/e/a11y_no_noninteractive_element_interactions
+411: 
+412:         <!-- Interactive Zoom/Pan container wrapper -->
+413:         <div
+                  ^
+414:           on:mousedown|stopPropagation={handleMouseDown}
+415:           on:mousemove|stopPropagation={handleMouseMove}
+1:59:12 AM [vite-plugin-svelte] src/lib/components/DrawPromptItem.svelte:316:12 Self-closing HTML tags for non-void elements are ambiguous — use `<textarea ...></textarea>` rather than `<textarea ... />`
+https://svelte.dev/e/element_invalid_self_closing_tag
+314:         <div class="flex-1 min-w-0">
+315:           <div class="relative">
+316:             <textarea
+                   ^
+317:               bind:this={replyTextareaEl}
+318:               bind:value={replyBody}
+1:59:12 AM [vite-plugin-svelte] src/lib/components/DrawPromptItem.svelte:390:12 Self-closing HTML tags for non-void elements are ambiguous — use `<textarea ...></textarea>` rather than `<textarea ... />`
+https://svelte.dev/e/element_invalid_self_closing_tag
+388:         <div class="flex-1 min-w-0">
+389:           <div class="relative">
+390:             <textarea
+                   ^
+391:               bind:this={followUpTextareaEl}
+392:               bind:value={followUpBody}
+1:59:12 AM [vite-plugin-svelte] src/lib/components/DrawPromptForm.svelte:90:4 Self-closing HTML tags for non-void elements are ambiguous — use `<textarea ...></textarea>` rather than `<textarea ... />`
+https://svelte.dev/e/element_invalid_self_closing_tag
+88:   <!-- Middle: Prompt Field -->
+89:   <div class="px-4 py-4 relative">
+90:     <textarea
+          ^
+91:       bind:this={bodyTextareaEl}
+92:       bind:value={body}
+1:59:12 AM [vite-plugin-svelte] src/lib/components/BoardShell.svelte:9:13 Component has unused export property 'isLoading'. If it is for external reference only, please consider using `export const isLoading`
+https://svelte.dev/e/export_let_unused
+ 7:   export let count: number;
+ 8:   export let isRefreshing = false;
+ 9:   export let isLoading = false;
+                          ^
+10:   export let isAdminMode = false;
+11:   export let passcode = '';
+1:59:12 AM [vite-plugin-svelte] src/lib/components/SketchbookCard.svelte:41:2 Visible, non-interactive element `<div>` with a click event must be accompanied by a keyboard event handler. Consider whether an interactive element such as `<button type="button">` or `<a>` might be more appropriate
+https://svelte.dev/e/a11y_click_events_have_key_events
+39: >
+40:   <!-- Drawing Image on the Left -->
+41:   <div 
+            ^
+42:     class="relative bg-white dark:bg-slate-950 shrink-0 border-slate-200/60 dark:border-slate-800/60 h-64 sm:h-auto w-full sm:w-64 md:w-80 border-b sm:border-b-0 sm:border-r flex flex-col justify-center overflow-hidden" 
+43:     on:click|stopPropagation
+1:59:12 AM [vite-plugin-svelte] src/lib/components/SketchbookCard.svelte:41:2 `<div>` with a click handler must have an ARIA role
+https://svelte.dev/e/a11y_no_static_element_interactions
+39: >
+40:   <!-- Drawing Image on the Left -->
+41:   <div 
+            ^
+42:     class="relative bg-white dark:bg-slate-950 shrink-0 border-slate-200/60 dark:border-slate-800/60 h-64 sm:h-auto w-full sm:w-64 md:w-80 border-b sm:border-b-0 sm:border-r flex flex-col justify-center overflow-hidden" 
+43:     on:click|stopPropagation
+1:59:12 AM [vite-plugin-svelte] src/lib/components/SketchbookCard.svelte:128:10 Visible, non-interactive element `<div>` with a click event must be accompanied by a keyboard event handler. Consider whether an interactive element such as `<button type="button">` or `<a>` might be more appropriate
+https://svelte.dev/e/a11y_click_events_have_key_events
+126:         <!-- Admin moderation controls -->
+127:         {#if isAdminMode}
+128:           <div class="flex items-center gap-2.5" on:click|stopPropagation>
+                     ^
+129:             <button
+130:               type="button"
+1:59:12 AM [vite-plugin-svelte] src/lib/components/SketchbookCard.svelte:128:10 `<div>` with a click handler must have an ARIA role
+https://svelte.dev/e/a11y_no_static_element_interactions
+126:         <!-- Admin moderation controls -->
+127:         {#if isAdminMode}
+128:           <div class="flex items-center gap-2.5" on:click|stopPropagation>
+                     ^
+129:             <button
+130:               type="button"
+1:59:12 AM [vite-plugin-svelte] src/lib/components/SketchbookCard.svelte:154:8 Visible, non-interactive element `<div>` with a click event must be accompanied by a keyboard event handler. Consider whether an interactive element such as `<button type="button">` or `<a>` might be more appropriate
+https://svelte.dev/e/a11y_click_events_have_key_events
+152:       <!-- Admin inline reply form in gallery card -->
+153:       {#if isReplying && isAdminMode}
+154:         <div class="flex flex-col gap-2 pt-2 border-t border-slate-200/30 dark:border-slate-800/30" on:click|stopPropagation>
+                   ^
+155:           <textarea
+156:             placeholder="Mike, write feedback..."
+1:59:12 AM [vite-plugin-svelte] src/lib/components/SketchbookCard.svelte:154:8 `<div>` with a click handler must have an ARIA role
+https://svelte.dev/e/a11y_no_static_element_interactions
+152:       <!-- Admin inline reply form in gallery card -->
+153:       {#if isReplying && isAdminMode}
+154:         <div class="flex flex-col gap-2 pt-2 border-t border-slate-200/30 dark:border-slate-800/30" on:click|stopPropagation>
+                   ^
+155:           <textarea
+156:             placeholder="Mike, write feedback..."
+1:59:12 AM [vite-plugin-svelte] src/lib/components/SketchbookCard.svelte:155:10 Self-closing HTML tags for non-void elements are ambiguous — use `<textarea ...></textarea>` rather than `<textarea ... />`
+https://svelte.dev/e/element_invalid_self_closing_tag
+153:       {#if isReplying && isAdminMode}
+154:         <div class="flex flex-col gap-2 pt-2 border-t border-slate-200/30 dark:border-slate-800/30" on:click|stopPropagation>
+155:           <textarea
+                 ^
+156:             placeholder="Mike, write feedback..."
+157:             bind:value={replyBody}
+1:59:12 AM [vite-plugin-svelte] src/lib/components/SketchbookCard.svelte:9:13 Component has unused export property 'passcode'. If it is for external reference only, please consider using `export const passcode`
+https://svelte.dev/e/export_let_unused
+ 7:   export let isAdminMode = false;
+ 8:   export let likedList: string[] = [];
+ 9:   export let passcode = '';
+                         ^
+10:   export let isPending = false;
+11:   export let buttonFeedback: Record<string, string> = {};
+1:59:12 AM [vite-plugin-svelte] src/lib/components/SketchbookCard.svelte:10:13 Component has unused export property 'isPending'. If it is for external reference only, please consider using `export const isPending`
+https://svelte.dev/e/export_let_unused
+ 8:   export let likedList: string[] = [];
+ 9:   export let passcode = '';
+10:   export let isPending = false;
+                          ^
+11:   export let buttonFeedback: Record<string, string> = {};
+12:   export let onLike: (id: string, e: MouseEvent) => void;
+1:59:13 AM [vite-plugin-svelte] src/lib/components/SketchbookCanvas.svelte:382:4 Self-closing HTML tags for non-void elements are ambiguous — use `<textarea ...></textarea>` rather than `<textarea ... />`
+https://svelte.dev/e/element_invalid_self_closing_tag
+380:   <!-- Caption textarea -->
+381:   <div class="px-4 py-2">
+382:     <textarea
+           ^
+383:       placeholder="Caption your artwork... (optional)"
+384:       bind:value={caption}
+1:59:13 AM [vite-plugin-svelte] src/lib/components/SketchbookCanvas.svelte:466:12 Self-closing HTML tags for non-void elements are ambiguous — use `<div ...></div>` rather than `<div ... />`
+https://svelte.dev/e/element_invalid_self_closing_tag
+464:           />
+465:           <div class="w-8 h-8 rounded-full bg-white dark:bg-slate-900 flex items-center justify-center border border-slate-200/60 dark:border-slate-800/60 shadow-inner shrink-0 relative overflow-hidden">
+466:             <div
+                   ^
+467:               class="rounded-full transition-all"
+468:               style="width: {Math.max(2, Math.min(brushSize, 20))}px; height: {Math.max(2, Math.min(brushSize, 20))}px; background-color: {isDrawingTool === 'eraser' ? '#cbd5e1' : brushColor};"
+1:59:13 AM [vite-plugin-svelte] src/lib/components/SketchbookCanvas.svelte:509:8 Self-closing HTML tags for non-void elements are ambiguous — use `<canvas ...></canvas>` rather than `<canvas ... />`
+https://svelte.dev/e/element_invalid_self_closing_tag
+507:       <!-- Center Panel: Canvas -->
+508:       <div class="sketchbook-canvas-frame relative w-full max-w-[400px] aspect-square rounded-xl overflow-hidden border-2 border-slate-100 dark:border-slate-900 shadow-sm shadow-black/5 dark:shadow-black/20 order-2 md:order-2 shrink-0">
+509:         <canvas
+               ^
+510:           bind:this={canvasRef}
+511:           width={600}
+1:59:13 AM [vite-plugin-svelte] src/lib/components/SketchbookCanvas.svelte:515:8 Self-closing HTML tags for non-void elements are ambiguous — use `<canvas ...></canvas>` rather than `<canvas ... />`
+https://svelte.dev/e/element_invalid_self_closing_tag
+513:           class="absolute inset-0 w-full h-full shadow-[inset_0_2px_8px_rgba(0,0,0,0.06)]"
+514:         />
+515:         <canvas
+               ^
+516:           bind:this={tempCanvasRef}
+517:           width={600}
+1:59:13 AM [vite-plugin-svelte] src/lib/components/SketchbookCanvas.svelte:531:12 Self-closing HTML tags for non-void elements are ambiguous — use `<button ...></button>` rather than `<button ... />`
+https://svelte.dev/e/element_invalid_self_closing_tag
+529:         <div class="grid grid-cols-5 md:flex md:flex-col md:justify-between md:items-center md:h-full gap-2.5 md:gap-3 w-full h-full bg-slate-100/45 dark:bg-slate-950/55 px-2 py-3 rounded-lg border border-slate-200/30 dark:border-slate-800/40">
+530:           {#each PRESETS as color}
+531:             <button
+                   ^
+532:               type="button"
+533:               on:click={() => (brushColor = color.hex)}
+1:59:13 AM [vite-plugin-svelte] src/lib/components/SketchbookCanvas.svelte:9:13 Component has unused export property 'showNotification'. If it is for external reference only, please consider using `export const showNotification`
+https://svelte.dev/e/export_let_unused
+ 7:   export let isCooldownActive = false;
+ 8:   export let cooldownLabel = '';
+ 9:   export let showNotification: (msg: string) => void;
+                                                        ^
+10:   export let active = true;
+11:   export let embedded = false;
+1:59:15 AM [vite-plugin-svelte] src/lib/components/SuggestionForm.svelte:287:4 Self-closing HTML tags for non-void elements are ambiguous — use `<textarea ...></textarea>` rather than `<textarea ... />`
+https://svelte.dev/e/element_invalid_self_closing_tag
+285: 
+286:   <div class="relative">
+287:     <textarea
+           ^
+288:       bind:this={emojiTarget}
+289:       bind:value={note}
+1:59:15 AM [vite-plugin-svelte] src/lib/components/SuggestionCard.svelte:373:10 Self-closing HTML tags for non-void elements are ambiguous — use `<textarea ...></textarea>` rather than `<textarea ... />`
+https://svelte.dev/e/element_invalid_self_closing_tag
+371:         </div>
+372:         <div class="flex-1 min-w-0 font-sans">
+373:           <textarea
+                 ^
+374:             bind:value={replyBody}
+375:             on:input={handleInput}
+1:59:15 AM [vite-plugin-svelte] src/lib/components/SuggestionCard.svelte:437:10 Self-closing HTML tags for non-void elements are ambiguous — use `<textarea ...></textarea>` rather than `<textarea ... />`
+https://svelte.dev/e/element_invalid_self_closing_tag
+435:         </div>
+436:         <div class="flex-1 min-w-0 font-sans">
+437:           <textarea
+                 ^
+438:             bind:value={followUpBody}
+439:             on:input={handleInput}
+1:59:16 AM [vite-plugin-svelte] src/lib/components/TalkPostForm.svelte:87:4 Self-closing HTML tags for non-void elements are ambiguous — use `<textarea ...></textarea>` rather than `<textarea ... />`
+https://svelte.dev/e/element_invalid_self_closing_tag
+85:   <!-- Middle: Message Field -->
+86:   <div class="px-4 py-4 relative">
+87:     <textarea
+          ^
+88:       bind:this={emojiTarget}
+89:       bind:value={body}
+1:59:16 AM [vite-plugin-svelte] src/lib/components/TalkPostItem.svelte:291:12 Self-closing HTML tags for non-void elements are ambiguous — use `<textarea ...></textarea>` rather than `<textarea ... />`
+https://svelte.dev/e/element_invalid_self_closing_tag
+289:         <div class="flex-grow min-w-0">
+290:           <div class="relative">
+291:             <textarea
+                   ^
+292:               bind:this={replyTextareaEl}
+293:               bind:value={replyBody}
+1:59:16 AM [vite-plugin-svelte] src/lib/components/TalkPostItem.svelte:365:12 Self-closing HTML tags for non-void elements are ambiguous — use `<textarea ...></textarea>` rather than `<textarea ... />`
+https://svelte.dev/e/element_invalid_self_closing_tag
+363:         <div class="flex-grow min-w-0">
+364:           <div class="relative">
+365:             <textarea
+                   ^
+366:               bind:this={followUpTextareaEl}
+367:               bind:value={followUpBody}
+1:59:32 AM [vite-plugin-svelte] src/lib/components/BoardThreadBubble.svelte:173:10 Self-closing HTML tags for non-void elements are ambiguous — use `<textarea ...></textarea>` rather than `<textarea ... />`
+https://svelte.dev/e/element_invalid_self_closing_tag
+171:       <div class="space-y-3">
+172:         <div class="relative">
+173:           <textarea
+                 ^
+174:             bind:this={editTextareaEl}
+175:             bind:value={editBody}
+1:59:32 AM [vite-plugin-svelte] src/lib/components/BoardThreadBubble.svelte:25:13 Component has unused export property 'depth'. If it is for external reference only, please consider using `export const depth`
+https://svelte.dev/e/export_let_unused
+23:     imageUrls?: string[];
+24:   };
+25:   export let depth: number;
+                              ^
+26:   export let author = 'anonymous';
+27:   export let isEditing = false;
+1:59:38 AM [vite-plugin-svelte] src/routes/blog/posts/flowers-interview/content.mdx:38:3 Screenreaders already announce `<img>` elements as an image
+https://svelte.dev/e/a11y_img_redundant_alt
+36: <p><strong>Takamatsu:</strong> And they said, “Probably the rocks.” (laughs)</p>
+37: <p><strong>Kodama:</strong> The rocks?! (laughs) Yes, it’s a scenic spot called Megane-iwa (Spectacles Rock). That’s the kind of thing you can’t find just by looking up materials in a library.</p>
+38: <p><img src="/blog/flowers-interview/1.png" alt="Image 1">
+                                                              ^
+39: <em>The meeting of Kaoru and Sentarō, which Takamatsu-sensei described as being ‘like a religious painting.’ From Kids on the Slope.</em></p>
+40: <p><strong>Takamatsu:</strong> That’s something I would have never known. It’s so interesting to hear a story that could only come from someone who lived back then.</p>
+1:59:38 AM [vite-plugin-svelte] src/routes/blog/posts/flowers-interview/content.mdx:46:3 Screenreaders already announce `<img>` elements as an image
+https://svelte.dev/e/a11y_img_redundant_alt
+44: <p><strong>Kodama:</strong> I love it! <em>Skip and Loafer</em>, at first glance, has this heartwarming, warm, and gentle image, but the way the characters’ emotions plummet is incredible.</p>
+45: <p><strong>Takamatsu:</strong> Thank you very much.</p>
+46: <p><img src="/blog/flowers-interview/2.jpg" alt="Image 2">
+                                                              ^
+47: <em>The sci-fi story “Kanaria-tachi no Fune” (The Boat of Canaries), which depicts a desperate struggle for survival in another world.</em></p>
+48: <p><strong>Interviewer:</strong> Kodama-sensei, what scene from <em>Skip and Loafer</em> left a particular impression on you?</p>
+1:59:38 AM [vite-plugin-svelte] src/routes/blog/posts/flowers-interview/content.mdx:56:3 Screenreaders already announce `<img>` elements as an image
+https://svelte.dev/e/a11y_img_redundant_alt
+54: <p><strong>Takamatsu:</strong> You’re praising me so much… (laughs). That’s what I always think. It shines in various ways… that’s the feeling I get.</p>
+55: <p><strong>Kodama:</strong> Everyone thinks so!</p>
+56: <p><img src="/blog/flowers-interview/3.webp" alt="Image 3">
+                                                               ^
+57: <em>A glimpse of the ‘local realism’ that Kodama-sensei is particular about. From Ao no Hana: The Forest of Pottery.</em></p>
+58: <hr>
+1:59:38 AM [vite-plugin-svelte] src/routes/blog/posts/flowers-interview/content.mdx:93:3 Screenreaders already announce `<img>` elements as an image
+https://svelte.dev/e/a11y_img_redundant_alt
+91: <p><strong>Kodama:</strong> Becoming good friends with the people you’re interviewing is very important, isn’t it? I think I have good luck, too. At my research locations, I always meet kind people who are eager to teach me. At the end of the final volume of <em>Apollon</em>, there was an illustration of the Owara festival as a preview for <em>Baby</em>, and through that illustration, I connected with an active dancer on social media, who then let me interview them… that kind of thing happened.</p>
+92: <p><strong>Takamatsu:</strong> You really attract good fortune! It must be a reflection of your wonderful character!</p>
+93: <p><img src="/blog/flowers-interview/4.jpeg" alt="Image 4">
+                                                               ^
+94: <em>A famous scene where they go to eat gyoza and reaffirm their friendship. From “Skip and Loafer.”</em></p>
+95: <hr>
+1:59:38 AM [vite-plugin-svelte] src/routes/blog/posts/flowers-interview/content.mdx:108:3 Screenreaders already announce `<img>` elements as an image
+https://svelte.dev/e/a11y_img_redundant_alt
+106: <p><strong>Takamatsu:</strong> That does happen. So it’s the same for you, sensei.</p>
+107: <p><strong>Kodama:</strong> (Laughs) Things like that happen quite a lot, yes.</p>
+108: <p><img src="/blog/flowers-interview/5.jpg" alt="Image 5">
+                                                               ^
+109: <em>“Skip and Loafer,” for which a second season of the TV anime has also been decided.</em></p>
+110: <hr>
+1:59:38 AM [vite-plugin-svelte] src/routes/blog/posts/flowers-interview/content.mdx:123:3 Screenreaders already announce `<img>` elements as an image
+https://svelte.dev/e/a11y_img_redundant_alt
+121: <p><strong>Kodama:</strong> In <em>Apollon</em>, there are things Kaoru says even though he likes Ritsuko, and scenes where Sentarō and Kaoru, knowing it’s not the other’s fault, push each other into a corner and get overwhelmed and lash out. It’s the same in <em>Baby</em>, right? There’s a scene where a character gets angry precisely because they love the other person, and in <em>Ao no Hana</em> they break up even though they love each other…</p>
+122: <p><strong>Takamatsu:</strong> You’ve read them so closely… thank you so much!</p>
+123: <p><img src="/blog/flowers-interview/6.png" alt="Image 6">
+                                                               ^
+124: <em>Maruo, skillfully playing the guitar. From “Kids on the Slope.”</em></p>
+125: <hr>
+1:59:38 AM [vite-plugin-svelte] src/routes/blog/posts/flowers-interview/content.mdx:136:3 Screenreaders already announce `<img>` elements as an image
+https://svelte.dev/e/a11y_img_redundant_alt
+134: <p><strong>Kodama:</strong> Yes! Speak through the piano, confess through the piano, and get rejected… that kind of youth I wish I had. Hikaru from <em>Baby</em> was a character created based on the premise of “what if there was a boy living there…,” so I’m not that invested in him, but with Kaoru, I might be projecting a little bit of the youth I wanted to live, plus it’d be nice if he could play piano, and it’d be great if he were a genius (laughs), he’s a character packed full of those kinds of dreams.</p>
+135: <p><strong>Takamatsu:</strong> That’s great. A great story (laughs)!</p>
+136: <p><img src="/blog/flowers-interview/7.jpg" alt="Image 7">
+                                                               ^
+137: <em>Mika, whose complexes led her to adopt a sarcastic tone, but… From “Skip and Loafer”.</em></p>
+138: <hr>
+1:59:38 AM [vite-plugin-svelte] src/routes/blog/posts/flowers-interview/content.mdx:165:3 Screenreaders already announce `<img>` elements as an image
+https://svelte.dev/e/a11y_img_redundant_alt
+163: <p><strong>Kodama:</strong> It’s my 25th anniversary… I’m a bit surprised myself at how long it’s been. Since my debut, the first two magazines I worked for went out of publication, and I had a blank period for some years after that… so I’m truly grateful to have been able to draw continuously for <em>flowers</em> where I re-debuted. It’s because I’ve continued that I’m able to meet with you like this, Takamatsu-sensei, and talk so much, so I’m truly happy. Thank you very much!</p>
+164: <p><strong>Takamatsu:</strong> The pleasure was all mine, thank you very much!</p>
+165: <p><img src="/blog/flowers-interview/8.jpg" alt="Image 8">
+                                                               ^
+166: <em>Tsukina, From “The Wolf’s Daughter”.</em></p>
+167: <hr>
+1:59:38 AM [vite-plugin-svelte] src/routes/blog/posts/flowers-interview/content.mdx:174:3 Screenreaders already announce `<img>` elements as an image
+https://svelte.dev/e/a11y_img_redundant_alt
+172: <p><strong>(Illustration 2: “‘Skip and Loafer’” as drawn by Yuki Kodama)</strong>
+173: Handwritten text: “Yuki Kodama-sensei,” “Thank you for the conversation ♡,” “I’m looking forward to more of ‘The Wolf’s Daughter’!”</p>
+174: <p><img src="/blog/flowers-interview/9.png" alt="Image 9">
+                                                               ^
+175: <em>Fan art for each other manga, drawn by Takamatsu-sensei and Kodama-sensei</em></p>
+176: <hr>
+1:59:38 AM [vite-plugin-svelte] src/routes/blog/posts/flowers-interview/content.mdx:199:3 Screenreaders already announce `<img>` elements as an image
+https://svelte.dev/e/a11y_img_redundant_alt
+197: <h3 id="special-present"><strong>Special present!!!</strong></h3>
+198: <p><strong>Autographed books by Yuki Kodama-sensei & Misaki Takamatsu-sensei for 1 winner</strong></p>
+199: <p><img src="/blog/flowers-interview/10.png" alt="Image 10">
+                                                                 ^
+200: <em>Special present!</em></p>
+201: <p><strong>How to Enter:</strong></p>
+1:59:38 AM [vite-plugin-svelte] src/routes/blog/posts/my-2025-resolution/content.mdx:35:0 `<h2>` element should contain text
+https://svelte.dev/e/a11y_missing_content
+33: </blockquote>
+34: <p>2024 was my year of discipline and preliminaries. 2025 is the year where there will be multiple echelons of elevations in my knowledge fabric. Watch this space.</p>
+35: <h2 id><br /></h2>
+                      ^
+36: <h3 id="resources">Resources</h3>
+37: <ol>
+1:59:38 AM [vite-plugin-svelte] src/routes/blog/posts/my-thoughts-about-chapter-67/content.mdx:35:0 `<h2>` element should contain text
+https://svelte.dev/e/a11y_missing_content
+33: </blockquote>
+34: <p>2024 was my year of discipline and preliminaries. 2025 is the year where there will be multiple echelons of elevations in my knowledge fabric. Watch this space.</p>
+35: <h2 id><br /></h2>
+                      ^
+36: <h3 id="resources">Resources</h3>
+37: <ol>
+1:59:39 AM [vite-plugin-svelte] src/routes/blog/posts/shima-mitsumi-nao-thoughts/content.mdx:32:0 `<h2>` element should contain text
+https://svelte.dev/e/a11y_missing_content
+30: <p>you wonder how the beach will look like when you are happy, and when you are sad. and when you are in that sadness feeling, everything is full of messy, not even a seashell, a grain of sand and grass looks beautifully there, but rather than spikey. it may be comfortable at first, but the more you see it, the painful it gets. it’s just what life is made to be, messy, unorganized. but that isn’t meant to be, at that moment, this messiness is also a call to action. our desires are strong, we don’t want to live like that way, so we stand up, and run to somewhere further, to somewhere that we think it can bring happiness to us. like nao, like anyone grappling with life’s messiness, doesn’t want to stay amidst the overgrown weeds forever. maybe she could might hurt, but her path is no longer dictated by others. there’s no turning back, only forward. only moving forward, then you know how the life isn’t just messy that much, and the weeds never seem to be like the way it was before, and that seashell isn’t much matter now.</p>
+31: <p>while past pains cannot be erased, they can be reframed. the fading color of the seashell echoes the slow healing process—how time softens the sharp edges of grief, turning once-vivid memories into something faint, less consuming, and more manageable. this mirrors her potential for growth, as she seeks new experiences and colors to bring meaning to her life. life is full of different colors, so just go and find it, maybe bring that color to heal the sadness, the grief of time, of emotions, of memories. it worth more than just looking at beach and do nothing.</p>
+32: <h2 id><br /></h2>
+                      ^
+33: <h3 id="resources">Resources</h3>
+34: <ol>
+1:59:39 AM [vite-plugin-svelte] src/routes/blog/posts/takamatsu-autograph-taiwan/content.mdx:95:3 Screenreaders already announce `<img>` elements as an image
+https://svelte.dev/e/a11y_img_redundant_alt
+93: <hr>
+94: <h3 id="memories-captured-a-group-photo-with-the-wonderful-fans-"><strong>Memories captured: A group photo with the wonderful fans!</strong> 📸</h3>
+95: <p><img
+     ^
+96:   src="/blog/takamatsu-interview-taiwan-tour/9.jpg"
+97:   alt="Group photo with all the fans"
+[plugin vite:resolve] Module "node:fs" has been externalized for browser compatibility, imported by "C:/my-website/packages/site-data/src/zines.ts". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+[plugin vite:resolve] Module "node:path" has been externalized for browser compatibility, imported by "C:/my-website/packages/site-data/src/zines.ts". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+[plugin vite:resolve] Module "node:fs" has been externalized for browser compatibility, imported by "C:/my-website/packages/site-data/src/zines.ts". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+[plugin vite:resolve] Module "node:path" has been externalized for browser compatibility, imported by "C:/my-website/packages/site-data/src/zines.ts". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+[plugin vite:resolve] Module "node:fs" has been externalized for browser compatibility, imported by "C:/my-website/packages/site-data/src/artworks.ts". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+[plugin vite:resolve] Module "node:path" has been externalized for browser compatibility, imported by "C:/my-website/packages/site-data/src/artworks.ts". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+[plugin vite:resolve] Module "node:fs" has been externalized for browser compatibility, imported by "C:/my-website/packages/site-data/src/artworks.ts". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+[plugin vite:resolve] Module "node:path" has been externalized for browser compatibility, imported by "C:/my-website/packages/site-data/src/artworks.ts". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+[plugin vite:resolve] Module "node:path" has been externalized for browser compatibility, imported by "C:/my-website/packages/site-data/src/asset-root.ts". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+[plugin vite:resolve] Module "node:path" has been externalized for browser compatibility, imported by "C:/my-website/packages/site-data/src/asset-root.ts". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+1:59:41 AM [vite-plugin-svelte] src/routes/artworks/kemutai-hanashi/+page.svelte:287:2 Unused CSS selector ".kemutai-lightbox"
+https://svelte.dev/e/css_unused_selector
+285: 
+286:   /* Lightbox */
+287:   .kemutai-lightbox {
+                        ^
+288:     position: fixed;
+289:     inset: 0;
+1:59:41 AM [vite-plugin-svelte] src/routes/artworks/kemutai-hanashi/+page.svelte:297:2 Unused CSS selector ".kemutai-lightbox-backdrop"
+https://svelte.dev/e/css_unused_selector
+295:   }
+296: 
+297:   .kemutai-lightbox-backdrop {
+                                 ^
+298:     position: absolute;
+299:     inset: 0;
+1:59:41 AM [vite-plugin-svelte] src/routes/artworks/kemutai-hanashi/+page.svelte:305:2 Unused CSS selector ".kemutai-lightbox-inner"
+https://svelte.dev/e/css_unused_selector
+303:   }
+304: 
+305:   .kemutai-lightbox-inner {
+                              ^
+306:     position: relative;
+307:     z-index: 1;
+1:59:41 AM [vite-plugin-svelte] src/routes/artworks/kemutai-hanashi/+page.svelte:315:2 Unused CSS selector ".kemutai-lightbox-close"
+https://svelte.dev/e/css_unused_selector
+313:   }
+314: 
+315:   .kemutai-lightbox-close {
+                              ^
+316:     position: absolute;
+317:     top: -2.5rem;
+1:59:41 AM [vite-plugin-svelte] src/routes/artworks/kemutai-hanashi/+page.svelte:332:2 Unused CSS selector ".kemutai-lightbox-close:hover"
+https://svelte.dev/e/css_unused_selector
+330:   }
+331: 
+332:   .kemutai-lightbox-close:hover {
+                                    ^
+333:     background: rgba(255, 255, 255, 0.2);
+334:   }
+1:59:41 AM [vite-plugin-svelte] src/routes/artworks/kemutai-hanashi/+page.svelte:336:2 Unused CSS selector ".kemutai-lightbox-figure"
+https://svelte.dev/e/css_unused_selector
+334:   }
+335: 
+336:   .kemutai-lightbox-figure {
+                               ^
+337:     display: flex;
+338:     flex-direction: column;
+1:59:41 AM [vite-plugin-svelte] src/routes/artworks/kemutai-hanashi/+page.svelte:344:2 Unused CSS selector ".kemutai-lightbox-figure img"
+https://svelte.dev/e/css_unused_selector
+342:   }
+343: 
+344:   .kemutai-lightbox-figure img {
+                                   ^
+345:     max-width: 80vw;
+346:     max-height: 80vh;
+1:59:41 AM [vite-plugin-svelte] src/routes/artworks/kemutai-hanashi/+page.svelte:353:2 Unused CSS selector ".kemutai-lightbox-figure figcaption"
+https://svelte.dev/e/css_unused_selector
+351:   }
+352: 
+353:   .kemutai-lightbox-figure figcaption {
+                                          ^
+354:     color: rgba(255, 255, 255, 0.6);
+355:     font-family: var(--font-mono);
+1:59:41 AM [vite-plugin-svelte] src/routes/artworks/kemutai-hanashi/+page.svelte:359:2 Unused CSS selector ".kemutai-lightbox-nav"
+https://svelte.dev/e/css_unused_selector
+357:   }
+358: 
+359:   .kemutai-lightbox-nav {
+                            ^
+360:     background: rgba(255, 255, 255, 0.1);
+361:     border: 1px solid rgba(255, 255, 255, 0.2);
+1:59:41 AM [vite-plugin-svelte] src/routes/artworks/kemutai-hanashi/+page.svelte:374:2 Unused CSS selector ".kemutai-lightbox-nav:hover"
+https://svelte.dev/e/css_unused_selector
+372:   }
+373: 
+374:   .kemutai-lightbox-nav:hover {
+                                  ^
+375:     background: rgba(255, 255, 255, 0.22);
+376:   }
+1:59:41 AM [vite-plugin-svelte] src/lib/components/RecommendationGenerator.svelte:249:14 Visible, non-interactive element `<span>` with a click event must be accompanied by a keyboard event handler. Consider whether an interactive element such as `<button type="button">` or `<a>` might be more appropriate
+https://svelte.dev/e/a11y_click_events_have_key_events
+247:             {item.title || `card #${idx + 1}`}
+248:             {#if items.length > 1}
+249:               <span
+                         ^
+250:                 class="gen-tab-remove"
+251:                 role="button"
+1:59:41 AM [vite-plugin-svelte] src/lib/components/RecommendationGenerator.svelte:439:16 Visible, non-interactive element `<div>` with a click event must be accompanied by a keyboard event handler. Consider whether an interactive element such as `<button type="button">` or `<a>` might be more appropriate
+https://svelte.dev/e/a11y_click_events_have_key_events
+437:               {@const isSameRow = Math.floor(idx / 2) === Math.floor(activeIndex / 2)}
+438:               {#if isSameRow}
+439:                 <div
+                          ^
+440:                   class="gen-card-wrap"
+441:                   class:active={activeIndex === idx && !isExporting}
+1:59:41 AM [vite-plugin-svelte] src/lib/components/RecommendationGenerator.svelte:457:14 Visible, non-interactive element `<div>` with a click event must be accompanied by a keyboard event handler. Consider whether an interactive element such as `<button type="button">` or `<a>` might be more appropriate
+https://svelte.dev/e/a11y_click_events_have_key_events
+455:           <div class="gen-grid" class:force-2col={isExporting}>
+456:             {#each items as item, idx}
+457:               <div
+                        ^
+458:                 class="gen-card-wrap"
+459:                 class:active={activeIndex === idx && !isExporting}
+1:59:41 AM [vite-plugin-svelte] src/lib/components/ZineBookshelf.svelte:238:4 Elements with the 'toolbar' interactive role must have a tabindex value
+https://svelte.dev/e/a11y_interactive_supports_focus
+236:   >
+237:     <!-- Floating controls bar -->
+238:     <div
+              ^
+239:       class="zine-fs-controls"
+240:       role="toolbar"
+1:59:41 AM [vite-plugin-svelte] src/lib/components/ImageCropperModal.svelte:208:0 Visible, non-interactive element `<div>` with a click event must be accompanied by a keyboard event handler. Consider whether an interactive element such as `<button type="button">` or `<a>` might be more appropriate
+https://svelte.dev/e/a11y_click_events_have_key_events
+206: </script>
+207: 
+208: <div use:portal class="cropper-overlay" transition:fade={{ duration: 180 }} on:click|self={() => dispatch('close')} role="dialog" aria-modal="true" tabindex="-1">
+           ^
+209:   <div class="cropper-modal" transition:scale={{ duration: 220, start: 0.95 }}>
+210:     <!-- Header -->
+1:59:41 AM [vite-plugin-svelte] src/lib/components/ImageCropperModal.svelte:219:4 Non-interactive element `<div>` should not be assigned mouse or keyboard event listeners
+https://svelte.dev/e/a11y_no_noninteractive_element_interactions
+217: 
+218:     <!-- Workspace -->
+219:     <div
+              ^
+220:       bind:this={containerEl}
+221:       class="cropper-workspace"
+✓ 4077 modules transformed.
+rendering chunks...
+computing gzip size...
+.svelte-kit/output/client/_app/version.json                                             0.03 kB │ gzip:  0.05 kB
+.svelte-kit/output/client/.vite/manifest.json                                          49.17 kB │ gzip:  4.88 kB
+.svelte-kit/output/client/_app/immutable/assets/PillTabs.CRDVWdE-.css                   0.54 kB │ gzip:  0.29 kB
+.svelte-kit/output/client/_app/immutable/assets/SiteFooter.hIII7GFO.css                 1.88 kB │ gzip:  0.65 kB
+.svelte-kit/output/client/_app/immutable/assets/HomePageContent.D_RPujBm.css            1.90 kB │ gzip:  0.73 kB
+.svelte-kit/output/client/_app/immutable/assets/5.q8TMYFwo.css                          2.04 kB │ gzip:  0.77 kB
+.svelte-kit/output/client/_app/immutable/assets/BoardThreadBubble.DQ8H-xPC.css          2.13 kB │ gzip:  0.72 kB
+.svelte-kit/output/client/_app/immutable/assets/RichText.CkCKZpFz.css                   3.19 kB │ gzip:  0.97 kB
+.svelte-kit/output/client/_app/immutable/assets/4.DCVm1gXF.css                          4.31 kB │ gzip:  1.21 kB
+.svelte-kit/output/client/_app/immutable/assets/20.CK7Okqtb.css                         8.12 kB │ gzip:  1.67 kB
+.svelte-kit/output/client/_app/immutable/assets/40.C5Uw612n.css                         8.13 kB │ gzip:  1.70 kB
+.svelte-kit/output/client/_app/immutable/assets/17.6tP4S2pV.css                        11.16 kB │ gzip:  2.41 kB
+.svelte-kit/output/client/_app/immutable/assets/19.zIAiTHsa.css                        11.93 kB │ gzip:  2.59 kB
+.svelte-kit/output/client/_app/immutable/assets/RecommendationGenerator.sslWGyQf.css   17.17 kB │ gzip:  2.93 kB
+.svelte-kit/output/client/_app/immutable/assets/0.BDISvBMy.css                        319.15 kB │ gzip: 46.82 kB
+.svelte-kit/output/client/_app/immutable/chunks/DsnmJJEf.js                             0.07 kB │ gzip:  0.08 kB
+.svelte-kit/output/client/_app/immutable/nodes/16.CvL-VE4N.js                           0.07 kB │ gzip:  0.08 kB
+.svelte-kit/output/client/_app/immutable/chunks/DA19PNXo.js                             0.08 kB │ gzip:  0.10 kB
+.svelte-kit/output/client/_app/immutable/entry/start.D90G3hpW.js                        0.08 kB │ gzip:  0.09 kB
+.svelte-kit/output/client/_app/immutable/chunks/Ccw7PXcW.js                             0.09 kB │ gzip:  0.10 kB
+.svelte-kit/output/client/_app/immutable/chunks/Dy5YFF9Y.js                             0.15 kB │ gzip:  0.15 kB
+.svelte-kit/output/client/_app/immutable/chunks/Cw25VCRA.js                             0.17 kB │ gzip:  0.16 kB
+.svelte-kit/output/client/_app/immutable/chunks/LTKn0eoc.js                             0.26 kB │ gzip:  0.21 kB
+.svelte-kit/output/client/_app/immutable/chunks/CDaY1o2E.js                             0.26 kB │ gzip:  0.22 kB
+.svelte-kit/output/client/_app/immutable/chunks/CNcIChBG.js                             0.29 kB │ gzip:  0.25 kB
+.svelte-kit/output/client/_app/immutable/chunks/B7k1Pb8L.js                             0.29 kB │ gzip:  0.24 kB
+.svelte-kit/output/client/_app/immutable/chunks/BqlTOgs2.js                             0.29 kB │ gzip:  0.16 kB
+.svelte-kit/output/client/_app/immutable/chunks/6Jc6pwMN.js                             0.30 kB │ gzip:  0.25 kB
+.svelte-kit/output/client/_app/immutable/chunks/DqBrt1VV.js                             0.31 kB │ gzip:  0.26 kB
+.svelte-kit/output/client/_app/immutable/chunks/BBmtQxRk.js                             0.31 kB │ gzip:  0.25 kB
+.svelte-kit/output/client/_app/immutable/chunks/BHjvtN_D.js                             0.33 kB │ gzip:  0.27 kB
+.svelte-kit/output/client/_app/immutable/chunks/Cy3S88b-.js                             0.35 kB │ gzip:  0.28 kB
+.svelte-kit/output/client/_app/immutable/nodes/18.ChG9rhVw.js                           0.35 kB │ gzip:  0.24 kB
+.svelte-kit/output/client/_app/immutable/chunks/ZRW2gjXD.js                             0.36 kB │ gzip:  0.27 kB
+.svelte-kit/output/client/_app/immutable/chunks/B8CEKzb1.js                             0.37 kB │ gzip:  0.26 kB
+.svelte-kit/output/client/_app/immutable/chunks/Sp1DV_Y5.js                             0.40 kB │ gzip:  0.31 kB
+.svelte-kit/output/client/_app/immutable/chunks/PeNQWNSD.js                             0.40 kB │ gzip:  0.31 kB
+.svelte-kit/output/client/_app/immutable/chunks/BkA05U-d.js                             0.41 kB │ gzip:  0.32 kB
+.svelte-kit/output/client/_app/immutable/chunks/CfnbW7DG.js                             0.43 kB │ gzip:  0.30 kB
+.svelte-kit/output/client/_app/immutable/chunks/BPtXRAj_.js                             0.43 kB │ gzip:  0.30 kB
+.svelte-kit/output/client/_app/immutable/chunks/B0OUESv3.js                             0.43 kB │ gzip:  0.31 kB
+.svelte-kit/output/client/_app/immutable/chunks/BtuhN-u8.js                             0.44 kB │ gzip:  0.29 kB
+.svelte-kit/output/client/_app/immutable/chunks/DSgOtapg.js                             0.44 kB │ gzip:  0.34 kB
+.svelte-kit/output/client/_app/immutable/nodes/2.Bqn48S2e.js                            0.46 kB │ gzip:  0.30 kB
+.svelte-kit/output/client/_app/immutable/nodes/1.BoMFdwrJ.js                            0.47 kB │ gzip:  0.31 kB
+.svelte-kit/output/client/_app/immutable/chunks/C4Jay6pr.js                             0.51 kB │ gzip:  0.33 kB
+.svelte-kit/output/client/_app/immutable/chunks/BY7NMIWb.js                             0.59 kB │ gzip:  0.42 kB
+.svelte-kit/output/client/_app/immutable/chunks/Dv-Toi-p.js                             0.67 kB │ gzip:  0.41 kB
+.svelte-kit/output/client/_app/immutable/chunks/BcyrSznU.js                             0.69 kB │ gzip:  0.43 kB
+.svelte-kit/output/client/_app/immutable/chunks/pzeKg6c3.js                             0.69 kB │ gzip:  0.35 kB
+.svelte-kit/output/client/_app/immutable/chunks/BDzyaqGc.js                             0.72 kB │ gzip:  0.46 kB
+.svelte-kit/output/client/_app/immutable/nodes/26.ChXbkz_j.js                           0.72 kB │ gzip:  0.45 kB
+.svelte-kit/output/client/_app/immutable/nodes/29.BZ15TtML.js                           0.79 kB │ gzip:  0.49 kB
+.svelte-kit/output/client/_app/immutable/nodes/6.BHliDhvz.js                            0.87 kB │ gzip:  0.52 kB
+.svelte-kit/output/client/_app/immutable/chunks/CyT3FXI8.js                             0.90 kB │ gzip:  0.50 kB
+.svelte-kit/output/client/_app/immutable/chunks/C20mGC0j.js                             0.94 kB │ gzip:  0.47 kB
+.svelte-kit/output/client/_app/immutable/chunks/Dv-mRI1J.js                             0.99 kB │ gzip:  0.51 kB
+.svelte-kit/output/client/_app/immutable/chunks/DzpC_QNw.js                             1.06 kB │ gzip:  0.47 kB
+.svelte-kit/output/client/_app/immutable/chunks/Ciw-q1Vm.js                             1.10 kB │ gzip:  0.62 kB
+.svelte-kit/output/client/_app/immutable/chunks/BM_eqsLH.js                             1.18 kB │ gzip:  0.54 kB
+.svelte-kit/output/client/_app/immutable/nodes/27.GOfEk5Er.js                           1.29 kB │ gzip:  0.76 kB
+.svelte-kit/output/client/_app/immutable/nodes/39.bzIex6kA.js                           1.32 kB │ gzip:  0.71 kB
+.svelte-kit/output/client/_app/immutable/nodes/15.DBUEV-k9.js                           1.34 kB │ gzip:  0.72 kB
+.svelte-kit/output/client/_app/immutable/nodes/34.DX4WVypD.js                           1.36 kB │ gzip:  0.71 kB
+.svelte-kit/output/client/_app/immutable/nodes/37.BrVefRBU.js                           1.38 kB │ gzip:  0.72 kB
+.svelte-kit/output/client/_app/immutable/chunks/BJx44bW7.js                             1.43 kB │ gzip:  0.81 kB
+.svelte-kit/output/client/_app/immutable/nodes/23.CBf7IBNQ.js                           1.43 kB │ gzip:  0.77 kB
+.svelte-kit/output/client/_app/immutable/chunks/S1MdjyVt.js                             1.45 kB │ gzip:  0.74 kB
+.svelte-kit/output/client/_app/immutable/chunks/CE09cQ_e.js                             1.47 kB │ gzip:  0.86 kB
+.svelte-kit/output/client/_app/immutable/nodes/25.B8uNZVLJ.js                           1.51 kB │ gzip:  0.83 kB
+.svelte-kit/output/client/_app/immutable/nodes/21.DPMicRzB.js                           1.53 kB │ gzip:  0.83 kB
+.svelte-kit/output/client/_app/immutable/chunks/CVx2-2dr.js                             1.53 kB │ gzip:  0.79 kB
+.svelte-kit/output/client/_app/immutable/nodes/12.C1zp-wuY.js                           1.58 kB │ gzip:  0.86 kB
+.svelte-kit/output/client/_app/immutable/nodes/13.Czh82kGT.js                           1.59 kB │ gzip:  0.88 kB
+.svelte-kit/output/client/_app/immutable/nodes/22.3gevD37d.js                           1.64 kB │ gzip:  0.91 kB
+.svelte-kit/output/client/_app/immutable/chunks/BVRJn6ZN.js                             1.65 kB │ gzip:  0.91 kB
+.svelte-kit/output/client/_app/immutable/chunks/CqdYP7jk.js                             1.67 kB │ gzip:  0.96 kB
+.svelte-kit/output/client/_app/immutable/nodes/11.G9gYGHlX.js                           1.71 kB │ gzip:  0.87 kB
+.svelte-kit/output/client/_app/immutable/chunks/CmhZK2PK.js                             1.85 kB │ gzip:  1.02 kB
+.svelte-kit/output/client/_app/immutable/nodes/35.Dv56ZsPQ.js                           1.88 kB │ gzip:  1.02 kB
+.svelte-kit/output/client/_app/immutable/chunks/DI39oO5X.js                             2.03 kB │ gzip:  0.98 kB
+.svelte-kit/output/client/_app/immutable/chunks/BJPUTgI9.js                             2.12 kB │ gzip:  1.19 kB
+.svelte-kit/output/client/_app/immutable/nodes/28.CdMrxKeP.js                           2.20 kB │ gzip:  1.12 kB
+.svelte-kit/output/client/_app/immutable/nodes/31.D7nP4NIz.js                           2.24 kB │ gzip:  1.11 kB
+.svelte-kit/output/client/_app/immutable/chunks/BNGGBMf5.js                             2.35 kB │ gzip:  1.07 kB
+.svelte-kit/output/client/_app/immutable/chunks/Dhg38m9e.js                             2.58 kB │ gzip:  0.98 kB
+.svelte-kit/output/client/_app/immutable/nodes/24.CRRnOBxb.js                           3.60 kB │ gzip:  1.32 kB
+.svelte-kit/output/client/_app/immutable/chunks/BHmUSGIV.js                             3.72 kB │ gzip:  1.70 kB
+.svelte-kit/output/client/_app/immutable/chunks/Dt2kFdVW.js                             3.74 kB │ gzip:  1.75 kB
+.svelte-kit/output/client/_app/immutable/chunks/DfVeCX1k.js                             3.76 kB │ gzip:  1.95 kB
+.svelte-kit/output/client/_app/immutable/chunks/4P_1Vu-j.js                             4.03 kB │ gzip:  1.84 kB
+.svelte-kit/output/client/_app/immutable/chunks/DbvBZ72H.js                             4.21 kB │ gzip:  1.96 kB
+.svelte-kit/output/client/_app/immutable/nodes/5.D2BZqnhu.js                            4.24 kB │ gzip:  1.98 kB
+.svelte-kit/output/client/_app/immutable/chunks/IaiQZu74.js                             4.44 kB │ gzip:  2.05 kB
+.svelte-kit/output/client/_app/immutable/chunks/BKbiVCGh.js                             4.56 kB │ gzip:  2.00 kB
+.svelte-kit/output/client/_app/immutable/chunks/BX2zjAy-.js                             4.84 kB │ gzip:  2.23 kB
+.svelte-kit/output/client/_app/immutable/chunks/C7qLxQ_W.js                             4.92 kB │ gzip:  1.98 kB
+.svelte-kit/output/client/_app/immutable/nodes/3.UYxF20n8.js                            5.85 kB │ gzip:  2.55 kB
+.svelte-kit/output/client/_app/immutable/chunks/BIJqscIW.js                             5.98 kB │ gzip:  2.66 kB
+.svelte-kit/output/client/_app/immutable/nodes/9.B4A20gT_.js                            6.20 kB │ gzip:  1.80 kB
+.svelte-kit/output/client/_app/immutable/chunks/Ctj2Ek-T.js                             6.53 kB │ gzip:  3.10 kB
+.svelte-kit/output/client/_app/immutable/chunks/ZU94FLdQ.js                             6.53 kB │ gzip:  3.10 kB
+.svelte-kit/output/client/_app/immutable/chunks/_WBXcYPB.js                             6.95 kB │ gzip:  1.79 kB
+.svelte-kit/output/client/_app/immutable/chunks/C2bPCiv0.js                             6.97 kB │ gzip:  3.12 kB
+.svelte-kit/output/client/_app/immutable/chunks/CCfwZc9Y.js                             7.39 kB │ gzip:  2.67 kB
+.svelte-kit/output/client/_app/immutable/chunks/Cmr8n9EE.js                             7.69 kB │ gzip:  2.27 kB
+.svelte-kit/output/client/_app/immutable/chunks/BahdzREN.js                             7.76 kB │ gzip:  3.33 kB
+.svelte-kit/output/client/_app/immutable/chunks/BbmgUk46.js                             8.27 kB │ gzip:  3.56 kB
+.svelte-kit/output/client/_app/immutable/chunks/BJBq6g9L.js                             8.46 kB │ gzip:  3.69 kB
+.svelte-kit/output/client/_app/immutable/chunks/HOgU8TZt.js                             8.61 kB │ gzip:  3.67 kB
+.svelte-kit/output/client/_app/immutable/chunks/CnSA5x8F.js                             9.07 kB │ gzip:  3.65 kB
+.svelte-kit/output/client/_app/immutable/nodes/4.BYhyYBzO.js                            9.43 kB │ gzip:  4.02 kB
+.svelte-kit/output/client/_app/immutable/chunks/CNiF2f3O.js                            10.49 kB │ gzip:  3.79 kB
+.svelte-kit/output/client/_app/immutable/chunks/CuAbOJ3P.js                            10.79 kB │ gzip:  4.34 kB
+.svelte-kit/output/client/_app/immutable/nodes/40.CaKxXIpU.js                          10.82 kB │ gzip:  3.60 kB
+.svelte-kit/output/client/_app/immutable/nodes/0.I8KuryJN.js                           11.26 kB │ gzip:  4.47 kB
+.svelte-kit/output/client/_app/immutable/chunks/DraWZ-gj.js                            11.30 kB │ gzip:  5.18 kB
+.svelte-kit/output/client/_app/immutable/chunks/IlD0Jm-U.js                            11.88 kB │ gzip:  4.64 kB
+.svelte-kit/output/client/_app/immutable/entry/app.CQC8ydes.js                         12.64 kB │ gzip:  4.08 kB
+.svelte-kit/output/client/_app/immutable/nodes/17.BNUpd2Rj.js                          12.86 kB │ gzip:  5.37 kB
+.svelte-kit/output/client/_app/immutable/chunks/CN_8p4G5.js                            12.95 kB │ gzip:  5.35 kB
+.svelte-kit/output/client/_app/immutable/nodes/20.C-YIgsZl.js                          13.16 kB │ gzip:  5.39 kB
+.svelte-kit/output/client/_app/immutable/chunks/BvxbQsCZ.js                            13.36 kB │ gzip:  5.69 kB
+.svelte-kit/output/client/_app/immutable/chunks/BeoRn2gJ.js                            13.73 kB │ gzip:  5.41 kB
+.svelte-kit/output/client/_app/immutable/chunks/BGdI0_JG.js                            14.06 kB │ gzip:  6.41 kB
+.svelte-kit/output/client/_app/immutable/nodes/33.5YY77lgg.js                          14.82 kB │ gzip:  5.47 kB
+.svelte-kit/output/client/_app/immutable/chunks/CjE-PObo.js                            15.55 kB │ gzip:  6.54 kB
+.svelte-kit/output/client/_app/immutable/chunks/CZm8Ig4n.js                            15.58 kB │ gzip:  6.40 kB
+.svelte-kit/output/client/_app/immutable/chunks/B1V_HR-C.js                            16.52 kB │ gzip:  5.70 kB
+.svelte-kit/output/client/_app/immutable/chunks/p4uNKWeN.js                            17.44 kB │ gzip:  7.57 kB
+.svelte-kit/output/client/_app/immutable/chunks/CCVkw1-Q.js                            18.36 kB │ gzip:  7.38 kB
+.svelte-kit/output/client/_app/immutable/chunks/D8aFnxLr.js                            18.40 kB │ gzip:  7.12 kB
+.svelte-kit/output/client/_app/immutable/chunks/CnqP392U.js                            19.71 kB │ gzip:  8.38 kB
+.svelte-kit/output/client/_app/immutable/chunks/CW408A1N.js                            19.82 kB │ gzip:  7.84 kB
+.svelte-kit/output/client/_app/immutable/chunks/CFxBaTqL.js                            20.18 kB │ gzip:  7.41 kB
+.svelte-kit/output/client/_app/immutable/chunks/CmZeYGck.js                            21.51 kB │ gzip:  7.54 kB
+.svelte-kit/output/client/_app/immutable/nodes/7.DohAkHcY.js                           21.91 kB │ gzip:  6.62 kB
+.svelte-kit/output/client/_app/immutable/chunks/GbI5aVkt.js                            22.55 kB │ gzip:  5.36 kB
+.svelte-kit/output/client/_app/immutable/chunks/CzMq3_62.js                            23.67 kB │ gzip:  8.28 kB
+.svelte-kit/output/client/_app/immutable/nodes/38.BJAQ8fyR.js                          26.07 kB │ gzip:  8.35 kB
+.svelte-kit/output/client/_app/immutable/nodes/14.90v-5ru6.js                          26.90 kB │ gzip:  8.96 kB
+.svelte-kit/output/client/_app/immutable/chunks/eKEMj_oO.js                            27.36 kB │ gzip:  8.78 kB
+.svelte-kit/output/client/_app/immutable/nodes/19.BSrAuO49.js                          28.09 kB │ gzip: 10.54 kB
+.svelte-kit/output/client/_app/immutable/chunks/C3-QFKok.js                            34.05 kB │ gzip: 13.11 kB
+.svelte-kit/output/client/_app/immutable/chunks/b_4p34DA.js                            37.06 kB │ gzip: 14.30 kB
+.svelte-kit/output/client/_app/immutable/chunks/Bp26uGqp.js                            39.39 kB │ gzip: 13.54 kB
+.svelte-kit/output/client/_app/immutable/nodes/36.DqIBqGPj.js                          41.73 kB │ gzip: 13.28 kB
+.svelte-kit/output/client/_app/immutable/nodes/30.41VPoYev.js                          48.34 kB │ gzip:  4.72 kB
+.svelte-kit/output/client/_app/immutable/chunks/DT-1aCKA.js                            57.05 kB │ gzip: 18.38 kB
+✓ built in 37.14s
+.svelte-kit/output/server/.vite/manifest.json                                                              51.02 kB
+.svelte-kit/output/server/_app/immutable/assets/PillTabs.CRDVWdE-.css                                       0.54 kB
+.svelte-kit/output/server/_app/immutable/assets/SiteFooter.hIII7GFO.css                                     1.88 kB
+.svelte-kit/output/server/_app/immutable/assets/HomePageContent.D_RPujBm.css                                1.90 kB
+.svelte-kit/output/server/_app/immutable/assets/_page.q8TMYFwo.css                                          2.04 kB
+.svelte-kit/output/server/_app/immutable/assets/board-utils.CkCKZpFz.css                                    3.19 kB
+.svelte-kit/output/server/_app/immutable/assets/_page.DCVm1gXF.css                                          4.31 kB
+.svelte-kit/output/server/_app/immutable/assets/_page.CK7Okqtb.css                                          8.12 kB
+.svelte-kit/output/server/_app/immutable/assets/_page.C5Uw612n.css                                          8.13 kB
+.svelte-kit/output/server/_app/immutable/assets/_page.6tP4S2pV.css                                         11.16 kB
+.svelte-kit/output/server/_app/immutable/assets/_page.BFDCxY0o.css                                         11.86 kB
+.svelte-kit/output/server/_app/immutable/assets/_layout.BDISvBMy.css                                      319.15 kB
+.svelte-kit/output/server/entries/pages/about/_page.ts.js                                                   0.05 kB
+.svelte-kit/output/server/chunks/false.js                                                                   0.05 kB
+.svelte-kit/output/server/entries/endpoints/draw/_id_/twitter-image/_server.ts.js                           0.07 kB
+.svelte-kit/output/server/entries/endpoints/sketchbook/_id_/twitter-image/_server.ts.js                     0.07 kB
+.svelte-kit/output/server/entries/endpoints/suggestions/_id_/twitter-image/_server.ts.js                    0.07 kB
+.svelte-kit/output/server/entries/endpoints/talk/_id_/twitter-image/_server.ts.js                           0.07 kB
+.svelte-kit/output/server/entries/endpoints/favicon.ico/_server.ts.js                                       0.11 kB
+.svelte-kit/output/server/entries/pages/diary/_page.server.ts.js                                            0.11 kB
+.svelte-kit/output/server/entries/pages/draw/_page.server.ts.js                                             0.12 kB
+.svelte-kit/output/server/entries/pages/talk/_page.server.ts.js                                             0.13 kB
+.svelte-kit/output/server/entries/pages/sketchbook/_page.server.ts.js                                       0.13 kB
+.svelte-kit/output/server/entries/pages/suggestions/_page.server.ts.js                                      0.13 kB
+.svelte-kit/output/server/entries/pages/recommendations/_page.server.ts.js                                  0.13 kB
+.svelte-kit/output/server/chunks/content13.js                                                               0.13 kB
+.svelte-kit/output/server/entries/pages/blog/posts/_slug_/_page.server.ts.js                                0.14 kB
+.svelte-kit/output/server/chunks/html.js                                                                    0.14 kB
+.svelte-kit/output/server/chunks/index-server.js                                                            0.18 kB
+.svelte-kit/output/server/entries/pages/learning/weekly-reflections/_page.server.ts.js                      0.19 kB
+.svelte-kit/output/server/entries/pages/artworks/kemutai-hanashi/_page.server.ts.js                         0.20 kB
+.svelte-kit/output/server/chunks/shared-server.js                                                           0.28 kB
+.svelte-kit/output/server/chunks/content25.js                                                               0.28 kB
+.svelte-kit/output/server/chunks/asset-root.js                                                              0.28 kB
+.svelte-kit/output/server/entries/pages/talk/_id_/_page.server.ts.js                                        0.32 kB
+.svelte-kit/output/server/entries/pages/draw/_id_/_page.server.ts.js                                        0.33 kB
+.svelte-kit/output/server/entries/pages/sketchbook/_id_/_page.server.ts.js                                  0.34 kB
+.svelte-kit/output/server/chunks/chevron-left.js                                                            0.36 kB
+.svelte-kit/output/server/chunks/chevron-right.js                                                           0.36 kB
+.svelte-kit/output/server/entries/pages/suggestions/_id_/_page.server.ts.js                                 0.36 kB
+.svelte-kit/output/server/chunks/x.js                                                                       0.36 kB
+.svelte-kit/output/server/entries/pages/homepage/_page.svelte.js                                            0.37 kB
+.svelte-kit/output/server/chunks/arrow-right.js                                                             0.40 kB
+.svelte-kit/output/server/chunks/arrow-up-right.js                                                          0.40 kB
+.svelte-kit/output/server/chunks/user.js                                                                    0.42 kB
+.svelte-kit/output/server/internal.js                                                                       0.44 kB
+.svelte-kit/output/server/chunks/state.svelte.js                                                            0.45 kB
+.svelte-kit/output/server/chunks/maximize-2.js                                                              0.46 kB
+.svelte-kit/output/server/chunks/ThemeToggle.js                                                             0.47 kB
+.svelte-kit/output/server/chunks/message-square.js                                                          0.50 kB
+.svelte-kit/output/server/entries/pages/diary/daily-notes/days/_slug_/_page.ts.js                           0.51 kB
+.svelte-kit/output/server/chunks/heart.js                                                                   0.51 kB
+.svelte-kit/output/server/chunks/message-circle.js                                                          0.51 kB
+.svelte-kit/output/server/chunks/users.js                                                                   0.53 kB
+.svelte-kit/output/server/chunks/book-open.js                                                               0.54 kB
+.svelte-kit/output/server/chunks/bell.js                                                                    0.54 kB
+.svelte-kit/output/server/chunks/content31.js                                                               0.54 kB
+.svelte-kit/output/server/entries/pages/artworks/_page.server.ts.js                                         0.55 kB
+.svelte-kit/output/server/entries/pages/_page.svelte.js                                                     0.56 kB
+.svelte-kit/output/server/chunks/server.js                                                                  0.62 kB
+.svelte-kit/output/server/chunks/attachment-limits.js                                                       0.69 kB
+.svelte-kit/output/server/chunks/stores.js                                                                  0.71 kB
+.svelte-kit/output/server/entries/pages/notes/_page.server.ts.js                                            0.79 kB
+.svelte-kit/output/server/entries/endpoints/api/push/subscribe/_server.ts.js                                0.79 kB
+.svelte-kit/output/server/entries/pages/notes/books/_page.svelte.js                                         0.81 kB
+.svelte-kit/output/server/chunks/StackVertical.js                                                           0.84 kB
+.svelte-kit/output/server/chunks/html-entities.js                                                           0.85 kB
+.svelte-kit/output/server/entries/pages/_page.server.ts.js                                                  0.86 kB
+.svelte-kit/output/server/entries/pages/notes/math/_page.svelte.js                                          0.88 kB
+.svelte-kit/output/server/chunks/palette.js                                                                 0.92 kB
+.svelte-kit/output/server/entries/endpoints/api/activity/currently-playing/_server.ts.js                    0.97 kB
+.svelte-kit/output/server/entries/endpoints/talk/_id_/opengraph-image/_server.ts.js                         0.98 kB
+.svelte-kit/output/server/entries/endpoints/api/activity/auth/_server.ts.js                                 1.05 kB
+.svelte-kit/output/server/chunks/utils.js                                                                   1.09 kB
+.svelte-kit/output/server/entries/endpoints/api/blog/read-count/_server.ts.js                               1.10 kB
+.svelte-kit/output/server/entries/pages/blog/_page.svelte.js                                                1.12 kB
+.svelte-kit/output/server/entries/endpoints/draw/_id_/opengraph-image/_server.ts.js                         1.12 kB
+.svelte-kit/output/server/entries/fallbacks/error.svelte.js                                                 1.12 kB
+.svelte-kit/output/server/entries/endpoints/suggestions/_id_/opengraph-image/_server.ts.js                  1.25 kB
+.svelte-kit/output/server/entries/pages/learning/weekly-reflections/_slug_/_page.svelte.js                  1.25 kB
+.svelte-kit/output/server/chunks/PageIntro.js                                                               1.30 kB
+.svelte-kit/output/server/entries/pages/talk/_id_/_page.svelte.js                                           1.31 kB
+.svelte-kit/output/server/entries/endpoints/api/activity/youtube-preview/_server.ts.js                      1.32 kB
+.svelte-kit/output/server/entries/pages/draw/_id_/_page.svelte.js                                           1.34 kB
+.svelte-kit/output/server/entries/pages/diary/daily-notes/days/_slug_/_page.svelte.js                       1.36 kB
+.svelte-kit/output/server/entries/pages/sketchbook/_id_/_page.svelte.js                                     1.37 kB
+.svelte-kit/output/server/entries/pages/pet/_page.svelte.js                                                 1.37 kB
+.svelte-kit/output/server/chunks/site.js                                                                    1.39 kB
+.svelte-kit/output/server/entries/endpoints/api/thumbnail/_server.ts.js                                     1.40 kB
+.svelte-kit/output/server/entries/pages/suggestions/_id_/_page.svelte.js                                    1.40 kB
+.svelte-kit/output/server/chunks/index2.js                                                                  1.41 kB
+.svelte-kit/output/server/chunks/push.js                                                                    1.42 kB
+.svelte-kit/output/server/chunks/learning.js                                                                1.42 kB
+.svelte-kit/output/server/chunks/content29.js                                                               1.42 kB
+.svelte-kit/output/server/entries/pages/learning/weekly-reflections/_slug_/_page.ts.js                      1.43 kB
+.svelte-kit/output/server/chunks/PillTabs.js                                                                1.44 kB
+.svelte-kit/output/server/chunks/SectionPageShell.js                                                        1.51 kB
+.svelte-kit/output/server/entries/pages/notes/books/llm-from-scratch-raschka/_page.svelte.js                1.56 kB
+.svelte-kit/output/server/chunks/BaseContainer.js                                                           1.58 kB
+.svelte-kit/output/server/chunks/content28.js                                                               1.60 kB
+.svelte-kit/output/server/chunks/pen-line.js                                                                1.61 kB
+.svelte-kit/output/server/chunks/content30.js                                                               1.62 kB
+.svelte-kit/output/server/entries/pages/stats/_page.server.ts.js                                            1.76 kB
+.svelte-kit/output/server/entries/pages/blog/_slug_/_page.svelte.js                                         1.77 kB
+.svelte-kit/output/server/chunks/content27.js                                                               1.81 kB
+.svelte-kit/output/server/entries/endpoints/api/annoy/_server.ts.js                                         1.85 kB
+.svelte-kit/output/server/entries/pages/notes/_page.svelte.js                                               1.89 kB
+.svelte-kit/output/server/chunks/journal.js                                                                 1.94 kB
+.svelte-kit/output/server/entries/pages/zine/_page.server.ts.js                                             1.99 kB
+.svelte-kit/output/server/chunks/SeoHead.js                                                                 1.99 kB
+.svelte-kit/output/server/entries/pages/learning/weekly-reflections/_page.svelte.js                         2.06 kB
+.svelte-kit/output/server/chunks/content26.js                                                               2.07 kB
+.svelte-kit/output/server/entries/pages/learning/_page.svelte.js                                            2.14 kB
+.svelte-kit/output/server/chunks/Icon.js                                                                    2.25 kB
+.svelte-kit/output/server/entries/pages/stats/_page.svelte.js                                               2.29 kB
+.svelte-kit/output/server/entries/pages/diary/diary-utensils/_page.svelte.js                                2.31 kB
+.svelte-kit/output/server/entries/pages/notes/books/llm-from-scratch-raschka/chapter-1/_page.svelte.js      2.34 kB
+.svelte-kit/output/server/chunks/generate.js                                                                2.36 kB
+.svelte-kit/output/server/entries/pages/learning/learning-utensils/_page.svelte.js                          2.36 kB
+.svelte-kit/output/server/chunks/cooldown.js                                                                2.37 kB
+.svelte-kit/output/server/entries/endpoints/api/activity/callback/_server.ts.js                             2.47 kB
+.svelte-kit/output/server/chunks/RedirectToBoard.js                                                         2.78 kB
+.svelte-kit/output/server/entries/pages/diary/daily-notes/_page.svelte.js                                   2.85 kB
+.svelte-kit/output/server/entries/pages/blog/_slug_/_page.ts.js                                             3.19 kB
+.svelte-kit/output/server/entries/endpoints/api/activity/_server.ts.js                                      3.26 kB
+.svelte-kit/output/server/chunks/artworks.js                                                                3.35 kB
+.svelte-kit/output/server/chunks/BlogPostTemplate.js                                                        3.46 kB
+.svelte-kit/output/server/entries/pages/artworks/kemutai-hanashi/_page.svelte.js                            3.47 kB
+.svelte-kit/output/server/chunks/content4.js                                                                3.69 kB
+.svelte-kit/output/server/entries/endpoints/api/translate/_server.ts.js                                     3.70 kB
+.svelte-kit/output/server/chunks/content15.js                                                               4.03 kB
+.svelte-kit/output/server/chunks/suggestion-helper.js                                                       4.10 kB
+.svelte-kit/output/server/chunks/content5.js                                                                4.16 kB
+.svelte-kit/output/server/entries/endpoints/api/sketchbook/_server.ts.js                                    4.54 kB
+.svelte-kit/output/server/chunks/discord.js                                                                 4.79 kB
+.svelte-kit/output/server/chunks/AdminLockToggle.js                                                         4.79 kB
+.svelte-kit/output/server/chunks/client.js                                                                  4.81 kB
+.svelte-kit/output/server/entries/pages/friends/_page.server.ts.js                                          5.04 kB
+.svelte-kit/output/server/chunks/sketchbook.js                                                              5.16 kB
+.svelte-kit/output/server/chunks/SiteFooter.js                                                              5.23 kB
+.svelte-kit/output/server/chunks/draw.js                                                                    5.59 kB
+.svelte-kit/output/server/chunks/exports.js                                                                 5.59 kB
+.svelte-kit/output/server/chunks/content11.js                                                               5.92 kB
+.svelte-kit/output/server/entries/endpoints/api/draw/_server.ts.js                                          6.15 kB
+.svelte-kit/output/server/entries/pages/sketchbook/_page.svelte.js                                          6.19 kB
+.svelte-kit/output/server/entries/pages/about/_page.svelte.js                                               6.28 kB
+.svelte-kit/output/server/chunks/talk.js                                                                    6.40 kB
+.svelte-kit/output/server/chunks/content12.js                                                               6.48 kB
+.svelte-kit/output/server/chunks/content14.js                                                               6.48 kB
+.svelte-kit/output/server/chunks/suggestions.js                                                             6.86 kB
+.svelte-kit/output/server/chunks/content23.js                                                               6.92 kB
+.svelte-kit/output/server/entries/endpoints/api/talk/_server.ts.js                                          7.12 kB
+.svelte-kit/output/server/chunks/spotify.js                                                                 7.26 kB
+.svelte-kit/output/server/chunks/internal.js                                                                7.26 kB
+.svelte-kit/output/server/entries/endpoints/api/suggestions/_server.ts.js                                   7.61 kB
+.svelte-kit/output/server/entries/pages/zine/_page.svelte.js                                                8.13 kB
+.svelte-kit/output/server/chunks/content9.js                                                                8.21 kB
+.svelte-kit/output/server/chunks/BoardOgCard.js                                                             8.27 kB
+.svelte-kit/output/server/chunks/content18.js                                                               8.42 kB
+.svelte-kit/output/server/chunks/BoardShell.js                                                              8.42 kB
+.svelte-kit/output/server/chunks/ImageGallery.js                                                            8.52 kB
+.svelte-kit/output/server/chunks/content8.js                                                                8.56 kB
+.svelte-kit/output/server/entries/endpoints/sketchbook/_id_/opengraph-image/_server.ts.js                   8.84 kB
+.svelte-kit/output/server/chunks/WritingIntro.js                                                            8.89 kB
+.svelte-kit/output/server/chunks/blog.js                                                                    9.13 kB
+.svelte-kit/output/server/entries/pages/artworks/_page.svelte.js                                            9.44 kB
+.svelte-kit/output/server/entries/pages/journal/_page.svelte.js                                             9.87 kB
+.svelte-kit/output/server/chunks/BoardThreadBubble.js                                                      10.36 kB
+.svelte-kit/output/server/entries/endpoints/api/suggestions/reference/_server.ts.js                        10.56 kB
+.svelte-kit/output/server/chunks/client2.js                                                                10.62 kB
+.svelte-kit/output/server/chunks/content6.js                                                               11.26 kB
+.svelte-kit/output/server/entries/pages/favorites/_page.svelte.js                                          11.50 kB
+.svelte-kit/output/server/entries/pages/_layout.svelte.js                                                  11.68 kB
+.svelte-kit/output/server/chunks/HomePageContent.js                                                        11.93 kB
+.svelte-kit/output/server/chunks/content19.js                                                              12.92 kB
+.svelte-kit/output/server/chunks/content10.js                                                              13.31 kB
+.svelte-kit/output/server/chunks/SketchbookCanvas.js                                                       14.62 kB
+.svelte-kit/output/server/entries/pages/friends/_page.svelte.js                                            14.80 kB
+.svelte-kit/output/server/chunks/content7.js                                                               15.50 kB
+.svelte-kit/output/server/chunks/content16.js                                                              15.54 kB
+.svelte-kit/output/server/chunks/content24.js                                                              17.39 kB
+.svelte-kit/output/server/chunks/content20.js                                                              18.34 kB
+.svelte-kit/output/server/chunks/content21.js                                                              18.36 kB
+.svelte-kit/output/server/chunks/content17.js                                                              19.77 kB
+.svelte-kit/output/server/chunks/content2.js                                                               20.14 kB
+.svelte-kit/output/server/entries/pages/blog/posts/getting-started-with-machine-learning/_page.svelte.js   21.98 kB
+.svelte-kit/output/server/chunks/content.js                                                                23.44 kB
+.svelte-kit/output/server/chunks/board-utils.js                                                            26.25 kB
+.svelte-kit/output/server/chunks/root.js                                                                   28.19 kB
+.svelte-kit/output/server/entries/pages/interact/_page.svelte.js                                           30.67 kB
+.svelte-kit/output/server/chunks/utils2.js                                                                 33.53 kB
+.svelte-kit/output/server/remote-entry.js                                                                  36.68 kB
+.svelte-kit/output/server/entries/pages/talk/_page.svelte.js                                               36.92 kB
+.svelte-kit/output/server/chunks/content3.js                                                               39.35 kB
+.svelte-kit/output/server/entries/pages/draw/_page.svelte.js                                               39.38 kB
+.svelte-kit/output/server/entries/pages/favorites/_page.server.ts.js                                       39.89 kB
+.svelte-kit/output/server/entries/pages/notes/pytorch/_page.svelte.js                                      48.26 kB
+.svelte-kit/output/server/chunks/content22.js                                                              56.99 kB
+.svelte-kit/output/server/entries/pages/suggestions/_page.svelte.js                                        58.28 kB
+.svelte-kit/output/server/chunks/index.js                                                                 101.41 kB
+.svelte-kit/output/server/index.js                                                                        130.61 kB
+✓ built in 1m 30s
+
+Run npm run preview to preview your production build locally.
+
+> Using @sveltejs/adapter-node
+(node:31904) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+"try_get_request_store" is imported from external module "@sveltejs/kit/internal/server" but never used in ".svelte-kit/adapter-node/index.js".
+  ✔ done

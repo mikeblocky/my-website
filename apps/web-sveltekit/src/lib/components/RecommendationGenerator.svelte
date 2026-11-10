@@ -513,7 +513,7 @@
     padding: 0.375rem 0.875rem;
     border-radius: 0.25rem;
     border: 1px solid hsl(var(--border));
-    font-size: 0.625rem;
+    font-size: var(--font-size-2xs);
     letter-spacing: 0.05em;
     font-weight: 600;
     text-transform: lowercase;
@@ -534,7 +534,7 @@
   .gen-tab-remove {
     color: hsl(var(--muted-foreground));
     cursor: pointer;
-    font-size: 0.6875rem;
+    font-size: var(--font-size-2xs);
     font-weight: 700;
     padding: 0 0.125rem;
     margin-left: 0.25rem;
@@ -548,7 +548,7 @@
     padding: 0.375rem 0.875rem;
     border-radius: 0.25rem;
     border: 1px dashed hsl(var(--border));
-    font-size: 0.625rem;
+    font-size: var(--font-size-2xs);
     letter-spacing: 0.05em;
     font-weight: 600;
     text-transform: lowercase;
@@ -597,7 +597,7 @@
     min-width: 0;
     background: transparent;
     padding: 0.75rem 1rem;
-    font-size: 0.875rem;
+    font-size: var(--font-size-sm);
     color: hsl(var(--foreground));
     font-family: var(--font-sans);
     outline: none;
@@ -614,7 +614,7 @@
     justify-content: center;
     gap: 0.375rem;
     padding: 0.75rem 1rem;
-    font-size: 0.75rem;
+    font-size: var(--font-size-2xs);
     font-weight: 600;
     color: hsl(var(--muted-foreground));
     background: transparent;
@@ -651,7 +651,7 @@
   .gen-img-actions { display: flex; align-items: center; gap: 0.625rem; }
 
   .gen-img-action-crop {
-    font-size: 0.5625rem;
+    font-size: var(--font-size-2xs);
     color: hsl(var(--pride-glow-val));
     font-weight: 700;
     cursor: pointer;
@@ -663,7 +663,7 @@
   .gen-img-action-crop:hover { text-decoration: underline; }
 
   .gen-img-action-remove {
-    font-size: 0.5625rem;
+    font-size: var(--font-size-2xs);
     color: hsl(var(--destructive));
     font-weight: 700;
     cursor: pointer;
@@ -678,7 +678,7 @@
     resize: none;
     background: transparent;
     padding: 0.75rem 1rem;
-    font-size: 0.875rem;
+    font-size: var(--font-size-sm);
     color: hsl(var(--foreground));
     font-family: var(--font-sans);
     outline: none;
@@ -696,7 +696,7 @@
   }
 
   .gen-links-label {
-    font-size: 0.5625rem;
+    font-size: var(--font-size-2xs);
     text-transform: lowercase;
     letter-spacing: 0.1em;
     color: hsl(var(--muted-foreground));
@@ -708,7 +708,7 @@
     display: flex;
     align-items: center;
     gap: 0.25rem;
-    font-size: 0.5625rem;
+    font-size: var(--font-size-2xs);
     font-weight: 700;
     text-transform: lowercase;
     letter-spacing: 0.075em;
@@ -735,7 +735,7 @@
     border-right: 1px solid hsl(var(--border) / 0.4);
     background: transparent;
     padding: 0.5rem 1rem;
-    font-size: 0.75rem;
+    font-size: var(--font-size-2xs);
     font-weight: 600;
     color: hsl(var(--foreground));
     font-family: var(--font-sans);
@@ -747,7 +747,7 @@
     min-width: 0;
     background: transparent;
     padding: 0.5rem 1rem;
-    font-size: 0.75rem;
+    font-size: var(--font-size-2xs);
     color: hsl(var(--foreground));
     font-family: var(--font-sans);
     outline: none;
@@ -783,7 +783,7 @@
     display: flex;
     align-items: center;
     gap: 0.375rem;
-    font-size: 0.75rem;
+    font-size: var(--font-size-2xs);
     font-weight: 700;
     text-transform: lowercase;
     padding: 0 1.25rem;
@@ -824,7 +824,7 @@
   }
 
   .gen-live-preview-label {
-    font-size: 0.5625rem;
+    font-size: var(--font-size-2xs);
     text-transform: lowercase;
     letter-spacing: 0.1em;
     color: hsl(var(--muted-foreground));
@@ -854,7 +854,7 @@
   }
 
   .gen-preview-title {
-    font-size: 0.875rem;
+    font-size: var(--font-size-sm);
     font-weight: 600;
     letter-spacing: 0.025em;
     color: hsl(var(--foreground));
@@ -868,7 +868,7 @@
     align-items: center;
     gap: 0.25rem;
     padding: 0.25rem 0.625rem;
-    font-size: 0.625rem;
+    font-size: var(--font-size-2xs);
     font-weight: 600;
     text-transform: lowercase;
     border-radius: 0.25rem;
@@ -921,7 +921,7 @@
     right: 0.5rem;
     background: hsl(var(--pride-glow-val) / 0.9);
     color: white;
-    font-size: 0.5625rem;
+    font-size: var(--font-size-2xs);
     padding: 0.125rem 0.5rem;
     border-radius: 0.25rem;
     font-family: var(--font-mono);

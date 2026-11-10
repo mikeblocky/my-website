@@ -1,0 +1,40 @@
+HTTP/1.1 308 Permanent Redirect
+Date: Tue, 10 Nov 2026 13:21:50 GMT
+Content-Type: text/plain
+Connection: keep-alive
+Cache-Control: public, max-age=14400, must-revalidate
+location: https://www.mikeblocky.com/artworks/kemutai-hanashi/29.jpg
+refresh: 0;url=https://www.mikeblocky.com/artworks/kemutai-hanashi/29.jpg
+Server: cloudflare
+strict-transport-security: max-age=63072000
+x-vercel-id: hkg1::gvtg6-1794316909823-d5339f181b77
+cf-cache-status: MISS
+Nel: {"report_to":"cf-nel","success_fraction":0.0,"max_age":604800}
+Speculation-Rules: "/cdn-cgi/speculation"
+Report-To: {"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=7C413Q3NpaTqtPRsY1c2wxXNFq%2FZlH9qZLuY06Ya9buWH8Mj7MDGkdrwULnq2xX5TfdpR9NASJnKvDKl%2B56DDo6E7lVh6AsGh%2FZr13%2Fo5L0YADaxj%2BruNWxJ455mzxyGJg%3D%3D"}]}
+CF-RAY: a5855ccdb8e1e8d4-HKG
+alt-svc: h3=":443"; ma=86400
+
+HTTP/1.1 200 OK
+Date: Tue, 10 Nov 2026 13:21:51 GMT
+Content-Type: image/jpeg
+Content-Length: 15854092
+Connection: keep-alive
+Accept-Ranges: bytes
+access-control-allow-origin: *
+Age: 0
+Cache-Control: public, max-age=14400, must-revalidate
+content-disposition: inline; filename="29.jpg"
+etag: "8a2d21fae3308b735c2767e681eae4c2"
+last-modified: Tue, 10 Nov 2026 13:21:50 GMT
+Server: cloudflare
+strict-transport-security: max-age=63072000
+x-vercel-cache: MISS
+x-vercel-id: hkg1::gvxcz-1794316910248-f4a96746b7af
+cf-cache-status: MISS
+Speculation-Rules: "/cdn-cgi/speculation"
+Report-To: {"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=pbut70f0%2FPC4xZZpr5OHBbiekzPTWIUUu36OpT5fNWlqfCI2QTPjLfoyNDL8wq2gNDjN6RCX3r3xrQ2oDnMun13WV3COvRs3yNn1VsrMVFEXF3%2FK1qDbSqiSwgPQIVHS631O340%3D"}]}
+Nel: {"report_to":"cf-nel","success_fraction":0.0,"max_age":604800}
+CF-RAY: a5855cd0bd6604e6-HKG
+alt-svc: h3=":443"; ma=86400
+

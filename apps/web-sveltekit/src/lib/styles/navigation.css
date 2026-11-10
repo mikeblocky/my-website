@@ -125,7 +125,7 @@
   padding: 0.625rem 1rem;
   color: hsl(var(--muted-foreground));
   font-family: var(--font-mono);
-  font-size: 0.875rem;
+  font-size: var(--font-size-sm);
   transition:
     background-color 180ms ease,
     color 180ms ease;

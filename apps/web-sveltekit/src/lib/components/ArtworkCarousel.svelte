@@ -129,10 +129,10 @@
 <style>
   .art-carousel { min-width: 0; margin-bottom: 3.5rem; }
   .art-carousel-header { display: flex; justify-content: space-between; align-items: center; gap: 16px; margin-bottom: 22px; }
-  h2 { font-size: clamp(1rem, 2vw, 1.3rem); font-weight: 550; line-height: 1.4; margin: 0; letter-spacing: -.025em; }
-  .art-carousel-header p { margin: 6px 0 0; color: hsl(var(--muted-foreground)); font-size: .7rem; }
+  h2 { font-size: var(--font-size-lg); font-weight: 550; line-height: 1.4; margin: 0; letter-spacing: -.025em; }
+  .art-carousel-header p { margin: 6px 0 0; color: hsl(var(--muted-foreground)); font-size: var(--font-size-2xs); }
   .art-carousel-header p span { margin-inline: 5px; }
-  .art-carousel-count { flex-shrink: 0; font-size: .7rem; font-variant-numeric: tabular-nums; }
+  .art-carousel-count { flex-shrink: 0; font-size: var(--font-size-2xs); font-variant-numeric: tabular-nums; }
   .art-carousel-count span { color: hsl(var(--muted-foreground)); }
   .art-carousel-track { position: relative; display: grid; place-items: center; isolation: isolate; height: clamp(340px, 64vh, 620px); overflow: visible; padding: 26px 0; border-radius: 0; touch-action: none; }
   .art-carousel-card { position: absolute; left: 50%; top: 50%; width: min(72%, calc(350px * var(--art-ratio))); max-height: 52vh; aspect-ratio: var(--art-ratio); padding: 0; border: 0; border-radius: 0; background: transparent; box-shadow: none; cursor: pointer; transform: translate(-50%, -50%) translateX(calc(var(--offset) * 82px)) translateY(calc(var(--depth) * 10px)) rotate(calc(var(--offset) * 10deg)) scale(calc(1 - var(--depth) * .045)); opacity: calc(1 - var(--depth) * .13); transition: transform 420ms cubic-bezier(.22,.8,.25,1), opacity 300ms ease; will-change: transform; }
@@ -147,7 +147,7 @@
   .art-carousel-controls button:hover { background: hsl(var(--muted)); transform: translateY(-2px); }
   .art-carousel-controls button:disabled { opacity: .25; cursor: default; transform: none; }
   .art-carousel-controls input { width: min(120px, 30vw); height: 3px; accent-color: hsl(var(--site-blue)); cursor: pointer; }
-  .art-carousel-empty { font-size: .8rem; color: hsl(var(--muted-foreground)); padding: 2rem 0; }
+  .art-carousel-empty { font-size: var(--font-size-xs); color: hsl(var(--muted-foreground)); padding: 2rem 0; }
   @media (max-width: 600px) { .art-carousel-track { height: clamp(340px, 58vh, 500px); padding-inline: 0; } .art-carousel-card { width: min(76%, calc(280px * var(--art-ratio))); max-height: 46vh; padding: 0; transform: translate(-50%, -50%) translateX(calc(var(--offset) * 40px)) translateY(calc(var(--depth) * 8px)) rotate(calc(var(--offset) * 10deg)) scale(calc(1 - var(--depth) * .045)); } .art-carousel-card.selected { opacity: 1; transform: translate(-50%, -50%) translateX(var(--drag-x, 0px)) rotate(calc(-1deg + var(--drag-rotation, 0deg))); } }
   @media (prefers-reduced-motion: reduce) { .art-carousel-card, .art-carousel-open, .art-carousel-controls button { transition: none; } }
 </style>
