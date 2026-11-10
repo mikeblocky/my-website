@@ -1,6 +1,9 @@
 import { createClient } from 'redis'
 import type { RedisClientType } from 'redis'
 import { env } from '$env/dynamic/private';
+import { dev } from '$app/environment';
+import { readFile, writeFile, mkdir } from 'node:fs/promises';
+import path from 'node:path';
 
 export const askQuestionsKey = 'ask:questions'
 export const talkMessagesKey = 'talk:messages'
@@ -145,7 +148,54 @@ function getMemoryClient(): KvClient {
 	}
 }
 
+// Public production snapshots are loaded only into local development memory.
+// Every edit remains local, and is persisted across dev-server restarts.
+const devDirectory = path.resolve('.dev-data');
+const devFeeds = [
+  ['talk', 'questions', talkMessagesKey], ['draw', 'prompts', drawPromptsKey],
+  ['suggestions', 'suggestions', suggestionsKey], ['sketchbook', 'drawings', sketchbookDrawingsKey]
+] as const;
+let persistQueue = Promise.resolve();
+let devContentLoaded: Promise<void> | undefined;
+async function loadDevContent() {
+  const memory = getMemoryClient();
+  await Promise.all(devFeeds.map(async ([name, field, key]) => {
+    try {
+      const payload = JSON.parse(await readFile(path.join(devDirectory, `${name}.json`), 'utf8'));
+      const posts = payload[field];
+      if (!Array.isArray(posts)) throw new Error('Invalid snapshot');
+      const existingIds = new Set((await memory.zRange(key, 0, -1)).map(value => JSON.parse(value).id));
+      await memory.zAdd(key, posts.filter(post => post && typeof post.id === 'string' && !existingIds.has(post.id)).map(post => ({
+        score: Date.parse(post.createdAt) || 0, value: JSON.stringify(post)
+      })));
+    } catch (error) { console.warn(`Dev ${name}: no saved public snapshot. Run npm run sync:interact.`, error instanceof Error ? error.message : ''); }
+  }));
+}
+function devClient(): KvClient {
+  const memory = getMemoryClient();
+  const persist = () => {
+    persistQueue = persistQueue.catch(() => {}).then(async () => {
+      await mkdir(devDirectory, { recursive: true });
+      await Promise.all(devFeeds.map(async ([name, field, key]) => {
+        const posts = (await memory.zRange(key, 0, -1)).map(value => JSON.parse(value));
+        await writeFile(path.join(devDirectory, `${name}.json`), JSON.stringify({ [field]: posts }));
+      }));
+    });
+    return persistQueue;
+  };
+  return { ...memory,
+    async zAdd(key, members) { const result = await memory.zAdd(key, members); await persist(); return result; },
+    async zRem(key, member) { const result = await memory.zRem(key, member); await persist(); return result; },
+    async zRemRangeByRank(key, start, stop) { const result = await memory.zRemRangeByRank(key, start, stop); await persist(); return result; }
+  };
+}
+
 export async function getRedisClient(): Promise<KvClient> {
+  if (dev && !redisUrl) {
+    devContentLoaded ??= loadDevContent();
+    await devContentLoaded;
+    return devClient();
+  }
 	if (!redisUrl || global.__redisUnavailable) {
 		return getMemoryClient()
 	}

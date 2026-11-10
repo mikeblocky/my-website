@@ -2,7 +2,7 @@
   import BaseContainer from '$lib/components/BaseContainer.svelte';
   import StackVertical from '$lib/components/StackVertical.svelte';
   import JournalShell from '$lib/components/JournalShell.svelte';
-  import PageIntro from '$lib/components/PageIntro.svelte';
+  import WritingIntro from '$lib/components/WritingIntro.svelte';
   import SeoHead from '$lib/components/SeoHead.svelte';
   import SiteFooter from '$lib/components/SiteFooter.svelte';
 </script>
@@ -13,16 +13,14 @@
   description="A personal collection of blogs, notes, and logs that I write over time."
 />
 
+<div class="writing-page">
 <BaseContainer size="lg" paddingX="md" paddingY="lg">
   <StackVertical gap="md">
-    <PageIntro
-      eyebrow="Journal"
-      title="Journal"
-      description="A personal collection of blogs, notes, and logs that I write over time."
-    />
+    <WritingIntro title="Journal" />
 
     <JournalShell />
   </StackVertical>
 
   <SiteFooter color="blue" />
 </BaseContainer>
+</div>

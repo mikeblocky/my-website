@@ -15,8 +15,6 @@
     Users
   } from '@lucide/svelte';
   import { portalLinks } from '$lib/site';
-  import DesktopNav from './DesktopNav.svelte';
-  import ThemeToggle from './ThemeToggle.svelte';
   import BaseContainer from './BaseContainer.svelte';
   import { reveal } from '../actions/reveal';
 
@@ -57,10 +55,6 @@
 </script>
 <BaseContainer size="lg" paddingX="md" paddingY="lg">
   <div class="sanctuary-home">
-    <header class="home-navigation">
-      <DesktopNav />
-      <div class="ml-auto"><ThemeToggle /></div>
-    </header>
 
     <section class="sanctuary-intro" aria-labelledby="home-title" use:reveal>
       <img class="sanctuary-mark" src="/icon.svg" alt="" width="48" height="48" />

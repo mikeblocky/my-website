@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Maximize2 } from '@lucide/svelte';
+  import ArtworkCarousel from './ArtworkCarousel.svelte';
   import PillTabs from './PillTabs.svelte';
   import ImageGallery from './ImageGallery.svelte';
 
@@ -50,31 +50,7 @@
     {#if activeTab === 'illustrations'}
       <div class="artwork-sections">
         {#each sections as section, sIdx}
-          <section class="art-section">
-            <header>
-              <h2>{section.title}</h2>
-            </header>
-            <div class="art-masonry">
-              {#each section.items as item, iIdx}
-                {@const flatIndex = sections.slice(0, sIdx).reduce((acc, sec) => acc + sec.items.length, 0) + iIdx}
-                <button
-                  type="button"
-                  class:portrait={item.isPortrait}
-                  aria-label={`Open ${section.title} artwork ${iIdx + 1}`}
-                  on:click={() => (activeIdx = flatIndex)}
-                >
-                  <img
-                    src={item.src}
-                    width={item.width}
-                    height={item.height}
-                    alt={`${section.title} artwork ${iIdx + 1}`}
-                    loading="lazy"
-                  />
-                  <span aria-hidden="true"><Maximize2 size={14} strokeWidth={1.8} /></span>
-                </button>
-              {/each}
-            </div>
-          </section>
+          <ArtworkCarousel title={section.title} items={section.items} onOpen={(index) => activeIdx = sections.slice(0, sIdx).reduce((sum, item) => sum + item.items.length, 0) + index} />
         {/each}
       </div>
     {:else}

@@ -18,6 +18,7 @@ export const GET: RequestHandler = async ({ params }) => {
   })
 
   const element = boardOgCard({
+    imageUrls: suggestion.imageUrls,
     accent: '#0ea5e9',
     accentSoft: '#f0f9ff',
     border: '#bae6fd',
@@ -26,7 +27,7 @@ export const GET: RequestHandler = async ({ params }) => {
     body,
     author: suggestion.author || 'anonymous',
     date,
-    imageUrl: suggestion.imageUrl,
+    imageUrl: suggestion.imageUrls?.[0] || suggestion.imageUrl || suggestion.reference?.image,
   })
 
   const png = await generatePng(element as any)

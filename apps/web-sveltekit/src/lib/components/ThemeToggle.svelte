@@ -10,7 +10,7 @@
 
   let iconEl: HTMLDivElement | undefined;
   let iconAnim: Animation | undefined;
-  let themeTransition: ViewTransition | undefined;
+  let themeTimer: ReturnType<typeof setTimeout>;
 
   // Mirrors the framer-motion icon animation from the Next.js ThemeToggle:
   //   animate={{ rotate: isDark ? 360 : 0, scale: [1, 0.8, 1] }}
@@ -33,7 +33,7 @@
         { transform: `rotate(${midDeg}deg) scale(0.8)` },
         { transform: `rotate(${toDeg}deg) scale(1)` }
       ],
-      { duration: 400, easing: 'ease-in-out' }
+      { duration: 180, easing: 'ease-in-out' }
     );
   }
 
@@ -50,21 +50,13 @@
       try { localStorage.setItem('theme', nextTheme); } catch {}
       if (mounted) spinIcon(fromDeg, rotateDegree);
     };
-    if (!mounted || !document.startViewTransition ||
-      window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    if (mounted && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      clearTimeout(themeTimer);
+      root.classList.add('theme-changing');
+      // Change colors in place: no full-page snapshots or separate navbar layer.
       update();
-      return;
-    }
-    themeTransition?.skipTransition();
-    root.classList.add('theme-crossfade');
-    const transition = document.startViewTransition(update);
-    themeTransition = transition;
-    void transition.finished.catch(() => {}).finally(() => {
-      if (themeTransition === transition) {
-        root.classList.remove('theme-crossfade');
-        themeTransition = undefined;
-      }
-    });
+      themeTimer = setTimeout(() => root.classList.remove('theme-changing'), 170);
+    } else update();
   }
 
   onMount(() => {

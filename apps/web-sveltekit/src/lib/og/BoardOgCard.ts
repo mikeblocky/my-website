@@ -8,6 +8,7 @@ type BoardOgCardProps = {
   author?: string
   date: string
   imageUrl?: string
+  imageUrls?: string[]
 }
 
 function clampText(text: string, max: number) {
@@ -33,9 +34,10 @@ function bodyStyle(len: number, hasImage: boolean) {
 }
 
 export function boardOgCard({
-  accent, accentSoft, border, label, body, title, author, date, imageUrl,
+  accent, accentSoft, border, label, body, title, author, date, imageUrl, imageUrls,
 }: BoardOgCardProps) {
-  const hasImage = !!imageUrl
+  const images = [...new Set(imageUrls?.length ? imageUrls : imageUrl ? [imageUrl] : [])].slice(0, 4)
+  const hasImage = images.length > 0
   const hasTitle = !!title && title.trim().length > 0
   const safeBody = clampText(body, hasImage ? 800 : 1200)
   const { fontSize, lineHeight } = bodyStyle(safeBody.length, hasImage)
@@ -224,11 +226,11 @@ export function boardOgCard({
               {
                 type: 'div',
                 props: {
-                  style: { display: 'flex', width: 420, flexShrink: 0, background: accentSoft },
-                  children: {
+                  style: { display: 'flex', flexWrap: 'wrap', width: 420, height: 526, flexShrink: 0, background: accentSoft },
+                  children: images.map((src, index) => ({
                     type: 'img',
-                    props: { src: imageUrl, style: { width: '100%', height: '100%', objectFit: 'cover' } },
-                  },
+                    props: { src, style: { width: images.length > 2 && !(images.length === 3 && index === 0) ? 210 : 420, height: images.length > 1 ? 263 : 526, objectFit: 'contain' } },
+                  })),
                 },
               },
               infoPanel(44),

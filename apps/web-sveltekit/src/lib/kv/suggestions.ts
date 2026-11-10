@@ -42,9 +42,9 @@ export async function saveSuggestion(suggestion: MediaSuggestion) {
   }
 }
 
-export async function fetchSuggestions(limit = 100): Promise<MediaSuggestion[]> {
+export async function fetchSuggestions(limit = 0): Promise<MediaSuggestion[]> {
   const redis = await getRedisClient()
-  const raw = await redis.zRange(suggestionsKey, -limit, -1, { REV: true })
+  const raw = await redis.zRange(suggestionsKey, 0, limit > 0 ? limit - 1 : -1, { REV: true })
 
   return raw
     .map((entry: string) => {

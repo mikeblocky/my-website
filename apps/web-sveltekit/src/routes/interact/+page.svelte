@@ -7,13 +7,12 @@
 <SeoHead
   title="interact"
   path="/interact"
-  image="/interact/opengraph-image.jpg"
-  twitterImage="/interact/twitter-image.jpg"
   description="A space to connect: send messages, draw something in the sketchbook suggest books or music, or leave drawing prompts."
 />
 
 <SectionPageShell
   title="Interact"
+  containerSize="md"
   description="A space to send messages, draw something in the sketchbook, suggest books or music, or leave drawing prompts."
   currentLabel="Interact"
   footerColor="blue"

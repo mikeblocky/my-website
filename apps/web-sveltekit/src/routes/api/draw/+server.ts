@@ -1,3 +1,4 @@
+import { revalidateDrawPrompts } from '$lib/kv/draw-cache';
 import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 import { env } from '$env/dynamic/private';
@@ -87,6 +88,8 @@ export const PUT: RequestHandler = async ({ request }) => {
     return json({ error: 'Prompt not found' }, { status: 404 });
   }
 
+  revalidateDrawPrompts();
+
   return json({ prompt: updatedPrompt }, { status: 200 });
 };
 
@@ -119,6 +122,7 @@ export const PATCH: RequestHandler = async ({ request }) => {
     if (!updatedPrompt) {
       return json({ error: 'Message not found' }, { status: 404 });
     }
+    revalidateDrawPrompts();
     return json({ prompt: updatedPrompt }, { status: 200 });
   } else {
     if (typeof body !== 'string') {
@@ -151,6 +155,8 @@ export const PATCH: RequestHandler = async ({ request }) => {
       updatedPrompt.author || 'anonymous',
       `[Follow-up] ${trimmedBody}`
     ).catch(err => console.error(err));
+
+    revalidateDrawPrompts();
 
     return json({ prompt: updatedPrompt, cooldown: reservation.cooldown }, { status: 200 });
   }

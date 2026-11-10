@@ -1,3 +1,4 @@
+import { revalidateSketchbookDrawings } from '$lib/kv/sketchbook-cache';
 import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 import { env } from '$env/dynamic/private';
@@ -75,6 +76,7 @@ export const PUT: RequestHandler = async ({ request }) => {
     if (!updated) {
       return json({ error: 'Drawing not found' }, { status: 404 });
     }
+    revalidateSketchbookDrawings();
     return json({ drawing: updated }, { status: 200 });
   }
 
@@ -91,6 +93,7 @@ export const PUT: RequestHandler = async ({ request }) => {
     if (!updated) {
       return json({ error: 'Message not found' }, { status: 404 });
     }
+    revalidateSketchbookDrawings();
     return json({ drawing: updated }, { status: 200 });
   } else {
     if (typeof reply !== 'string' || reply.trim().length === 0) {
@@ -100,6 +103,7 @@ export const PUT: RequestHandler = async ({ request }) => {
     if (!updated) {
       return json({ error: 'Drawing not found' }, { status: 404 });
     }
+    revalidateSketchbookDrawings();
     return json({ drawing: updated }, { status: 200 });
   }
 };
@@ -120,6 +124,8 @@ export const DELETE: RequestHandler = async ({ url }) => {
   if (!success) {
     return json({ error: 'Drawing not found' }, { status: 404 });
   }
-  
+
+  revalidateSketchbookDrawings();
+
   return json({ success: true }, { status: 200 });
 };

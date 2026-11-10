@@ -368,3 +368,53 @@
   height: 1.05rem;
   color: hsl(var(--muted-foreground));
 }
+
+@media (min-width: 761px) { .mobile-navigation { display: none; } }
+.mobile-dock { height: 68px; padding: 5px; box-shadow: 0 6px 22px hsl(220 20% 10% / .09), inset 0 1px 0 hsl(0 0% 100% / .35); }
+.mobile-dock .mobile-dock-tab { align-content: center; gap: 3px; }
+.mobile-dock-caption { font-size: 9px; line-height: 1.1; letter-spacing: .01em; opacity: .85; transition: opacity 220ms ease; }
+.compact .mobile-dock-caption { display: none; }
+.mobile-spotify-player { border-radius: 20px; padding: 9px 12px; box-shadow: 0 6px 22px hsl(220 20% 10% / .08); }
+.mobile-spotify-art { width: 38px; height: 38px; border-radius: 10px; border: 0; }
+.mobile-spotify-tint, .mobile-spotify-art-overlay { display: none; }
+.mobile-spotify-song { display: flex; align-items: center; gap: 7px; }
+.mobile-spotify-collapsed-btn { width: 48px; height: 48px; border-radius: 15px; box-shadow: 0 4px 16px hsl(220 20% 10% / .1); }
+.music-meter { display: inline-flex; gap: 2px; align-items: center; height: 12px; flex-shrink: 0; color: hsl(var(--site-blue)); }
+.music-meter i { display: block; width: 2px; height: 10px; border-radius: 2px; background: currentColor; animation: music-pulse 900ms ease-in-out infinite alternate; }
+.music-meter i:nth-child(2) { animation-delay: -320ms; }
+.music-meter i:nth-child(3) { animation-delay: -630ms; }
+.mobile-menu-theme { margin-top: 12px; }
+@keyframes music-pulse { from { transform: scaleY(.35); } to { transform: scaleY(1); } }
+@media (prefers-reduced-motion: reduce) { .music-meter i { animation: none; } }
+
+/* A single thumb-friendly button unfolds into the complete mobile menu. */
+.phone-navigation { display: none; }
+@media (max-width: 760px) { .phone-navigation { display: block; } }
+.phone-menu-trigger, .phone-menu-panel, .phone-music { background: hsl(var(--background) / .94); color: hsl(var(--foreground)); border: 1px solid hsl(var(--border) / .8); box-shadow: 0 8px 32px hsl(220 30% 8% / .12); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
+.phone-menu-trigger { position: fixed; bottom: calc(20px + env(safe-area-inset-bottom, 0px)); right: max(20px, env(safe-area-inset-right, 0px)); z-index: 72; width: 54px; height: 54px; display: grid; place-items: center; border-radius: 19px; cursor: pointer; transition: transform 380ms cubic-bezier(.22,1,.36,1), background-color 260ms ease, color 260ms ease; }
+.phone-menu-trigger.open { transform: rotate(90deg); }
+.phone-menu-trigger:active { scale: .92; }
+.phone-menu-backdrop { position: fixed; inset: 0; z-index: 70; border: 0; background: hsl(var(--foreground) / .08); backdrop-filter: blur(3px); }
+.phone-menu-panel { position: fixed; bottom: calc(86px + env(safe-area-inset-bottom, 0px)); right: max(20px, env(safe-area-inset-right, 0px)); z-index: 71; width: min(248px, calc(100vw - 40px)); max-height: calc(100dvh - 120px - env(safe-area-inset-bottom, 0px)); overflow-y: auto; border-radius: 24px; padding: 10px; transform-origin: bottom right; }
+.phone-menu-panel nav { display: grid; gap: 2px; }
+.phone-menu-panel nav a { display: flex; align-items: center; gap: 12px; min-height: 44px; padding: 10px 14px; border-radius: 14px; font-size: .85rem; text-transform: capitalize; color: hsl(var(--muted-foreground)); transition: background-color 200ms ease, color 200ms ease, translate 300ms cubic-bezier(.22,1,.36,1); }
+.phone-menu-panel nav a.active, .phone-menu-panel nav a:hover { color: hsl(var(--site-blue)); background: hsl(var(--site-blue) / .08); }
+.phone-menu-panel nav a:active { translate: 3px 0; }
+.phone-menu-theme { display: flex; justify-content: space-between; align-items: center; padding: 10px 12px 2px; margin-top: 6px; font-size: .75rem; color: hsl(var(--muted-foreground)); }
+.phone-menu-theme > div > :not(button) { display: none; }
+.phone-music { position: fixed; bottom: calc(20px + env(safe-area-inset-bottom, 0px)); left: 16px; z-index: 65; display: flex; align-items: center; gap: 9px; width: min(260px, calc(100vw - 104px)); min-height: 54px; border-radius: 18px; padding: 7px 10px; }
+.phone-music img { border-radius: 10px; object-fit: cover; }
+.phone-music > span:not(.music-meter) { min-width: 0; flex: 1; }
+.phone-music strong, .phone-music small { display: block; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.phone-music strong { font-size: .75rem; font-weight: 600; }
+.phone-music small { font-size: .65rem; color: hsl(var(--muted-foreground)); margin-top: 3px; }
+@media (prefers-reduced-motion: reduce) { .phone-menu-trigger, .phone-menu-panel nav a { transition: none; } }
+
+.phone-menu-trigger { touch-action: none; user-select: none; -webkit-user-select: none; view-transition-name: phone-navigation-button; transition: left 280ms cubic-bezier(.22,1,.36,1), top 280ms cubic-bezier(.22,1,.36,1), background-color 280ms ease, color 280ms ease; }
+.phone-menu-trigger.open { transform: none; }
+.phone-menu-trigger.dragging { transition: none !important; cursor: grabbing; scale: 1.06; }
+.phone-menu-panel { backdrop-filter: none; -webkit-backdrop-filter: none; background: hsl(var(--background)); }
+.phone-menu-backdrop { backdrop-filter: none; }
+.phone-position-tools { display: grid; gap: 6px; padding: 10px 12px 4px; color: hsl(var(--muted-foreground)); font-size: .65rem; }
+.phone-position-tools button { border: 0; background: transparent; color: hsl(var(--site-blue)); padding: 4px 0; text-align: left; cursor: pointer; font-size: .7rem; }
+::view-transition-old(phone-navigation-button), ::view-transition-new(phone-navigation-button) { animation: none; }

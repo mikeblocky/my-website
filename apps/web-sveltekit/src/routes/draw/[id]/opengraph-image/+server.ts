@@ -17,6 +17,7 @@ export const GET: RequestHandler = async ({ params }) => {
   const imageUrl = prompt.imageUrls?.[0] || prompt.imageUrl
 
   const element = boardOgCard({
+    imageUrls: prompt.imageUrls,
     accent: '#7c3aed',
     accentSoft: '#f5f3ff',
     border: '#ddd6fe',

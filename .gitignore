@@ -49,3 +49,6 @@ BlogPostContent.tsx
 # agents
 .agents/
 .gemini/
+
+# Local public feed snapshots and dev edits
+apps/web-sveltekit/.dev-data/

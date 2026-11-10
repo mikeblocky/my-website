@@ -8,7 +8,7 @@ let cachedPrompts: DrawPrompt[] | null = null;
 let lastCacheTime = 0;
 const CACHE_TTL = 30000; // 30 seconds
 
-export async function getDrawPrompts(limit = 100): Promise<DrawPrompt[]> {
+export async function getDrawPrompts(limit = 0): Promise<DrawPrompt[]> {
     const now = Date.now();
     if (!cachedPrompts || now - lastCacheTime > CACHE_TTL) {
         cachedPrompts = await fetchPrompts(limit);

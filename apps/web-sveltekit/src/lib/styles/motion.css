@@ -491,3 +491,13 @@
     transform: translateY(0);
   }
 }
+
+/* Only a few surfaces animate during theme changes; text updates immediately. */
+@media (prefers-reduced-motion: no-preference) {
+  html.theme-changing body,
+  html.theme-changing .site-sidebar,
+  html.theme-changing .phone-menu-panel,
+  html.theme-changing .phone-menu-trigger {
+    transition: background-color 140ms ease-out, border-color 140ms ease-out !important;
+  }
+}

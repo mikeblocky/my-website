@@ -39,9 +39,9 @@ export async function savePrompt(prompt: DrawPrompt) {
   }
 }
 
-export async function fetchPrompts(limit = 100): Promise<DrawPrompt[]> {
+export async function fetchPrompts(limit = 0): Promise<DrawPrompt[]> {
   const redis = await getRedisClient()
-  const raw = await redis.zRange(drawPromptsKey, -limit, -1, { REV: true })
+  const raw = await redis.zRange(drawPromptsKey, 0, limit > 0 ? limit - 1 : -1, { REV: true })
   return raw
     .map((entry: string) => {
       try {

@@ -35,7 +35,7 @@
     accept="image/*"
     multiple
     on:change={handleChange}
-    class="hidden"
+    class="sr-only"
   />
   <ImageIcon size={iconSize} />
   <span><slot>Add</slot></span>

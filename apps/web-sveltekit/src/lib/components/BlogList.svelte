@@ -1,7 +1,6 @@
 <script lang="ts">
   import type { BlogPost } from '@mikeblocky/site-data';
-  import { slide } from 'svelte/transition';
-  import StackVertical from './StackVertical.svelte';
+  import { ArrowUpRight } from '@lucide/svelte';
   import { cn } from '@/lib/utils/utils';
 
   export let posts: BlogPost[] = [];
@@ -128,13 +127,13 @@
     <div 
       class={cn(
         "relative w-full rounded-sm border border-slate-200/60 dark:border-slate-800/60 bg-background/40 transition-all duration-200",
-        isFocused && "ring-1 ring-[hsl(var(--pride-glow-val))]/80 border-[hsl(var(--pride-glow-val))]/80"
+        isFocused && "border-transparent"
       )}
     >
       <input
         bind:value={query}
         type="text"
-        placeholder="Search blogs you want to see..."
+        placeholder="Search articles"
         aria-label="Search blogs"
         on:focus={() => (isFocused = true)}
         on:blur={() => (isFocused = false)}
@@ -154,6 +153,7 @@
     </div>
 
     <!-- Theme Filter Strip -->
+    <details class="writing-theme-picker"><summary>Browse by theme{activeTheme !== 'all' ? ` · ${activeTheme}` : ''}</summary>
     <div class="theme-filter-strip theme-filter-strip--wrap" aria-label="Filter blogs by theme">
       {#each themes as theme}
         <button
@@ -166,6 +166,7 @@
       {/each}
     </div>
 
+    </details>
     <span class="blog-count-label text-sm font-medium text-muted-foreground block">{countLabel}</span>
   </div>
 
@@ -173,81 +174,17 @@
   <div class="blog-list space-y-6 mt-6" aria-live="polite">
     {#if paginatedPosts.length}
       {#each paginatedPosts as post, index}
-        <div class="group">
-          <a class="block py-3 transition-colors duration-200" href={`/blog/${post.slug}`}>
-            <article>
-              <div class="flex flex-col">
-                <h4 class="group-hover:pride-text transition-colors duration-150 mb-2 mt-0 font-medium text-lg text-slate-900 dark:text-slate-100 font-sans">
-                  {#each highlightText(post.title, query) as part}
-                    {#if part.highlight}
-                      <span class="bg-[hsl(var(--pride-glow-val))]/15 text-slate-950 dark:text-slate-50 border-b border-[hsl(var(--pride-glow-val))]/40 px-0.5 rounded-sm font-medium">
-                        {part.text}
-                      </span>
-                    {:else}
-                      {part.text}
-                    {/if}
-                  {/each}
-                </h4>
-                
-                <p class="text-base text-muted-foreground line-clamp-2 mb-3 font-sans">
-                  {#each highlightText(post.description, query) as part}
-                    {#if part.highlight}
-                      <span class="bg-[hsl(var(--pride-glow-val))]/15 text-slate-950 dark:text-slate-50 border-b border-[hsl(var(--pride-glow-val))]/40 px-0.5 rounded-sm font-medium">
-                        {part.text}
-                      </span>
-                    {:else}
-                      {part.text}
-                    {/if}
-                  {/each}
-                </p>
-
-                <!-- Search matches inline snippet -->
-                {#if query && post.searchMatches && post.searchMatches.length > 0}
-                  <div class="mb-3 rounded-sm border border-slate-200/60 dark:border-slate-800/60 bg-slate-50/50 dark:bg-slate-900/30 px-3 py-2.5 shadow-none" transition:slide>
-                    <StackVertical gap="sm">
-                      {#each post.searchMatches as match}
-                        <div class="space-y-1">
-                          <span class="text-xs font-semibold pride-text block font-mono">
-                            Line {match.lineNumber}
-                          </span>
-                          <p class="text-sm leading-6 text-muted-foreground font-sans">
-                            {#each highlightText(match.excerpt, query) as part}
-                              {#if part.highlight}
-                                <span class="bg-[hsl(var(--pride-glow-val))]/15 text-slate-950 dark:text-slate-50 border-b border-[hsl(var(--pride-glow-val))]/40 px-0.5 rounded-sm font-medium">
-                                  {part.text}
-                                </span>
-                              {:else}
-                                {part.text}
-                              {/if}
-                            {/each}
-                          </p>
-                        </div>
-                      {/each}
-                    </StackVertical>
-                  </div>
-                {/if}
-
-                <!-- Meta Details -->
-                <div class="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-muted-foreground font-mono">
-                  <span>{post.date}</span>
-                  <span>•</span>
-                  <span>{post.readingTime}</span>
-                  {#if post.themes}
-                    {#each post.themes as theme}
-                      <span>•</span>
-                      <span class="pride-text font-medium lowercase">
-                        {theme}
-                      </span>
-                    {/each}
-                  {/if}
-                </div>
-              </div>
-            </article>
+        <article class="writing-thread">
+          <span class="writing-entry-number" aria-hidden="true">{String((safeCurrentPage - 1) * POSTS_PER_PAGE + index + 1).padStart(2, '0')}</span>
+          <a class="writing-thread-toggle writing-direct-link" href={`/blog/${post.slug}`} data-sveltekit-preload-data="hover">
+            <span>
+              <span class="writing-thread-title">{#each highlightText(post.title, query) as part}{#if part.highlight}<mark>{part.text}</mark>{:else}{part.text}{/if}{/each}</span>
+              <span class="writing-thread-meta">{post.date}<span aria-hidden="true"> · </span>{post.readingTime}</span>
+              <span class="writing-entry-summary">{post.description}</span>
+              {#if normalizedQuery && post.searchMatches?.length}<span class="writing-search-excerpt">{post.searchMatches[0].excerpt}</span>{/if}
+            </span><ArrowUpRight size={17} class="writing-entry-arrow" />
           </a>
-          {#if index < paginatedPosts.length - 1}
-            <hr class="border-slate-200/30 dark:border-slate-800/30 mt-3" />
-          {/if}
-        </div>
+        </article>
       {/each}
     {:else}
       <div class="rounded-sm border border-slate-200/60 bg-slate-50/50 p-6 text-center dark:border-slate-800/60 dark:bg-slate-900/30 shadow-none font-sans text-sm text-muted-foreground">

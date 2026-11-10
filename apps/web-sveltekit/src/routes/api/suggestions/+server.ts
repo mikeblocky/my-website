@@ -1,3 +1,4 @@
+import { revalidateMediaSuggestions } from '$lib/kv/suggestions-cache';
 import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 import {
@@ -135,6 +136,8 @@ export const PUT: RequestHandler = async ({ request }) => {
     return json({ error: 'Suggestion not found' }, { status: 404 });
   }
 
+  revalidateMediaSuggestions();
+
   return json({ suggestion: updated }, { status: 200 });
 };
 
@@ -168,6 +171,8 @@ export const PATCH: RequestHandler = async ({ request }) => {
       return json({ error: 'Message not found' }, { status: 404 });
     }
 
+    revalidateMediaSuggestions();
+
     return json({ suggestion: updated }, { status: 200 });
   }
 
@@ -185,6 +190,8 @@ export const PATCH: RequestHandler = async ({ request }) => {
     if (!updated) {
       return json({ error: 'Suggestion not found' }, { status: 404 });
     }
+
+    revalidateMediaSuggestions();
 
     return json({ suggestion: updated }, { status: 200 });
   }
@@ -208,6 +215,8 @@ export const PATCH: RequestHandler = async ({ request }) => {
     if (!updated) {
       return json({ error: 'Suggestion not found' }, { status: 404 });
     }
+
+    revalidateMediaSuggestions();
 
     return json({ suggestion: updated, cooldown: reservation.cooldown }, { status: 200 });
   }

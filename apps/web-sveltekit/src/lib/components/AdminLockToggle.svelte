@@ -4,6 +4,7 @@
   type AdminAccent = 'blue' | 'violet' | 'teal' | 'yellow' | 'indigo' | 'sky';
 
   export let isAdminMode = false;
+  export let showLabel = false;
   export let passcode = '';
   export let showPasscodeInput = false;
   export let onEnabled: () => void = () => {};
@@ -45,6 +46,7 @@
   $: styles = accentStyles[accent];
 
   function enableAdmin() {
+    if (!passcode.trim()) return;
     isAdminMode = true;
     showPasscodeInput = false;
     onEnabled();
@@ -53,9 +55,7 @@
   function handleInput(event: Event) {
     const input = event.target as HTMLInputElement;
     passcode = input.value;
-    if (passcode.length >= 4) {
-      enableAdmin();
-    }
+
   }
 
   function handleKeyDown(event: KeyboardEvent) {
@@ -79,13 +79,16 @@
     type="button"
     on:click={toggleInput}
     class="flex items-center justify-center rounded-full p-1.5 text-slate-400 transition-colors duration-150 hover:bg-slate-200/50 dark:hover:bg-slate-800/40 {styles.hover} {isAdminMode ? styles.active : ''}"
+    aria-label={isAdminMode ? 'Disable Admin Mode' : 'Enable Admin Mode'}
+    aria-pressed={isAdminMode}
     title={isAdminMode ? 'Disable Admin Mode' : 'Enable Admin Mode'}
   >
     <svelte:component this={isAdminMode ? Unlock : Lock} size={14} strokeWidth={1.8} />
+    {#if showLabel}<span class="ml-1 text-xs">{isAdminMode ? 'Admin on' : 'Admin'}</span>{/if}
   </button>
 
   {#if showPasscodeInput && !isAdminMode}
-    <div class="flex w-[110px] items-center overflow-hidden">
+    <div class="flex w-[180px] items-center gap-1">
       <input
         type="password"
         value={passcode}
@@ -94,6 +97,7 @@
         placeholder="Passcode"
         class="w-full rounded-md border border-slate-200 bg-background px-2.5 py-1 text-xs text-slate-900 focus:outline-none focus:ring-1 dark:border-slate-800 dark:text-slate-100 {styles.ring}"
       />
+      <button type="button" on:click={enableAdmin} disabled={!passcode.trim()} class="rounded-md px-2 py-1 text-xs text-blue-600 disabled:opacity-40">Unlock</button>
     </div>
   {/if}
 </div>

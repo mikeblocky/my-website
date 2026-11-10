@@ -1,365 +1,115 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
-  import { browser } from '$app/environment';
-  import { page } from '$app/stores';
-  import { fade, fly } from 'svelte/transition';
-  import { cubicOut } from 'svelte/easing';
+  import { onMount, tick } from 'svelte';
   import { goto } from '$app/navigation';
-  import {
-    Home,
-    Grid,
-    BookOpen,
-    MessageSquare,
-    MoreHorizontal,
-    User,
-    Users,
-    Heart,
-    Music,
-    ChevronDown
-  } from '@lucide/svelte';
-  import {
-    spotifyCurrentlyPlaying,
-    spotifyHasChecked,
-    startSpotifyPolling
-  } from '$lib/spotify/currently-playing-store';
-
-  let isMoreOpen = false;
-  let isSpotifyCollapsed = false;
-  let isGenerator = false;
-  let isCompact = false;
+  import { page } from '$app/stores';
+  import { fly, fade } from 'svelte/transition';
+  import { cubicOut } from 'svelte/easing';
+  import { Menu, X, Home, User, Palette, BookOpen, Users, Heart, MessageCircle, Music } from '@lucide/svelte';
+  import { navLinks } from '$lib/site';
+  import ThemeToggle from './ThemeToggle.svelte';
+  import { spotifyCurrentlyPlaying, startSpotifyPolling } from '$lib/spotify/currently-playing-store';
+  let open = false;
   let reducedMotion = false;
-  let dragIndex: number | null = null;
-  let gesture: { id: number; x: number; y: number; dragging: boolean } | null = null;
+  let navigating = false;
+  let positioned = false;
+  let x = 0, y = 0, viewportWidth = 0, viewportHeight = 0;
+  let panelHeight = 440;
+  let panel: HTMLDivElement;
+  let dragging = false;
   let suppressClick = false;
-
-  const duration = (milliseconds: number) => reducedMotion ? 0 : milliseconds;
-
-  function startGesture(event: PointerEvent) {
+  let pointer: { id: number; x: number; y: number; originX: number; originY: number } | null = null;
+  type DockPosition = { corner: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right' };
+  let position: DockPosition = { corner: 'bottom-right' };
+  const size = 54, margin = 16;
+  const clamp = (value: number, max: number) => Math.max(margin, Math.min(value, Math.max(margin, max - size - margin)));
+  function restorePosition() {
+    viewportWidth = window.innerWidth;
+    viewportHeight = window.visualViewport?.height || window.innerHeight;
+    x = position.corner.endsWith('left') ? margin : viewportWidth - size - margin;
+    y = position.corner.startsWith('top') ? margin : viewportHeight - size - margin;
+    x = clamp(x, viewportWidth); y = clamp(y, viewportHeight); positioned = true;
+  }
+  function snapPosition() {
+    position = { corner: `${y + size / 2 < viewportHeight / 2 ? 'top' : 'bottom'}-${x + size / 2 < viewportWidth / 2 ? 'left' : 'right'}` as DockPosition['corner'] }; restorePosition();
+    try { localStorage.setItem('mike:mobile-navigation-position', JSON.stringify(position)); } catch {}
+  }
+  function startDrag(event: PointerEvent) {
     if (!event.isPrimary || event.button !== 0) return;
-    gesture = { id: event.pointerId, x: event.clientX, y: event.clientY, dragging: false };
+    const target = event.currentTarget as HTMLButtonElement;
+    target.setPointerCapture(event.pointerId);
     suppressClick = false;
+    pointer = { id: event.pointerId, x: event.clientX, y: event.clientY, originX: x, originY: y };
   }
-
-  function moveGesture(event: PointerEvent) {
-    if (!gesture || gesture.id !== event.pointerId) return;
-    const dx = event.clientX - gesture.x;
-    const dy = event.clientY - gesture.y;
-    if (!gesture.dragging) {
-      if (Math.abs(dy) > 10 && Math.abs(dy) > Math.abs(dx)) { gesture = null; return; }
-      if (Math.abs(dx) < 8) return;
-      gesture.dragging = true;
-      (event.currentTarget as HTMLElement).setPointerCapture(event.pointerId);
-    }
-    const rect = (event.currentTarget as HTMLElement).getBoundingClientRect();
-    dragIndex = Math.max(0, Math.min(4, (event.clientX - rect.left - 6) / ((rect.width - 12) / 5) - 0.5));
+  function moveDrag(event: PointerEvent) {
+    if (!pointer || pointer.id !== event.pointerId) return;
+    const dx = event.clientX - pointer.x, dy = event.clientY - pointer.y;
+    if (!dragging && Math.hypot(dx, dy) < 8) return;
+    dragging = true; suppressClick = true; open = false;
+    x = clamp(pointer.originX + dx, viewportWidth); y = clamp(pointer.originY + dy, viewportHeight);
   }
-
-  function endGesture(event: PointerEvent) {
-    if (!gesture || gesture.id !== event.pointerId) return;
-    const index = dragIndex === null ? -1 : Math.round(dragIndex);
-    const didDrag = gesture.dragging;
-    gesture = null;
-    dragIndex = null;
-    if (!didDrag) return;
-    suppressClick = true;
-    if (index === 4) isMoreOpen = !isMoreOpen;
-    else if (index >= 0) {
-      isMoreOpen = false;
-      if (mainTabs[index].href !== pathname) void goto(mainTabs[index].href);
-    }
+  function finishDrag(event: PointerEvent) {
+    if (!pointer || pointer.id !== event.pointerId) return;
+    const moved = dragging;
+    pointer = null; dragging = false;
+    if (moved) snapPosition();
   }
+  async function navigate(event: MouseEvent, href: string) {
+    if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+    event.preventDefault(); navigating = true; open = false;
+    await tick();
+    try { await goto(href); } finally { navigating = false; }
+  }
+  function measurePanel(node: HTMLDivElement) {
+    const observer = new ResizeObserver(() => panelHeight = node.offsetHeight);
+    observer.observe(node); return { destroy: () => observer.disconnect() };
+  }
+  $: panelX = Math.max(margin, Math.min(x + size - 248, viewportWidth - 248 - margin));
+  $: panelY = y > viewportHeight / 2 ? Math.max(margin, y - panelHeight - 12) : Math.min(viewportHeight - panelHeight - margin, y + size + 12);
+  function resetPosition() { position = { corner: 'bottom-right' }; restorePosition(); snapPosition(); open = false; }
 
-  const mainTabs = [
-    { href: '/', label: 'Home', icon: Home, exact: true },
-    { href: '/artworks', label: 'Gallery', icon: Grid },
-    { href: '/journal', label: 'Journal', icon: BookOpen },
-    { href: '/interact', label: 'Interact', icon: MessageSquare }
-  ];
-
-  const moreTabs = [
-    { href: '/about', label: 'About', icon: User },
-    { href: '/friends', label: 'Friends', icon: Users },
-    { href: '/favorites', label: 'Favorites', icon: Heart }
-  ];
-
+  const icons = [Home, User, Palette, BookOpen, Users, Heart, MessageCircle];
   $: pathname = $page.url.pathname;
-
-  // Check if active page/tab is recommendation generator. Query params and
-  // localStorage are browser-only during SvelteKit prerendering.
-  $: {
-    if (!browser || pathname !== '/favorites') {
-      isGenerator = false;
-    } else {
-      const tabParam = $page.url.searchParams.get('tab');
-      const storedTab = localStorage.getItem('mikeblocky:recommendations-tab');
-      const activeTab = tabParam || storedTab || 'manga';
-      isGenerator = activeTab === 'generator';
-    }
-  }
-
-  // Close sheet on path change
-  $: {
-    if (pathname) {
-      isMoreOpen = false;
-    }
-  }
-
-  // `pathname` is passed in explicitly so the reactive statements and markup
-  // that call this track it as a dependency.
-  const isTabActive = (tab: { href: string; exact?: boolean }, path: string) => {
-    if (tab.exact) {
-      return path === tab.href;
-    }
-    return path.startsWith(tab.href);
-  };
-
+  $: if (pathname) open = false;
   onMount(() => {
     startSpotifyPolling();
-    const preference = window.matchMedia('(prefers-reduced-motion: reduce)');
-    const syncPreference = () => { reducedMotion = preference.matches; };
-    syncPreference();
-    preference.addEventListener('change', syncPreference);
-    let previousY = window.scrollY;
-    let travel = 0;
-    let frame = 0;
-    const handleScroll = () => {
-      if (frame) return;
-      frame = requestAnimationFrame(() => {
-        const y = Math.max(0, window.scrollY);
-        const delta = y - previousY;
-        travel = Math.sign(delta) === Math.sign(travel) ? travel + delta : delta;
-        if (y < 80 || travel < -14) isCompact = false;
-        else if (travel > 24 && !isMoreOpen && !gesture) isCompact = true;
-        previousY = y;
-        frame = 0;
-      });
-    };
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-      preference.removeEventListener('change', syncPreference);
-      cancelAnimationFrame(frame);
-    };
+    try {
+      const saved = JSON.parse(localStorage.getItem('mike:mobile-navigation-position') || 'null');
+      if (saved && ['top-left','top-right','bottom-left','bottom-right'].includes(saved.corner)) position = { corner: saved.corner };
+    } catch {}
+    restorePosition();
+    window.addEventListener('resize', restorePosition);
+    window.visualViewport?.addEventListener('resize', restorePosition);
+    const preference = matchMedia('(prefers-reduced-motion: reduce)');
+    const update = () => reducedMotion = preference.matches;
+    update(); preference.addEventListener('change', update);
+    return () => { preference.removeEventListener('change', update); window.removeEventListener('resize', restorePosition); window.visualViewport?.removeEventListener('resize', restorePosition); };
   });
-
-  $: moreActive = moreTabs.some(tab => isTabActive(tab, pathname));
-
-  $: activeIndex = (() => {
-    if (isMoreOpen || moreActive) return 4;
-    return mainTabs.findIndex(tab => isTabActive(tab, pathname));
-  })();
-
-  $: getPlayerBottomOffset = () => '72px';
-  $: playerBarVisible = !!$spotifyCurrentlyPlaying && !isSpotifyCollapsed;
-  $: moreMenuBottom = '5.25rem';
+  const active = (href: string, path: string) => href === '/' ? path === '/' : path.startsWith(href) || (href === '/journal' && /^\/(blog|diary|learning)/.test(path));
 </script>
-
-<div class="mobile-navigation sm:hidden select-none" class:compact={isCompact && !isMoreOpen}>
-
-  <!-- ────────────────── SPOTIFY FLOATING PLAYER BAR ────────────────── -->
-  {#if $spotifyCurrentlyPlaying}
-    {#if isSpotifyCollapsed}
-      <button
-        type="button"
-        on:click={() => (isSpotifyCollapsed = false)}
-        class="mobile-spotify-collapsed-btn"
-        style="bottom: calc(1.5rem + env(safe-area-inset-bottom, 0px) + {getPlayerBottomOffset()});"
-        title="Expand currently playing"
-        aria-label="Expand currently playing"
-        in:fly={{ x: 12, duration: duration(360), opacity: 0, easing: cubicOut }}
-        out:fade={{ duration: duration(120) }}
-      >
-        {#if $spotifyCurrentlyPlaying.artworkUrl}
-          <img
-            src={$spotifyCurrentlyPlaying.artworkUrl}
-            alt={$spotifyCurrentlyPlaying.album || 'artwork'}
-            style:animation={reducedMotion ? 'none' : 'spin 12s linear infinite'}
-          />
-        {:else}
-          <Music class="mobile-spotify-fallback-icon" />
-        {/if}
-        <div class="mobile-spotify-art-overlay"></div>
-      </button>
-    {:else}
-      <div
-        class="mobile-spotify-player-wrap"
-        style="bottom: calc(1rem + env(safe-area-inset-bottom, 0px) + {getPlayerBottomOffset()});"
-        in:fly={{ y: 10, duration: duration(380), opacity: 0, easing: cubicOut }}
-        out:fade={{ duration: duration(120) }}
-      >
-        <div class="mobile-spotify-player">
-          <!-- Shared blue glass tint -->
-          <div
-            class="mobile-spotify-tint"
-            style="background: hsl(var(--site-blue));"
-          ></div>
- 
-          <!-- Link part (artwork & text) -->
-          <a
-            href={$spotifyCurrentlyPlaying.songUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <div class="mobile-spotify-art">
-              {#if $spotifyCurrentlyPlaying.artworkUrl}
-                <img
-                  src={$spotifyCurrentlyPlaying.artworkUrl}
-                  alt={$spotifyCurrentlyPlaying.album || 'artwork'}
-                  style:animation={reducedMotion ? 'none' : 'spin 12s linear infinite'}
-                />
-              {:else}
-                <Music class="mobile-spotify-fallback-icon-small" />
-              {/if}
-              <div class="mobile-spotify-art-overlay"></div>
-            </div>
- 
-            <div class="mobile-spotify-details">
-              <p class="mobile-spotify-song">
-                {$spotifyCurrentlyPlaying.song}
-              </p>
-              <p class="mobile-spotify-artist">
-                listening to: {$spotifyCurrentlyPlaying.artist}
-              </p>
-            </div>
+<svelte:window on:keydown={(event) => { if (event.key === 'Escape') open = false; }} />
+<div class="phone-navigation">
+  {#if open}
+    <button class="phone-menu-backdrop" type="button" aria-label="Close navigation" on:click={() => open = false} transition:fade={{duration: reducedMotion || navigating ? 0 : 140}}></button>
+    <div class="phone-menu-panel" id="phone-menu" bind:this={panel} use:measurePanel style:left={positioned ? `${panelX}px` : undefined} style:top={positioned ? `${Math.max(margin, panelY)}px` : undefined} style:bottom={positioned ? 'auto' : undefined} style:right={positioned ? 'auto' : undefined} transition:fly={{y: 12, duration: reducedMotion || navigating ? 0 : 240, easing: cubicOut}}>
+      <nav aria-label="Mobile navigation">
+        {#each navLinks as link, index}
+          <a href={link.href} class:active={active(link.href, pathname)} aria-current={active(link.href, pathname) ? 'page' : undefined} on:click={(event) => navigate(event, link.href)}>
+            <svelte:component this={icons[index]} size={18} strokeWidth={1.7} /><span>{link.label}</span>
           </a>
- 
-          <!-- Collapse button -->
-          <button
-            type="button"
-            on:click={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              isSpotifyCollapsed = true;
-            }}
-            class="mobile-spotify-close"
-            title="Collapse player"
-            aria-label="Collapse player"
-          >
-            <ChevronDown />
-          </button>
-        </div>
-      </div>
-    {/if}
-  {/if}
-
-  <!-- ────────────────── iOS LIQUID GLASS TAB BAR ────────────────── -->
-  <!-- Dragging supplements the native, keyboard-accessible links and button below. -->
-  <!-- svelte-ignore a11y_click_events_have_key_events a11y_no_noninteractive_element_interactions -->
-  <nav
-    class="mobile-dock"
-    class:dragging={dragIndex !== null}
-    aria-label="Mobile navigation"
-    on:pointerdown={startGesture}
-    on:pointermove={moveGesture}
-    on:pointerup={endGesture}
-    on:pointercancel={() => { gesture = null; dragIndex = null; }}
-    on:lostpointercapture={() => { gesture = null; dragIndex = null; }}
-    on:click|capture={(event) => {
-      if (suppressClick && event.detail !== 0) { event.preventDefault(); event.stopPropagation(); suppressClick = false; }
-    }}
-    style:--selection={dragIndex ?? Math.max(0, activeIndex)}
-    style="bottom: calc(1rem + env(safe-area-inset-bottom, 0px));"
-  >
-    {#each mainTabs as tab, index}
-      {@const active = isTabActive(tab, pathname) && !isMoreOpen}
-      <a
-        href={tab.href}
-        draggable="false"
-        aria-label={tab.label}
-        aria-current={active ? 'page' : undefined}
-        title={tab.label}
-        class="mobile-dock-tab"
-        class:active
-        on:click={(e) => {
-          if (isMoreOpen) {
-            isMoreOpen = false;
-          }
-          if (active) {
-            e.preventDefault();
-            if (!isGenerator) {
-              window.scrollTo({ top: 0, behavior: 'smooth' });
-            }
-          }
-        }}
-      >
-        <span class="mobile-dock-icon-wrap">
-          <svelte:component this={tab.icon} class="mobile-dock-icon" />
-        </span>
-      </a>
-    {/each}
-
-    <!-- More Tab Trigger -->
-    <button
-      type="button"
-      on:click={() => (isMoreOpen = !isMoreOpen)}
-      class="mobile-dock-tab mobile-dock-more"
-      class:active={isMoreOpen || moreActive}
-      aria-label="More navigation"
-      title="More"
-      aria-expanded={isMoreOpen}
-      aria-controls="mobile-more-menu"
-    >
-      <span class="mobile-dock-icon-wrap">
-        <svelte:component
-          this={MoreHorizontal}
-          class="mobile-dock-icon mobile-dock-more-icon-inner"
-          style="transition: transform 380ms var(--ease-out); transform: rotate({isMoreOpen ? 90 : 0}deg);"
-        />
-      </span>
-    </button>
-
-    <!-- The same lens travels continuously between all five controls. -->
-    {#if activeIndex !== -1}
-      <div
-        class="mobile-dock-lens"
-        aria-hidden="true"
-      ></div>
-    {/if}
-  </nav>
-
-  <!-- ────────────────── MORE FLOATING OVERLAY MENU ────────────────── -->
-  {#if isMoreOpen}
-    <div
-      class="mobile-more-backdrop"
-      on:click={() => (isMoreOpen = false)}
-      on:keydown={(e) => e.key === 'Escape' && (isMoreOpen = false)}
-      role="button"
-      tabindex="0"
-      aria-label="Close more navigation"
-      in:fade={{ duration: duration(220) }}
-      out:fade={{ duration: duration(180) }}
-    ></div>
-
-    <div
-      class="mobile-more-menu"
-      id="mobile-more-menu"
-      style="bottom: calc({moreMenuBottom} + env(safe-area-inset-bottom, 0px));"
-    >
-      {#each moreTabs as tab, index}
-        {@const active = isTabActive(tab, pathname)}
-        <div in:fly={{ y: 8, delay: reducedMotion ? 0 : index * 35, duration: duration(320), opacity: 0, easing: cubicOut }} out:fade={{ duration: duration(120) }}>
-          <a
-            href={tab.href}
-            class:active
-            on:click={(e) => {
-              isMoreOpen = false;
-              if (active) {
-                e.preventDefault();
-                if (!isGenerator) {
-                  window.scrollTo({ top: 0, behavior: 'smooth' });
-                }
-              }
-            }}
-          >
-            <svelte:component
-              this={tab.icon}
-              class="mobile-more-icon"
-            />
-            <span>{tab.label}</span>
-          </a>
-        </div>
-      {/each}
+        {/each}
+      </nav>
+      <div class="phone-menu-theme"><span>Appearance</span><ThemeToggle /></div>
+      <div class="phone-position-tools"><span>Drag to any of the four corners</span><button type="button" on:click={resetPosition}>Reset position</button></div>
     </div>
   {/if}
-
+  {#if $spotifyCurrentlyPlaying}
+    <a class="phone-music" href={$spotifyCurrentlyPlaying.songUrl} target="_blank" rel="noreferrer" aria-label={`Mike is listening to ${$spotifyCurrentlyPlaying.song} by ${$spotifyCurrentlyPlaying.artist}`}>
+      {#if $spotifyCurrentlyPlaying.artworkUrl}<img src={$spotifyCurrentlyPlaying.artworkUrl} alt="" width="36" height="36" />{:else}<Music size={20} />{/if}
+      <span><strong>{$spotifyCurrentlyPlaying.song}</strong><small>{$spotifyCurrentlyPlaying.artist}</small></span>
+      <span class="music-meter" aria-hidden="true"><i></i><i></i><i></i></span>
+    </a>
+  {/if}
+  <button class="phone-menu-trigger" class:open class:dragging style:left={positioned ? `${x}px` : undefined} style:top={positioned ? `${y}px` : undefined} style:bottom={positioned ? 'auto' : undefined} style:right={positioned ? 'auto' : undefined} on:pointerdown={startDrag} on:pointermove={moveDrag} on:pointerup={finishDrag} on:pointercancel={finishDrag} on:lostpointercapture={finishDrag} type="button" aria-label={open ? 'Close menu' : 'Open menu'} aria-expanded={open} aria-controls="phone-menu" on:click={() => { if (suppressClick) { suppressClick = false; return; } open = !open; }}>
+    <span class="phone-trigger-icon"><svelte:component this={open ? X : Menu} size={21} strokeWidth={1.8} /></span>
+  </button>
 </div>

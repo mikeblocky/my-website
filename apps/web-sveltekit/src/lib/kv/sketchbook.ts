@@ -34,9 +34,9 @@ export async function saveDrawing(drawing: SketchbookDrawing) {
   }
 }
 
-export async function fetchDrawings(limit = 100): Promise<SketchbookDrawing[]> {
+export async function fetchDrawings(limit = 0): Promise<SketchbookDrawing[]> {
   const redis = await getRedisClient()
-  const raw = await redis.zRange(sketchbookDrawingsKey, -limit, -1, { REV: true })
+  const raw = await redis.zRange(sketchbookDrawingsKey, 0, limit > 0 ? limit - 1 : -1, { REV: true })
   return raw
     .map((entry: string) => {
       try {

@@ -18,6 +18,7 @@
     "start:next": "next start",
     "start:svelte": "npm --workspace @mikeblocky/web-sveltekit run start",
     "check:svelte": "npm --workspace @mikeblocky/web-sveltekit run check",
+    "sync:interact": "node scripts/sync-interact.mjs",
     "sync:blog-social-images": "node scripts/sync-blog-social-images.mjs",
     "lint": "eslint .",
     "lint:svelte": "npm --workspace @mikeblocky/web-sveltekit run lint",

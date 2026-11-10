@@ -1,0 +1,25 @@
+/* Native controls with a themed browser picker when supported. */
+.site-native-select {
+  min-height: 44px; padding: 0.65rem 0.9rem;
+  border: 1px solid hsl(var(--border)); border-radius: 0.75rem;
+  background-color: hsl(var(--background)); color: hsl(var(--foreground));
+  font: inherit; cursor: pointer; color-scheme: inherit;
+}
+.site-native-select:focus-visible { outline: 2px solid hsl(var(--site-blue) / 0.55); outline-offset: 3px; }
+.site-native-select option { background-color: hsl(var(--background)); color: hsl(var(--foreground)); font: inherit; }
+@supports (appearance: base-select) {
+  .site-native-select, .site-native-select::picker(select) { appearance: base-select; }
+  .site-native-select { align-items: center; gap: 1rem; }
+  .site-native-select::picker-icon { color: hsl(var(--muted-foreground)); transition: rotate 220ms var(--ease-out); }
+  .site-native-select:open::picker-icon { rotate: 180deg; }
+  .site-native-select::picker(select) {
+    margin-block-start: 0.5rem; padding: 0.35rem;
+    border: 1px solid hsl(var(--border)); border-radius: 0.9rem;
+    background: hsl(var(--background)); color: hsl(var(--foreground));
+    box-shadow: 0 12px 32px hsl(220 35% 10% / 0.16);
+    max-height: min(24rem, 60dvh);
+  }
+  .site-native-select option { display: flex; align-items: center; gap: 1rem; min-height: 44px; padding: 0.65rem 0.8rem; border-radius: 0.55rem; }
+  .site-native-select option:hover, .site-native-select option:focus, .site-native-select option:checked { background: hsl(var(--site-blue) / 0.09); color: hsl(var(--site-blue)); }
+  .site-native-select option::checkmark { order: 1; margin-inline-start: auto; color: hsl(var(--site-blue)); }
+}

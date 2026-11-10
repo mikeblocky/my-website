@@ -7,7 +7,7 @@ let cachedDrawings: SketchbookDrawing[] | null = null;
 let lastCacheTime = 0;
 const CACHE_TTL = 30000; // 30 seconds
 
-export async function getSketchbookDrawings(limit = 100): Promise<SketchbookDrawing[]> {
+export async function getSketchbookDrawings(limit = 0): Promise<SketchbookDrawing[]> {
     const now = Date.now();
     if (!cachedDrawings || now - lastCacheTime > CACHE_TTL) {
         cachedDrawings = await fetchDrawings(limit);

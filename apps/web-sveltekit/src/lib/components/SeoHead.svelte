@@ -4,13 +4,14 @@
   export let title = site.name;
   export let description = site.description;
   export let path = '/';
-  export let image = '/Illustration133.jpg';
+  export let image = '';
+  $: generatedImage = `/api/thumbnail?title=${encodeURIComponent(title)}`;
   export let twitterImage = '';
 
   $: url = new URL(path, site.url).toString();
   $: pageTitle = title === site.name ? title : `${title} | ${site.name}`;
-  $: ogImageUrl = new URL(image || '/Illustration133.jpg', site.url).toString();
-  $: twitterImageUrl = new URL(twitterImage || image || '/Illustration133.jpg', site.url).toString();
+  $: ogImageUrl = new URL(image || generatedImage, site.url).toString();
+  $: twitterImageUrl = new URL(twitterImage || image || generatedImage, site.url).toString();
 </script>
 
 <svelte:head>
@@ -23,6 +24,9 @@
   <meta property="og:description" content={description} />
   <meta property="og:url" content={url} />
   <meta property="og:image" content={ogImageUrl} />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content={title} />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:image" content={twitterImageUrl} />
 </svelte:head>

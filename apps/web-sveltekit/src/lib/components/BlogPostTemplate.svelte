@@ -1,6 +1,5 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import ThemeToggle from './ThemeToggle.svelte';
   import SiteFooter from './SiteFooter.svelte';
   import BaseContainer from './BaseContainer.svelte';
 
@@ -14,6 +13,8 @@
   export let parentHref = '/journal';
 
   let readCount: number | null = null;
+  let progress = 0;
+  let readingBody: HTMLDivElement;
 
   async function recordRead() {
     if (!slug) return;
@@ -36,10 +37,23 @@
 
   onMount(() => {
     recordRead();
+    let frame = 0;
+    const update = () => {
+      frame = 0;
+      if (!readingBody) return;
+      const rect = readingBody.getBoundingClientRect();
+      progress = Math.max(0, Math.min(1, -rect.top / Math.max(1, rect.height - window.innerHeight)));
+    };
+    const schedule = () => { if (!frame) frame = requestAnimationFrame(update); };
+    update();
+    window.addEventListener('scroll', schedule, { passive: true });
+    window.addEventListener('resize', schedule);
+    return () => { cancelAnimationFrame(frame); window.removeEventListener('scroll', schedule); window.removeEventListener('resize', schedule); };
   });
 </script>
 
-<div class="relative w-full">
+<div class="relative w-full writing-article">
+  <div class="writing-reading-progress" aria-hidden="true"><span style:transform={`scaleX(${progress})`}></span></div>
   <BaseContainer size="xl" paddingX="sm" paddingY="lg">
     <div class="flex flex-col gap-6">
       <!-- Breadcrumb Header -->
@@ -55,8 +69,7 @@
             <span aria-hidden="true">/</span>
             <span class="truncate max-w-[150px] sm:max-w-[240px] md:max-w-[350px] lg:max-w-[450px] inline-block align-bottom" title={title}>{title}</span>
           </nav>
-          <ThemeToggle />
-        </div>
+              </div>
 
         <div class="section-title-block space-y-2 mt-4">
           <h1 class="font-sans font-bold text-xl sm:text-3xl md:text-3xl lg:text-4xl text-slate-900 dark:text-white mt-0 mb-4 w-full break-words">
@@ -66,7 +79,7 @@
             <span>{date} | {readingTime}</span>
             {#if readCount !== null}
               <span class="text-muted-foreground/30">•</span>
-              <span>{readCount.toLocaleString()} reads</span>
+              <span>{readCount.toLocaleString()} {readCount === 1 ? 'read' : 'reads'}</span>
             {/if}
             {#each themes as theme}
               <span class="text-muted-foreground/30">•</span>
@@ -81,6 +94,7 @@
         <article id="content" class="relative min-w-0">
           <div
             id="blog-content-body"
+            bind:this={readingBody}
             class="prose prose-panel max-w-none pb-24 pt-2 xl:pb-0 dark:prose-invert relative overflow-x-hidden {contentClassName}"
           >
             <slot />

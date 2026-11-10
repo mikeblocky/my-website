@@ -30,16 +30,16 @@ export async function saveTalk(talk: TalkTopic) {
   }
 }
 
-export async function fetchTalks(limit = 100): Promise<TalkTopic[]> {
+export async function fetchTalks(limit = 0): Promise<TalkTopic[]> {
   const redis = await getRedisClient()
   
   // Fetch from current talk:messages key
-  const talkRaw = await redis.zRange(talkMessagesKey, -limit, -1, { REV: true })
+  const talkRaw = await redis.zRange(talkMessagesKey, 0, limit > 0 ? limit - 1 : -1, { REV: true })
   
   // Also fetch from legacy ask:questions key
   let askRaw: string[] = []
   try {
-    askRaw = await redis.zRange(askQuestionsKey, -limit, -1, { REV: true })
+    askRaw = await redis.zRange(askQuestionsKey, 0, limit > 0 ? limit - 1 : -1, { REV: true })
   } catch (_e) {
     // Legacy key might not exist
   }
@@ -75,13 +75,13 @@ export async function fetchTalks(limit = 100): Promise<TalkTopic[]> {
 /** Admin replies to a talk (appends an admin message to the thread) */
 export async function replyToTalk(id: string, replyBody: string, imageUrl?: string, imageUrls?: string[]): Promise<TalkTopic | null> {
   const redis = await getRedisClient()
-  const talks = await fetchTalks(MAX_STORED_TALKS)
+  const talks = await fetchTalks()
   
   const target = talks.find(t => t.id === id)
   if (!target) return null
   
   // Build old member from raw Redis data (re-fetch raw to avoid migration artifacts)
-  const rawAll = await redis.zRange(talkMessagesKey, 0, -1)
+  const rawAll = [...await redis.zRange(talkMessagesKey, 0, -1), ...await redis.zRange(askQuestionsKey, 0, -1)]
   const rawMember = rawAll.find((entry: string) => {
     try { return JSON.parse(entry).id === id } catch { return false }
   })
@@ -117,12 +117,12 @@ export async function replyToTalk(id: string, replyBody: string, imageUrl?: stri
 /** Visitor follows up on a talk (appends an asker message to the thread) */
 export async function followUpTalk(id: string, followUpBody: string, imageUrl?: string, imageUrls?: string[]): Promise<TalkTopic | null> {
   const redis = await getRedisClient()
-  const talks = await fetchTalks(MAX_STORED_TALKS)
+  const talks = await fetchTalks()
   
   const target = talks.find(t => t.id === id)
   if (!target) return null
   
-  const rawAll = await redis.zRange(talkMessagesKey, 0, -1)
+  const rawAll = [...await redis.zRange(talkMessagesKey, 0, -1), ...await redis.zRange(askQuestionsKey, 0, -1)]
   const rawMember = rawAll.find((entry: string) => {
     try { return JSON.parse(entry).id === id } catch { return false }
   })
@@ -152,7 +152,7 @@ export async function followUpTalk(id: string, followUpBody: string, imageUrl?: 
 }
 
 export async function getTalkById(id: string): Promise<TalkTopic | null> {
-  const talks = await fetchTalks(MAX_STORED_TALKS)
+  const talks = await fetchTalks()
   return talks.find(t => t.id === id) || null
 }
 
@@ -165,12 +165,12 @@ export async function updateThreadMessage(
   newImageUrls?: string[]
 ): Promise<TalkTopic | null> {
   const redis = await getRedisClient()
-  const talks = await fetchTalks(MAX_STORED_TALKS)
+  const talks = await fetchTalks()
   
   const target = talks.find(t => t.id === talkId)
   if (!target) return null
   
-  const rawAll = await redis.zRange(talkMessagesKey, 0, -1)
+  const rawAll = [...await redis.zRange(talkMessagesKey, 0, -1), ...await redis.zRange(askQuestionsKey, 0, -1)]
   const rawMember = rawAll.find((entry: string) => {
     try { return JSON.parse(entry).id === talkId } catch { return false }
   })

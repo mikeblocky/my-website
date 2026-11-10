@@ -13,8 +13,6 @@
 <SeoHead
   title={data.post.title}
   path={`/blog/${slug}`}
-  image={ogImage}
-  twitterImage={twitterImage}
   description={data.post.description}
 />
 

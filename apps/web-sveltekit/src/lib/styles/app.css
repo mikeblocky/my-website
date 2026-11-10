@@ -16,3 +16,6 @@
 @import "./responsive.css";
 @import "./favorites.css";
 @import "./notes.css";
+@import "./native-select.css";
+
+@import "./sidebar.css";

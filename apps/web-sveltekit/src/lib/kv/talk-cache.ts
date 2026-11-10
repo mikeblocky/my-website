@@ -8,7 +8,7 @@ let cachedTalks: TalkTopic[] | null = null;
 let lastCacheTime = 0;
 const CACHE_TTL = 30000; // 30 seconds
 
-export async function getTalkMessages(limit = 100): Promise<TalkTopic[]> {
+export async function getTalkMessages(limit = 0): Promise<TalkTopic[]> {
     const now = Date.now();
     if (!cachedTalks || now - lastCacheTime > CACHE_TTL) {
         cachedTalks = await fetchTalks(limit);

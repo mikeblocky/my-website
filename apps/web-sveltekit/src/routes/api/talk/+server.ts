@@ -1,3 +1,4 @@
+import { revalidateTalkMessages } from '$lib/kv/talk-cache';
 import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 import { env } from '$env/dynamic/private';
@@ -65,6 +66,8 @@ export const POST: RequestHandler = async ({ request }) => {
 
   notifyOwnerNewTalk(author, body).catch(err => console.error(err));
 
+  revalidateTalkMessages();
+
   return json({ question: talk, cooldown: reservation.cooldown }, { status: 201 });
 };
 
@@ -119,6 +122,8 @@ export const PUT: RequestHandler = async ({ request }) => {
     }
   }).catch(err => console.error('Push notifier failed', err));
 
+  revalidateTalkMessages();
+
   return json({ question: updatedTalk }, { status: 200 });
 };
 
@@ -151,6 +156,7 @@ export const PATCH: RequestHandler = async ({ request }) => {
     if (!updatedTalk) {
       return json({ error: 'Message not found' }, { status: 404 });
     }
+    revalidateTalkMessages();
     return json({ question: updatedTalk }, { status: 200 });
   } else {
     if (typeof body !== 'string') {
@@ -183,6 +189,8 @@ export const PATCH: RequestHandler = async ({ request }) => {
       updatedTalk.author || 'anonymous',
       `[Follow-up] ${trimmedBody}`
     ).catch(err => console.error(err));
+
+    revalidateTalkMessages();
 
     return json({ question: updatedTalk, cooldown: reservation.cooldown }, { status: 200 });
   }

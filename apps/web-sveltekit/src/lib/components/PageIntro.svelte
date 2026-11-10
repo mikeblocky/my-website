@@ -1,5 +1,4 @@
 <script lang="ts">
-  import ThemeToggle from './ThemeToggle.svelte';
   import { reveal } from '../actions/reveal';
 
   export let eyebrow = '';
@@ -18,7 +17,6 @@
         <span>{eyebrow}</span>
       {/if}
     </nav>
-    <ThemeToggle />
   </div>
 
   <div class="section-title-block" use:reveal>

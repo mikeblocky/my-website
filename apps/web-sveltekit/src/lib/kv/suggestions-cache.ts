@@ -8,7 +8,7 @@ let cachedSuggestions: MediaSuggestion[] | null = null;
 let lastCacheTime = 0;
 const CACHE_TTL = 30000; // 30 seconds
 
-export async function getMediaSuggestions(limit = 100): Promise<MediaSuggestion[]> {
+export async function getMediaSuggestions(limit = 0): Promise<MediaSuggestion[]> {
     const now = Date.now();
     if (!cachedSuggestions || now - lastCacheTime > CACHE_TTL) {
         cachedSuggestions = await fetchSuggestions(limit);

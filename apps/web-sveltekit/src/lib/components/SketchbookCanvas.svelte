@@ -7,6 +7,14 @@
   export let isCooldownActive = false;
   export let cooldownLabel = '';
   export let showNotification: (msg: string) => void;
+  export let active = true;
+  export let embedded = false;
+
+  export function getDrawingImage(): string | null {
+    return canvasRef && historyIndex > 0 ? canvasRef.toDataURL('image/png') : null;
+  }
+
+  export function resetDrawing() { initCanvas(); }
 
   const MAX_BODY_LENGTH = 300;
 
@@ -61,7 +69,7 @@
   $: canRedo = historyIndex < historyList.length - 1;
 
   // Form State
-  let author = '';
+  export let author = '';
   let caption = '';
 
   // Canvas context setups
@@ -162,6 +170,7 @@
 
   // Global Keyboard Shortcuts for Undo (Ctrl+Z), Redo (Ctrl+Y), Brush (B), and Eraser (E)
   function handleKeyDown(e: KeyboardEvent) {
+    if (!active) return;
     const activeEl = document.activeElement;
     if (activeEl && (activeEl.tagName === 'INPUT' || activeEl.tagName === 'TEXTAREA')) {
       return;
@@ -234,6 +243,7 @@
 
   // Drawing event handlers
   function startDrawing(e: PointerEvent) {
+    if (!active || isPending) return;
     e.preventDefault();
     if (!tempCanvasRef) return;
     
@@ -351,11 +361,13 @@
   }
 </script>
 
-<form 
+<svelte:element this={embedded ? 'div' : 'form'}
+  class:embedded
   on:submit={handleFormSubmit} 
   class="sketchbook-canvas-form bg-white/40 dark:bg-slate-950/20 rounded-xl border border-slate-200/50 dark:border-slate-850/50 shadow-sm flex flex-col text-left font-sans overflow-hidden pride-focus-within-glow"
 >
   <!-- Top Alias input field -->
+  {#if !embedded}
   <div class="border-b border-slate-100 dark:border-slate-900 px-4 py-3 bg-slate-50/20 dark:bg-slate-950/20 rounded-t-xl">
     <input
       type="text"
@@ -381,6 +393,7 @@
   </div>
 
   <!-- Clean Drawing Area with Canvas and settings -->
+  {/if}
   <div class="sketchbook-drawing-stage flex flex-col items-center gap-5 px-4 pb-6 pt-5 border-t border-slate-100 dark:border-slate-900 w-full">
     <div class="flex flex-col md:flex-row items-center md:items-stretch justify-center gap-6 w-full max-w-[900px] mx-auto">
       
@@ -481,6 +494,7 @@
             }}
             on:keydown={(e) => {
               if (e.key === 'Enter') {
+                e.preventDefault();
                 e.currentTarget.blur();
               }
             }}
@@ -541,6 +555,7 @@
   </div>
 
   <!-- Bottom row -->
+  {#if !embedded}
   <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-t border-slate-100 dark:border-slate-900 px-4 py-3.5 bg-slate-50/20 dark:bg-slate-950/20 overflow-hidden rounded-b-xl">
     <span class="text-xs font-semibold text-slate-400 dark:text-slate-500 select-none">
       Draw on the canvas above to submit your artwork!
@@ -563,4 +578,5 @@
       </button>
     </div>
   </div>
-</form>
+  {/if}
+</svelte:element>

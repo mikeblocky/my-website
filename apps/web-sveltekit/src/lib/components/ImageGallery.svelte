@@ -107,7 +107,9 @@
     if (isDraggingDismiss) {
       isDraggingDismiss = false;
       const distance = Math.sqrt(dragDismissX * dragDismissX + dragDismissY * dragDismissY);
-      if (distance > 80) {
+      if (Math.abs(dragDismissX) > 60 && Math.abs(dragDismissX) > Math.abs(dragDismissY)) {
+        if (dragDismissX < 0) showNext(); else showPrevious();
+      } else if (distance > 80) {
         closeLightbox();
       } else {
         dragDismissY = 0;
@@ -152,7 +154,9 @@
     if (isDraggingDismiss) {
       isDraggingDismiss = false;
       const distance = Math.sqrt(dragDismissX * dragDismissX + dragDismissY * dragDismissY);
-      if (distance > 70) {
+      if (Math.abs(dragDismissX) > 60 && Math.abs(dragDismissX) > Math.abs(dragDismissY)) {
+        if (dragDismissX < 0) showNext(); else showPrevious();
+      } else if (distance > 70) {
         closeLightbox();
       } else {
         dragDismissY = 0;
@@ -186,14 +190,24 @@
   }
 
   // Wheel zoom handler
+  let lastWheelChange = 0;
+  let wheelDistance = 0;
   function handleWheel(e: WheelEvent) {
     if (activeIdx === null) return;
     e.preventDefault();
-    const delta = -e.deltaY * 0.005;
-    scale = Math.max(1, Math.min(4, scale + delta));
-    if (scale === 1) {
-      translateX = 0;
-      translateY = 0;
+    e.stopPropagation();
+    if (e.ctrlKey || e.metaKey) {
+      scale = Math.max(1, Math.min(4, scale - e.deltaY * 0.005));
+      if (scale === 1) { translateX = 0; translateY = 0; }
+      return;
+    }
+    const delta = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
+    const now = performance.now();
+    if (!delta || now - lastWheelChange < 220) return;
+    wheelDistance = Math.sign(delta) === Math.sign(wheelDistance) ? wheelDistance + delta : delta;
+    if (Math.abs(wheelDistance) >= 1) {
+      if (wheelDistance > 0) showNext(); else showPrevious();
+      wheelDistance = 0; lastWheelChange = now;
     }
   }
 
@@ -239,9 +253,11 @@
 
   onMount(() => {
     window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener('wheel', handleWheel, { capture: true, passive: false });
     return () => {
       document.body.style.overflow = '';
       window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener('wheel', handleWheel, true);
     };
   });
 </script>
@@ -314,13 +330,9 @@
 <!-- Lightbox Modal using Svelte portal -->
 {#if activeIdx !== null}
   <div
-    use:portal
     transition:fade={{ duration: 180 }}
-    on:click={closeLightbox}
-    on:wheel={handleWheel}
-    on:keydown={handleKeyDown}
     class="fixed inset-0 z-50 flex items-center justify-center select-none backdrop-blur-md"
-    style="background-color: rgba(10, 10, 10, {Math.max(0.35, 0.94 - Math.sqrt(dragDismissX * dragDismissX + dragDismissY * dragDismissY) / 500)});"
+    style="z-index: 1000; background-color: rgba(10, 10, 10, {Math.max(0.35, 0.94 - Math.sqrt(dragDismissX * dragDismissX + dragDismissY * dragDismissY) / 500)});"
     role="dialog"
     aria-modal="true"
     aria-label="Image viewer"
@@ -329,18 +341,16 @@
     <!-- Close target -->
     <button
       type="button"
-      aria-label="Close lightbox backdrop"
+      aria-label="Close lightbox backdrop" on:click|stopPropagation={closeLightbox}
       class="absolute inset-0 z-10 bg-transparent border-0 outline-none cursor-default"
-      on:click={(e) => { if (scale === 1) { e.stopPropagation(); closeLightbox(); } }}
     />
 
     <!-- Minimal Close Button in Top Right -->
     <div class="absolute top-6 right-6 z-30">
       <button
         type="button"
-        aria-label="Close"
+        aria-label="Close" on:click|stopPropagation={closeLightbox}
         class="bg-transparent text-white/50 hover:text-white p-2 transition-colors border-0 outline-none cursor-pointer"
-        on:click={closeLightbox}
       >
         <X size={22} strokeWidth={1.5} />
       </button>
@@ -350,18 +360,16 @@
     {#if scale === 1 && cleanUrls.length > 1}
       <button
         type="button"
-        aria-label="Previous image"
-        class="absolute top-1/2 left-6 -translate-y-1/2 z-30 text-white/20 hover:text-white/80 p-3 transition-colors border-0 outline-none cursor-pointer hidden sm:block"
-        on:click={(e) => { e.stopPropagation(); showPrevious(); }}
+        aria-label="Previous image" on:click|stopPropagation={showPrevious}
+        class="absolute top-1/2 left-6 -translate-y-1/2 z-30 text-white/20 hover:text-white/80 p-3 transition-colors border-0 outline-none cursor-pointer"
       >
         <ChevronLeft size={36} strokeWidth={1} />
       </button>
 
       <button
         type="button"
-        aria-label="Next image"
-        class="absolute top-1/2 right-6 -translate-y-1/2 z-30 text-white/20 hover:text-white/80 p-3 transition-colors border-0 outline-none cursor-pointer hidden sm:block"
-        on:click={(e) => { e.stopPropagation(); showNext(); }}
+        aria-label="Next image" on:click|stopPropagation={showNext}
+        class="absolute top-1/2 right-6 -translate-y-1/2 z-30 text-white/20 hover:text-white/80 p-3 transition-colors border-0 outline-none cursor-pointer"
       >
         <ChevronRight size={36} strokeWidth={1} />
       </button>
