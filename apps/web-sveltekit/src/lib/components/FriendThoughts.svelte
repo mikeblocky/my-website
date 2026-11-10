@@ -6,13 +6,19 @@
   export let x = 0;
   export let y = 0;
   export let inline = false;
+  export let onHeight: (height: number) => void = () => {};
+  function measure(node: HTMLElement) {
+    const observer = new ResizeObserver(() => onHeight(node.getBoundingClientRect().height));
+    observer.observe(node);
+    return { destroy() { observer.disconnect(); } };
+  }
   export let onClose: () => void;
   function appear(node: Element) {
     return fly(node, { y: 8, duration: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 240 });
   }
 </script>
 
-<aside id={inline ? "friend-thoughts-mobile" : "friend-thoughts"} class="thought-cloud" class:inline style={`left: ${x}px; top: ${y}px;`} aria-label={`Thoughts about @${username}`} in:appear>
+<aside id={inline ? "friend-thoughts-mobile" : "friend-thoughts"} class="thought-cloud" class:inline use:measure style={`left: ${x}px; top: ${y}px;`} aria-label={`Thoughts about @${username}`} in:appear>
   <header><span>@{username}</span><button type="button" on:click={onClose} aria-label="Close thoughts"><X size={14} /></button></header>
   <div class="thoughts">
     {#each friendThoughts[username] ?? [] as thought, index}
@@ -25,7 +31,7 @@
 </aside>
 
 <style>
-  .thought-cloud { position: absolute; z-index: 5; max-height: 420px; overflow-y: auto; scrollbar-width: thin; padding: 6px; width: min(270px, calc(100% - 24px)); color: hsl(var(--foreground)); }
+  .thought-cloud { position: absolute; z-index: 5; padding: 6px; width: min(340px, calc(100% - 24px)); color: hsl(var(--foreground)); }
   header { display: flex; align-items: center; justify-content: space-between; margin: 0 8px 9px; gap: 12px; }
   header > span { font-size: .65rem; padding: 5px 9px; border-radius: 20px; background: hsl(var(--background)); box-shadow: 0 2px 12px hsl(var(--foreground) / .06); }
   header button { display: grid; place-items: center; width: 44px; height: 44px; border: 1px solid hsl(var(--border)); border-radius: 50%; background: hsl(var(--background)); color: hsl(var(--muted-foreground)); cursor: pointer; }
@@ -40,7 +46,7 @@
   .thoughts:has(.photo + .photo) { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .thoughts:has(.photo + .photo) .thought:not(.photo) { grid-column: 1 / -1; justify-self: center; }
   .thoughts:has(.photo + .photo) .photo img { height: auto; aspect-ratio: 16 / 10; }
-  .long { flex-basis: 100%; max-height: 160px; overflow-y: auto; overscroll-behavior: contain; line-height: 1.6; transform: none; animation: none; }
+  .long { flex-basis: 100%;  line-height: 1.6; transform: none; animation: none; }
   .inline { max-height: none; overflow: visible; position: relative; left: auto !important; top: auto !important; width: 100%; padding: 12px 8px 22px; }
   .inline .long { max-height: none; font-size: .85rem; }
   .thoughts:has(.photo + .photo) .photo.portrait img { height: auto; aspect-ratio: 3 / 4; }

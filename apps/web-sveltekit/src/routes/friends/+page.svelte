@@ -32,6 +32,7 @@
   }
   let mapElement: HTMLDivElement;
   let thoughtUsername = '';
+  let thoughtHeight = 0;
   let thoughtX = 0;
   let thoughtY = 0;
   let thoughtDotX = 0;
@@ -45,7 +46,7 @@
     const person = (event.currentTarget as HTMLElement).getBoundingClientRect();
     const anchorX = person.left + person.width / 2 - map.left;
     const anchorY = person.top + person.height / 2 - map.top;
-    const width = Math.min(270, map.width - 24);
+    const width = Math.min(340, map.width - 24);
     thoughtX = Math.max(12, Math.min(map.width - width - 12, anchorX < map.width / 2 ? anchorX + 32 : anchorX - width - 32));
     thoughtY = username === 'octobersfilm' ? 12 : Math.max(12, Math.min(map.height - 270, anchorY - 70));
     thoughtDotX = anchorX;
@@ -71,7 +72,7 @@
 <SectionPageShell title="Friends" currentLabel="Friends" footerColor="blue">
   <section class="friends-circle">
     <PillTabs bind:activeTab {tabs} ariaLabel="Friend groups" storageKey="mikeblocky:friends-tab" syncUrl />
-    <div class="connection-map" bind:this={mapElement} class:has-thought={!!thoughtUsername} class:paused aria-label="People connected to Mike">
+    <div class="connection-map" bind:this={mapElement} class:has-thought={!!thoughtUsername} class:paused style={`margin-bottom: ${thoughtUsername ? Math.max(16, thoughtY + thoughtHeight - 460 + 24) : 16}px;`} aria-label="People connected to Mike">
       {#key activeTab}<div class="connection-world"><div class="connection-orbit">
       <svg class="connection-threads" viewBox="0 0 800 460" preserveAspectRatio="none" fill="none" aria-hidden="true">
         {#each nodes as node (node.friend.username)}
@@ -87,7 +88,7 @@
       </div></div>{/key}
       {#if thoughtUsername}
         <span class="thought-dots" style={`left: ${thoughtDotX}px; top: ${thoughtDotY}px;`} aria-hidden="true"><i></i><i></i></span>
-        <div class="desktop-thoughts">{#key thoughtUsername}<FriendThoughts username={thoughtUsername} x={thoughtX} y={thoughtY} onClose={() => thoughtUsername = ''} />{/key}</div>
+        <div class="desktop-thoughts">{#key thoughtUsername}<FriendThoughts username={thoughtUsername} x={thoughtX} y={thoughtY} onHeight={(height) => thoughtHeight = height} onClose={() => thoughtUsername = ''} />{/key}</div>
       {/if}
       <div class="connection-center"><img src="/mike-avatar.jpg" alt="Mike" width="64" height="64" /><strong>Mike</strong></div>
       <button class="orbit-pause" type="button" aria-label={paused ? 'Resume orbit' : 'Pause orbit'} aria-pressed={paused} on:click={() => paused = !paused}><svelte:component this={paused ? Play : Pause} size={14} /><span>{paused ? 'Resume' : 'Pause'}</span></button>
@@ -120,6 +121,7 @@
   .friend-controls select { width: 100%; padding-inline: 12px; }
   @media (max-width: 560px) {
     .phone-friends { display: block; }
+    .connection-map { margin-bottom: 1rem !important; }
     .desktop-thoughts, .thought-dots { display: none; }
     .connection-person { min-width: 48px; min-height: 48px; }
     .orbit-pause { min-height: 44px; }
