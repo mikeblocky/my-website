@@ -20,7 +20,7 @@ export const buddingFriends: Friend[] = [
         description: "A fellow fan of Kemutai Hanashi! We talk a lot in the server, which is a really fun coincidence. I'm still getting to know them, and since I usually take a while before adding people on Discord, I'm just taking things slow. But if it goes, then it goes—I'm happy to see where it leads."
     },
     {
-        username: '_azuace',
+        username: 'beyondlaboira',
         description: "A fellow fan of Kemutai Hanashi whom I first noticed on Tumblr. We’ve been talking a bit more lately and sharing thoughts on the server, bringing us a little closer. Really, they are one of the most wonderful people I've ever met, and I'm so glad to connect with them—it's actually my first time getting to know someone in the nonbinary/aroace spectrum. Through them, I've seen so many things I didn't know before, alongside a shared love for art. I know how hard it must have been, and I'm truly happy that they came out and found acceptance. I hope that one day we can bridge the remaining gap and build a comfortable friendship."
     }
 ]
