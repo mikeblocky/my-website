@@ -1,9 +1,12 @@
 import { getArtworkSections, getDrawingStats } from '@mikeblocky/site-data/artworks';
 
-export const prerender = false;
+// Artwork discovery reads the source public/ directory. Generate this route at
+// build time: production functions serve static assets separately and cannot
+// enumerate that directory at request time.
+export const prerender = true;
 
 export function load() {
-  // Shuffle on the server so SSR, hydration and the full-screen viewer share one order.
+  // Shuffle at build time so the page and viewer share the same serialized order.
   const sections = getArtworkSections().map(section => {
     const items = [...section.items];
     for (let index = items.length - 1; index > 0; index--) {

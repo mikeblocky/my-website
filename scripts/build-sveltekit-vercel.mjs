@@ -1,3 +1,4 @@
+import { verifyArtworkOutput } from './verify-artwork-output.mjs';
 import {
   cpSync,
   existsSync,
@@ -57,6 +58,7 @@ mkdirSync(rootVercel, { recursive: true });
 // ("Could not find target .../![-]/catchall for path .../__data.json").
 cpSync(appOutput, rootOutput, { recursive: true, verbatimSymlinks: true });
 normalizeFunctionHandlers(resolve(rootOutput, 'functions'));
+verifyArtworkOutput(rootOutput);
 
 console.log(`Copied SvelteKit Vercel output to ${rootOutput}`);
 
