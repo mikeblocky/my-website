@@ -1,7 +1,7 @@
 import type { RequestHandler } from '@sveltejs/kit'
 import { getTalkById } from '$lib/kv/talk'
 import { boardOgCard } from '$lib/og/BoardOgCard'
-import { generatePng } from '$lib/og/generate'
+import { socialImageResponse } from '$lib/og/social-response'
 
 export const GET: RequestHandler = async ({ params }) => {
   const talk = await getTalkById(params.id!)
@@ -25,11 +25,5 @@ export const GET: RequestHandler = async ({ params }) => {
     imageUrl: talk.imageUrls?.[0] || talk.imageUrl,
   })
 
-  const png = await generatePng(element as any)
-  return new Response(png, {
-    headers: {
-      'Content-Type': 'image/png',
-      'Cache-Control': 'public, max-age=3600',
-    },
-  })
+  return socialImageResponse(`talk:${params.id}`, element)
 }

@@ -388,3 +388,6 @@
   gap: 0.625rem;
   padding-top: 0.125rem;
 }
+
+/* Favorites cards keep one readable typeface in previews and PNG exports. */
+.recommendation-card, .recommendation-card * { font-family: 'DM Sans', sans-serif; }

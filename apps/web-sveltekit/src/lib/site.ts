@@ -11,7 +11,8 @@ export const navLinks = [
   { href: '/journal', label: 'journal' },
   { href: '/friends', label: 'friends' },
   { href: '/favorites', label: 'favorites' },
-  { href: '/interact', label: 'interact' }
+  { href: '/interact', label: 'interact' },
+  { href: '/commissions', label: 'commissions' }
 ];
 
 export const portalLinks = [

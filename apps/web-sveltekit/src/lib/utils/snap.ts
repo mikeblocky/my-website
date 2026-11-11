@@ -1,231 +1,46 @@
-async function renderPng(element: HTMLElement, options: Record<string, unknown>) {
-  const { toPng } = await import('html-to-image')
-  return toPng(element, options)
-}
-
-export async function snapTalkCard(id: string) {
-  const element = document.getElementById(`talk-${id}`)
-  if (!element) return null
-
-  const url = `${window.location.origin}/talk/${id}`
-  const isDark = document.documentElement.classList.contains('dark')
-  const actionsDiv = element.querySelector('.talk-actions') as HTMLElement
-
-  if (actionsDiv) actionsDiv.style.visibility = 'hidden'
-
-  const moreOverlays = element.querySelectorAll('.gallery-more-overlay') as NodeListOf<HTMLElement>
-  const zoomOverlays = element.querySelectorAll('.gallery-zoom-overlay') as NodeListOf<HTMLElement>
-  moreOverlays.forEach(el => el.style.display = 'none')
-  zoomOverlays.forEach(el => el.style.display = 'none')
-
-  const linkBar = document.createElement('div')
-  linkBar.style.cssText = `margin-top:12px;padding-top:10px;border-top:1px solid ${isDark ? '#ffffff15' : '#00000010'};font-size:12px;color:${isDark ? '#94a3b8' : '#64748b'};font-family:system-ui,sans-serif;letter-spacing:0.02em;`
-  linkBar.textContent = `Link: ${url}`
-  element.appendChild(linkBar)
-
+/** Capture a separate, fully laid out copy without changing the live thread. */
+async function snapCard(prefix: string, id: string) {
+  const source = document.getElementById(`${prefix}-${id}`);
+  if (!source) throw new Error('Post not found');
+  await document.fonts.ready;
+  const clone = source.cloneNode(true) as HTMLElement;
+  const width = Math.ceil(source.getBoundingClientRect().width);
+  const wrapper = document.createElement('div');
+  wrapper.style.cssText = `position:fixed;left:-10000px;top:0;width:${width}px;pointer-events:none;`;
+  wrapper.appendChild(clone);
+  // Preserve grid/flex layout; never force a modern timeline post into display:block.
+  clone.style.cssText += ';margin:0;transform:none;animation:none;transition:none;box-sizing:border-box;width:100%;padding:24px;border:0;border-radius:0;';
+  clone.querySelectorAll('.timeline-action-feedback, .timeline-post-actions, .talk-actions, .prompt-actions, .suggestion-actions, .drawing-actions, .timeline-text-toggle, .gallery-more-overlay, .gallery-zoom-overlay, form').forEach(node => node.remove());
+  clone.querySelectorAll<HTMLElement>('.expandable-post-text').forEach(node => {
+    node.style.height = 'auto'; node.style.overflow = 'visible'; node.style.maskImage = 'none';
+    node.classList.remove('collapsed');
+  });
+  document.body.appendChild(wrapper);
   try {
-    const dataUrl = await renderPng(element, {
-      backgroundColor: isDark ? '#1a1525' : '#ffffff',
-      style: {
-        borderRadius: '16px',
-        border: isDark ? '1px solid #3b2d5a' : '1px solid #e2e8f0',
-        boxShadow: 'none',
-        padding: '24px',
-        margin: '0',
-        display: 'block',
-        color: isDark ? '#f1f5f9' : '#0f172a'
-      }
-    })
-    const res = await fetch(dataUrl)
-    const blob = await res.blob()
-
+    await Promise.all(Array.from(clone.querySelectorAll('img')).map(async image => {
+      image.loading = 'eager';
+      try { await image.decode(); } catch { /* Keep the existing image fallback. */ }
+    }));
+    const { toPng } = await import('html-to-image');
+    const backgroundColor = getComputedStyle(document.body).backgroundColor;
+    const dataUrl = await toPng(clone, {
+      backgroundColor, pixelRatio: 2, width,
+      height: Math.ceil(clone.getBoundingClientRect().height),
+      style: { boxShadow: 'none', animation: 'none', transition: 'none' }
+    });
+    const blob = await (await fetch(dataUrl)).blob();
     try {
-      await navigator.clipboard.write([
-        new ClipboardItem({ 'image/png': blob })
-      ])
-      return 'snapped'
-    } catch (_error) {
-      const a = document.createElement('a')
-      a.href = dataUrl
-      a.download = `talk-${id}.png`
-      a.click()
-      return 'saved'
+      await navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })]);
+      return 'snapped';
+    } catch {
+      const link = document.createElement('a');
+      link.href = dataUrl; link.download = `${prefix}-${id}.png`; link.click();
+      return 'saved';
     }
-  } finally {
-    if (actionsDiv) actionsDiv.style.visibility = ''
-    moreOverlays.forEach(el => el.style.display = '')
-    zoomOverlays.forEach(el => el.style.display = '')
-    linkBar.remove()
-  }
+  } finally { wrapper.remove(); }
 }
 
-export async function snapSuggestionCard(id: string) {
-  const element = document.getElementById(`suggestion-${id}`)
-  if (!element) return null
-
-  const url = `${window.location.origin}/suggestions/${id}`
-  const isDark = document.documentElement.classList.contains('dark')
-  const actionsDiv = element.querySelector('.suggestion-actions') as HTMLElement
-  const previousFlexWrap = element.style.flexWrap
-
-  if (actionsDiv) actionsDiv.style.visibility = 'hidden'
-  element.style.flexWrap = 'wrap'
-
-  const moreOverlays = element.querySelectorAll('.gallery-more-overlay') as NodeListOf<HTMLElement>
-  const zoomOverlays = element.querySelectorAll('.gallery-zoom-overlay') as NodeListOf<HTMLElement>
-  moreOverlays.forEach(el => el.style.display = 'none')
-  zoomOverlays.forEach(el => el.style.display = 'none')
-
-  const linkBar = document.createElement('div')
-  linkBar.style.cssText = `flex:0 0 100%;width:100%;box-sizing:border-box;margin-top:12px;padding:10px 24px 16px;border-top:1px solid ${isDark ? '#ffffff15' : '#00000010'};font-size:12px;color:${isDark ? '#94a3b8' : '#64748b'};font-family:system-ui,sans-serif;letter-spacing:0.02em;`
-  linkBar.textContent = `Link: ${url}`
-  element.appendChild(linkBar)
-
-  try {
-    const dataUrl = await renderPng(element, {
-      backgroundColor: isDark ? '#1a1525' : '#ffffff',
-      style: {
-        borderRadius: '16px',
-        border: isDark ? '1px solid #3b2d5a' : '1px solid #e2e8f0',
-        boxShadow: 'none',
-        margin: '0',
-        color: isDark ? '#f1f5f9' : '#0f172a'
-      }
-    })
-    const res = await fetch(dataUrl)
-    const blob = await res.blob()
-
-    try {
-      await navigator.clipboard.write([
-        new ClipboardItem({ 'image/png': blob })
-      ])
-      return 'snapped'
-    } catch (_error) {
-      const a = document.createElement('a')
-      a.href = dataUrl
-      a.download = `suggestion-${id}.png`
-      a.click()
-      return 'saved'
-    }
-  } finally {
-    if (actionsDiv) actionsDiv.style.visibility = ''
-    moreOverlays.forEach(el => el.style.display = '')
-    zoomOverlays.forEach(el => el.style.display = '')
-    element.style.flexWrap = previousFlexWrap
-    linkBar.remove()
-  }
-}
-
-export async function snapSketchbookCard(id: string) {
-  const element = document.getElementById(`drawing-${id}`)
-  if (!element) return null
-
-  const url = `${window.location.origin}/sketchbook/${id}`
-  const isDark = document.documentElement.classList.contains('dark')
-
-  const actionsDiv = element.querySelector('.drawing-actions') as HTMLElement
-  if (actionsDiv) actionsDiv.style.visibility = 'hidden'
-
-  const moreOverlays = element.querySelectorAll('.gallery-more-overlay') as NodeListOf<HTMLElement>
-  const zoomOverlays = element.querySelectorAll('.gallery-zoom-overlay') as NodeListOf<HTMLElement>
-  moreOverlays.forEach(el => el.style.display = 'none')
-  zoomOverlays.forEach(el => el.style.display = 'none')
-
-  const linkBar = document.createElement('div')
-  linkBar.style.cssText = `flex:0 0 100%;width:100%;box-sizing:border-box;margin-top:12px;padding:10px 24px 16px;border-top:1px solid ${isDark ? '#ffffff15' : '#00000010'};font-size:12px;color:${isDark ? '#94a3b8' : '#64748b'};font-family:system-ui,sans-serif;letter-spacing:0.02em;`
-  linkBar.textContent = `Link: ${url}`
-  element.appendChild(linkBar)
-
-  const previousFlexWrap = element.style.flexWrap
-  element.style.flexWrap = 'wrap'
-
-  try {
-    const dataUrl = await renderPng(element, {
-      backgroundColor: isDark ? '#1a1525' : '#ffffff',
-      style: {
-        borderRadius: '16px',
-        border: isDark ? '1px solid #3b2d5a' : '1px solid #e2e8f0',
-        boxShadow: 'none',
-        margin: '0',
-        color: isDark ? '#f1f5f9' : '#0f172a'
-      }
-    })
-    const res = await fetch(dataUrl)
-    const blob = await res.blob()
-
-    try {
-      await navigator.clipboard.write([
-        new ClipboardItem({ 'image/png': blob })
-      ])
-      return 'snapped'
-    } catch (_error) {
-      const a = document.createElement('a')
-      a.href = dataUrl
-      a.download = `artwork-${id}.png`
-      a.click()
-      return 'saved'
-    }
-  } finally {
-    if (actionsDiv) actionsDiv.style.visibility = ''
-    moreOverlays.forEach(el => el.style.display = '')
-    zoomOverlays.forEach(el => el.style.display = '')
-    element.style.flexWrap = previousFlexWrap
-    linkBar.remove()
-  }
-}
-
-export async function snapDrawCard(id: string) {
-  const element = document.getElementById(`prompt-${id}`)
-  if (!element) return null
-
-  const url = `${window.location.origin}/draw/${id}`
-  const isDark = document.documentElement.classList.contains('dark')
-
-  const actionsDiv = element.querySelector('.prompt-actions') as HTMLElement
-  if (actionsDiv) actionsDiv.style.visibility = 'hidden'
-
-  const moreOverlays = element.querySelectorAll('.gallery-more-overlay') as NodeListOf<HTMLElement>
-  const zoomOverlays = element.querySelectorAll('.gallery-zoom-overlay') as NodeListOf<HTMLElement>
-  moreOverlays.forEach(el => el.style.display = 'none')
-  zoomOverlays.forEach(el => el.style.display = 'none')
-
-  const linkBar = document.createElement('div')
-  linkBar.style.cssText = `margin-top:12px;padding-top:10px;border-top:1px solid ${isDark ? '#ffffff15' : '#00000010'};font-size:12px;color:${isDark ? '#94a3b8' : '#64748b'};font-family:system-ui,sans-serif;letter-spacing:0.02em;`
-  linkBar.textContent = `Link: ${url}`
-  element.appendChild(linkBar)
-
-  try {
-    const dataUrl = await renderPng(element, {
-      backgroundColor: isDark ? '#110c1c' : '#ffffff',
-      style: {
-        borderRadius: '16px',
-        border: isDark ? '1px solid #4c2f77' : '1px solid #f3e8ff',
-        boxShadow: 'none',
-        padding: '24px',
-        margin: '0',
-        display: 'block',
-        color: isDark ? '#f5f3ff' : '#1e1b4b'
-      }
-    })
-    const res = await fetch(dataUrl)
-    const blob = await res.blob()
-
-    try {
-      await navigator.clipboard.write([
-        new ClipboardItem({ 'image/png': blob })
-      ])
-      return 'snapped'
-    } catch (_error) {
-      const a = document.createElement('a')
-      a.href = dataUrl
-      a.download = `draw-${id}.png`
-      a.click()
-      return 'saved'
-    }
-  } finally {
-    if (actionsDiv) actionsDiv.style.visibility = ''
-    moreOverlays.forEach(el => el.style.display = '')
-    zoomOverlays.forEach(el => el.style.display = '')
-    linkBar.remove()
-  }
-}
+export const snapTalkCard = (id: string) => snapCard('talk', id);
+export const snapDrawCard = (id: string) => snapCard('prompt', id);
+export const snapSuggestionCard = (id: string) => snapCard('suggestion', id);
+export const snapSketchbookCard = (id: string) => snapCard('drawing', id);

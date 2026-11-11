@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { snapDrawCard } from '$lib/utils/snap';
   import { onMount } from 'svelte';
   import { ChevronLeft, ChevronRight } from '@lucide/svelte';
   import { initialPrompts } from '@mikeblocky/site-data';
@@ -259,62 +260,10 @@
   }
 
   async function snapAndCopy(id: string) {
-    const element = document.getElementById(`prompt-${id}`);
-    if (!element) return;
-
-    const url = `${window.location.origin}/draw/${id}`;
-    const isDark = document.documentElement.classList.contains('dark');
-    const actionsDiv = element.querySelector('.prompt-actions') as HTMLElement;
-    if (actionsDiv) actionsDiv.style.visibility = 'hidden';
-
-    const moreOverlays = element.querySelectorAll('.gallery-more-overlay') as NodeListOf<HTMLElement>;
-    const zoomOverlays = element.querySelectorAll('.gallery-zoom-overlay') as NodeListOf<HTMLElement>;
-    moreOverlays.forEach(el => el.style.display = 'none');
-    zoomOverlays.forEach(el => el.style.display = 'none');
-
-    const linkBar = document.createElement('div');
-    linkBar.style.cssText = `margin-top:12px;padding-top:10px;border-top:1px solid ${isDark ? '#ffffff15' : '#00000010'};font-size:var(--font-size-2xs);color:${isDark ? '#94a3b8' : '#64748b'};font-family:system-ui,sans-serif;letter-spacing:0.02em;`;
-    linkBar.textContent = `Link: ${url}`;
-      element.appendChild(linkBar);
-  
-      try {
-        const { toPng } = await import('html-to-image');
-        const dataUrl = await toPng(element, {
-        backgroundColor: isDark ? '#110c1c' : '#ffffff',
-        style: {
-          borderRadius: '16px',
-          border: isDark ? '1px solid #4c2f77' : '1px solid #f3e8ff',
-          boxShadow: 'none',
-          padding: '24px',
-          margin: '0',
-          display: 'block',
-          color: isDark ? '#f5f3ff' : '#1e1b4b'
-        }
-      });
-      const res = await fetch(dataUrl);
-      const blob = await res.blob();
-
-      try {
-        await navigator.clipboard.write([
-          new ClipboardItem({ 'image/png': blob })
-        ]);
-        showButtonFeedback(`snap-${id}`, '✓ Snapped');
-      } catch (err) {
-        const a = document.createElement('a');
-        a.href = dataUrl;
-        a.download = `draw-${id}.png`;
-        a.click();
-        showButtonFeedback(`snap-${id}`, '✓ Saved');
-      }
-    } catch (e) {
-      console.error('Snap failed', e);
-      showButtonFeedback(`snap-${id}`, 'Could not snap');
-    } finally {
-      if (actionsDiv) actionsDiv.style.visibility = '';
-      moreOverlays.forEach(el => el.style.display = '');
-      zoomOverlays.forEach(el => el.style.display = '');
-      linkBar.remove();
-    }
+    try {
+      const result = await snapDrawCard(id);
+      showButtonFeedback(`snap-${id}`, result === 'saved' ? 'Saved' : 'Copied');
+    } catch { showButtonFeedback(`snap-${id}`, 'Could not capture'); }
   }
 
   $: totalPages = Math.ceil(prompts.length / ITEMS_PER_PAGE);

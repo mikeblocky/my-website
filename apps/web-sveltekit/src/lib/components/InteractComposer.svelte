@@ -61,11 +61,11 @@
     <button type="button" class:chosen={kind === 'sketchbook'} aria-pressed={kind === 'sketchbook'}
       disabled={busy || uploading} on:click={() => kind = 'sketchbook'}><Palette size={17} strokeWidth={1.6} /><span>Draw</span></button>
   </div>
-  <form on:submit|preventDefault={submit} aria-label="Write a post">
+  <form class:drawing-mode={kind === 'sketchbook'} on:submit|preventDefault={submit} aria-label="Write a post">
     <input class="interact-alias" aria-label="Your name (optional)" placeholder="Your name (optional)" bind:value={author} maxlength={80} readonly={busy} />
     <div class="interact-editor">
-      <textarea bind:this={editor} bind:value={body} maxlength={limit} rows={3} readonly={busy}
-        aria-label="Post text" placeholder="What’s on your mind?" required={kind !== 'sketchbook'}></textarea>
+      <textarea bind:this={editor} bind:value={body} maxlength={limit} rows={kind === 'sketchbook' ? 1 : 3} readonly={busy}
+        aria-label="Post text" placeholder={kind === 'sketchbook' ? 'A little caption… (optional)' : 'What’s on your mind?'} required={kind !== 'sketchbook'}></textarea>
       <EmojiPickerButton getTarget={() => editor} accent="sky" />
     </div>
     <div hidden={kind !== 'sketchbook'} class="interact-drawing-attachment">

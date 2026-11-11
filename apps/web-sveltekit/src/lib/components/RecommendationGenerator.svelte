@@ -187,6 +187,7 @@
     const el = document.getElementById('favorites-card-export-target');
     if (!el) return;
     isExporting = true;
+    await document.fonts.ready;
     await new Promise(r => setTimeout(r, 120));
     try {
       const { toPng } = await import('html-to-image');
@@ -209,6 +210,7 @@
     try {
       const el = document.getElementById('favorites-card-export-target');
       if (!el) return;
+      await document.fonts.ready;
       const rowCount = Math.ceil(items.length / 2);
       const { toPng } = await import('html-to-image');
       for (let i = 0; i < rowCount; i++) {
@@ -888,7 +890,8 @@
 
   .gen-export-wrapper { width: 100%; padding: 1rem 0; }
 
-  .gen-export-target { width: 100%; background: transparent; }
+  .gen-export-target { width: 100%; background: transparent; font-family: 'DM Sans', sans-serif; }
+  .gen-export-target :global(*) { font-family: 'DM Sans', sans-serif; }
   .gen-export-target.exporting { border-radius: 0.75rem; padding: 1.5rem; }
 
   .gen-single-wrap { width: 100%; border-radius: 0.375rem; overflow: hidden; }

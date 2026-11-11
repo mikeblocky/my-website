@@ -1,5 +1,8 @@
 @config "../../../../../tailwind.config.ts";
-@import "tailwindcss";
+@import "tailwindcss" source(none);
+/* Only scan live app/data sources, not captures, logs, or generated output. */
+@source "../../";
+@source "../../../../../packages/site-data/src";
 
 @import "./base.css";
 @import "./navigation.css";

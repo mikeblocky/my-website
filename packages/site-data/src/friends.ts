@@ -82,6 +82,21 @@ const upcomingFriends: Friend[] = [
   }
 ];
 
+const admiredSupporters: Friend[] = [
+  {
+    username: 'Meownie3',
+    description: "Meownie helped bring me to Kemutai Hanashi and Skip and Loafer. Her updates kept drawing me further into both stories, and I always enjoyed keeping up with what she shared. Along with lilatheduck's translated Skip and Loafer analyses, her posts were a big part of how I found my way into these stories."
+  },
+  {
+    username: 'CiciCustomz',
+    description: "A supporter whose encouragement I really appreciate. I'm glad my drawings brought us into the same little corner of the internet, and I admire the kindness they've shown toward what I make."
+  },
+  {
+    username: 'TbhkWOOO',
+    description: "Someone whose support has been lovely to receive. I appreciate them taking an interest in my work, and I'm happy to have that encouragement around as I keep drawing."
+  }
+];
+
 export const friendGroups: FriendGroup[] = [
   {
     id: 'developed',
@@ -106,5 +121,6 @@ export const friendGroups: FriendGroup[] = [
     title: 'Upcoming',
     description: 'People I hope to know with more patience and courage.',
     friends: upcomingFriends
-  }
+  },
+  { id: 'admired', title: 'Admired supporters', description: 'People whose support and shared interests have stayed with me.', friends: admiredSupporters }
 ];

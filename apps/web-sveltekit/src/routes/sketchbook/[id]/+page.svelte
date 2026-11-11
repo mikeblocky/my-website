@@ -12,8 +12,8 @@
     ? `"${drawing.body.slice(0, 150)}${drawing.body.length > 150 ? '...' : ''}" — Drawing by ${drawing.author}`
     : `A beautiful sketch drawn by ${drawing.author} on the collaborative board.`;
   $: title = `Drawing by ${drawing.author} | Sketchbook`;
-  $: ogImage = `/sketchbook/${id}/opengraph-image`;
-  $: twitterImage = `/sketchbook/${id}/twitter-image`;
+  $: ogImage = `/sketchbook/${id}/opengraph-image?v=3`;
+  $: twitterImage = ogImage;
 </script>
 
 <SeoHead

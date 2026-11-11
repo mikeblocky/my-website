@@ -1,10 +1,10 @@
 <script lang="ts">
   import { page } from '$app/stores';
-  import { Home, User, Palette, BookOpen, Users, Heart, MessageCircle, PanelLeftClose, PanelLeftOpen } from '@lucide/svelte';
+  import { Home, User, Palette, BookOpen, Users, Heart, MessageCircle, ClipboardList, PanelLeftClose, PanelLeftOpen } from '@lucide/svelte';
   import { navLinks } from '$lib/site';
   import ThemeToggle from './ThemeToggle.svelte';
   export let collapsed = false;
-  const icons = [Home, User, Palette, BookOpen, Users, Heart, MessageCircle];
+  const icons = [Home, User, Palette, BookOpen, Users, Heart, MessageCircle, ClipboardList];
   $: activeIndex = navLinks.findIndex(link => link.href === '/' ? $page.url.pathname === '/' : $page.url.pathname.startsWith(link.href) || (link.href === '/journal' && /^\/(blog|diary|learning)/.test($page.url.pathname)));
 </script>
 

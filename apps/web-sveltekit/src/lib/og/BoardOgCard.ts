@@ -1,263 +1,33 @@
+import { randomOgPalette } from './PageOgCard';
+
 type BoardOgCardProps = {
-  accent: string
-  accentSoft: string
-  border: string
-  label: string
-  body: string
-  title?: string
-  author?: string
-  date: string
-  imageUrl?: string
-  imageUrls?: string[]
-}
+  accent: string; accentSoft: string; border: string; label: string;
+  body: string; title?: string; author?: string; date: string;
+  imageUrl?: string; imageUrls?: string[];
+};
 
-function clampText(text: string, max: number) {
-  return text.length > max ? text.slice(0, max - 1) + '…' : text
-}
-
-function bodyStyle(len: number, hasImage: boolean) {
-  if (hasImage) {
-    if (len > 500) return { fontSize: 16, lineHeight: 1.28 }
-    if (len > 360) return { fontSize: 18, lineHeight: 1.3 }
-    if (len > 260) return { fontSize: 20, lineHeight: 1.32 }
-    if (len > 180) return { fontSize: 23, lineHeight: 1.35 }
-    if (len > 100) return { fontSize: 28, lineHeight: 1.4 }
-    return { fontSize: 34, lineHeight: 1.5 }
-  }
-  if (len > 700) return { fontSize: 18, lineHeight: 1.28 }
-  if (len > 560) return { fontSize: 20, lineHeight: 1.3 }
-  if (len > 420) return { fontSize: 22, lineHeight: 1.32 }
-  if (len > 280) return { fontSize: 26, lineHeight: 1.35 }
-  if (len > 160) return { fontSize: 30, lineHeight: 1.4 }
-  if (len > 80)  return { fontSize: 36, lineHeight: 1.5 }
-  return { fontSize: 42, lineHeight: 1.5 }
-}
-
-export function boardOgCard({
-  accent, accentSoft, border, label, body, title, author, date, imageUrl, imageUrls,
-}: BoardOgCardProps) {
-  const images = [...new Set(imageUrls?.length ? imageUrls : imageUrl ? [imageUrl] : [])].slice(0, 4)
-  const hasImage = images.length > 0
-  const hasTitle = !!title && title.trim().length > 0
-  const safeBody = clampText(body, hasImage ? 800 : 1200)
-  const { fontSize, lineHeight } = bodyStyle(safeBody.length, hasImage)
-  const footerWidth = hasImage ? 520 : 980
-
-  // Explicit pixel widths so Satori wraps text correctly.
-  // Card: 1200 - 2*40 outer - 2*12 border = 1096px inner content.
-  // Text-only panel: 1096 - 2*60 padding = 976px.
-  // With-image panel: 1096 - 420 image - 44 left - 44 right padding = 588px.
-  const textWidth = hasImage ? 588 : 976
-
-  const textBlock = {
-    type: 'div',
-    props: {
-      style: {
-        display: 'flex',
-        flexDirection: 'column',
-        width: textWidth,
-        maxHeight: hasImage ? 300 : 265,
-        overflow: 'hidden',
-      },
-      children: {
-        type: 'span',
-        props: {
-          style: {
-            fontSize,
-            fontWeight: 400,
-            color: '#334155',
-            lineHeight,
-          },
-          children: `"${safeBody}"`,
-        },
-      },
-    },
-  }
-
-  function infoPanel(rightPadding = 60) {
-    return {
-      type: 'div',
-      props: {
-        style: {
-          display: 'flex',
-          flexDirection: 'column',
-          flexGrow: 1,
-          paddingTop: 44,
-          paddingBottom: 44,
-          paddingLeft: hasImage ? 44 : 60,
-          paddingRight: rightPadding,
-          overflow: 'hidden',
-          minWidth: 0,
-        },
-        children: [
-          // Badge
-          {
-            type: 'div',
-            props: {
-              style: { display: 'flex', alignItems: 'center', flexShrink: 0 },
-              children: {
-                type: 'div',
-                props: {
-                  style: {
-                    paddingTop: 8, paddingBottom: 8,
-                    paddingLeft: 26, paddingRight: 26,
-                    borderRadius: 999,
-                    background: accentSoft,
-                    borderWidth: 2, borderStyle: 'solid', borderColor: border,
-                    color: accent, fontSize: 24, fontWeight: 700,
-                  },
-                  children: label,
-                },
-              },
-            },
-          },
-          // Text area
-          {
-            type: 'div',
-            props: {
-              style: {
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'center',
-                flexGrow: 1,
-                marginTop: 24,
-                marginBottom: 24,
-                overflow: 'hidden',
-                minWidth: 0,
-              },
-              children: [
-                ...(hasTitle ? [{
-                  type: 'div',
-                  props: {
-                    style: {
-                      width: '100%',
-                      fontSize: hasImage ? 26 : 30,
-                      fontWeight: 700,
-                      color: '#0f172a',
-                      lineHeight: 1.3,
-                      marginBottom: 14,
-                      overflow: 'hidden',
-                    },
-                    children: clampText(title!, 90),
-                  },
-                }] : []),
-                textBlock,
-              ],
-            },
-          },
-          // Footer
-          {
-            type: 'div',
-            props: {
-              style: {
-                display: 'flex',
-                flexDirection: 'column',
-                width: footerWidth,
-                maxWidth: '100%',
-                flexShrink: 0,
-              },
-              children: [
-                {
-                  type: 'div',
-                  props: {
-                    style: { display: 'flex', width: '100%', height: 2, background: '#f1f5f9', marginBottom: 18 },
-                  },
-                },
-                {
-                  type: 'div',
-                  props: {
-                    style: {
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      alignItems: 'flex-end',
-                      width: '100%',
-                    },
-                    children: [
-                      {
-                        type: 'div',
-                        props: {
-                          style: { display: 'flex', flexDirection: 'column', minWidth: 0 },
-                          children: [
-                            {
-                              type: 'div',
-                              props: { style: { fontSize: 22, fontWeight: 700, color: accent }, children: 'mikeblocky.com/interact' },
-                            },
-                            ...(author ? [{
-                              type: 'div',
-                              props: {
-                                style: { fontSize: 18, fontWeight: 400, color: '#94a3b8', marginTop: 4 },
-                                children: hasImage ? `by ${author} · ${date}` : `by ${author}`,
-                              },
-                            }] : []),
-                          ],
-                        },
-                      },
-                      ...(!hasImage ? [{
-                        type: 'div',
-                        props: { style: { fontSize: 20, fontWeight: 400, color: '#94a3b8', flexShrink: 0 }, children: date },
-                      }] : []),
-                    ],
-                  },
-                },
-              ],
-            },
-          },
-        ],
-      },
-    }
-  }
-
-  if (hasImage) {
-    return {
-      type: 'div',
-      props: {
-        style: { background: accentSoft, width: '100%', height: '100%', display: 'flex', padding: 40 },
-        children: {
-          type: 'div',
-          props: {
-            style: {
-              display: 'flex', flexDirection: 'row',
-              width: '100%', height: '100%',
-              background: '#ffffff',
-              borderWidth: 12, borderStyle: 'solid', borderColor: accent,
-              borderRadius: 32, overflow: 'hidden',
-            },
-            children: [
-              {
-                type: 'div',
-                props: {
-                  style: { display: 'flex', flexWrap: 'wrap', width: 420, height: 526, flexShrink: 0, background: accentSoft },
-                  children: images.map((src, index) => ({
-                    type: 'img',
-                    props: { src, style: { width: images.length > 2 && !(images.length === 3 && index === 0) ? 210 : 420, height: images.length > 1 ? 263 : 526, objectFit: 'contain' } },
-                  })),
-                },
-              },
-              infoPanel(44),
-            ],
-          },
-        },
-      },
-    }
-  }
-
-  return {
-    type: 'div',
-    props: {
-      style: { background: accentSoft, width: '100%', height: '100%', display: 'flex', padding: 40 },
-      children: {
-        type: 'div',
-        props: {
-          style: {
-            display: 'flex', flexDirection: 'column',
-            width: '100%', height: '100%',
-            background: '#ffffff',
-            borderWidth: 12, borderStyle: 'solid', borderColor: accent,
-            borderRadius: 32, overflow: 'hidden',
-          },
-          children: [infoPanel(60)],
-        },
-      },
-    },
-  }
+/** Match the colorful page thumbnails without clipping longer posts or artwork. */
+export function boardOgCard({ body, title, author, date, imageUrl, imageUrls, label }: BoardOgCardProps) {
+  const images = [...new Set(imageUrls?.length ? imageUrls : imageUrl ? [imageUrl] : [])].slice(0, 4);
+  const content = label === 'Drawing' && !body.trim() ? 'drew a thing!' : body;
+  const { background, accent } = randomOgPalette();
+  const textWidth = images.length ? 654 : 1104;
+  const fontSize = content.length > 400 ? 26 : 32;
+  const lines = content.split('\n').reduce((sum, line) => sum + Math.max(1, Math.ceil(Array.from(line).reduce((width, char) => width + (char.codePointAt(0)! > 0x2e7f ? 1 : .65), 0) / (textWidth / fontSize))), 0);
+  const centered = lines <= 5 && content.length + (title?.length || 0) <= 280;
+  const height = Math.max(630, Math.ceil(224 + lines * fontSize * 1.5 + (title ? 100 : 0)));
+  const node = (style: Record<string, unknown>, children?: unknown): any => ({type:'div', props:{style:{display:'flex', ...style}, children}});
+  const header = node({alignItems:'center', justifyContent:'flex-start', flexWrap:'wrap', gap:14, marginBottom:24, width:'100%'}, [
+    node({width:48, height:48, borderRadius:24, background:'#ffffff', color:accent, alignItems:'center', justifyContent:'center', fontSize:24, flexShrink:0}, (author || 'anonymous').slice(0,1).toUpperCase()),
+    node({fontSize:28, fontWeight:700}, author || 'anonymous'),
+    node({fontSize:23, color:accent, opacity:.65}, `· ${date}`)
+  ]);
+  return node({width:1200, height, padding:48, paddingBottom:66, gap:40, alignItems:centered ? 'center' : 'flex-start', background, color:accent, borderBottom:`18px solid ${accent}`, fontFamily:'DM Sans, Noto Sans JP'}, [
+    node({width:textWidth, flexDirection:'column', flexShrink:0, alignItems:'flex-start', justifyContent:centered ? 'center' : 'flex-start', textAlign:'left', alignSelf:centered ? 'center' : 'flex-start'}, [
+      header,
+      ...(title ? [node({fontSize:32, fontWeight:700, marginBottom:16},title)] : []),
+      node({width:'100%', justifyContent:'flex-start', fontSize, lineHeight:1.5, whiteSpace:'pre-wrap', wordBreak:'break-word'},content)
+    ]),
+    ...(images.length ? [node({width:410, flexDirection:'column', gap:12, alignSelf:'center'}, images.map(src => ({type:'img',props:{src,style:{width:410,height:Math.min(480,Math.floor((height-114)/images.length)-12),objectFit:'contain',borderRadius:8, background:'#ffffff'}}})))] : [])
+  ]);
 }

@@ -12,8 +12,8 @@
   $: bodySnippet = prompt.body.slice(0, 150) + (prompt.body.length > 150 ? '...' : '');
   $: description = `"${bodySnippet}" — Suggested by ${author}`;
   $: title = `Prompt from ${author} | Drawing prompts`;
-  $: ogImage = `/draw/${id}/opengraph-image`;
-  $: twitterImage = `/draw/${id}/twitter-image`;
+  $: ogImage = `/draw/${id}/opengraph-image?v=3`;
+  $: twitterImage = ogImage;
 </script>
 
 <SeoHead

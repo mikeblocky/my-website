@@ -6,6 +6,7 @@ import path from 'node:path';
 export default defineConfig({
   plugins: [tailwindcss(), sveltekit()],
   optimizeDeps: {
+    include: ['@lucide/svelte', 'tailwind-merge'],
     exclude: ['html-to-image']
   },
   resolve: {
@@ -15,6 +16,7 @@ export default defineConfig({
   },
   server: {
     port: process.env.PORT ? parseInt(process.env.PORT) : 5173,
+    strictPort: true,
     fs: {
       allow: ['../..']
     }

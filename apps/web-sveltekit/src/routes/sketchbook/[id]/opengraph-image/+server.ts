@@ -1,7 +1,7 @@
 import type { RequestHandler } from '@sveltejs/kit'
 import { getDrawingById } from '$lib/kv/sketchbook'
 import { artworkOgCard } from '$lib/og/ArtworkOgCard'
-import { generatePng } from '$lib/og/generate'
+import { socialImageResponse } from '$lib/og/social-response'
 
 export const GET: RequestHandler = async ({ params }) => {
   const drawing = await getDrawingById(params.id!)
@@ -24,11 +24,5 @@ export const GET: RequestHandler = async ({ params }) => {
     date,
   })
 
-  const png = await generatePng(element as any)
-  return new Response(png, {
-    headers: {
-      'Content-Type': 'image/png',
-      'Cache-Control': 'public, max-age=3600',
-    },
-  })
+  return socialImageResponse(`sketchbook:${params.id}`, element)
 }

@@ -11,8 +11,8 @@
   $: body = suggestion.note || suggestion.bestPart || suggestion.reference?.description || suggestion.title;
   $: description = `"${body.slice(0, 150)}${body.length > 150 ? '...' : ''}" - Suggested by ${suggestion.author || 'anonymous'}`;
   $: title = `${suggestion.title} | Media suggestions`;
-  $: ogImage = `/suggestions/${id}/opengraph-image`;
-  $: twitterImage = `/suggestions/${id}/twitter-image`;
+  $: ogImage = `/suggestions/${id}/opengraph-image?v=3`;
+  $: twitterImage = ogImage;
 </script>
 
 <SeoHead

@@ -51,14 +51,6 @@
     }
   }
 
-  // Local text state for the size input
-  let sizeInputText = String(brushSize);
-  let sizeInputFocused = false;
-
-  $: if (!sizeInputFocused) {
-    sizeInputText = String(brushSize);
-  }
-
   // History stack for Undo / Redo
   let historyList: string[] = [];
   let historyIndex = -1;
@@ -74,6 +66,7 @@
 
   // Canvas context setups
   let isDrawing = false;
+  let drawingPointer: number | null = null;
   let lastPos = { x: 0, y: 0 };
   let stabilizedPos = { x: 0, y: 0 };
   let lastRawPos = { x: 0, y: 0 };
@@ -243,7 +236,8 @@
 
   // Drawing event handlers
   function startDrawing(e: PointerEvent) {
-    if (!active || isPending) return;
+    if (!active || isPending || isDrawing || (e.pointerType === 'mouse' && e.button !== 0)) return;
+    drawingPointer = e.pointerId;
     e.preventDefault();
     if (!tempCanvasRef) return;
     
@@ -270,7 +264,7 @@
   }
 
   function draw(e: PointerEvent) {
-    if (!isDrawing) return;
+    if (!isDrawing || e.pointerId !== drawingPointer) return;
     e.preventDefault();
 
     if (!tempCanvasRef) return;
@@ -298,7 +292,7 @@
   }
 
   function stopDrawing(e: PointerEvent) {
-    if (isDrawing) {
+    if (isDrawing && e.pointerId === drawingPointer) {
       if (tempCanvasRef && canvasRef) {
         try {
           tempCanvasRef.releasePointerCapture(e.pointerId);
@@ -328,6 +322,7 @@
       }
 
       isDrawing = false;
+      drawingPointer = null;
       points = [];
       saveStateToHistory();
     }
@@ -341,7 +336,7 @@
 
     const imageUrl = canvasRef.toDataURL('image/png');
 
-    if (historyList.length <= 1) {
+    if (historyIndex <= 0) {
       errorMessage = "Please draw something before submitting!";
       return;
     }
@@ -361,222 +356,64 @@
   }
 </script>
 
-<svelte:element this={embedded ? 'div' : 'form'}
-  class:embedded
-  on:submit={handleFormSubmit} 
-  class="sketchbook-canvas-form bg-white/40 dark:bg-slate-950/20 rounded-xl border border-slate-200/50 dark:border-slate-850/50 shadow-sm flex flex-col text-left font-sans overflow-hidden pride-focus-within-glow"
->
-  <!-- Top Alias input field -->
+<svelte:element this={embedded ? 'div' : 'form'} class="sketchbook-canvas-form" class:embedded on:submit={handleFormSubmit}>
   {#if !embedded}
-  <div class="border-b border-slate-100 dark:border-slate-900 px-4 py-3 bg-slate-50/20 dark:bg-slate-950/20 rounded-t-xl">
-    <input
-      type="text"
-      placeholder="Your alias (optional)"
-      bind:value={author}
-      class="w-full bg-transparent text-sm font-semibold text-slate-800 placeholder:text-muted-foreground/60 focus:outline-none dark:text-slate-100 font-sans"
-    />
-  </div>
-
-  <!-- Caption textarea -->
-  <div class="px-4 py-2">
-    <textarea
-      placeholder="Caption your artwork... (optional)"
-      bind:value={caption}
-      maxlength={MAX_BODY_LENGTH}
-      on:input={(e) => {
-        e.currentTarget.style.height = 'auto';
-        e.currentTarget.style.height = `${e.currentTarget.scrollHeight}px`;
-      }}
-      rows={1}
-      class="w-full bg-transparent py-2 text-base text-slate-900 placeholder:text-slate-400 focus:outline-none dark:text-slate-100 dark:placeholder:text-slate-600 resize-none overflow-hidden min-h-[82px] font-sans"
-    />
-  </div>
-
-  <!-- Clean Drawing Area with Canvas and settings -->
+    <input aria-label="Your name" placeholder="Your name (optional)" bind:value={author} />
+    <textarea aria-label="Drawing caption" placeholder="A little caption… (optional)" bind:value={caption} maxlength={MAX_BODY_LENGTH} rows={2}></textarea>
   {/if}
-  <div class="sketchbook-drawing-stage flex flex-col items-center gap-5 px-4 pb-6 pt-5 border-t border-slate-100 dark:border-slate-900 w-full">
-    <div class="flex flex-col md:flex-row items-center md:items-stretch justify-center gap-6 w-full max-w-[900px] mx-auto">
-      
-      <!-- Left Panel: Brush Tools -->
-      <div class="sketchbook-tool-panel w-full max-w-[400px] md:max-w-none md:w-[68px] bg-white/55 dark:bg-slate-950/35 backdrop-blur-sm p-2.5 rounded-xl border border-slate-200/50 dark:border-slate-800/60 flex flex-col gap-4 md:gap-5 md:justify-between md:items-center shadow-sm shadow-slate-100/10 dark:shadow-black/10 order-1 md:order-1">
-        
-        <!-- Tool Switcher -->
-        <div class="flex flex-row md:flex-col bg-slate-100/45 dark:bg-slate-950/55 p-1 rounded-lg border border-slate-200/30 dark:border-slate-800/40 w-full gap-1">
-          <button
-            type="button"
-            on:click={() => (isDrawingTool = 'pencil')}
-            class="sketchbook-soft-control p-2.5 rounded-md flex items-center justify-center cursor-pointer flex-1 md:w-full border-0 {isDrawingTool === 'pencil' ? 'pride-text bg-white/90 dark:bg-slate-900/80 shadow-sm shadow-black/5 pride-icon-glow scale-[1.01]' : 'text-slate-450 hover:text-slate-700 dark:text-slate-550 dark:hover:text-slate-300 hover:bg-white/45 dark:hover:bg-slate-900/45 bg-transparent'}"
-            title="Pencil mode (B)"
-          >
-            <Pencil size={15} />
-          </button>
-          <button
-            type="button"
-            on:click={() => (isDrawingTool = 'eraser')}
-            class="sketchbook-soft-control p-2.5 rounded-md flex items-center justify-center cursor-pointer flex-1 md:w-full border-0 {isDrawingTool === 'eraser' ? 'pride-text bg-white/90 dark:bg-slate-900/80 shadow-sm shadow-black/5 pride-icon-glow scale-[1.01]' : 'text-slate-450 hover:text-slate-700 dark:text-slate-550 dark:hover:text-slate-300 hover:bg-white/45 dark:hover:bg-slate-900/45 bg-transparent'}"
-            title="Eraser mode (E)"
-          >
-            <Eraser size={15} />
-          </button>
-        </div>
-
-        <!-- Undo, Redo, Clear -->
-        <div class="flex flex-row md:flex-col bg-slate-100/45 dark:bg-slate-950/55 p-1.5 rounded-lg border border-slate-200/30 dark:border-slate-800/40 items-center justify-between md:justify-center gap-1 w-full">
-          <button
-            type="button"
-            on:click={handleUndo}
-            disabled={!canUndo}
-            class="sketchbook-soft-control p-2 rounded-md text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-250 hover:bg-white/70 dark:hover:bg-slate-900/70 disabled:opacity-20 disabled:pointer-events-none cursor-pointer flex-1 md:w-full flex items-center justify-center border-0 bg-transparent"
-            title="Undo (Ctrl+Z)"
-          >
-            <Undo2 size={14} />
-          </button>
-          <button
-            type="button"
-            on:click={handleRedo}
-            disabled={!canRedo}
-            class="sketchbook-soft-control p-2 rounded-md text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-250 hover:bg-white/70 dark:hover:bg-slate-900/70 disabled:opacity-20 disabled:pointer-events-none cursor-pointer flex-1 md:w-full flex items-center justify-center border-0 bg-transparent"
-            title="Redo (Ctrl+Y)"
-          >
-            <Redo2 size={14} />
-          </button>
-          <div class="w-[1px] md:w-4/5 h-4 md:h-[1px] bg-slate-200 dark:bg-slate-800 self-center my-0.5 md:my-1"></div>
-          <button
-            type="button"
-            on:click={initCanvas}
-            class="sketchbook-soft-control p-2 rounded-md text-slate-450 hover:text-red-500 dark:text-slate-500 dark:hover:text-red-400 hover:bg-red-500/10 dark:hover:bg-red-950/30 cursor-pointer flex-1 md:w-full flex items-center justify-center border-0 bg-transparent"
-            title="Clear board"
-          >
-            <Trash2 size={14} />
-          </button>
-        </div>
-
-        <!-- Brush Thickness Slider -->
-        <div class="flex flex-col items-center gap-2.5 bg-slate-100/45 dark:bg-slate-950/55 p-2 rounded-lg border border-slate-200/30 dark:border-slate-800/40 w-full">
-          <input
-            type="range"
-            min="1"
-            max="40"
-            value={brushSize}
-            on:input={(e) => setBrushSize(parseInt(e.currentTarget.value))}
-            class="w-full md:[writing-mode:vertical-lr] md:[direction:rtl] h-1.5 md:h-24 md:w-1.5 accent-[hsl(var(--pride-glow-val))] cursor-pointer bg-slate-200 dark:bg-slate-800 rounded-full my-1"
-            title={`Brush size: ${brushSize}px`}
-          />
-          <div class="w-8 h-8 rounded-full bg-white dark:bg-slate-900 flex items-center justify-center border border-slate-200/60 dark:border-slate-800/60 shadow-inner shrink-0 relative overflow-hidden">
-            <div
-              class="rounded-full transition-all"
-              style="width: {Math.max(2, Math.min(brushSize, 20))}px; height: {Math.max(2, Math.min(brushSize, 20))}px; background-color: {isDrawingTool === 'eraser' ? '#cbd5e1' : brushColor};"
-            />
-          </div>
-          <input
-            type="text"
-            inputmode="numeric"
-            min="1"
-            max="100"
-            bind:value={sizeInputText}
-            on:focus={() => {
-              sizeInputFocused = true;
-              sizeInputText = String(brushSize);
-            }}
-            on:input={(e) => {
-              sizeInputText = e.currentTarget.value.replace(/[^0-9]/g, '');
-            }}
-            on:blur={() => {
-              sizeInputFocused = false;
-              const val = parseInt(sizeInputText);
-              if (!isNaN(val) && val >= 1) {
-                const nextSize = Math.max(1, Math.min(val, 100));
-                setBrushSize(nextSize);
-                sizeInputText = String(nextSize);
-              } else {
-                sizeInputText = String(brushSize);
-              }
-            }}
-            on:keydown={(e) => {
-              if (e.key === 'Enter') {
-                e.preventDefault();
-                e.currentTarget.blur();
-              }
-            }}
-            class="w-9 h-6 text-center text-[10px] font-bold bg-white/75 dark:bg-slate-900/70 border border-slate-200/60 dark:border-slate-800/70 rounded-md text-slate-700 dark:text-slate-300 focus:outline-none shrink-0 font-mono"
-            title="Type custom size (1-100)"
-          />
-        </div>
-      </div>
-
-      <!-- Center Panel: Canvas -->
-      <div class="sketchbook-canvas-frame relative w-full max-w-[400px] aspect-square rounded-xl overflow-hidden border-2 border-slate-100 dark:border-slate-900 shadow-sm shadow-black/5 dark:shadow-black/20 order-2 md:order-2 shrink-0">
-        <canvas
-          bind:this={canvasRef}
-          width={600}
-          height={600}
-          class="absolute inset-0 w-full h-full shadow-[inset_0_2px_8px_rgba(0,0,0,0.06)]"
-        />
-        <canvas
-          bind:this={tempCanvasRef}
-          width={600}
-          height={600}
-          on:pointerdown={startDrawing}
-          on:pointermove={draw}
-          on:pointerup={stopDrawing}
-          on:pointercancel={stopDrawing}
-          class="absolute inset-0 w-full h-full cursor-crosshair touch-none z-10"
-        />
-      </div>
-
-      <!-- Right Panel: Colors -->
-      <div class="sketchbook-tool-panel w-full max-w-[400px] md:max-w-none md:w-[68px] bg-white/55 dark:bg-slate-950/35 backdrop-blur-sm p-2.5 rounded-xl border border-slate-200/50 dark:border-slate-800/60 flex flex-col shadow-sm shadow-slate-100/10 dark:shadow-black/10 order-3 md:order-3">
-        <div class="grid grid-cols-5 md:flex md:flex-col md:justify-between md:items-center md:h-full gap-2.5 md:gap-3 w-full h-full bg-slate-100/45 dark:bg-slate-950/55 px-2 py-3 rounded-lg border border-slate-200/30 dark:border-slate-800/40">
-          {#each PRESETS as color}
-            <button
-              type="button"
-              on:click={() => (brushColor = color.hex)}
-              class="w-[22px] h-[22px] rounded-full border border-slate-250 dark:border-slate-800 relative transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] scale-100 hover:scale-110 shadow-sm cursor-pointer {brushColor === color.hex ? 'ring-2 ring-[hsl(var(--pride-glow-val))] ring-offset-2 dark:ring-offset-slate-900 scale-105 shadow-md shadow-[hsl(var(--pride-glow-val))/0.12]' : ''}"
-              style="background-color: {color.hex};"
-              title={color.name}
-            />
-          {/each}
-          
-          <label
-            class="w-[22px] h-[22px] rounded-full border border-slate-200/80 dark:border-slate-800/80 flex items-center justify-center relative cursor-pointer hover:scale-110 shadow-sm bg-white dark:bg-slate-900 transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] {!PRESETS.some(p => p.hex === brushColor) ? 'ring-2 ring-[hsl(var(--pride-glow-val))] ring-offset-2 dark:ring-offset-slate-900 scale-105 shadow-md shadow-[hsl(var(--pride-glow-val))/0.12]' : ''}"
-            title="Custom Color"
-          >
-            <input
-              type="color"
-              bind:value={brushColor}
-              class="absolute inset-0 opacity-0 cursor-pointer w-full h-full"
-            />
-            <Palette size={11} class="text-slate-500 dark:text-slate-400" />
-          </label>
-        </div>
-      </div>
-
+  <div class="drawing-toolbar" role="group" aria-label="Drawing tools">
+    <div class="drawing-tools">
+      <button type="button" class:selected={isDrawingTool === 'pencil'} aria-label="Pencil" aria-pressed={isDrawingTool === 'pencil'} on:click={() => isDrawingTool = 'pencil'}><Pencil size={18} /></button>
+      <button type="button" class:selected={isDrawingTool === 'eraser'} aria-label="Eraser" aria-pressed={isDrawingTool === 'eraser'} on:click={() => isDrawingTool = 'eraser'}><Eraser size={18} /></button>
+    </div>
+    <div class="drawing-tools">
+      <button type="button" aria-label="Undo" disabled={!canUndo || isPending} on:click={handleUndo}><Undo2 size={18} /></button>
+      <button type="button" aria-label="Redo" disabled={!canRedo || isPending} on:click={handleRedo}><Redo2 size={18} /></button>
+      <button type="button" aria-label="Clear drawing" disabled={!canUndo || isPending} on:click={() => { if (confirm('Clear this drawing?')) { const ctx = canvasRef.getContext('2d'); if (ctx) { ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, 600, 600); saveStateToHistory(); } } }}><Trash2 size={17} /></button>
     </div>
   </div>
-
-  <!-- Bottom row -->
+  <div class="drawing-paper">
+    <canvas bind:this={canvasRef} width={600} height={600} aria-label="Your drawing"></canvas>
+    <canvas bind:this={tempCanvasRef} width={600} height={600} aria-label="Drawing surface" on:pointerdown={startDrawing} on:pointermove={draw} on:pointerup={stopDrawing} on:pointercancel={stopDrawing} on:lostpointercapture={stopDrawing}></canvas>
+  </div>
+  <div class="drawing-settings">
+    <label class="drawing-size"><span>{isDrawingTool === 'eraser' ? 'Eraser' : 'Brush'}</span><input aria-label="Brush size" type="range" min="1" max="40" value={brushSize} on:input={(e) => setBrushSize(Number(e.currentTarget.value))} /><output>{brushSize}</output></label>
+    <div class="drawing-colors" role="group" aria-label="Ink colors">
+      {#each PRESETS as color}
+        <button type="button" aria-label={color.name} aria-pressed={brushColor === color.hex} class:selected={brushColor === color.hex} on:click={() => { brushColor = color.hex; isDrawingTool = 'pencil'; }}><span style:background={color.hex}></span></button>
+      {/each}
+      <label class="custom-color" title="Custom color"><Palette size={18} /><input aria-label="Custom ink color" type="color" bind:value={brushColor} /></label>
+    </div>
+  </div>
   {#if !embedded}
-  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-t border-slate-100 dark:border-slate-900 px-4 py-3.5 bg-slate-50/20 dark:bg-slate-950/20 overflow-hidden rounded-b-xl">
-    <span class="text-xs font-semibold text-slate-400 dark:text-slate-500 select-none">
-      Draw on the canvas above to submit your artwork!
-    </span>
-
-    <div class="flex flex-col w-full sm:w-auto gap-2">
-      {#if errorMessage}
-        <div class="rounded-lg border border-red-250 bg-red-50/50 dark:border-red-955/20 dark:bg-red-955/20 px-3.5 py-2 text-xs text-red-650 dark:text-red-400 font-medium">
-          {errorMessage}
-        </div>
-      {/if}
-
-      <button
-        type="submit"
-        disabled={isPending || isCooldownActive}
-        class="w-full sm:w-auto pride-button rounded-md h-9 px-4.5 text-xs font-semibold cursor-pointer disabled:opacity-50"
-        title={isCooldownActive ? `You can send another artwork in ${cooldownLabel}` : undefined}
-      >
-        {isCooldownActive ? cooldownLabel : 'Publish artwork'}
-      </button>
-    </div>
-  </div>
+    {#if errorMessage}<p role="alert">{errorMessage}</p>{/if}
+    <button class="drawing-publish" type="submit" disabled={isPending || isCooldownActive}>{isPending ? 'Posting…' : isCooldownActive ? cooldownLabel : 'Post drawing'}</button>
   {/if}
 </svelte:element>
+
+<style>
+  .sketchbook-canvas-form { width:100%; min-width:0; color:hsl(var(--foreground)); font-family:var(--font-sans); }
+  .drawing-toolbar { display:flex; align-items:center; justify-content:space-between; padding:6px; gap:8px; }
+  .drawing-tools { display:flex; gap:2px; }
+  button { display:grid; place-items:center; width:44px; height:44px; border:0; border-radius:9px; background:transparent; color:hsl(var(--muted-foreground)); cursor:pointer; transition:background 160ms,color 160ms; }
+  button.selected { color:hsl(var(--site-blue)); background:hsl(var(--site-blue)/.09); }
+  button:hover:not(:disabled) { background:hsl(var(--foreground)/.06); }
+  button:disabled { opacity:.3; cursor:default; }
+  button:focus-visible, input:focus-visible { outline:2px solid hsl(var(--site-blue)); outline-offset:2px; }
+  .drawing-paper { position:relative; width:100%; aspect-ratio:1; background:white; overflow:hidden; border-block:1px solid hsl(var(--border)); }
+  canvas { position:absolute; inset:0; width:100%; height:100%; }
+  canvas:last-child { touch-action:none; cursor:crosshair; }
+  .drawing-settings { padding:10px 6px 6px; }
+  .drawing-size { display:flex; align-items:center; gap:12px; padding:0 8px; font-size:var(--font-size-xs); color:hsl(var(--muted-foreground)); }
+  .drawing-size input { flex:1; min-width:0; height:44px; accent-color:hsl(var(--site-blue)); }
+  output { min-width:2ch; font-variant-numeric:tabular-nums; }
+  .drawing-colors { display:grid; grid-template-columns:repeat(10,minmax(0,1fr)); margin-top:4px; }
+  .drawing-colors button { width:100%; height:44px; }
+  .drawing-colors span { width:20px; height:20px; border-radius:50%; border:1px solid #0002; }
+  .drawing-colors button.selected span { outline:2px solid hsl(var(--foreground)); outline-offset:3px; }
+  .custom-color { position:relative; display:grid; place-items:center; min-height:44px; cursor:pointer; }
+  .custom-color input { position:absolute; inset:0; width:100%; height:100%; opacity:0; cursor:pointer; }
+  .drawing-publish { width:auto; padding-inline:20px; background:hsl(var(--foreground)); color:hsl(var(--background)); margin-top:12px; }
+  .sketchbook-canvas-form > input, textarea { width:100%; border:0; background:transparent; color:inherit; font:inherit; padding:12px; }
+  @media (prefers-reduced-motion:reduce) { button { transition:none; } }
+</style>

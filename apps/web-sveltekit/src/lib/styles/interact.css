@@ -83,15 +83,6 @@
 
 /* Drawing is an attachment in the same composer, with no second form/footer. */
 .interact-drawing-attachment { margin-top: 0.75rem; border: 1px solid hsl(var(--border)); border-radius: 0.85rem; overflow: hidden; }
-.interact-drawing-attachment .sketchbook-drawing-stage { padding: 0.5rem; gap: 0; background: transparent; border: 0; }
-.interact-drawing-attachment .sketchbook-drawing-stage > div { display: flex; flex-direction: column; gap: 0.65rem; }
-.interact-drawing-attachment .sketchbook-tool-panel { display: flex; flex-direction: row; flex-wrap: wrap; align-items: center; gap: 0.4rem; width: 100%; max-width: none; padding: 0; border: 0; background: transparent; box-shadow: none; }
-.interact-drawing-attachment .sketchbook-tool-panel > div { display: flex; flex-direction: row; align-items: center; width: auto; gap: 0.15rem; padding: 0.2rem; border: 0; }
-.interact-drawing-attachment .sketchbook-tool-panel button { min-width: 36px; min-height: 36px; padding: 0.5rem; width: auto; }
-.interact-drawing-attachment .sketchbook-tool-panel input[type='range'] { writing-mode: horizontal-tb; direction: ltr; width: 65px; height: 4px; }
-.interact-drawing-attachment .sketchbook-tool-panel input[type='text'] { width: 32px; }
-.interact-drawing-attachment .sketchbook-canvas-frame { align-self: center; width: 100%; max-width: 400px; }
-.interact-drawing-attachment .sketchbook-canvas-frame + div { display: flex; flex-direction: row; flex-wrap: wrap; justify-content: center; gap: 0.5rem; width: 100%; height: auto; padding: 0.5rem; }
 @media (max-width: 480px) {
   .timeline-post { padding: 1rem 0; gap: 0.65rem; }
   .timeline-avatar { width: 34px; height: 34px; }
@@ -119,3 +110,5 @@
   .interact-feed-toolbar { grid-template-columns: minmax(0, 1fr) 6.5rem 44px 5rem; }
   .interact-feed-toolbar > div:has(input[type='password']) { grid-column: 1 / -1; justify-self: end; }
 }
+
+.interact-composer .drawing-mode .interact-editor textarea { min-height: 2.5rem; }

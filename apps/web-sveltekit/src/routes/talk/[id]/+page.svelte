@@ -12,8 +12,8 @@
   $: bodySnippet = talk.body.slice(0, 150) + (talk.body.length > 150 ? '...' : '');
   $: description = `"${bodySnippet}" — Shared by ${author}`;
   $: title = `Post from ${author} | Talk`;
-  $: ogImage = `/talk/${id}/opengraph-image`;
-  $: twitterImage = `/talk/${id}/twitter-image`;
+  $: ogImage = `/talk/${id}/opengraph-image?v=3`;
+  $: twitterImage = ogImage;
 </script>
 
 <SeoHead

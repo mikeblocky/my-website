@@ -4,7 +4,7 @@
   import { page } from '$app/stores';
   import { fly, fade } from 'svelte/transition';
   import { cubicOut } from 'svelte/easing';
-  import { Menu, X, Home, User, Palette, BookOpen, Users, Heart, MessageCircle, Music } from '@lucide/svelte';
+  import { Menu, X, Home, User, Palette, BookOpen, Users, Heart, MessageCircle, ClipboardList, Music } from '@lucide/svelte';
   import { navLinks } from '$lib/site';
   import ThemeToggle from './ThemeToggle.svelte';
   import { spotifyCurrentlyPlaying, startSpotifyPolling } from '$lib/spotify/currently-playing-store';
@@ -67,7 +67,7 @@
   $: panelY = y > viewportHeight / 2 ? Math.max(margin, y - panelHeight - 12) : Math.min(viewportHeight - panelHeight - margin, y + size + 12);
   function resetPosition() { position = { corner: 'bottom-right' }; restorePosition(); snapPosition(); open = false; }
 
-  const icons = [Home, User, Palette, BookOpen, Users, Heart, MessageCircle];
+  const icons = [Home, User, Palette, BookOpen, Users, Heart, MessageCircle, ClipboardList];
   $: pathname = $page.url.pathname;
   $: if (pathname) open = false;
   onMount(() => {

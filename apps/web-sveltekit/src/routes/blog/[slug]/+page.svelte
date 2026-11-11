@@ -4,15 +4,15 @@
 
   export let data: any;
 
-  // Resolve social image or default
   $: slug = data.post.slug;
-  $: ogImage = `/blog/posts/${slug}/opengraph-image.${data.post.imageFormat || 'png'}`;
-  $: twitterImage = `/blog/posts/${slug}/twitter-image.${data.post.imageFormat || 'png'}`;
+  $: thumbnail = `/api/thumbnail?title=${encodeURIComponent(data.post.title)}`;
 </script>
 
 <SeoHead
   title={data.post.title}
   path={`/blog/${slug}`}
+  image={thumbnail}
+  twitterImage={thumbnail}
   description={data.post.description}
 />
 

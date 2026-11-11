@@ -25,8 +25,18 @@
   <meta property="og:url" content={url} />
   <meta property="og:image" content={ogImageUrl} />
   <meta property="og:image:width" content="1200" />
-  <meta property="og:image:height" content="630" />
+  {#if !image || image.startsWith('/api/thumbnail')}
+    <meta property="og:image:height" content="630" />
+  {/if}
+  <meta property="og:image:secure_url" content={ogImageUrl} />
+  {#if !image || image.includes('/api/thumbnail') || image.includes('/opengraph-image')}
+    <meta property="og:image:type" content="image/png" />
+  {/if}
   <meta property="og:image:alt" content={title} />
   <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content={pageTitle} />
+  <meta name="twitter:description" content={description} />
+  <meta name="twitter:site" content="@mikeblocky" />
   <meta name="twitter:image" content={twitterImageUrl} />
+  <meta name="twitter:image:alt" content={title} />
 </svelte:head>

@@ -21,5 +21,8 @@ export const friendThoughts: Record<string, Thought[]> = {
   eljcfran: [{ text: 'A kind, supportive friend I love sharing little things with ♡' }],
   thatyamakun: [{ text: 'Witch Hat Atelier ✧' }, { text: 'Arkco ♡', image: 'arkco', portrait: true }],
   lilatheduckk: [{ text: 'Fan fiction & lovely thoughts about the stories we share' }],
+  Meownie3: [{ text: 'Kemutai Hanashi & Skip and Loafer' }, { text: 'Her updates helped bring me into both stories' }, { text: 'Alongside lilatheduck’s translated SaL analyses ♡' }],
+  CiciCustomz: [{ text: 'Thank you for supporting my drawings ♡' }],
+  TbhkWOOO: [{ text: 'A little encouragement that I really appreciate ♡' }],
   kuusand: [{ text: 'One of my very first supporters — I still appreciate that ♡' }]
 };

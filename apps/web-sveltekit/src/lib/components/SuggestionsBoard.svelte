@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { snapSuggestionCard } from '$lib/utils/snap';
   import { onMount } from 'svelte';
   import { ChevronLeft, ChevronRight } from '@lucide/svelte';
   import { initialSuggestions } from '@mikeblocky/site-data';
@@ -211,64 +212,10 @@
   }
 
   async function snapAndCopy(id: string) {
-    const element = document.getElementById(`suggestion-${id}`);
-    if (!element) return;
-
-    const url = `${window.location.origin}/suggestions/${id}`;
-    const isDark = document.documentElement.classList.contains('dark');
-    const actionsDiv = element.querySelector('.suggestion-actions') as HTMLElement;
-    const previousFlexWrap = element.style.flexWrap;
-
-    if (actionsDiv) actionsDiv.style.visibility = 'hidden';
-    element.style.flexWrap = 'wrap';
-
-    const moreOverlays = element.querySelectorAll('.gallery-more-overlay') as NodeListOf<HTMLElement>;
-    const zoomOverlays = element.querySelectorAll('.gallery-zoom-overlay') as NodeListOf<HTMLElement>;
-    moreOverlays.forEach(el => el.style.display = 'none');
-    zoomOverlays.forEach(el => el.style.display = 'none');
-
-    const linkBar = document.createElement('div');
-    linkBar.style.cssText = `flex:0 0 100%;width:100%;box-sizing:border-box;margin-top:12px;padding:10px 24px 16px;border-top:1px solid ${isDark ? '#ffffff15' : '#00000010'};font-size:var(--font-size-2xs);color:${isDark ? '#94a3b8' : '#64748b'};font-family:system-ui,sans-serif;letter-spacing:0.02em;`;
-    linkBar.textContent = `Link: ${url}`;
-      element.appendChild(linkBar);
-  
-      try {
-        const { toPng } = await import('html-to-image');
-        const dataUrl = await toPng(element, {
-        backgroundColor: isDark ? '#1a1525' : '#ffffff',
-        style: {
-          borderRadius: '16px',
-          border: isDark ? '1px solid #3b2d5a' : '1px solid #e2e8f0',
-          boxShadow: 'none',
-          margin: '0',
-          color: isDark ? '#f1f5f9' : '#0f172a'
-        }
-      });
-      const res = await fetch(dataUrl);
-      const blob = await res.blob();
-
-      try {
-        await navigator.clipboard.write([
-          new ClipboardItem({ 'image/png': blob })
-        ]);
-        showButtonFeedback(`snap-${id}`, '✓ Snapped');
-      } catch (_error) {
-        const a = document.createElement('a');
-        a.href = dataUrl;
-        a.download = `suggestion-${id}.png`;
-        a.click();
-        showButtonFeedback(`snap-${id}`, '✓ Saved');
-      }
-    } catch (e) {
-      console.error('Snap failed', e);
-      showButtonFeedback(`snap-${id}`, 'Could not snap');
-    } finally {
-      if (actionsDiv) actionsDiv.style.visibility = '';
-      moreOverlays.forEach(el => el.style.display = '');
-      zoomOverlays.forEach(el => el.style.display = '');
-      element.style.flexWrap = previousFlexWrap;
-      linkBar.remove();
-    }
+    try {
+      const result = await snapSuggestionCard(id);
+      showButtonFeedback(`snap-${id}`, result === 'saved' ? 'Saved' : 'Copied');
+    } catch { showButtonFeedback(`snap-${id}`, 'Could not capture'); }
   }
 
   async function handleReplySubmit(id: string, replyBody: string, replyImageUrls: string[]) {
