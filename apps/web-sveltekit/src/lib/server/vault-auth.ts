@@ -3,7 +3,8 @@ import words from './passphrase-words.json' with { type: 'json' };
 const vocabulary = new Set(words);
 const normalize = (value:string) => value.trim().toLowerCase().replace(/[\s-]+/g,'-');
 const isPhrase = (value:string) => { const parts=normalize(value).split('-');return parts.length===4&&parts.every(word=>vocabulary.has(word)); };
-export const vaultCookie = 'commission_vault_admin';
+// A new name avoids legacy /commissions/files cookies shadowing the shared owner session.
+export const vaultCookie = 'commission_owner_session';
 export const adminAccessVersion = (password:string, secret:string) => Number.parseInt(createHmac('sha256',secret).update(password).digest('hex').slice(0,12),16);
 export const folderCookie = (id: string) => `folder_${id.replaceAll('-', '')}`;
 export const randomPassword = () => Array.from({length:4},()=>words[randomInt(words.length)]).join('-');
