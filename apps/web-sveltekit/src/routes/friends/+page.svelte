@@ -59,10 +59,10 @@
       if (now - last > 32) {
         const map = mapElement.getBoundingClientRect(), avatar = person.getBoundingClientRect();
         const bounds = { left: Math.max(12, map.left + 8), right: Math.min(window.innerWidth - 12, map.right - 8), top: 24, bottom: window.innerHeight - 24 };
-        const room = Math.max(avatar.top - bounds.top - 14, bounds.bottom - avatar.bottom - 14);
+        const room = bounds.bottom - bounds.top;
         const nextWidth = thoughtWidth(bounds.right - bounds.left, long, chosenWidth, height > room);
         if (nextWidth !== chosenWidth) { chosenWidth = nextWidth; node.style.width = `${chosenWidth}px`; }
-        const placement = placeThought(avatar, bounds, width, height, long);
+        const placement = placeThought(avatar, bounds, width, height);
         node.style.transform = `translate3d(${placement.x}px,${placement.y}px,0)`;
         last = now;
       }

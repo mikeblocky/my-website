@@ -24,7 +24,7 @@
   <header><span>@{username}</span><button type="button" on:click={onClose} aria-label="Close thoughts"><X size={14} /></button></header>
   <div class="thoughts">
     {#each friendThoughts[username] ?? [] as thought, index}
-      <div class:photo={thought.image} class:long={thought.long} class:portrait={thought.portrait} class="thought" style={`--i: ${index}; --tilt: ${index % 2 ? 3 : -3}deg;`}>
+      <div class:photo={thought.image} class:long={thought.long} class:portrait={thought.portrait} class="thought" style={`--i: ${index}; --tilt: ${thought.long ? -.5 : index % 2 ? 3 : -3}deg;`}>
         {#if thought.image}<img src={`/friends/thoughts/${thought.image}.webp`} alt={thought.text} decoding="async" />{/if}
         <span>{thought.text}</span>
       </div>
@@ -49,13 +49,16 @@
   .photo:nth-child(even) img { max-height: 184px; }
   .photo:nth-child(3n) img { max-height: 162px; }
   .photo > span { display: block; text-align: center; padding: 8px 3px 0; font-size: var(--font-size-2xs); }
-  .long { flex-basis: 100%;  line-height: 1.6; transform: none; animation: none; }
+  .long { flex-basis: 100%; line-height: 1.6; }
   .inline { max-height: none; overflow: visible; position: relative; left: auto !important; top: auto !important; width: 100%; padding: 12px 8px 22px; }
+  .inline.wide { max-width:420px; margin-inline:auto; }
   .inline .long { max-height: none; font-size: var(--font-size-sm); }
   .wide .photo img { max-height: 160px; }
   .wide .photo:nth-child(even) img { max-height: 214px; }
   .wide .photo:nth-child(3n) img { max-height: 184px; }
   .wide .thoughts .long { width:100%; box-sizing:border-box; text-align:left; }
+  .thought { animation:thought-arrive 380ms cubic-bezier(.22,1,.36,1) both, thought-drift calc(5.8s + var(--i) * .45s) ease-in-out infinite; animation-delay:calc(var(--i) * 45ms),calc(380ms + var(--i) * 70ms); }
+  @keyframes thought-drift { 0%,100% { transform:translateY(0) rotate(var(--tilt)); } 50% { transform:translateY(-5px) rotate(calc(var(--tilt) + .6deg)); } }
   @keyframes thought-arrive { from { opacity: 0; transform: translateY(8px) scale(.94) rotate(0); } to { opacity: 1; transform: translateY(0) scale(1) rotate(var(--tilt)); } }
   @media (prefers-reduced-motion: reduce) { .thought { animation: none; } }
 </style>

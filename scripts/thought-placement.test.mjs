@@ -2,9 +2,9 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { thoughtWidth, placeThought } from '../apps/web-sveltekit/src/lib/thought-placement.ts';
 const bounds = {left:12,right:900,top:12,bottom:708};
-test('long thoughts widen within the available space', () => {
-  assert.equal(thoughtWidth(800,true),520);
-  assert.equal(thoughtWidth(800,true,520,true),600);
+test('long thoughts stay compact and respect the viewport', () => {
+  assert.equal(thoughtWidth(800,true),420);
+  assert.equal(thoughtWidth(800,true,420,true),460);
   assert.equal(thoughtWidth(340,true,520,true),340);
   assert.equal(thoughtWidth(800,false),300);
 });

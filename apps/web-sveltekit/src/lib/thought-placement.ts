@@ -2,7 +2,7 @@ type Rectangle = { left: number; right: number; top: number; bottom: number };
 const clamp = (value: number, min: number, max: number) => Math.max(min, Math.min(Math.max(min, max), value));
 
 export function thoughtWidth(available: number, long: boolean, previous = 0, needsMoreRoom = false) {
-  return Math.max(0, Math.min(available, 620, Math.max(long ? 520 : 300, previous + (needsMoreRoom ? 80 : 0))));
+  return Math.max(0, Math.min(available, long ? 460 : 380, Math.max(long ? 420 : 300, previous + (needsMoreRoom ? 40 : 0))));
 }
 
 /** Prefer above the person; flip below when necessary and keep the complete bubble in view. */
