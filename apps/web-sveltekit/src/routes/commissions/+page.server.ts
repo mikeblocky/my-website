@@ -41,7 +41,7 @@ export const actions: Actions = {
     if(!isVaultAdmin(cookies))return fail(401,{error:'Sign in first.'});
     const data=await request.formData(),person=String(data.get('person')||'').trim().replace(/^@/,'');
     if(!person||person.length>80||/[\x00-\x1f]/.test(person))return fail(400,{error:'Enter a valid name.'});
-    const password=String(data.get('password')||'')||randomPassword();if(!validFolderPassword(password))return fail(400,{error:'Use 10–128 characters.'});
+    const password=String(data.get('password')||'')||randomPassword();if(!validFolderPassword(password))return fail(400,{error:'Use 10â€“128 characters.'});
     const {DB}=await vaultStorage();if(await DB.prepare('SELECT id FROM vault_folders WHERE lower(person)=lower(?)').bind(person).first())return fail(409,{error:'A gallery already exists for this person.'});
     const id=randomUUID(),record=passwordRecord(password,undefined,vaultSecrets().pepper);
     await DB.prepare('INSERT INTO vault_folders(id,person,password_hash,salt,created_at) VALUES(?,?,?,?,?)').bind(id,person,record.hash,record.salt,new Date().toISOString()).run();
