@@ -1,5 +1,5 @@
 import test from 'node:test';import assert from 'node:assert/strict';import ts from 'typescript';import {readFile}from'node:fs/promises';
-import {createHash} from 'node:crypto';
+import {createHash,createHmac} from 'node:crypto';
 const source=(await readFile('apps/web-sveltekit/src/lib/server/vault-auth.ts','utf8')).replace("'./passphrase-words.json'",JSON.stringify(new URL('../apps/web-sveltekit/src/lib/server/passphrase-words.json',import.meta.url).href));
 const auth=await import('data:text/javascript;base64,'+Buffer.from(ts.transpile(source,{module:ts.ModuleKind.ESNext,target:ts.ScriptTarget.ES2022})).toString('base64'));
 const secret='s'.repeat(48);
@@ -10,7 +10,7 @@ test('folder sessions reject other folders, tampering, expiry and password rotat
 });
 test('memorable phrases are unique, accept spaces, and require the separate server secret',()=>{
  const passwords=Array.from({length:500},()=>auth.randomPassword());assert.equal(new Set(passwords).size,500);assert.ok(passwords.every(x=>/^[a-z]+(?:-[a-z]+){3}$/.test(x)));
- const record=auth.passwordRecord(passwords[0],undefined,secret);assert.notEqual(record.hash,passwords[0]);assert.equal(auth.passwordMatches(passwords[0],record.salt,record.hash,secret),true);assert.equal(auth.passwordMatches(passwords[0].replaceAll('-',' ').toUpperCase(),record.salt,record.hash,secret),true);assert.equal(auth.passwordMatches(passwords[0],record.salt,record.hash,'wrong'),false);assert.equal(auth.passwordMatches(record.hash,record.salt,record.hash,secret),false);assert.throws(()=>auth.passwordRecord(passwords[0]));
+ const record=auth.passwordRecord(passwords[0],undefined,secret);assert.notEqual(record.hash,passwords[0]);assert.equal(auth.passwordMatches(passwords[0],record.salt,record.hash,secret),true);assert.equal(auth.passwordMatches(passwords[0].replaceAll('-',' ').toUpperCase(),record.salt,record.hash,secret),false);assert.equal(auth.passwordMatches(passwords[0],record.salt,record.hash,'wrong'),false);assert.equal(auth.passwordMatches(record.hash,record.salt,record.hash,secret),false);assert.throws(()=>auth.passwordRecord(passwords[0]));
  assert.equal(auth.secretMatches(passwords[0].replaceAll('-',' '),passwords[0]),true);
 });
 test('vault administration rejects weak or missing secrets',()=>{
@@ -19,4 +19,13 @@ test('vault administration rejects weak or missing secrets',()=>{
 test('legacy random tokens remain usable until the owner rotates access',()=>{
  const password='a'.repeat(32),salt='legacy-salt',hash=createHash('sha256').update(salt).update(':').update(password).digest('hex');
  assert.equal(auth.passwordMatches(password,salt,hash),true);assert.equal(auth.passwordMatches('b'.repeat(32),salt,hash),false);
+});
+
+test('custom passwords preserve case and punctuation; old phrases still accept spaces',()=>{
+ const password="My lovely gallery!",record=auth.passwordRecord(password,undefined,secret);
+ assert.equal(auth.passwordMatches(password,record.salt,record.hash,secret),true);
+ assert.equal(auth.passwordMatches(password.toLowerCase(),record.salt,record.hash,secret),false);
+ for(const invalid of ['mike',' '.repeat(12),'a'.repeat(129),'hello\nthere!'])assert.throws(()=>auth.passwordRecord(invalid,undefined,secret));
+ const phrase=auth.randomPassword(),salt='old-salt',hash='v2:'+createHmac('sha256',secret).update(salt+':'+phrase).digest('hex');
+ assert.equal(auth.passwordMatches(phrase.replaceAll('-',' ').toUpperCase(),salt,hash,secret),true);
 });

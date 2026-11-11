@@ -13,7 +13,7 @@ Public attachments are content-addressed under `/media/`. Only objects registere
 ## Private galleries
 
 - Open `/commissions/files` with the independent, randomly generated gallery admin password. The local credential is stored in the Git-ignored `.private-backups/private-folder-admin.txt`.
-- Create one folder per person. Its generated four-word passphrase appears once. Spaces and hyphens are interchangeable. Share the folder URL and passphrase directly with its intended recipient.
+- Manage orders and private galleries together at `/commissions`, using the gallery admin password. Choose a 10–128 character gallery password or leave it blank to generate four words. New passwords are case-sensitive and used exactly as entered. Existing four-word passwords still accept spaces or hyphens. Recipients can change their folder password under Access after confirming the current password; this signs other viewers out. Share the URL and password directly with its intended recipient.
 - Recipients may view, comment, and pin annotations to images. Only the gallery administrator can upload, archive, restore, or reset access.
 - Resetting a folder password revokes existing viewer sessions. Sessions expire after one hour and use HttpOnly, Secure, SameSite=Strict, host-only cookies scoped to the folder.
 - Image requests independently verify the session and folder membership. No public bucket URL or unauthenticated signed download is issued. Pages, data, and images are no-store and noindex; authentication is the access boundary.

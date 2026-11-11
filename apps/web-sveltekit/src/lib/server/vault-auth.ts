@@ -6,15 +6,20 @@ const isPhrase = (value:string) => { const parts=normalize(value).split('-');ret
 export const vaultCookie = 'commission_vault_admin';
 export const folderCookie = (id: string) => `folder_${id.replaceAll('-', '')}`;
 export const randomPassword = () => Array.from({length:4},()=>words[randomInt(words.length)]).join('-');
+export const validFolderPassword = (password:string) => password.length>=10&&password.length<=128&&password.trim().length>=10&&!/[\x00-\x1f\x7f]/.test(password);
 export function passwordRecord(password: string, salt = randomBytes(24).toString('hex'), pepper = '') {
-  if(!isPhrase(password)||pepper.length<32)throw new Error('Passphrase protection is not configured.');
-  return { salt, hash: 'v2:'+createHmac('sha256',pepper).update(salt).update(':').update(normalize(password)).digest('hex') };
+  if(!validFolderPassword(password)||pepper.length<32)throw new Error('Use a password between 10 and 128 characters.');
+  return { salt, hash: 'v3:'+createHmac('sha256',pepper).update(salt).update(':').update(password).digest('hex') };
 }
 export function passwordMatches(password: string, salt: string, hash: string, pepper = '') {
   if(password.length>256)return false;
+  if(hash.startsWith('v3:')) {
+    if(!validFolderPassword(password)||pepper.length<32||!/^v3:[a-f0-9]{64}$/.test(hash))return false;
+    return timingSafeEqual(Buffer.from(passwordRecord(password,salt,pepper).hash.slice(3),'hex'),Buffer.from(hash.slice(3),'hex'));
+  }
   if(hash.startsWith('v2:')) {
     if(!isPhrase(password)||pepper.length<32||!/^v2:[a-f0-9]{64}$/.test(hash))return false;
-    const expected=passwordRecord(password,salt,pepper).hash.slice(3);
+    const expected=createHmac('sha256',pepper).update(salt).update(':').update(normalize(password)).digest('hex');
     return timingSafeEqual(Buffer.from(expected,'hex'),Buffer.from(hash.slice(3),'hex'));
   }
   // Existing high-entropy tokens keep working until their owner replaces them.

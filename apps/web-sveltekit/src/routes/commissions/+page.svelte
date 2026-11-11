@@ -2,10 +2,13 @@
   import { enhance } from '$app/forms';
   import { commissionStatuses } from '$lib/commissions';
   import type { Commission } from '$lib/commissions';
-  import SectionPageShell from '$lib/components/SectionPageShell.svelte';
+  import GalleryShell from '$lib/components/GalleryShell.svelte';
+  import GalleryPassphrase from '$lib/components/GalleryPassphrase.svelte';
   import { Plus, LockKeyhole, Search, ArrowUpRight, Pencil, Archive, FolderOpen } from '@lucide/svelte';
   export let data;
   export let form: any;
+  let galleryPerson='',galleryCreating=false;
+  const stages=['planned','queued','in progress','review','delivered'];
   let search = '', status = 'all', showArchived = false, draft: any = null, saving = false;
   $: entries = data.entries as Commission[];
   $: active = entries.filter(entry => !entry.archived && !['delivered', 'cancelled'].includes(entry.status));
@@ -22,13 +25,15 @@
 </script>
 
 <svelte:head><title>Commissions & orders | mikeblocky.com</title><meta name="robots" content="noindex,nofollow" /></svelte:head>
-<SectionPageShell title="Commissions & orders" currentLabel="Commissions">
+<GalleryShell title="Commissions & orders" overview>
   <section class="commission-workspace">
-    <a class="vault-entry" href="/commissions/files">Private image folders ↗</a>
-    <header class="tracker-top"><span class="private-label"><LockKeyhole size={14} />{data.authenticated ? 'Admin' : 'Read only'}</span>{#if data.authenticated}<form method="POST" action="?/lock"><button class="quiet">Stop editing</button></form>{/if}</header>
-      <div class="tracker-stats"><div><strong>{active.length}</strong><span>Active</span></div><div><strong>{overdue.length}</strong><span>Overdue</span></div><div><strong>{entries.filter(entry => !entry.archived && entry.status === 'delivered').length}</strong><span>Delivered</span></div></div>
+    <header class="tracker-top"><span class="private-label"><LockKeyhole size={14} />{data.authenticated ? 'Editing' : 'Overview'}</span>{#if data.authenticated}<form method="POST" action="?/lock"><button class="quiet">Stop editing</button></form>{/if}</header>
+      <div class="tracker-stats"><div><strong>{active.length}</strong><span>Active</span></div><div><strong>{entries.filter(entry=>!entry.archived&&entry.status==='review').length}</strong><span>In review</span></div><div><strong>{entries.filter(entry => !entry.archived && entry.status === 'delivered').length}</strong><span>Delivered</span></div></div>
       {#if data.storageError}<p class="notice error" role="alert">{data.storageError}</p>{/if}
       {#if form?.error}<p class="notice error" role="alert">{form.error}</p>{:else if form?.message}<p class="notice" role="status">{form.message}</p>{/if}
+      {#if form?.created}<GalleryPassphrase password={form.password} folderId={form.folderId} />{/if}
+      {#if data.authenticated}<section class="commission-galleries" aria-label="Private galleries"><header><h2>Private galleries</h2><button class="quiet" type="button" on:click={()=>{galleryPerson='';galleryCreating=!galleryCreating;}}><Plus size={16} />New gallery</button></header><div class="commission-gallery-list">{#each data.galleries as gallery}<a href={`/commissions/files/${gallery.id}`}><FolderOpen size={19} /><span><strong>{gallery.person}</strong><small>{gallery.image_count} images</small></span><ArrowUpRight size={15} /></a>{/each}</div>
+      {#if galleryCreating}<form class="inline-gallery" method="POST" action="?/createGallery" use:enhance={()=>{saving=true;return async({update,result})=>{await update({reset:false});saving=false;if(result.type==='success')galleryCreating=false;};}}><div class="field"><label for="gallery-person">Person</label><input id="gallery-person" name="person" bind:value={galleryPerson} required maxlength="80" /></div><div class="field"><label for="gallery-password">Password</label><input id="gallery-password" name="password" type="password" autocomplete="new-password" minlength="10" maxlength="128" placeholder="Leave blank to generate" /></div><button class="primary" disabled={saving}>Create gallery</button><button class="quiet" type="button" on:click={()=>galleryCreating=false}>Cancel</button></form>{/if}</section>{/if}
       <div class="tracker-tools"><label class="search"><Search size={17} /><input aria-label="Search commissions" placeholder="Find a person or project…" bind:value={search} /></label><select class="site-native-select" aria-label="Filter by status" bind:value={status}><option value="all">All statuses</option>{#each commissionStatuses as item}<option value={item}>{item}</option>{/each}</select>{#if data.authenticated}<button class="primary" disabled={!!data.storageError || saving} on:click={() => edit()}><Plus size={17} />New order</button>{/if}</div>
       {#if data.authenticated}<label class="archive-filter"><input type="checkbox" bind:checked={showArchived} />Archived orders</label>{/if}
       {#if data.authenticated && draft}
@@ -55,26 +60,31 @@
       <div class="order-list">
         {#each visible as entry (entry.id)}
           <details class="order-card">
-            <summary><div><span class="order-person">{entry.direction} {entry.person} · {entry.kind}</span><h2>{entry.title}</h2>{#if data.folderIds[entry.person.replace(/^@/,'').toLowerCase()]}<a href={`/commissions/files/${data.folderIds[entry.person.replace(/^@/,'').toLowerCase()]}`} aria-label={`Open ${entry.person}’s private gallery`} title="Private gallery" on:click|stopPropagation><FolderOpen size={18} /></a>{:else if data.authenticated}<a href={`/commissions/files?person=${encodeURIComponent(entry.person)}`} aria-label={`Create ${entry.person}’s private gallery`} title="Create private gallery" on:click|stopPropagation><FolderOpen size={18} /></a>{/if}<span class="order-due" class:late={!!entry.dueDate && entry.dueDate < today && !['delivered', 'cancelled'].includes(entry.status)}>{entry.dueDate ? `Due ${entry.dueDate}` : 'No deadline'}</span></div><div class="order-summary"><span class="status">{entry.status}</span>{#if data.authenticated}<strong>{money(entry.amountCents, entry.currency)}</strong><small>{money(entry.amountCents - entry.paidCents, entry.currency)} remaining</small>{/if}</div></summary>
-            <div class="order-details"><div class="order-dates"><span>Ordered: {entry.orderedDate || '—'}</span><span>Delivered: {entry.deliveredDate || '—'}</span>{#if data.authenticated}<span>Paid: {money(entry.paidCents, entry.currency)}</span>{/if}</div>{#if entry.brief}<h3>Brief</h3><p>{entry.brief}</p>{/if}{#if entry.deliverables}<h3>Deliverables</h3><p>{entry.deliverables}</p>{/if}{#if data.authenticated && entry.notes}<h3>Notes</h3><p>{entry.notes}</p>{/if}{#if data.authenticated}<div class="order-links">{#if entry.referenceUrl}<a href={entry.referenceUrl} target="_blank" rel="noreferrer">References <ArrowUpRight size={14} /></a>{/if}{#if entry.deliveryUrl}<a href={entry.deliveryUrl} target="_blank" rel="noreferrer">Files / tracking <ArrowUpRight size={14} /></a>{/if}</div><footer><button class="quiet" disabled={saving} on:click={() => edit(entry)}><Pencil size={15} />Edit</button><form method="POST" action="?/archive" use:enhance><input type="hidden" name="id" value={entry.id} /><input type="hidden" name="revision" value={entry.revision} /><button class="quiet"><Archive size={15} />{entry.archived ? 'Restore' : 'Archive'}</button></form><small>Updated {entry.updatedAt.slice(0, 10)}</small></footer>{:else}<small>Updated {entry.updatedAt.slice(0, 10)}</small>{/if}</div>
+            <summary><div><span class="order-person">{entry.direction} {entry.person} · {entry.kind}</span><h2>{entry.title}</h2><span class="order-due" class:late={!!entry.dueDate && entry.dueDate < today && !['delivered', 'cancelled'].includes(entry.status)}>{entry.dueDate ? `Due ${entry.dueDate}` : 'No deadline'}</span></div><div class="order-summary"><span class="status">{entry.status}</span>{#if data.authenticated}<strong>{money(entry.amountCents, entry.currency)}</strong><small>{money(entry.amountCents - entry.paidCents, entry.currency)} remaining</small>{/if}</div></summary>
+            <div class="order-details">
+            {#if entry.status!=='cancelled'}<ol class="order-progress" aria-label="Project progress">{#each stages as stage,index}<li class:complete={stages.indexOf(entry.status)>=index} aria-current={entry.status===stage?'step':undefined}><span></span>{stage}</li>{/each}</ol>{/if}
+            <div class="order-gallery-action">{#if data.folderIds[entry.person.replace(/^@/,'').toLowerCase()]}<a class="gallery-button" href={`/commissions/files/${data.folderIds[entry.person.replace(/^@/,'').toLowerCase()]}`}><FolderOpen size={16} />Private gallery<ArrowUpRight size={14} /></a>{:else if data.authenticated}<button class="quiet" on:click={()=>{galleryPerson=entry.person;galleryCreating=true;}}><FolderOpen size={16} />Create private gallery</button>{/if}</div><div class="order-dates"><span>Ordered: {entry.orderedDate || '—'}</span><span>Delivered: {entry.deliveredDate || '—'}</span>{#if data.authenticated}<span>Paid: {money(entry.paidCents, entry.currency)}</span>{/if}</div>{#if entry.brief}<h3>Brief</h3><p>{entry.brief}</p>{/if}{#if entry.deliverables}<h3>Deliverables</h3><p>{entry.deliverables}</p>{/if}{#if data.authenticated && entry.notes}<h3>Notes</h3><p>{entry.notes}</p>{/if}{#if data.authenticated}<div class="order-links">{#if entry.referenceUrl}<a href={entry.referenceUrl} target="_blank" rel="noreferrer">References <ArrowUpRight size={14} /></a>{/if}{#if entry.deliveryUrl}<a href={entry.deliveryUrl} target="_blank" rel="noreferrer">Files / tracking <ArrowUpRight size={14} /></a>{/if}</div><footer><button class="quiet" disabled={saving} on:click={() => edit(entry)}><Pencil size={15} />Edit</button><form method="POST" action="?/archive" use:enhance><input type="hidden" name="id" value={entry.id} /><input type="hidden" name="revision" value={entry.revision} /><button class="quiet"><Archive size={15} />{entry.archived ? 'Restore' : 'Archive'}</button></form><small>Updated {entry.updatedAt.slice(0, 10)}</small></footer>{:else}<small>Updated {entry.updatedAt.slice(0, 10)}</small>{/if}</div>
           </details>
         {:else}<div class="empty"><p>{search || status !== 'all' ? 'No matching orders.' : showArchived ? 'No archived orders.' : 'No orders yet.'}</p></div>{/each}
       </div>
     {#if !data.authenticated}
       <details class="tracker-lock" open={!!form?.error}>
-        <summary>Mike’s edit access</summary>
+        <summary>Manage commissions</summary>
         <form method="POST" action="?/unlock" use:enhance>
-          <label for="tracker-passcode">Admin passcode</label>
+          <label for="tracker-passcode">Admin password</label>
           <input id="tracker-passcode" name="passcode" type="password" autocomplete="current-password" required maxlength="256" disabled={!data.configured} />
-          <button class="primary" disabled={!data.configured}>Enable editing</button>
+          <button class="primary" disabled={!data.configured}>Sign in</button>
         </form>
         {#if !data.configured}<p class="notice">Editing is not configured on this server yet.</p>{/if}
       </details>
     {/if}
   </section>
-</SectionPageShell>
+</GalleryShell>
 
 <style>
+  .commission-galleries{margin:0 0 36px;padding:22px;border:1px solid hsl(var(--border));border-radius:18px;}.commission-galleries>header{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:14px;}.commission-galleries h2{margin:0;}.commission-gallery-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px;}.commission-gallery-list a{display:flex;align-items:center;gap:12px;padding:14px;border-radius:12px;background:hsl(var(--muted)/.35);}.commission-gallery-list a>span{display:grid;gap:5px;flex:1;}.commission-gallery-list strong{font-size:var(--font-size-sm);font-weight:550;}.inline-gallery{display:flex;align-items:end;gap:12px;flex-wrap:wrap;margin-top:20px;}.inline-gallery .field{flex:1;min-width:180px;}.order-gallery-action{margin:16px 0;}.order-progress{list-style:none;display:flex;padding:0;margin:8px 0 24px;gap:6px;}.order-progress li{flex:1;display:grid;gap:9px;font-size:var(--font-size-2xs);color:hsl(var(--muted-foreground));}.order-progress li>span{height:3px;background:hsl(var(--muted));border-radius:3px;}.order-progress li.complete>span{background:#2563eb;}.order-card{border:1px solid hsl(var(--border))!important;border-radius:16px;margin-bottom:14px;padding:0 24px;}.order-details{max-width:100%;}.tracker-tools{margin-bottom:24px;}.primary{background:#2563eb!important;}.order-editor{background:hsl(var(--muted)/.18);}
+  @media(max-width:600px){.commission-galleries{padding:16px;}.order-card{padding:0 16px;}.order-progress{flex-wrap:wrap;}.order-progress li{min-width:55px;}.order-progress li>span{width:100%;}}
+
   .commission-workspace { font-family:var(--font-sans); min-width:0; }
   .tracker-lock { max-width:400px; margin:32px 0; padding:16px 0; border-top:1px solid hsl(var(--border)); }
   .tracker-lock > summary { padding:10px 0; color:hsl(var(--muted-foreground)); font-size:var(--font-size-xs); }

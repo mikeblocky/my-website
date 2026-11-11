@@ -2,7 +2,7 @@ import { fail, error, redirect } from '@sveltejs/kit';
 import { dev } from '$app/environment';
 import { randomUUID } from 'node:crypto';
 import { canReadFolder, isVaultAdmin, readFolder, vaultStorage, vaultSecrets, privateHeaders, limitAttempt, checkedImage, safeFileName, type VaultFile, type VaultComment } from '$lib/server/vault';
-import { folderCookie, passwordMatches, passwordRecord, randomPassword, signAccess } from '$lib/server/vault-auth';
+import { folderCookie, passwordMatches, passwordRecord, randomPassword, validFolderPassword, signAccess } from '$lib/server/vault-auth';
 import type { Actions, PageServerLoad } from './$types';
 export const load: PageServerLoad = async ({params,cookies,setHeaders}) => {
   setHeaders(privateHeaders);
@@ -63,11 +63,19 @@ export const actions: Actions = {
     }
     return {uploaded:true};
   },
-  rotate:async({params,cookies})=>{
-    if(!isVaultAdmin(cookies))error(401,'Access denied.');
+  rotate:async({params,cookies,request,getClientAddress})=>{
     const folder=await readFolder(params.id);if(!folder)error(404,'Folder unavailable.');
-    const password=randomPassword(),record=passwordRecord(password,undefined,vaultSecrets().pepper),{DB}=await vaultStorage();
-    await DB.prepare('UPDATE vault_folders SET password_hash=?,salt=?,version=version+1 WHERE id=?').bind(record.hash,record.salt,folder.id).run();
-    return {password};
+    if(!canReadFolder(cookies,folder))error(401,'Access denied.');
+    await limitAttempt(getClientAddress(),`password:${folder.id}`,8);
+    const admin=isVaultAdmin(cookies),data=await request.formData();
+    if(!admin&&!passwordMatches(String(data.get('currentPassword')||''),folder.salt,folder.password_hash,vaultSecrets().pepper))return fail(401,{error:'Current password is incorrect.'});
+    const chosen=String(data.get('password')||'');
+    if(!chosen&&!admin)return fail(400,{error:'Enter a new password.'});
+    if(chosen&&(!validFolderPassword(chosen)||chosen!==String(data.get('confirmPassword')||'')))return fail(400,{error:'Use 10–128 characters and matching passwords.'});
+    const password=chosen||randomPassword(),record=passwordRecord(password,undefined,vaultSecrets().pepper),{DB}=await vaultStorage();
+    const changed=await DB.prepare('UPDATE vault_folders SET password_hash=?,salt=?,version=version+1 WHERE id=? AND version=?').bind(record.hash,record.salt,folder.id,folder.version).run();
+    if(!changed.meta.changes)return fail(409,{error:'Password changed elsewhere. Sign in again.'});
+    if(!admin)cookies.set(folderCookie(folder.id),signAccess(folder.id,folder.version+1,vaultSecrets().session),{path:`/commissions/files/${folder.id}`,httpOnly:true,secure:!dev,sameSite:'strict',maxAge:3600});
+    return chosen?{passwordChanged:true}:{password};
   }
 };
