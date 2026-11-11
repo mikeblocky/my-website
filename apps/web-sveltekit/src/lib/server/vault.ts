@@ -10,7 +10,7 @@ export const validVaultId = (id: string) => /^[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{
 export type Folder = {id:string;person:string;password_hash:string;salt:string;version:number;created_at:string};
 export type VaultFile = {id:string;folder_id:string;object_key:string;name:string;mime:string;size:number;created_at:string;archived:number};
 export type VaultComment = {id:string;folder_id:string;file_id:string|null;x:number|null;y:number|null;author:string;role:'admin'|'viewer';body:string;created_at:string};
-export function vaultSecrets() { const cloud=cloudBindings(); return { admin:cloud?.VAULT_ADMIN_PASSWORD || env.VAULT_ADMIN_PASSWORD || '',session:cloud?.VAULT_SESSION_SECRET || env.VAULT_SESSION_SECRET || '' }; }
+export function vaultSecrets() { const cloud=cloudBindings(); return { admin:cloud?.VAULT_ADMIN_PASSWORD || env.VAULT_ADMIN_PASSWORD || '',session:cloud?.VAULT_SESSION_SECRET || env.VAULT_SESSION_SECRET || '',pepper:String(cloud?.VAULT_PASSWORD_PEPPER || env.VAULT_PASSWORD_PEPPER || '') }; }
 export const isVaultAdmin = (cookies: Cookies) => verifyAccess(cookies.get(vaultCookie),'admin',1,vaultSecrets().session);
 export function canReadFolder(cookies: Cookies, folder: Folder) { return isVaultAdmin(cookies)||verifyAccess(cookies.get(folderCookie(folder.id)),folder.id,folder.version,vaultSecrets().session); }
 export const privateHeaders = { 'cache-control':'private, no-store, max-age=0', 'cdn-cache-control':'no-store', 'cloudflare-cdn-cache-control':'no-store', 'x-robots-tag':'noindex, nofollow, noarchive, noimageindex', 'referrer-policy':'same-origin', 'x-content-type-options':'nosniff' };

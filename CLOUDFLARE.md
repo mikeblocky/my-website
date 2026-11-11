@@ -13,11 +13,11 @@ Public attachments are content-addressed under `/media/`. Only objects registere
 ## Private galleries
 
 - Open `/commissions/files` with the independent, randomly generated gallery admin password. The local credential is stored in the Git-ignored `.private-backups/private-folder-admin.txt`.
-- Create one folder per person. Its random 192-bit password appears once. Share the folder URL and password directly with its intended recipient.
+- Create one folder per person. Its generated four-word passphrase appears once. Spaces and hyphens are interchangeable. Share the folder URL and passphrase directly with its intended recipient.
 - Recipients may view, comment, and pin annotations to images. Only the gallery administrator can upload, archive, restore, or reset access.
 - Resetting a folder password revokes existing viewer sessions. Sessions expire after one hour and use HttpOnly, Secure, SameSite=Strict, host-only cookies scoped to the folder.
 - Image requests independently verify the session and folder membership. No public bucket URL or unauthenticated signed download is issued. Pages, data, and images are no-store and noindex; authentication is the access boundary.
-- Random folder tokens are salted and hashed. The folder password format cannot be replaced with a weak human password. Login and comment attempts have persistent limits.
+- Generated passphrases use four independently selected words from an attributed EFF short-word list. Their salted HMAC hashes require the separate `VAULT_PASSWORD_PEPPER` Worker secret, protecting against offline guessing after a database-only leak. Login and comment attempts have persistent limits. Existing high-entropy tokens remain verifiable until replaced.
 - Uploaded PNG/JPEG/WebP files are checked for signatures, dimensions, and size. SVG/HTML uploads are rejected. Comments and names render as escaped text. Private writes require a same-origin request.
 
 Do not place commission files in `public/`, public social cards, or the public attachment endpoint.
