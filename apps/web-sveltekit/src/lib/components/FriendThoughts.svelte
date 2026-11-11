@@ -6,6 +6,7 @@
   export let x = 0;
   export let y = 0;
   export let inline = false;
+  export let instance = '';
   export let onHeight: (height: number) => void = () => {};
   function measure(node: HTMLElement) {
     const observer = new ResizeObserver(() => onHeight(node.getBoundingClientRect().height));
@@ -18,7 +19,7 @@
   }
 </script>
 
-<aside id={inline ? "friend-thoughts-mobile" : "friend-thoughts"} class="thought-cloud" class:inline use:measure style={`left: ${x}px; top: ${y}px;`} aria-label={`Thoughts about @${username}`} in:appear>
+<aside id={instance || (inline ? "friend-thoughts-mobile" : "friend-thoughts")} class="thought-cloud" class:inline use:measure style={`left: ${x}px; top: ${y}px;`} aria-label={`Thoughts about @${username}`} in:appear>
   <header><span>@{username}</span><button type="button" on:click={onClose} aria-label="Close thoughts"><X size={14} /></button></header>
   <div class="thoughts">
     {#each friendThoughts[username] ?? [] as thought, index}

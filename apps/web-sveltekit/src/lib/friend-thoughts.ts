@@ -12,7 +12,7 @@ export const friendThoughts: Record<string, Thought[]> = {
   skipsyourloafer: [{ text: 'Mika & Mukai ♡' }],
   to_nikaku: [{ text: 'Such beautiful drawings — I always stop to look' }],
   beyondlaboira: [{ text: 'Always so supportive of the things I share' }, { text: 'Such a lovely person to have around ♡' }],
-  goinghostie: [{ text: 'Hoshiai no Sora ✧' }],
+  goinghostie: [{ text: 'Hoshiai no Sora ✧' }, { text: 'Ssum ♡', image: 'ssum', portrait: true }],
   maomao_2605: [
     { text: 'Manga & anime' },
     { text: 'Fruits Basket', image: 'fruits-basket' },
