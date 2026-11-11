@@ -14,7 +14,7 @@ export const GET: RequestHandler = async ({ params }) => {
   const showTitle = !!suggestion.note && suggestion.title !== suggestion.note
 
   const date = new Date(suggestion.createdAt).toLocaleDateString('en-US', {
-    month: 'short', day: 'numeric', year: 'numeric',
+    month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC',
   })
 
   const element = boardOgCard({

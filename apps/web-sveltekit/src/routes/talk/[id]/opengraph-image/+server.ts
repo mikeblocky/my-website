@@ -10,7 +10,7 @@ export const GET: RequestHandler = async ({ params }) => {
   }
 
   const date = new Date(talk.createdAt).toLocaleDateString('en-US', {
-    month: 'short', day: 'numeric', year: 'numeric',
+    month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC',
   })
 
   const element = boardOgCard({

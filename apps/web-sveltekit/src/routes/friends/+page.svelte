@@ -8,8 +8,11 @@
   import SeoHead from '$lib/components/SeoHead.svelte';
   import SectionPageShell from '$lib/components/SectionPageShell.svelte';
   import { fade } from 'svelte/transition';
+  import { onMount } from 'svelte';
   import { Pause, Play, ChevronLeft, ChevronRight } from '@lucide/svelte';
   export let data;
+  let folderIds:Record<string,string>={};
+  onMount(()=>{fetch('/api/commission-folders').then(response=>response.ok?response.json():{}).then(value=>{folderIds=value;}).catch(()=>{});});
   const groupLabels: Record<string, { label: string; tag: string }> = {
     admired: { label: 'Admired supporters', tag: 'Admired supporter' },
     developed: { label: 'Mutuals & close friends', tag: 'Mutual' },
@@ -131,7 +134,7 @@
     <div id="friend-detail" class="connection-detail" aria-live="polite">
       {#if selected}
         {#key selected.username}
-          <div in:noteFade><FriendCard username={selected.username} description={selected.description} tag={selected.tag} /></div>
+          <div in:noteFade><FriendCard username={selected.username} description={selected.description} tag={selected.tag} folderId={folderIds[selected.username.toLowerCase()]||''} /></div>
         {/key}
       {/if}
     </div>

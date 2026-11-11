@@ -17,6 +17,7 @@ export function boardOgCard({ body, title, author, date, imageUrl, imageUrls, la
   const hash = postColorHash(key);
   const dimensions = images.map(src => {
     try {
+      if(src.startsWith('/media/')) { const url=new URL(src,'https://www.mikeblocky.com');const width=Number(url.searchParams.get('w')),height=Number(url.searchParams.get('h'));if(width>0&&height>0)return {width,height}; }
       if (src.startsWith('data:image/') && src.includes(';base64,') && src.length < 12000000) {
         const size = imageSize(Buffer.from(src.split(',')[1], 'base64'));
         return { width: size.width, height: size.height };

@@ -55,3 +55,8 @@ apps/web-sveltekit/.dev-data/
 
 # Generated, content-addressed gallery images
 /public/artwork-previews/
+
+# Private migration exports, credentials and Cloudflare local state
+.private-backups/
+**/.wrangler/
+**/.dev.vars*

@@ -56,7 +56,7 @@ export const POST: RequestHandler = async ({ request }) => {
   const imageUrls = Array.isArray(data.imageUrls)
     ? data.imageUrls.filter((url: any) => typeof url === 'string')
     : undefined;
-  const imageError = validateImageUrls(imageUrls);
+  const imageError = validateImageUrls(imageUrls, imageUrl);
   if (imageError) {
     return json({ error: imageError }, { status: 413 });
   }
@@ -79,14 +79,14 @@ export const PUT: RequestHandler = async ({ request }) => {
 
   const { id, reply, passcode, imageUrl, imageUrls } = data;
   
-  if (env.ADMIN_PASSCODE && passcode !== env.ADMIN_PASSCODE) {
+  if (!env.ADMIN_PASSCODE || passcode !== env.ADMIN_PASSCODE) {
     return json({ error: 'Unauthorized' }, { status: 401 });
   }
 
   const cleanImageUrls = Array.isArray(imageUrls)
     ? imageUrls.filter((url: any) => typeof url === 'string')
     : undefined;
-  const imageError = validateImageUrls(cleanImageUrls);
+  const imageError = validateImageUrls(cleanImageUrls, imageUrl);
   if (imageError) {
     return json({ error: imageError }, { status: 413 });
   }
@@ -138,13 +138,13 @@ export const PATCH: RequestHandler = async ({ request }) => {
   const cleanImageUrls = Array.isArray(imageUrls)
     ? imageUrls.filter((url: any) => typeof url === 'string')
     : undefined;
-  const imageError = validateImageUrls(cleanImageUrls);
+  const imageError = validateImageUrls(cleanImageUrls, imageUrl);
   if (imageError) {
     return json({ error: imageError }, { status: 413 });
   }
 
   if (messageId) {
-    if (env.ADMIN_PASSCODE && passcode !== env.ADMIN_PASSCODE) {
+    if (!env.ADMIN_PASSCODE || passcode !== env.ADMIN_PASSCODE) {
       return json({ error: 'Unauthorized' }, { status: 401 });
     }
     if (typeof body !== 'string' || body.trim().length === 0) {

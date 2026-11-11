@@ -3,7 +3,7 @@
   import { commissionStatuses } from '$lib/commissions';
   import type { Commission } from '$lib/commissions';
   import SectionPageShell from '$lib/components/SectionPageShell.svelte';
-  import { Plus, LockKeyhole, Search, ArrowUpRight, Pencil, Archive } from '@lucide/svelte';
+  import { Plus, LockKeyhole, Search, ArrowUpRight, Pencil, Archive, FolderOpen } from '@lucide/svelte';
   export let data;
   export let form: any;
   let search = '', status = 'all', showArchived = false, draft: any = null, saving = false;
@@ -24,6 +24,7 @@
 <svelte:head><title>Commissions & orders | mikeblocky.com</title><meta name="robots" content="noindex,nofollow" /></svelte:head>
 <SectionPageShell title="Commissions & orders" currentLabel="Commissions">
   <section class="commission-workspace">
+    <a class="vault-entry" href="/commissions/files">Private image folders ↗</a>
     <header class="tracker-top"><span class="private-label"><LockKeyhole size={14} />{data.authenticated ? 'Admin' : 'Read only'}</span>{#if data.authenticated}<form method="POST" action="?/lock"><button class="quiet">Stop editing</button></form>{/if}</header>
       <div class="tracker-stats"><div><strong>{active.length}</strong><span>Active</span></div><div><strong>{overdue.length}</strong><span>Overdue</span></div><div><strong>{entries.filter(entry => !entry.archived && entry.status === 'delivered').length}</strong><span>Delivered</span></div></div>
       {#if data.storageError}<p class="notice error" role="alert">{data.storageError}</p>{/if}
@@ -54,7 +55,7 @@
       <div class="order-list">
         {#each visible as entry (entry.id)}
           <details class="order-card">
-            <summary><div><span class="order-person">{entry.direction} {entry.person} · {entry.kind}</span><h2>{entry.title}</h2><span class="order-due" class:late={!!entry.dueDate && entry.dueDate < today && !['delivered', 'cancelled'].includes(entry.status)}>{entry.dueDate ? `Due ${entry.dueDate}` : 'No deadline'}</span></div><div class="order-summary"><span class="status">{entry.status}</span>{#if data.authenticated}<strong>{money(entry.amountCents, entry.currency)}</strong><small>{money(entry.amountCents - entry.paidCents, entry.currency)} remaining</small>{/if}</div></summary>
+            <summary><div><span class="order-person">{entry.direction} {entry.person} · {entry.kind}</span><h2>{entry.title}</h2>{#if data.folderIds[entry.person.replace(/^@/,'').toLowerCase()]}<a href={`/commissions/files/${data.folderIds[entry.person.replace(/^@/,'').toLowerCase()]}`} aria-label={`Open ${entry.person}’s private gallery`} title="Private gallery" on:click|stopPropagation><FolderOpen size={18} /></a>{:else if data.authenticated}<a href={`/commissions/files?person=${encodeURIComponent(entry.person)}`} aria-label={`Create ${entry.person}’s private gallery`} title="Create private gallery" on:click|stopPropagation><FolderOpen size={18} /></a>{/if}<span class="order-due" class:late={!!entry.dueDate && entry.dueDate < today && !['delivered', 'cancelled'].includes(entry.status)}>{entry.dueDate ? `Due ${entry.dueDate}` : 'No deadline'}</span></div><div class="order-summary"><span class="status">{entry.status}</span>{#if data.authenticated}<strong>{money(entry.amountCents, entry.currency)}</strong><small>{money(entry.amountCents - entry.paidCents, entry.currency)} remaining</small>{/if}</div></summary>
             <div class="order-details"><div class="order-dates"><span>Ordered: {entry.orderedDate || '—'}</span><span>Delivered: {entry.deliveredDate || '—'}</span>{#if data.authenticated}<span>Paid: {money(entry.paidCents, entry.currency)}</span>{/if}</div>{#if entry.brief}<h3>Brief</h3><p>{entry.brief}</p>{/if}{#if entry.deliverables}<h3>Deliverables</h3><p>{entry.deliverables}</p>{/if}{#if data.authenticated && entry.notes}<h3>Notes</h3><p>{entry.notes}</p>{/if}{#if data.authenticated}<div class="order-links">{#if entry.referenceUrl}<a href={entry.referenceUrl} target="_blank" rel="noreferrer">References <ArrowUpRight size={14} /></a>{/if}{#if entry.deliveryUrl}<a href={entry.deliveryUrl} target="_blank" rel="noreferrer">Files / tracking <ArrowUpRight size={14} /></a>{/if}</div><footer><button class="quiet" disabled={saving} on:click={() => edit(entry)}><Pencil size={15} />Edit</button><form method="POST" action="?/archive" use:enhance><input type="hidden" name="id" value={entry.id} /><input type="hidden" name="revision" value={entry.revision} /><button class="quiet"><Archive size={15} />{entry.archived ? 'Restore' : 'Archive'}</button></form><small>Updated {entry.updatedAt.slice(0, 10)}</small></footer>{:else}<small>Updated {entry.updatedAt.slice(0, 10)}</small>{/if}</div>
           </details>
         {:else}<div class="empty"><p>{search || status !== 'all' ? 'No matching orders.' : showArchived ? 'No archived orders.' : 'No orders yet.'}</p></div>{/each}

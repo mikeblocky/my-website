@@ -177,3 +177,26 @@ body::after { content: ''; position: fixed; inset: 0; z-index: 90; pointer-event
 html:not(.dark) body::after { opacity: .045; }
 html:not(.dark).light-page-settling body::after { opacity: .14; transition-duration: 160ms; }
 @media (prefers-reduced-motion: reduce) { body::after { transition: none; } }
+/* Private commission folders use native forms and keep images in their natural ratio. */
+.vault-workspace { max-width: 900px; margin-inline: auto; display: grid; gap: 28px; padding-block: 20px 48px; }
+.vault-form { display: grid; gap: 12px; max-width: 440px; }
+.vault-workspace input { width: 100%; padding: 12px; border: 1px solid hsl(var(--border)); border-radius: 10px; background: hsl(var(--background)); box-sizing: border-box; }
+.vault-workspace button { padding: 10px 16px; border: 1px solid hsl(var(--border)); border-radius: 10px; background: hsl(var(--muted)); cursor: pointer; }
+.vault-folder-list { display: grid; gap: 12px; }
+.vault-folder-list a { display: flex; justify-content: space-between; gap: 16px; padding: 18px 0; border-bottom: 1px solid hsl(var(--border)); }
+.vault-credential { display: grid; gap: 12px; padding: 20px; background: hsl(var(--muted)); border-radius: 12px; overflow-wrap: anywhere; }
+.vault-images { columns: 2 280px; gap: 24px; }
+.vault-images figure { break-inside: avoid; margin: 0 0 24px; }
+.vault-images img { width: 100%; height: auto; border-radius: 6px; }
+.vault-images figcaption { font-size: .85rem; color: hsl(var(--muted-foreground)); padding-top: 8px; overflow-wrap: anywhere; }
+.vault-entry { display: block; text-align: right; font-size: .9rem; color: hsl(var(--muted-foreground)); }
+.vault-workspace .vault-image-frame { display:block; position:relative; width:100%; padding:0; border:0; background:transparent; cursor:crosshair; }
+.vault-image-frame img { display:block; }
+.vault-pin { position:absolute; transform:translate(-50%,-50%); display:grid; place-items:center; min-width:24px; height:24px; border-radius:50%; background:#2467e8; color:white; border:2px solid white; font-size:12px; pointer-events:none; }
+.vault-pin.pending { background:#df762e; }
+.vault-comments { display:grid; gap:24px; }
+.vault-comments textarea { padding:12px; border:1px solid hsl(var(--border)); border-radius:10px; background:hsl(var(--background)); }
+.vault-comments article { padding-block:16px; border-top:1px solid hsl(var(--border)); }
+.vault-comments article header { display:flex; flex-wrap:wrap; gap:12px; align-items:center; }
+.vault-comments small { color:hsl(var(--muted-foreground)); }
+.vault-comments article p { white-space:pre-wrap; overflow-wrap:anywhere; }

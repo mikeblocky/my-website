@@ -4,6 +4,7 @@ import { defineConfig } from 'vite';
 import path from 'node:path';
 
 export default defineConfig({
+  ssr: { external: ['@cf-wasm/resvg', '@cf-wasm/photon'] },
   plugins: [tailwindcss(), sveltekit()],
   optimizeDeps: {
     include: ['@lucide/svelte', 'tailwind-merge'],

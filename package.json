@@ -23,7 +23,9 @@
     "lint": "eslint .",
     "lint:svelte": "npm --workspace @mikeblocky/web-sveltekit run lint",
     "create:blog": "node scripts/create-blog-post.js",
-    "create:diary": "node scripts/create-diary-post.js"
+    "create:diary": "node scripts/create-diary-post.js",
+    "build:cloudflare": "node scripts/build-cloudflare.mjs",
+    "deploy:cloudflare": "npm run build:cloudflare && wrangler deploy --config apps/web-sveltekit/wrangler.jsonc"
   },
   "dependencies": {
     "@mdx-js/loader": "^3.1.1",

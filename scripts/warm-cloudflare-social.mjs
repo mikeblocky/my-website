@@ -1,0 +1,20 @@
+import{sql,putObject,cloudToken,account}from'./cloudflare-api.mjs';import{nodeImageRenderer,nodeBoardCard}from'./og-node-runtime.mjs';import{readdir,readFile}from'node:fs/promises';import path from'node:path';
+import{socialObjectKey}from'../apps/web-sveltekit/src/lib/og/social-cache.ts';import{pageOgCard}from'../apps/web-sveltekit/src/lib/og/PageOgCard.ts';
+process.on('uncaughtException',error=>{console.error(error.message);process.exit(1);});
+const render=await nodeImageRenderer(),board=await nodeBoardCard();let count=0;
+await putObject('social/default.png',new Uint8Array(await render(pageOgCard('mikeblocky.com'))));
+const rows=(await sql("SELECT * FROM redis_sorted WHERE key IN ('talk:messages','ask:questions','sketchbook:drawings','draw:prompts','suggestions:media') ORDER BY key,score DESC"))[0].results,seen=new Set();
+for(const row of rows){const packed=JSON.parse(row.value);let value=packed.text;if(value===undefined){const r=await fetch(`https://api.cloudflare.com/client/v4/accounts/${account}/r2/buckets/mikeblocky-private/objects/${encodeURIComponent(packed.object)}`,{headers:{Authorization:`Bearer ${cloudToken()}`}});value=await r.text();}
+ const post=JSON.parse(value),kind=row.key==='sketchbook:drawings'?'sketchbook':row.key==='draw:prompts'?'draw':row.key==='suggestions:media'?'suggestions':'talk';
+ const key=`v4:${kind}:${post.id}`;if(seen.has(key))continue;seen.add(key);
+ const props={colorKey:`${kind}:${post.id}`,label:kind==='sketchbook'?'Drawing':kind==='draw'?'Drawing prompt':kind==='suggestions'?'Suggestion':'Talk',body:kind==='suggestions'?post.note||post.title:post.body||'',author:post.author||'anonymous',date:new Date(post.createdAt).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric',timeZone:'UTC'}),imageUrl:kind==='sketchbook'?post.imageUrl:post.imageUrls?.[0]||post.imageUrl||(kind==='suggestions'?post.reference?.image:undefined),imageUrls:kind==='sketchbook'?undefined:post.imageUrls,title:kind==='draw'?[post.character,post.media].filter(Boolean).join(' · '):kind==='suggestions'&&post.note&&post.title!==post.note?post.title:''};
+ const element=board(props),objectKey=socialObjectKey(key,element);
+ // Server layout uses public URLs; the local renderer embeds their exact bytes.
+ async function embed(node){if(Array.isArray(node))return Promise.all(node.map(embed));if(!node||typeof node!=='object'||!node.props)return node;const p={...node.props};if(node.type==='img'&&p.src.startsWith('/media/')){const id=p.src.split('/')[2].split('?')[0],file=(await sql('SELECT object_key,mime FROM public_media WHERE id=?',[id]))[0].results[0];const r=await fetch(`https://api.cloudflare.com/client/v4/accounts/${account}/r2/buckets/mikeblocky-private/objects/${encodeURIComponent(file.object_key)}`,{headers:{Authorization:`Bearer ${cloudToken()}`}});if(!r.ok)throw Error('Public image unavailable.');p.src=`data:${file.mime};base64,${Buffer.from(await r.arrayBuffer()).toString('base64')}`;}if(p.children)p.children=await embed(p.children);return{...node,props:p};}
+ const png=await render(await embed(element),1200,element.props.style.height);await putObject(objectKey,new Uint8Array(png));count++;
+}
+const titles=new Set(['mikeblocky.com','Home','About','Friends','Artworks','Journal','Favorites','Interact','Commissions & orders']);
+async function visit(folder){for(const item of await readdir(folder,{withFileTypes:true})){const file=path.join(folder,item.name);if(item.isDirectory())await visit(file);else if(item.name.endsWith('.html')){const html=await readFile(file,'utf8');for(const match of html.matchAll(/content="([^"]*\/api\/thumbnail\?title=[^"]*)"/g)){try{titles.add(new URL(match[1].replaceAll('&amp;','&'),'https://www.mikeblocky.com').searchParams.get('title'));}catch{}}}}}
+await visit('apps/web-sveltekit/.svelte-kit/cloudflare');
+for(const title of titles){const card=pageOgCard(title);await putObject(socialObjectKey(`page:${title}`,card),new Uint8Array(await render(card)));count++;}
+console.log(`Pre-rendered and cached ${count} public thumbnails without using Worker CPU or browser minutes.`);

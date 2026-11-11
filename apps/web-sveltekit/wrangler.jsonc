@@ -1,0 +1,15 @@
+{
+  "$schema": "../../node_modules/wrangler/config-schema.json",
+  "name": "mikeblocky-site",
+  "account_id": "4970ae1534c76f6630ce684cb25a940a",
+  "main": ".svelte-kit/cloudflare/_worker.js",
+  "compatibility_date": "2026-11-11",
+  "compatibility_flags": ["nodejs_compat"],
+  "assets": { "binding": "ASSETS", "directory": ".svelte-kit/cloudflare", "run_worker_first": ["/commissions/*"] },
+  "d1_databases": [{ "binding": "DB", "database_name": "mikeblocky-site", "database_id": "df316882-2903-4173-92dd-64e89d027c5f", "migrations_dir": "migrations" }],
+  "r2_buckets": [{ "binding": "PRIVATE_FILES", "bucket_name": "mikeblocky-private" }],
+  "browser": { "binding": "BROWSER" },
+  "workers_dev": true,
+  "preview_urls": false,
+  "observability": { "enabled": true, "head_sampling_rate": 0.1 }
+}

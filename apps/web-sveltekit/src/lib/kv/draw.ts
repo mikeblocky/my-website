@@ -14,7 +14,7 @@ export function buildPromptPayload(partial: {
   const now = new Date().toISOString()
   return {
     id: Math.random().toString(36).substring(2, 11),
-    author: partial.author.trim() || 'anonymous',
+    author: partial.author.trim().slice(0,80) || 'anonymous',
     body: partial.body.trim(),
     createdAt: now,
     character: partial.character?.trim(),

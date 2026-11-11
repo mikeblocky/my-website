@@ -7,7 +7,7 @@ export function buildTalkPayload(partial: { author: string; body: string; imageU
   const now = new Date().toISOString()
   return {
     id: Math.random().toString(36).substring(2, 11),
-    author: partial.author.trim() || 'anonymous',
+    author: partial.author.trim().slice(0,80) || 'anonymous',
     body: partial.body.trim(),
     createdAt: now,
     imageUrl: partial.imageUrl,

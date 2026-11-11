@@ -4,6 +4,8 @@ import { env } from '$env/dynamic/private';
 import { dev } from '$app/environment';
 import { readFile, writeFile, mkdir } from 'node:fs/promises';
 import path from 'node:path';
+import { cloudBindings } from '$lib/server/cloudflare';
+import { cloudflareClient } from './cloudflare';
 
 export const askQuestionsKey = 'ask:questions'
 export const talkMessagesKey = 'talk:messages'
@@ -191,13 +193,15 @@ function devClient(): KvClient {
 }
 
 export async function getRedisClient(): Promise<KvClient> {
+  const cloud = cloudBindings();
+  if (cloud?.DB) return cloudflareClient(cloud);
   if (dev && !redisUrl) {
     devContentLoaded ??= loadDevContent();
     await devContentLoaded;
     return devClient();
   }
 	if (!redisUrl || global.__redisUnavailable) {
-		return getMemoryClient()
+		throw new Error('Persistent storage is unavailable.');
 	}
 
 	if (global.__redisClient && global.__redisClient.isOpen) {
@@ -235,6 +239,6 @@ export async function getRedisClient(): Promise<KvClient> {
 		try {
 			client.destroy()
 		} catch {}
-		return getMemoryClient()
+		throw new Error('Persistent storage is unavailable.');
 	}
 }

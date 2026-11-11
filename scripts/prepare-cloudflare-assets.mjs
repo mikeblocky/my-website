@@ -1,0 +1,13 @@
+import {readdir,stat,writeFile,rename,readFile} from 'node:fs/promises';
+import path from 'node:path';
+import sharp from 'sharp';
+const root=path.resolve('apps/web-sveltekit/.svelte-kit/cloudflare');let optimized=0;
+const entry=path.join(root,'_worker.js'),application=path.join(root,'_app-worker.js');
+const current=await readFile(entry,'utf8');
+if(!current.includes('mikeblocky-fallback-wrapper')){
+ await rename(entry,application);
+ await writeFile(path.join(root,'.assetsignore'),'/_app-worker.js\n');
+ await writeFile(entry,`// mikeblocky-fallback-wrapper\nimport application from './_app-worker.js';\nconst fallbackOrigin='https://my-website-mikeblockys-projects.vercel.app';\nfunction publicRead(request){const path=new URL(request.url).pathname;return request.method==='GET'&&!path.includes('/__data.json')&&(path==='/'||/^\\/(about|friends|artworks|journal|blog|favorites|learning|notes|zine|diary|interact|talk|draw|sketchbook|suggestions|_app|artwork-previews|distribution|recommendations)(\\/|$)/.test(path)||/^\\/api\\/(thumbnail|talk|draw|sketchbook|suggestions)$/.test(path));}\nexport default {async fetch(request,env,ctx){let response;try{response=await application.fetch(request,env,ctx);}catch{response=new Response('Temporarily unavailable',{status:503});}if(response.status>=500&&publicRead(request)){try{const target=new URL(request.url);const backup=await fetch(fallbackOrigin+target.pathname+target.search,{headers:{accept:request.headers.get('accept')||'*/*'},redirect:'follow'});if(backup.ok){response=new Response(backup.body,backup);response.headers.set('cache-control','no-store');response.headers.set('x-site-fallback','vercel');}}catch{}}response=new Response(response.body,response);response.headers.set('x-site-host','cloudflare');return response;}};\n`);
+}
+async function visit(folder){for(const item of await readdir(folder,{withFileTypes:true})){const file=path.join(folder,item.name);if(item.isDirectory())await visit(file);else if((await stat(file)).size>25*1024*1024){if(!/\.(jpe?g|png|webp)$/i.test(file))throw Error(`Oversized deploy asset: ${file}`);const input=await sharp(file).resize({width:6000,height:6000,fit:'inside',withoutEnlargement:true}).toBuffer();const output=await sharp(input).toFormat(/\.png$/i.test(file)?'png':/\.webp$/i.test(file)?'webp':'jpeg',{quality:90}).toBuffer();if(output.length>25*1024*1024)throw Error(`Asset remains too large: ${file}`);await writeFile(file+'.optimized.tmp',output);await rename(file+'.optimized.tmp',file);optimized++;}}}
+await visit(root);console.log(`Prepared Cloudflare assets; optimized ${optimized} oversized images. Repository originals were preserved.`);

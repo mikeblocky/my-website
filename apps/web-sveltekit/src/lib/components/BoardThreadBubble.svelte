@@ -132,7 +132,7 @@
     <div class="w-9 sm:w-12 flex justify-center">
       <div class="w-9 h-9 sm:w-12 sm:h-12 rounded-full border border-black/[0.04] dark:border-white/[0.04] overflow-hidden select-none">
         <img 
-          src={isAdmin ? "/mike-avatar.jpg" : "/q.jpg"}
+          src={isAdmin ? "/poster-avatar.webp" : "/poster-avatar.webp"}
           alt={isAdmin ? "Response Avatar" : "Question Avatar"} 
           class="w-full h-full object-cover" 
         />

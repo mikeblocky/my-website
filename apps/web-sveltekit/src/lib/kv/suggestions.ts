@@ -15,7 +15,7 @@ export function buildSuggestionPayload(partial: {
 }): MediaSuggestion {
   return {
     id: Math.random().toString(36).substring(2, 11),
-    author: partial.author.trim() || 'anonymous',
+    author: partial.author.trim().slice(0,80) || 'anonymous',
     title: partial.title.trim(),
     category: partial.category,
     note: partial.note?.trim() || undefined,

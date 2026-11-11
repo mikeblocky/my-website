@@ -91,7 +91,7 @@
 </script>
 
 <article class="timeline-post" id={`${feedConfig[entry.kind].prefix}-${post.id}`}>
-  <img class="timeline-avatar" src={/^mike(blocky)?$/i.test(author) ? '/mike-avatar.jpg' : '/q.jpg'} alt="" width="40" height="40" loading="lazy" />
+  <img class="timeline-avatar" src={/^mike(blocky)?$/i.test(author) ? '/poster-avatar.webp' : '/poster-avatar.webp'} alt="" width="40" height="40" loading="lazy" />
   <div class="timeline-post-content">
     <header class="timeline-post-header">
       <strong>{author}</strong>
@@ -132,7 +132,7 @@
       <div class="timeline-conversation" id={`thread-${entry.kind}-${post.id}`} transition:slide={{ duration: reduceMotion ? 0 : 420, easing: cubicOut }}>
         {#each thread as message (message.id)}
           <div class="timeline-thread-item">
-            <img class="timeline-avatar" src={message.role === 'admin' ? '/mike-avatar.jpg' : '/q.jpg'} alt="" width="32" height="32" loading="lazy" />
+            <img class="timeline-avatar" src={message.role === 'admin' ? '/poster-avatar.webp' : '/poster-avatar.webp'} alt="" width="32" height="32" loading="lazy" />
             <div class="timeline-thread-content">
               <header class="timeline-post-header"><strong>{message.role === 'admin' ? 'Mike' : author}</strong>{#if message.role === 'admin'}<span class="timeline-tag">Admin</span>{/if}<time datetime={message.createdAt}>{formatBoardDateCompact(message.createdAt)}</time>
                 {#if isAdminMode}<button class="timeline-edit-button" type="button" aria-label="Edit reply" on:click={() => { editing = message.id; editBody = message.body; editImages = message.imageUrls?.length ? [...message.imageUrls] : message.imageUrl ? [message.imageUrl] : []; }}><Pencil size={14} /></button>{/if}
@@ -152,7 +152,7 @@
         {/each}
         {#if canRespond}
           <form class="timeline-reply-editor" on:submit|preventDefault={respond} aria-label="Reply to post">
-            {#if isAdminMode}<div class="timeline-reply-identity"><img src="/mike-avatar.jpg" alt="Mike" width="24" height="24" /><span>Replying as <strong>Mike</strong></span><span class="timeline-tag">Admin</span></div>{/if}
+            {#if isAdminMode}<div class="timeline-reply-identity"><img src="/poster-avatar.webp" alt="Mike" width="24" height="24" /><span>Replying as <strong>Mike</strong></span><span class="timeline-tag">Admin</span></div>{/if}
             <div class="interact-editor"><textarea bind:this={replyEditor} aria-label="Reply text" placeholder={isAdminMode ? "Write an admin reply…" : "Post your reply"} bind:value={replyBody} maxlength={800} rows={2} required readonly={isPending}></textarea><EmojiPickerButton getTarget={() => replyEditor} accent="sky" /></div>
             <AttachmentPreviewGrid urls={replyImages} onRemove={(index) => replyImages = replyImages.filter((_, i) => i !== index)} />
             <div class="timeline-reply-tools"><AttachmentUploadButton onFiles={(files) => attach(files, 'reply')} accent="blue">Images</AttachmentUploadButton><button class="interact-post-button" type="submit" disabled={isPending || attaching || !replyBody.trim() || (!isAdminMode && isCooldownActive)}>{isPending ? 'Posting…' : !isAdminMode && isCooldownActive ? `Wait ${cooldownLabel}` : isAdminMode ? 'Reply as admin' : 'Reply'}</button></div>

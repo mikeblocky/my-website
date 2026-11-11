@@ -14,6 +14,9 @@
     "prebuild": "node ../../scripts/generate-artwork-previews.mjs"
   },
   "dependencies": {
+    "@cf-wasm/photon": "^0.4.0",
+    "@cf-wasm/resvg": "^0.4.0",
+    "@cloudflare/puppeteer": "^2.0.0",
     "@lucide/svelte": "^1.18.0",
     "@mikeblocky/site-data": "0.1.0",
     "@resvg/resvg-js": "^2.6.2",
@@ -33,9 +36,11 @@
     "web-push": "^3.6.7"
   },
   "devDependencies": {
+    "@sveltejs/adapter-cloudflare": "^7.2.10",
     "@types/katex": "^0.16.8",
     "@types/web-push": "^3.6.4",
     "svelte-check": "^4.3.4",
-    "typescript": "^6.0.3"
+    "typescript": "^6.0.3",
+    "wrangler": "^4.160.0"
   }
 }

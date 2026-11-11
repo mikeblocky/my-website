@@ -1,3 +1,4 @@
+import { validateImageUrls } from '$lib/images/attachment-limits';
 import { revalidateSketchbookDrawings } from '$lib/kv/sketchbook-cache';
 import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
@@ -29,6 +30,9 @@ export const POST: RequestHandler = async ({ request }) => {
   if (!data || typeof data.imageUrl !== 'string') {
     return json({ error: 'Invalid payload: Drawing image is required.' }, { status: 400 });
   }
+
+  const imageError=validateImageUrls([],data.imageUrl);
+  if(imageError)return json({error:imageError},{status:400});
 
   // Basic base64 image validation
   if (!data.imageUrl.startsWith('data:image/')) {
@@ -81,7 +85,7 @@ export const PUT: RequestHandler = async ({ request }) => {
   }
 
   // Admin action validation
-  if (env.ADMIN_PASSCODE && passcode !== env.ADMIN_PASSCODE) {
+  if (!env.ADMIN_PASSCODE || passcode !== env.ADMIN_PASSCODE) {
     return json({ error: 'Unauthorized' }, { status: 401 });
   }
 
@@ -116,7 +120,7 @@ export const DELETE: RequestHandler = async ({ url }) => {
     return json({ error: 'Missing drawing ID' }, { status: 400 });
   }
 
-  if (env.ADMIN_PASSCODE && passcode !== env.ADMIN_PASSCODE) {
+  if (!env.ADMIN_PASSCODE || passcode !== env.ADMIN_PASSCODE) {
     return json({ error: 'Unauthorized' }, { status: 401 });
   }
 

@@ -60,6 +60,11 @@ export async function subscribeToPush(talkId: string): Promise<boolean> {
 
     // Subscribe to push
     const applicationServerKey = urlBase64ToUint8Array(VAPID_PUBLIC_KEY)
+    const previous = await registration.pushManager.getSubscription();
+    if (previous) {
+      const oldKey = previous.options.applicationServerKey;
+      if (!oldKey || new Uint8Array(oldKey).some((byte,index)=>byte!==applicationServerKey[index]) || oldKey.byteLength!==applicationServerKey.byteLength) await previous.unsubscribe();
+    }
     const subscription = await registration.pushManager.subscribe({
       userVisibleOnly: true,
       applicationServerKey: applicationServerKey.buffer as ArrayBuffer

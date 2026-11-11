@@ -38,7 +38,7 @@ export function parseCommission(form: FormData): CommissionInput {
   };
   const link = (name: string) => {
     const value = text(name, 2000);
-    if (value) { try { if (!['https:', 'http:'].includes(new URL(value).protocol)) throw new Error(); } catch { throw new Error(`Use an http or https ${name}.`); } }
+    if (value) { try { const url=new URL(value); if (!['https:', 'http:'].includes(url.protocol)||url.username||url.password||/[\x00-\x1f\x7f]/.test(value)) throw new Error(); } catch { throw new Error(`Use an http or https ${name}.`); } }
     return value;
   };
   return { title, person, direction: direction as CommissionInput['direction'], kind: kind as CommissionInput['kind'], status: status as CommissionStatus, currency, amountCents, paidCents,

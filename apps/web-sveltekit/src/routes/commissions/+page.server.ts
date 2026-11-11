@@ -7,6 +7,7 @@ import { friendGroups } from '@mikeblocky/site-data/friends';
 import { parseCommission, publicCommission } from '$lib/commissions';
 import { createCommissionSession, matchesPasscode, sessionName, verifyCommissionSession } from '$lib/server/commission-auth';
 import { listCommissions, saveCommission } from '$lib/server/commissions';
+import { commissionFolderLinks } from '$lib/server/vault';
 
 export const prerender = false;
 const attempts = new Map<string, { count: number; until: number }>();
@@ -19,9 +20,11 @@ export const load: PageServerLoad = async ({ cookies, setHeaders }) => {
   const people = authenticated ? friendGroups.flatMap(group => group.friends.map(friend => friend.username)) : [];
   try {
     const all = (await listCommissions()).sort((a, b) => b.updatedAt.localeCompare(a.updatedAt));
-    return { today, authenticated, configured: !!env.ADMIN_PASSCODE, entries: authenticated ? all : all.filter(entry => !entry.archived).map(publicCommission), people, storageError: '' };
+    const entries=authenticated?all:all.filter(entry=>!entry.archived).map(publicCommission);
+    let folderIds:Record<string,string>={};try{folderIds=await commissionFolderLinks(entries.map(entry=>entry.person));}catch{}
+    return { today, authenticated, configured: !!env.ADMIN_PASSCODE, entries, people, storageError: '',folderIds };
   } catch (error) {
-    return { today, authenticated, configured: !!env.ADMIN_PASSCODE, entries: [], people, storageError: authenticated && error instanceof Error ? error.message : 'Order updates are temporarily unavailable.' };
+    return { today, authenticated, configured: !!env.ADMIN_PASSCODE, entries: [], people, storageError: authenticated && error instanceof Error ? error.message : 'Order updates are temporarily unavailable.',folderIds:{} as Record<string,string> };
   }
 };
 
