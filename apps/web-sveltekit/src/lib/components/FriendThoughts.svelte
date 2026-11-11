@@ -42,14 +42,19 @@
   .thought { position: relative; max-width: 100%; padding: 10px 15px; border-radius: 22px 22px 22px 7px; background: hsl(var(--background)); border: 1px solid hsl(var(--border) / .75); box-shadow: 0 6px 20px hsl(var(--foreground) / .07); font-size: var(--font-size-2xs); line-height: 1.35; transform: rotate(var(--tilt)); animation: thought-arrive 380ms cubic-bezier(.22,1,.36,1) both; animation-delay: calc(var(--i) * 45ms); }
   .thought:nth-child(2) { background: color-mix(in srgb, hsl(var(--background)) 90%, #a9c5ff); }
   .thought:nth-child(3) { background: color-mix(in srgb, hsl(var(--background)) 90%, #f4b6cd); }
-  .thoughts .photo { padding: 0; border: 0; border-radius: 0; background: none; box-shadow: none; flex: 0 1 auto; min-width: 0; max-width: calc(50% - 5px); }
+  .thoughts .photo { padding: 7px 7px 12px; border: 0; border-radius: 4px; background: hsl(var(--background)); box-shadow: 0 5px 16px hsl(var(--foreground) / .07); flex: 0 1 auto; min-width: 0; max-width: calc(50% - 5px); box-sizing: border-box; }
   .photo:only-child { max-width: 100%; }
-  .photo img { display: block; width: auto; height: auto; max-width: 100%; max-height: 180px; margin-inline: auto; border-radius: 3px; object-fit: contain; }
+  .thoughts .photo:nth-child(even) { background: color-mix(in srgb, hsl(var(--background)) 90%, #a9c5ff); }
+  .photo img { display: block; width: auto; height: auto; max-width: 100%; max-height: 142px; margin-inline: auto; border-radius: 3px; object-fit: contain; }
+  .photo:nth-child(even) img { max-height: 184px; }
+  .photo:nth-child(3n) img { max-height: 162px; }
   .photo > span { display: block; text-align: center; padding: 8px 3px 0; font-size: var(--font-size-2xs); }
   .long { flex-basis: 100%;  line-height: 1.6; transform: none; animation: none; }
   .inline { max-height: none; overflow: visible; position: relative; left: auto !important; top: auto !important; width: 100%; padding: 12px 8px 22px; }
   .inline .long { max-height: none; font-size: var(--font-size-sm); }
-  .wide .photo img { max-height: 190px; }
+  .wide .photo img { max-height: 160px; }
+  .wide .photo:nth-child(even) img { max-height: 214px; }
+  .wide .photo:nth-child(3n) img { max-height: 184px; }
   .wide .thoughts .long { width:100%; box-sizing:border-box; text-align:left; }
   @keyframes thought-arrive { from { opacity: 0; transform: translateY(8px) scale(.94) rotate(0); } to { opacity: 1; transform: translateY(0) scale(1) rotate(var(--tilt)); } }
   @media (prefers-reduced-motion: reduce) { .thought { animation: none; } }
