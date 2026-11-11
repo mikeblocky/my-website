@@ -25,7 +25,7 @@
   <div class="thoughts">
     {#each friendThoughts[username] ?? [] as thought, index}
       <div class:photo={thought.image} class:long={thought.long} class:portrait={thought.portrait} class="thought" style={`--i: ${index}; --tilt: ${index % 2 ? 3 : -3}deg;`}>
-        {#if thought.image}<img src={`/friends/thoughts/${thought.image}.webp`} alt={thought.text} width="280" height="156" decoding="async" />{/if}
+        {#if thought.image}<img src={`/friends/thoughts/${thought.image}.webp`} alt={thought.text} decoding="async" />{/if}
         <span>{thought.text}</span>
       </div>
     {/each}
@@ -42,19 +42,14 @@
   .thought { position: relative; max-width: 100%; padding: 10px 15px; border-radius: 22px 22px 22px 7px; background: hsl(var(--background)); border: 1px solid hsl(var(--border) / .75); box-shadow: 0 6px 20px hsl(var(--foreground) / .07); font-size: var(--font-size-2xs); line-height: 1.35; transform: rotate(var(--tilt)); animation: thought-arrive 380ms cubic-bezier(.22,1,.36,1) both; animation-delay: calc(var(--i) * 45ms); }
   .thought:nth-child(2) { background: color-mix(in srgb, hsl(var(--background)) 90%, #a9c5ff); }
   .thought:nth-child(3) { background: color-mix(in srgb, hsl(var(--background)) 90%, #f4b6cd); }
-  .photo { padding: 5px 5px 9px; border-radius: 9px; flex: 1 1 100px; min-width: 0; }
-  .photo img { display: block; width: 100%; height: 104px; border-radius: 5px; object-fit: cover; }
-  .thoughts .photo.portrait img { height: auto; aspect-ratio: auto; }
+  .thoughts .photo { padding: 0; border: 0; border-radius: 0; background: none; box-shadow: none; flex: 0 1 auto; min-width: 0; max-width: calc(50% - 5px); }
+  .photo:only-child { max-width: 100%; }
+  .photo img { display: block; width: auto; height: auto; max-width: 100%; max-height: 180px; margin-inline: auto; border-radius: 3px; object-fit: contain; }
   .photo > span { display: block; text-align: center; padding: 8px 3px 0; font-size: var(--font-size-2xs); }
-  .thoughts:has(.photo + .photo) { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .thoughts:has(.photo + .photo) .thought:not(.photo) { grid-column: 1 / -1; justify-self: center; }
-  .thoughts:has(.photo + .photo) .photo img { height: auto; aspect-ratio: 16 / 10; }
   .long { flex-basis: 100%;  line-height: 1.6; transform: none; animation: none; }
   .inline { max-height: none; overflow: visible; position: relative; left: auto !important; top: auto !important; width: 100%; padding: 12px 8px 22px; }
   .inline .long { max-height: none; font-size: var(--font-size-sm); }
-  .thoughts:has(.photo + .photo) .photo.portrait img { height: auto; aspect-ratio: 3 / 4; }
-  .wide .thoughts:has(.photo + .photo) { grid-template-columns:repeat(2,minmax(0,1fr)); }
-  .wide .thoughts:has(.photo + .photo) .photo img, .wide .thoughts:has(.photo + .photo) .photo.portrait img, .wide .thoughts .photo img { height:156px; aspect-ratio:auto; object-fit:contain; }
+  .wide .photo img { max-height: 190px; }
   .wide .thoughts .long { width:100%; box-sizing:border-box; text-align:left; }
   @keyframes thought-arrive { from { opacity: 0; transform: translateY(8px) scale(.94) rotate(0); } to { opacity: 1; transform: translateY(0) scale(1) rotate(var(--tilt)); } }
   @media (prefers-reduced-motion: reduce) { .thought { animation: none; } }
