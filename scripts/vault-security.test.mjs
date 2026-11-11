@@ -29,3 +29,11 @@ test('custom passwords preserve case and punctuation; old phrases still accept s
  const phrase=auth.randomPassword(),salt='old-salt',hash='v2:'+createHmac('sha256',secret).update(salt+':'+phrase).digest('hex');
  assert.equal(auth.passwordMatches(phrase.replaceAll('-',' ').toUpperCase(),salt,hash,secret),true);
 });
+
+test('custom admin passwords retain exact identity and rotating them revokes only admin sessions',()=>{
+ const before='A memorable password!',after='A different password!';
+ assert.equal(auth.secretMatches(before,before),true);assert.equal(auth.secretMatches(before.toLowerCase(),before),false);
+ const token=auth.signAccess('admin',auth.adminAccessVersion(before,secret),secret);
+ assert.equal(auth.verifyAccess(token,'admin',auth.adminAccessVersion(before,secret),secret),true);
+ assert.equal(auth.verifyAccess(token,'admin',auth.adminAccessVersion(after,secret),secret),false);
+});

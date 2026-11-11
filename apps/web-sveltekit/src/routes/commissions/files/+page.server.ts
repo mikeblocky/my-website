@@ -2,7 +2,7 @@ import { fail, redirect, error } from '@sveltejs/kit';
 import { randomUUID } from 'node:crypto';
 import { dev } from '$app/environment';
 import { isVaultAdmin, vaultStorage, vaultSecrets, privateHeaders, limitAttempt } from '$lib/server/vault';
-import { randomPassword, passwordRecord, validFolderPassword, secretMatches, signAccess, vaultCookie } from '$lib/server/vault-auth';
+import { randomPassword, adminAccessVersion, passwordRecord, validFolderPassword, secretMatches, signAccess, vaultCookie } from '$lib/server/vault-auth';
 import type { Actions, PageServerLoad } from './$types';
 export const load: PageServerLoad = async ({cookies,setHeaders,url}) => {
   setHeaders(privateHeaders);
@@ -17,7 +17,7 @@ export const actions: Actions = {
     const data=await request.formData(),secrets=vaultSecrets();
     if(!secretMatches(String(data.get('password')||''),secrets.admin))return fail(401,{error:'Access denied.'});
     if(cookies.get(vaultCookie))cookies.delete(vaultCookie,{path:'/commissions/files'});
-    cookies.set(vaultCookie,signAccess('admin',1,secrets.session),{path:'/commissions',secure:!dev,httpOnly:true,sameSite:'strict',maxAge:3600});
+    cookies.set(vaultCookie,signAccess('admin',adminAccessVersion(secrets.admin,secrets.session),secrets.session),{path:'/commissions',secure:!dev,httpOnly:true,sameSite:'strict',maxAge:3600});
     redirect(303,'/commissions/files');
   },
   lock: async ({cookies})=>{cookies.delete(vaultCookie,{path:'/commissions/files'});cookies.delete(vaultCookie,{path:'/commissions'});redirect(303,'/commissions/files');},

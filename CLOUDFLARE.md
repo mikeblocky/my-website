@@ -33,3 +33,5 @@ The Vercel production alias is retained as a fallback. Set `MIGRATION_READ_ONLY=
 Existing commissioned people were provisioned with separate galleries. Their initial recipient passwords are in the Git-ignored `.private-backups/commission-folder-passwords.json`. Future passwords appear once on creation or reset; they are not retrievable from the database.
 
 Keep all `.env*`, `.dev.vars*`, `.private-backups/`, and `.wrangler/` files out of Git. Cloudflare integration credentials are configured as Worker secrets.
+
+Commission permissions: owner sessions can edit orders, payments, galleries and images. Recipient sessions are scoped to one folder and can only read active images, comment, annotate, and change that folder password after verifying the current one. Comment identities are server-assigned (`mikeblocky` or the assigned folder username); submitted author/role fields are ignored. Admin password changes invalidate admin sessions independently of recipient sessions. Archive controls apply to individual orders; archived orders remain visible to the owner and are excluded from public data.

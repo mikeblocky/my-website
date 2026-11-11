@@ -37,7 +37,7 @@ export const actions: Actions = {
     let x:number|null=null,y:number|null=null;
     if(fileId){if(!await DB.prepare('SELECT id FROM vault_files WHERE id=? AND folder_id=? AND archived=0').bind(fileId,folder.id).first())error(404,'Image unavailable.');x=Number(data.get('x'));y=Number(data.get('y'));if(!Number.isFinite(x)||!Number.isFinite(y)||x<0||x>1||y<0||y>1)return fail(400,{error:'Choose a point on the image.'});}
     const admin=isVaultAdmin(cookies);
-    await DB.prepare('INSERT INTO vault_comments(id,folder_id,file_id,x,y,author,role,body,created_at) VALUES(?,?,?,?,?,?,?,?,?)').bind(randomUUID(),folder.id,fileId||null,x,y,admin?'Mike':folder.person,admin?'admin':'viewer',body,new Date().toISOString()).run();
+    await DB.prepare('INSERT INTO vault_comments(id,folder_id,file_id,x,y,author,role,body,created_at) VALUES(?,?,?,?,?,?,?,?,?)').bind(randomUUID(),folder.id,fileId||null,x,y,admin?'mikeblocky':folder.person,admin?'admin':'viewer',body,new Date().toISOString()).run();
     return {commented:true};
   },
   unlock:async({params,cookies,request,getClientAddress})=>{

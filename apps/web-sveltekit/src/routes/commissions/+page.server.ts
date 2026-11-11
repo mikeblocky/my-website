@@ -4,7 +4,7 @@ import { dev } from '$app/environment';
 import { randomUUID } from 'node:crypto';
 import { friendGroups } from '@mikeblocky/site-data/friends';
 import { parseCommission, publicCommission } from '$lib/commissions';
-import { vaultCookie, signAccess, secretMatches, randomPassword, passwordRecord, validFolderPassword } from '$lib/server/vault-auth';
+import { vaultCookie, signAccess, secretMatches, randomPassword, adminAccessVersion, passwordRecord, validFolderPassword } from '$lib/server/vault-auth';
 import { listCommissions, saveCommission } from '$lib/server/commissions';
 import { commissionFolderLinks, isVaultAdmin, vaultSecrets, vaultStorage, limitAttempt, privateHeaders } from '$lib/server/vault';
 
@@ -33,7 +33,7 @@ export const actions: Actions = {
     const form=await request.formData(),secrets=vaultSecrets();
     if(!secretMatches(String(form.get('passcode')||''),secrets.admin))return fail(401,{error:'Incorrect password.'});
     if(cookies.get(vaultCookie))cookies.delete(vaultCookie,{path:'/commissions/files'});
-    cookies.set(vaultCookie,signAccess('admin',1,secrets.session),{path:'/commissions',httpOnly:true,sameSite:'strict',secure:!dev,maxAge:3600});
+    cookies.set(vaultCookie,signAccess('admin',adminAccessVersion(secrets.admin,secrets.session),secrets.session),{path:'/commissions',httpOnly:true,sameSite:'strict',secure:!dev,maxAge:3600});
     redirect(303, '/commissions');
   },
   lock: async ({ cookies }) => { cookies.delete(vaultCookie,{path:'/commissions'});cookies.delete(vaultCookie,{path:'/commissions/files'}); redirect(303, '/commissions'); },

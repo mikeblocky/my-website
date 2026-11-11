@@ -4,6 +4,7 @@ const vocabulary = new Set(words);
 const normalize = (value:string) => value.trim().toLowerCase().replace(/[\s-]+/g,'-');
 const isPhrase = (value:string) => { const parts=normalize(value).split('-');return parts.length===4&&parts.every(word=>vocabulary.has(word)); };
 export const vaultCookie = 'commission_vault_admin';
+export const adminAccessVersion = (password:string, secret:string) => Number.parseInt(createHmac('sha256',secret).update(password).digest('hex').slice(0,12),16);
 export const folderCookie = (id: string) => `folder_${id.replaceAll('-', '')}`;
 export const randomPassword = () => Array.from({length:4},()=>words[randomInt(words.length)]).join('-');
 export const validFolderPassword = (password:string) => password.length>=10&&password.length<=128&&password.trim().length>=10&&!/[\x00-\x1f\x7f]/.test(password);
@@ -27,7 +28,7 @@ export function passwordMatches(password: string, salt: string, hash: string, pe
   return timingSafeEqual(createHash('sha256').update(salt).update(':').update(password).digest(),Buffer.from(hash,'hex'));
 }
 export function secretMatches(candidate: string, secret: string) {
-  return (secret.length>=24||isPhrase(secret))&&candidate.length<=256&&timingSafeEqual(createHash('sha256').update(isPhrase(secret)?normalize(candidate):candidate).digest(),createHash('sha256').update(isPhrase(secret)?normalize(secret):secret).digest());
+  return (validFolderPassword(secret)||isPhrase(secret))&&candidate.length<=256&&timingSafeEqual(createHash('sha256').update(isPhrase(secret)?normalize(candidate):candidate).digest(),createHash('sha256').update(isPhrase(secret)?normalize(secret):secret).digest());
 }
 export function signAccess(scope: string, version: number, secret: string, now = Date.now()) {
   if (secret.length < 32) throw new Error('Private access is not configured.');
