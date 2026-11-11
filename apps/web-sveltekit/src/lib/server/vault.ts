@@ -13,7 +13,7 @@ export type VaultComment = {id:string;folder_id:string;file_id:string|null;x:num
 export function vaultSecrets() { const cloud=cloudBindings(); return { admin:cloud?.VAULT_ADMIN_PASSWORD || env.VAULT_ADMIN_PASSWORD || '',session:cloud?.VAULT_SESSION_SECRET || env.VAULT_SESSION_SECRET || '' }; }
 export const isVaultAdmin = (cookies: Cookies) => verifyAccess(cookies.get(vaultCookie),'admin',1,vaultSecrets().session);
 export function canReadFolder(cookies: Cookies, folder: Folder) { return isVaultAdmin(cookies)||verifyAccess(cookies.get(folderCookie(folder.id)),folder.id,folder.version,vaultSecrets().session); }
-export const privateHeaders = { 'cache-control':'private, no-store, max-age=0', 'cdn-cache-control':'no-store', 'cloudflare-cdn-cache-control':'no-store', 'x-robots-tag':'noindex, nofollow, noarchive, noimageindex', 'referrer-policy':'no-referrer', 'x-content-type-options':'nosniff' };
+export const privateHeaders = { 'cache-control':'private, no-store, max-age=0', 'cdn-cache-control':'no-store', 'cloudflare-cdn-cache-control':'no-store', 'x-robots-tag':'noindex, nofollow, noarchive, noimageindex', 'referrer-policy':'same-origin', 'x-content-type-options':'nosniff' };
 export async function vaultStorage(): Promise<CloudBindings> {
   const cloud=cloudBindings(); if(cloud?.DB&&cloud.PRIVATE_FILES)return cloud;
   // Local development uses the same SQL and private storage contract through Wrangler.

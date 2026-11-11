@@ -13,7 +13,7 @@ export function cloudToken(){
 }
 export async function cloudApi(route,options={}){
   const response=await fetch(`https://api.cloudflare.com/client/v4/accounts/${account}${route}`,{...options,headers:{Authorization:`Bearer ${cloudToken()}`,...options.headers}});
-  if(!response.ok)throw Error(`Cloudflare request failed (${response.status}) for ${route.split('?')[0]}`);
+  if(!response.ok){const failure=await response.json().catch(()=>({}));throw Error(`Cloudflare request failed (${response.status}) for ${route.split('?')[0]}: ${failure.errors?.map(item=>`${item.code}: ${item.message}`).join('; ')||'Request rejected'}`);}
   const data=await response.json();if(data.success===false)throw Error(`Cloudflare rejected request: ${data.errors?.map(e=>e.code).join(',')}`);return data.result;
 }
 export const sql=async(sql,params=[])=>cloudApi(`/d1/database/${database}/query`,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({sql,params})});

@@ -11,5 +11,9 @@
   "browser": { "binding": "BROWSER" },
   "workers_dev": true,
   "preview_urls": false,
+  "routes": [
+    { "pattern": "mikeblocky.com/*", "zone_id": "7976f312ed767e7a7bfef1881d416a0a" },
+    { "pattern": "www.mikeblocky.com/*", "zone_id": "7976f312ed767e7a7bfef1881d416a0a" }
+  ],
   "observability": { "enabled": true, "head_sampling_rate": 0.1 }
 }

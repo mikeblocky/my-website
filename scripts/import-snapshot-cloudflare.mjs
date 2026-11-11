@@ -8,6 +8,7 @@ const decipher=createDecipheriv('aes-256-gcm',key,Buffer.from(backup.iv,'base64'
 const snapshot=Buffer.concat([decipher.update(Buffer.from(backup.data,'base64')),decipher.final()]);
 if(createHash('sha256').update(snapshot).digest('hex')!==backup.sha256)throw Error('Backup checksum failed.');
 const {entries}=JSON.parse(snapshot);console.log(`Verified encrypted snapshot: ${entries.length} keys.`);
+if(process.argv.includes('--replace'))for(const table of ['redis_strings','redis_sorted','redis_hashes','redis_archive'])await sql(`DELETE FROM ${table}`);
 const strings=[],sorted=[],hashes=[],archive=[];
 const pack=async value=>{if(Buffer.byteLength(value)<100000)return JSON.stringify({text:value});const key=`records/${createHash('sha256').update(value).digest('hex')}`;await putObject(key,value);return JSON.stringify({object:key});};
 for(let i=0;i<entries.length;i+=20){await Promise.all(entries.slice(i,i+20).map(async e=>{

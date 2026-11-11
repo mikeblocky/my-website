@@ -26,6 +26,10 @@ Do not place commission files in `public/`, public social cards, or the public a
 
 The complete Redis export is AES-256-GCM encrypted under the Git-ignored `.private-backups/` directory, with its decryption key stored separately. `migration-audit.json` records the initial full-content verification. Source Redis is retained for rollback. Public media extraction changes the storage representation while preserving image bytes.
 
+The Worker is primary through routes for exactly `mikeblocky.com/*` and `www.mikeblocky.com/*`. Existing proxied DNS remains pointed at Vercel, so disabling those two routes restores the Vercel origin without deleting DNS records. Other subdomains and the fansite are unaffected.
+
 The Vercel production alias is retained as a fallback. Set `MIGRATION_READ_ONLY=1` on Vercel so requests cannot create a second writable copy of the site. The Cloudflare entry can fall back to public Vercel GET pages when the application returns a server error. It never forwards credentials, private galleries, private images, or writes to that fallback. An outage of Cloudflare itself requires using the direct Vercel alias or changing DNS; the Worker cannot provide failover while its platform is unavailable.
+
+Existing commissioned people were provisioned with separate galleries. Their initial recipient passwords are in the Git-ignored `.private-backups/commission-folder-passwords.json`. Future passwords appear once on creation or reset; they are not retrievable from the database.
 
 Keep all `.env*`, `.dev.vars*`, `.private-backups/`, and `.wrangler/` files out of Git. Cloudflare integration credentials are configured as Worker secrets.

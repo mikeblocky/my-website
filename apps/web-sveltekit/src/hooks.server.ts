@@ -17,7 +17,7 @@ export const handle: Handle = async ({event,resolve}) => {
   }
   const response=await resolve(event);
   response.headers.set('x-content-type-options','nosniff');
-  response.headers.set('referrer-policy',privateRoute?'no-referrer':'strict-origin-when-cross-origin');
+  response.headers.set('referrer-policy',privateRoute?'same-origin':'strict-origin-when-cross-origin');
   response.headers.set('permissions-policy','camera=(), microphone=(), geolocation=()');
   if(privateRoute)for(const [key,value]of Object.entries(privateHeaders))response.headers.set(key,value);
   return response;
