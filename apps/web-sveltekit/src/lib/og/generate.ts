@@ -1,5 +1,6 @@
 import satori from 'satori'
 import { Resvg } from '@resvg/resvg-js'
+import sharp from 'sharp'
 
 import regularFontUrl from './fonts/DM-Sans-400.ttf?inline';
 import boldFontUrl from './fonts/DM-Sans-700.ttf?inline';
@@ -75,6 +76,20 @@ export async function generatePng(
   width = 1200,
   height = 630
 ): Promise<ArrayBuffer> {
+  // Satori's image parser does not support all uploaded raster formats.
+  // Normalize embedded WebP/AVIF/GIF attachments before measuring/rendering them.
+  const normalizeImages = async (node: any): Promise<any> => {
+    if (Array.isArray(node)) return Promise.all(node.map(normalizeImages));
+    if (!node || typeof node !== 'object' || !node.props) return node;
+    const props = { ...node.props };
+    if (node.type === 'img' && typeof props.src === 'string' && /^data:image\/(webp|avif|gif);base64,/i.test(props.src)) {
+      const png = await sharp(Buffer.from(props.src.split(',')[1], 'base64')).resize({ width: 1200, height: 1200, fit: 'inside', withoutEnlargement: true }).png().toBuffer();
+      props.src = `data:image/png;base64,${png.toString('base64')}`;
+    }
+    if (props.children) props.children = await normalizeImages(props.children);
+    return { ...node, props };
+  };
+  element = await normalizeImages(element);
   const fonts = await getFonts()
   const textOf = (node: any): string => typeof node === 'string' ? node : Array.isArray(node) ? node.map(textOf).join('') : node?.props ? textOf(node.props.children) : '';
   const japanese = [...new Set(textOf(element).match(/[\u2e80-\u9fff\uf900-\ufaff\uff00-\uffef]/gu) || [])].join('');

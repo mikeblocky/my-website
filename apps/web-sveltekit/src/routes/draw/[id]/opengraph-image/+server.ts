@@ -17,6 +17,7 @@ export const GET: RequestHandler = async ({ params }) => {
   const imageUrl = prompt.imageUrls?.[0] || prompt.imageUrl
 
   const element = boardOgCard({
+    colorKey: `draw:${params.id}`,
     imageUrls: prompt.imageUrls,
     accent: '#7c3aed',
     accentSoft: '#f5f3ff',
@@ -29,5 +30,5 @@ export const GET: RequestHandler = async ({ params }) => {
     imageUrl,
   })
 
-  return socialImageResponse(`draw:${params.id}`, element)
+  return socialImageResponse(`v4:draw:${params.id}`, element)
 }

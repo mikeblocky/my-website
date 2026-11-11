@@ -1,17 +1,32 @@
-import { randomOgPalette } from './PageOgCard';
+import { postOgPalette, postColorHash } from './PageOgCard';
+import { imageSize } from 'image-size';
 
 type BoardOgCardProps = {
   accent: string; accentSoft: string; border: string; label: string;
   body: string; title?: string; author?: string; date: string;
   imageUrl?: string; imageUrls?: string[];
+  colorKey?: string;
 };
 
 /** Match the colorful page thumbnails without clipping longer posts or artwork. */
-export function boardOgCard({ body, title, author, date, imageUrl, imageUrls, label }: BoardOgCardProps) {
+export function boardOgCard({ body, title, author, date, imageUrl, imageUrls, label, colorKey }: BoardOgCardProps) {
   const images = [...new Set(imageUrls?.length ? imageUrls : imageUrl ? [imageUrl] : [])].slice(0, 4);
   const content = label === 'Drawing' && !body.trim() ? 'drew a thing!' : body;
-  const { background, accent } = randomOgPalette();
-  const textWidth = images.length ? 654 : 1104;
+  const key = colorKey || `${label}:${author}:${date}:${title || content}`;
+  const { background, accent } = postOgPalette(key);
+  const hash = postColorHash(key);
+  const dimensions = images.map(src => {
+    try {
+      if (src.startsWith('data:image/') && src.includes(';base64,') && src.length < 12000000) {
+        const size = imageSize(Buffer.from(src.split(',')[1], 'base64'));
+        return { width: size.width, height: size.height };
+      }
+    } catch { /* Unknown formats retain a safe uncropped square fallback. */ }
+    return { width: 600, height: 600 };
+  });
+  const ratio = dimensions[0] ? dimensions[0].width / dimensions[0].height : 1;
+  const imageColumn = ratio > 1.25 ? 470 + hash % 71 : ratio < .8 ? 340 + hash % 71 : 400 + hash % 81;
+  const textWidth = images.length ? 1064 - imageColumn : 1104;
   const fontSize = content.length > 400 ? 26 : 32;
   const lines = content.split('\n').reduce((sum, line) => sum + Math.max(1, Math.ceil(Array.from(line).reduce((width, char) => width + (char.codePointAt(0)! > 0x2e7f ? 1 : .65), 0) / (textWidth / fontSize))), 0);
   const centered = lines <= 5 && content.length + (title?.length || 0) <= 280;
@@ -28,6 +43,14 @@ export function boardOgCard({ body, title, author, date, imageUrl, imageUrls, la
       ...(title ? [node({fontSize:32, fontWeight:700, marginBottom:16},title)] : []),
       node({width:'100%', justifyContent:'flex-start', fontSize, lineHeight:1.5, whiteSpace:'pre-wrap', wordBreak:'break-word'},content)
     ]),
-    ...(images.length ? [node({width:410, flexDirection:'column', gap:12, alignSelf:'center'}, images.map(src => ({type:'img',props:{src,style:{width:410,height:Math.min(480,Math.floor((height-114)/images.length)-12),objectFit:'contain',borderRadius:8, background:'#ffffff'}}})))] : [])
+    ...(images.length ? [node({width:imageColumn, flexWrap:'wrap', alignItems:'center', justifyContent:'center', gap:12, alignSelf:'center'}, images.map((src,index) => {
+      const size = dimensions[index], columns = images.length > 2 ? 2 : 1;
+      const rows = Math.ceil(images.length / columns);
+      const maxWidth = (imageColumn - (columns - 1) * 12) / columns;
+      const maxHeight = Math.min(480, (height - 114 - (rows - 1) * 12) / rows);
+      const variation = .88 + postColorHash(`${key}:${index}`) % 13 / 100;
+      const scale = Math.min(maxWidth / size.width, maxHeight / size.height) * variation;
+      return {type:'img',props:{src,style:{width:Math.round(size.width * scale),height:Math.round(size.height * scale),objectFit:'contain',borderRadius:8, background:'#ffffff'}}};
+    }))] : [])
   ]);
 }

@@ -14,6 +14,7 @@ export const GET: RequestHandler = async ({ params }) => {
   })
 
   const element = boardOgCard({
+    colorKey: `talk:${params.id}`,
     imageUrls: talk.imageUrls,
     accent: '#4f46e5',
     accentSoft: '#eef2ff',
@@ -25,5 +26,5 @@ export const GET: RequestHandler = async ({ params }) => {
     imageUrl: talk.imageUrls?.[0] || talk.imageUrl,
   })
 
-  return socialImageResponse(`talk:${params.id}`, element)
+  return socialImageResponse(`v4:talk:${params.id}`, element)
 }

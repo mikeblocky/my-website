@@ -18,11 +18,12 @@ export const GET: RequestHandler = async ({ params }) => {
   })
 
   const element = artworkOgCard({
+    id: params.id,
     imageUrl: drawing.imageUrl,
     caption: drawing.body || undefined,
     author: drawing.author,
     date,
   })
 
-  return socialImageResponse(`sketchbook:${params.id}`, element)
+  return socialImageResponse(`v4:sketchbook:${params.id}`, element)
 }

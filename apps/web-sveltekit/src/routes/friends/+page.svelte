@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { thoughtWidth, placeThought } from '$lib/thought-placement';
+  import { friendThoughts } from '$lib/friend-thoughts';
   import { friendOrbit } from '$lib/friend-orbit';
   import FriendThoughts from '$lib/components/FriendThoughts.svelte';
   import FriendCard from '$lib/components/FriendCard.svelte';
@@ -40,25 +42,40 @@
   }
   function followThought(node: HTMLElement) {
     const media = window.matchMedia('(min-width:1000px)');
+    const marker = document.createComment('thought-anchor');
+    node.before(marker);
     const person = mapElement.querySelector<HTMLElement>(`[data-person="${CSS.escape(thoughtUsername)}"]`);
     let frame = 0, last = 0, width = 300, height = 180;
+    const long = !!friendThoughts[thoughtUsername]?.some(thought => thought.long);
+    let chosenWidth = thoughtWidth(Math.min(mapElement.clientWidth - 16, window.innerWidth - 24), long);
+    node.style.width = `${chosenWidth}px`;
     const observer = new ResizeObserver(() => { width = node.offsetWidth; height = node.offsetHeight; });
     observer.observe(node);
     function move(now: number) {
       if (!media.matches || !person) return;
       if (now - last > 32) {
         const map = mapElement.getBoundingClientRect(), avatar = person.getBoundingClientRect();
-        const x = Math.max(8, Math.min(map.width - width - 8, avatar.left + avatar.width / 2 - map.left - width / 2));
-        const above = avatar.top - map.top - height - 14;
-        const y = map.top + above > 12 ? above : avatar.bottom - map.top + 14;
-        node.style.transform = `translate3d(${x}px,${y}px,0)`;
+        const bounds = { left: Math.max(12, map.left + 8), right: Math.min(window.innerWidth - 12, map.right - 8), top: 24, bottom: window.innerHeight - 24 };
+        const room = Math.max(avatar.top - bounds.top - 14, bounds.bottom - avatar.bottom - 14);
+        const nextWidth = thoughtWidth(bounds.right - bounds.left, long, chosenWidth, height > room);
+        if (nextWidth !== chosenWidth) { chosenWidth = nextWidth; node.style.width = `${chosenWidth}px`; }
+        const placement = placeThought(avatar, bounds, width, height, long);
+        node.style.transform = `translate3d(${placement.x}px,${placement.y}px,0)`;
         last = now;
       }
       frame = requestAnimationFrame(move);
     }
-    function start() { cancelAnimationFrame(frame); if (media.matches) frame = requestAnimationFrame(move); }
+    function start() {
+      cancelAnimationFrame(frame);
+      if (media.matches) {
+        document.body.appendChild(node);
+        node.style.position = 'fixed';
+        node.style.zIndex = '1000';
+        frame = requestAnimationFrame(move);
+      } else if (marker.parentNode) marker.after(node);
+    }
     media.addEventListener('change', start); start();
-    return { destroy() { cancelAnimationFrame(frame); observer.disconnect(); media.removeEventListener('change', start); } };
+    return { destroy() { cancelAnimationFrame(frame); observer.disconnect(); media.removeEventListener('change', start); node.remove(); marker.remove(); } };
   }
   function dismissOutside(event: PointerEvent) {
     if (window.matchMedia('(max-width: 560px), (pointer: coarse)').matches) return;
@@ -94,7 +111,7 @@
         </button>
       {/each}
       </div></div>{/key}
-      {#if thoughtUsername}{#key thoughtUsername}<div class="anchored-thought" use:followThought><FriendThoughts instance="friend-thoughts-orbit" username={thoughtUsername} inline onClose={() => thoughtUsername = ''} /></div>{/key}{/if}
+      {#if thoughtUsername}{#key thoughtUsername}<div class="anchored-thought" use:followThought><FriendThoughts instance="friend-thoughts-orbit" username={thoughtUsername} wide={!!friendThoughts[thoughtUsername]?.some(thought => thought.long)} inline onClose={() => thoughtUsername = ''} /></div>{/key}{/if}
       <button class="connection-center" type="button" aria-label="Show all connections" on:click={() => { selectedUsername = ''; thoughtUsername = ''; highlighted = ''; }}><img src="/mike-avatar.jpg" alt="Mike" width="64" height="64" /><strong>Mike</strong></button>
       <button class="orbit-pause" type="button" aria-label={paused ? 'Resume orbit' : 'Pause orbit'} aria-pressed={paused} on:click={() => paused = !paused}><svelte:component this={paused ? Play : Pause} size={14} /><span>{paused ? 'Resume' : 'Pause'}</span></button>
     </div>

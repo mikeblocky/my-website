@@ -3,7 +3,7 @@ import { generatePng } from './generate';
 const ttl = 60 * 60 * 1000;
 const cards = new Map<string, { expires: number; png: Promise<ArrayBuffer> }>();
 
-/** Random colors are picked at generation time, then shared by all crawlers for an hour. */
+/** Per-item palettes and layouts are cached so all crawlers receive the same card. */
 export async function socialImageResponse(key: string, element: any) {
   let card = cards.get(key);
   if (!card || card.expires <= Date.now()) {

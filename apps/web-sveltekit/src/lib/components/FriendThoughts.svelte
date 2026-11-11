@@ -7,6 +7,7 @@
   export let y = 0;
   export let inline = false;
   export let instance = '';
+  export let wide = false;
   export let onHeight: (height: number) => void = () => {};
   function measure(node: HTMLElement) {
     const observer = new ResizeObserver(() => onHeight(node.getBoundingClientRect().height));
@@ -19,7 +20,7 @@
   }
 </script>
 
-<aside id={instance || (inline ? "friend-thoughts-mobile" : "friend-thoughts")} class="thought-cloud" class:inline use:measure style={`left: ${x}px; top: ${y}px;`} aria-label={`Thoughts about @${username}`} in:appear>
+<aside id={instance || (inline ? "friend-thoughts-mobile" : "friend-thoughts")} class="thought-cloud" class:inline class:wide use:measure style={`left: ${x}px; top: ${y}px;`} aria-label={`Thoughts about @${username}`} in:appear>
   <header><span>@{username}</span><button type="button" on:click={onClose} aria-label="Close thoughts"><X size={14} /></button></header>
   <div class="thoughts">
     {#each friendThoughts[username] ?? [] as thought, index}
@@ -52,6 +53,9 @@
   .inline { max-height: none; overflow: visible; position: relative; left: auto !important; top: auto !important; width: 100%; padding: 12px 8px 22px; }
   .inline .long { max-height: none; font-size: var(--font-size-sm); }
   .thoughts:has(.photo + .photo) .photo.portrait img { height: auto; aspect-ratio: 3 / 4; }
+  .wide .thoughts:has(.photo + .photo) { grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .wide .thoughts:has(.photo + .photo) .photo img, .wide .thoughts:has(.photo + .photo) .photo.portrait img, .wide .thoughts .photo img { height:156px; aspect-ratio:auto; object-fit:contain; }
+  .wide .thoughts .long { width:100%; box-sizing:border-box; text-align:left; }
   @keyframes thought-arrive { from { opacity: 0; transform: translateY(8px) scale(.94) rotate(0); } to { opacity: 1; transform: translateY(0) scale(1) rotate(var(--tilt)); } }
   @media (prefers-reduced-motion: reduce) { .thought { animation: none; } }
 </style>

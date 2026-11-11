@@ -97,6 +97,11 @@ html {
   text-size-adjust: 100%;
 }
 
+/* Scale the shared rem-based typography, controls and spacing together on desktop. */
+@media (min-width: 1024px) {
+  html { font-size: 109.375%; }
+}
+
 html::-webkit-scrollbar,
 body::-webkit-scrollbar {
   display: none;
