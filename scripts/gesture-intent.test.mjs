@@ -20,8 +20,10 @@ test('quick phone taps tolerate wobble without moving the menu button',()=>{
   assert.equal(dockDragIntent(22,4,'touch',120),'pending');
   assert.equal(dockDragIntent(0,0,'touch',500),'pending');
 });
-test('a deliberate hold-drag or clear swipe can still reposition the dock',()=>{
-  assert.equal(dockDragIntent(16,0,'touch',220),'drag');
-  assert.equal(dockDragIntent(30,0,'touch',80),'drag');
+test('only a deliberate hold-drag repositions the dock on touch screens',()=>{
+  assert.equal(dockDragIntent(16,0,'touch',220),'pending');
+  assert.equal(dockDragIntent(30,0,'touch',80),'pending');
+  assert.equal(dockDragIntent(16,0,'touch',350),'drag');
+  assert.equal(dockDragIntent(30,0,'pen',350),'drag');
   assert.equal(dockDragIntent(7,0,'mouse',30),'drag');
 });

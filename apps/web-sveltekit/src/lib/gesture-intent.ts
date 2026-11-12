@@ -7,6 +7,6 @@ export function dragIntent(dx:number,dy:number,pointerType:string,axis:'free'|'h
 export function dockDragIntent(dx:number,dy:number,pointerType:string,elapsed:number){
   if(pointerType!=='touch'&&pointerType!=='pen')return dragIntent(dx,dy,pointerType);
   const distance=Math.hypot(dx,dy);
-  // A quick tap may wobble; holding briefly or moving decisively starts a drag.
-  return distance>=28||(elapsed>=180&&distance>=14)?'drag':'pending';
+  // Touch activation stays native; repositioning needs an intentional hold-drag.
+  return elapsed>=320&&distance>=14?'drag':'pending';
 }
