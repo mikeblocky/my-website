@@ -284,7 +284,7 @@
 
   .emoji-picker__grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(2.1rem, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(2.75rem, 1fr));
     gap: 2px;
   }
 
@@ -323,6 +323,9 @@
     color: #94a3b8;
     font-size: 13px;
     font-family: var(--font-sans);
+  }
+  @media(pointer:coarse),(max-width:760px){
+    .emoji-picker__item:hover,.emoji-picker__item:focus-visible{transform:none;}
   }
 
   .emoji-picker__empty-glyph {

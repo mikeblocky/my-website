@@ -1,7 +1,9 @@
+<script context="module" lang="ts">
+  let themeTransitionTimer:ReturnType<typeof setTimeout>;
+</script>
 <script lang="ts">
   import { onMount } from 'svelte';
   import { Sun, Moon } from '@lucide/svelte';
-  import { scale as svelteScale } from 'svelte/transition';
   import SpotifyNowPlaying from './SpotifyNowPlaying.svelte';
 
   let theme: 'light' | 'dark' = 'light';
@@ -10,7 +12,6 @@
 
   let iconEl: HTMLDivElement | undefined;
   let iconAnim: Animation | undefined;
-  let themeTimer: ReturnType<typeof setTimeout>;
 
   // Mirrors the framer-motion icon animation from the Next.js ThemeToggle:
   //   animate={{ rotate: isDark ? 360 : 0, scale: [1, 0.8, 1] }}
@@ -24,13 +25,14 @@
   function spinIcon(fromDeg: number, toDeg: number) {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     const midDeg = (fromDeg + toDeg) / 2;
+    const currentTransform=iconEl?getComputedStyle(iconEl).transform:`rotate(${fromDeg}deg)`;
     // Cancel any in-flight spin so rapid toggles don't stack conflicting
     // transform animations on the icon.
     iconAnim?.cancel();
     iconAnim = iconEl?.animate(
       [
-        { transform: `rotate(${fromDeg}deg) scale(1)` },
-        { transform: `rotate(${midDeg}deg) scale(0.8)` },
+        { transform: currentTransform },
+        { transform: `rotate(${midDeg}deg) scale(0.9)` },
         { transform: `rotate(${toDeg}deg) scale(1)` }
       ],
       { duration: 180, easing: 'ease-in-out' }
@@ -38,8 +40,8 @@
   }
 
   function applyTheme(nextTheme: 'light' | 'dark') {
-    if (theme === nextTheme && mounted) return;
     const root = document.documentElement;
+    if (theme === nextTheme && mounted && root.classList.contains('dark')===(nextTheme==='dark')) return;
     const fromDeg = rotateDegree;
     const update = () => {
       theme = nextTheme;
@@ -51,19 +53,25 @@
       if (mounted) spinIcon(fromDeg, rotateDegree);
     };
     if (mounted && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      clearTimeout(themeTimer);
+      clearTimeout(themeTransitionTimer);
       root.classList.add('theme-changing');
       // Change colors in place: no full-page snapshots or separate navbar layer.
       update();
-      themeTimer = setTimeout(() => root.classList.remove('theme-changing'), 170);
+      themeTransitionTimer = setTimeout(() => root.classList.remove('theme-changing'), 170);
     } else update();
   }
 
   onMount(() => {
-    const stored = localStorage.getItem('theme');
+    let stored:string|null=null;try{stored=localStorage.getItem('theme');}catch{}
     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
     applyTheme(stored === 'dark' || (!stored && prefersDark) ? 'dark' : 'light');
     mounted = true;
+    const observer=new MutationObserver(()=>{
+      const next=document.documentElement.classList.contains('dark')?'dark':'light';
+      if(next!==theme){theme=next;rotateDegree=next==='dark'?360:0;}
+    });
+    observer.observe(document.documentElement,{attributes:true,attributeFilter:['class']});
+    return ()=>{observer.disconnect();iconAnim?.cancel();};
   });
 </script>
 
@@ -74,8 +82,7 @@
       type="button"
       class="relative p-2 rounded-lg inline-flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors duration-200 hover:bg-gray-100 dark:hover:bg-gray-800 border-0 bg-transparent cursor-pointer"
       aria-label="Toggle theme"
-      on:click={() => applyTheme(theme === 'dark' ? 'light' : 'dark')}
-      transition:svelteScale={{ duration: 200, start: 0.95 }}
+      on:click={() => applyTheme(document.documentElement.classList.contains('dark') ? 'light' : 'dark')}
     >
       <div
         bind:this={iconEl}

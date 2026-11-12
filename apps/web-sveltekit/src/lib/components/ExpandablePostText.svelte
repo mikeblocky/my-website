@@ -23,7 +23,7 @@
 {/if}
 
 <style>
-  .expandable-post-text { overflow: hidden; transition: height 440ms cubic-bezier(0.22, 1, 0.36, 1); }
+  .expandable-post-text { overflow: hidden; transition: height 280ms cubic-bezier(0.22, 1, 0.36, 1); }
   .expandable-post-text.collapsed { mask-image: linear-gradient(to bottom, black 65%, transparent 100%); }
   .timeline-text-toggle { display: block; border: 0; padding: 0.45rem 0; background: transparent; color: hsl(var(--site-blue)); font: inherit; font-size: var(--font-size-xs); cursor: pointer; }
   .timeline-text-toggle:hover { text-decoration: underline; }

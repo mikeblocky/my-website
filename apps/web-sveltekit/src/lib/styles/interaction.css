@@ -1,0 +1,19 @@
+/* Feedback never changes a control's position or the browser's native activation. */
+:root{--safe-top:env(safe-area-inset-top,0px);--safe-right:env(safe-area-inset-right,0px);--safe-bottom:env(safe-area-inset-bottom,0px);--safe-left:env(safe-area-inset-left,0px);}
+:where(button,a[href],summary,[role=button]){touch-action:manipulation;-webkit-tap-highlight-color:transparent;}
+:where(button,a[href],summary) > svg{pointer-events:none;}
+:where(button,a[href],summary).ui-held{opacity:.74;}
+:where(button,a[href],summary,input).ui-ack{outline:2px solid hsl(var(--site-blue)/.4);outline-offset:2px;}
+:where(button,a[href],summary):focus-visible{outline:2px solid hsl(var(--site-blue));outline-offset:3px;}
+::view-transition{pointer-events:none;}
+.route-loading-bar{position:fixed;inset:0 0 auto;height:3px;z-index:2000;overflow:hidden;pointer-events:none;background:hsl(var(--site-blue)/.12);}
+.route-loading-bar::after{content:'';display:block;height:100%;width:40%;background:hsl(var(--site-blue));animation:route-progress 1s ease-in-out infinite;}
+@keyframes route-progress{from{transform:translateX(-100%);}to{transform:translateX(350%);}}
+@media(pointer:coarse),(max-width:760px){
+  button:not(.connection-person):not(.connection-center):not(.gallery-photo):not(.art-carousel-card),summary{min-width:44px;min-height:44px;}
+  .gallery-icon,.art-carousel-controls button{min-width:48px;min-height:48px;}
+  input[type=range]{min-height:44px;}
+  :where(button,.sanctuary-text-link,.section-link-item):active{translate:none;}
+  .phone-menu-panel nav a:active{translate:none;}
+}
+@media(prefers-reduced-motion:reduce){.route-loading-bar::after{animation:none;width:100%;opacity:.65;}}

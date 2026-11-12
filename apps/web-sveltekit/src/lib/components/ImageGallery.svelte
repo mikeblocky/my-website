@@ -19,6 +19,20 @@
   let dragDismissY = 0;
   let dragDismissX = 0;
   let isDraggingDismiss = false;
+  function focusViewer(node:HTMLElement){
+    const previous=document.activeElement instanceof HTMLElement?document.activeElement:null;
+    node.querySelector<HTMLButtonElement>('button[aria-label="Close"]')?.focus({preventScroll:true});
+    function trap(event:KeyboardEvent){
+      if(event.key!=='Tab')return;
+      const controls=Array.from(node.querySelectorAll<HTMLElement>('button:not(:disabled),a[href],[tabindex="0"]')).filter(el=>el.tabIndex>=0&&el.getClientRects().length>0);
+      const first=controls[0],last=controls.at(-1);
+      if(!first){event.preventDefault();node.focus();return;}
+      if(event.shiftKey&&document.activeElement===first){event.preventDefault();last?.focus();}
+      else if(!event.shiftKey&&document.activeElement===last){event.preventDefault();first.focus();}
+    }
+    node.addEventListener('keydown',trap);
+    return {destroy(){node.removeEventListener('keydown',trap);if(previous?.isConnected)previous.focus({preventScroll:true});}};
+  }
 
   function portal(node: HTMLElement) {
     if (typeof document === 'undefined') return {};
@@ -350,8 +364,11 @@
 <!-- Lightbox Modal using Svelte portal -->
 {#if activeIdx !== null}
   <div
-    transition:fade={{ duration: 180 }}
-    class="fixed inset-0 z-50 flex items-center justify-center select-none backdrop-blur-md"
+    use:focusViewer
+    transition:fade={{ duration: 140 }}
+    on:introstart={event=>(event.currentTarget as HTMLElement).inert=false}
+    on:outrostart={event=>(event.currentTarget as HTMLElement).inert=true}
+    class="fixed inset-0 z-50 flex items-center justify-center select-none"
     style="z-index: 1000; background-color: rgba(10, 10, 10, {Math.max(0.35, 0.94 - Math.sqrt(dragDismissX * dragDismissX + dragDismissY * dragDismissY) / 500)});"
     role="dialog"
     aria-modal="true"
@@ -361,6 +378,7 @@
     <!-- Close target -->
     <button
       type="button"
+      tabindex="-1"
       aria-label="Close lightbox backdrop" on:click|stopPropagation={closeLightbox}
       class="absolute inset-0 z-10 bg-transparent border-0 outline-none cursor-default"
     />

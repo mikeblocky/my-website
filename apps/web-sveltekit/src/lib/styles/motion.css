@@ -20,7 +20,7 @@
   }
 
   ::view-transition-old(root) {
-    animation: route-leave 240ms var(--ease-soft) both;
+    animation: route-leave 180ms var(--ease-soft) both;
     mix-blend-mode: normal;
     z-index: 2;
   }

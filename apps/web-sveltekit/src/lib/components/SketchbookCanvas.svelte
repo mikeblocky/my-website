@@ -415,5 +415,6 @@
   .custom-color input { position:absolute; inset:0; width:100%; height:100%; opacity:0; cursor:pointer; }
   .drawing-publish { width:auto; padding-inline:20px; background:hsl(var(--foreground)); color:hsl(var(--background)); margin-top:12px; }
   .sketchbook-canvas-form > input, textarea { width:100%; border:0; background:transparent; color:inherit; font:inherit; padding:12px; }
+  @media(pointer:coarse),(max-width:760px){.drawing-colors{grid-template-columns:repeat(5,minmax(0,1fr));gap:4px;}}
   @media (prefers-reduced-motion:reduce) { button { transition:none; } }
 </style>

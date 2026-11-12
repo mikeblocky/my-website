@@ -1,6 +1,7 @@
 <script lang="ts">
   import { ArrowLeft, ArrowRight, Maximize2 } from '@lucide/svelte';
   import { onMount } from 'svelte';
+  import { dragIntent } from '$lib/gesture-intent';
   export let title: string;
   export let items: { src: string; previewSrc?: string; width: number; height: number }[] = [];
   export let onOpen: (index: number) => void;
@@ -53,7 +54,7 @@
     } finally { preparing = false; }
   }
   function startSwipe(event: PointerEvent) {
-    if (!event.isPrimary) return;
+    if (!event.isPrimary || event.button!==0) return;
     pointer = { id: event.pointerId, x: event.clientX, y: event.clientY };
     dragX = 0; dragging = false;
     suppressClick = false;
@@ -61,11 +62,14 @@
   function moveSwipe(event: PointerEvent) {
     if (!pointer || pointer.id !== event.pointerId) return;
     const dx = event.clientX - pointer.x, dy = event.clientY - pointer.y;
-    if (!dragging && Math.max(Math.abs(dx), Math.abs(dy)) < 8) return;
+    if(!dragging){
+      const intent=dragIntent(dx,dy,event.pointerType,'horizontal');
+      if(intent==='pending')return;
+      if(intent==='scroll'){pointer=null;suppressClick=true;return;}
+      track.setPointerCapture(event.pointerId);
+    }
     dragging = true; suppressClick = true;
-    track.setPointerCapture(event.pointerId);
-    const distance = Math.abs(dx) >= Math.abs(dy) ? dx : dy;
-    dragX = Math.max(-160, Math.min(160, distance));
+    dragX = Math.max(-160, Math.min(160, dx));
   }
   function browseWheel(node: HTMLElement) {
     const listener = (event: WheelEvent) => horizontalWheel(event);
@@ -84,14 +88,15 @@
     if (Math.abs(wheelDistance) >= 1) { go(current + Math.sign(wheelDistance)); wheelDistance = 0; lastWheel = now; }
   }
   function finishSwipe(event: PointerEvent) {
-    if (!pointer) return;
-    const dx = event.clientX - pointer.x, dy = event.clientY - pointer.y;
+    if (!pointer || pointer.id!==event.pointerId) return;
+    const dx = event.clientX - pointer.x;
+    const moved=dragging;
     pointer = null; dragging = false; dragX = 0;
-    const distance = Math.abs(dx) >= Math.abs(dy) ? dx : dy;
-    if (Math.abs(distance) > 25) { suppressClick = true; go(current + (distance < 0 ? 1 : -1)); }
+    if(track.hasPointerCapture(event.pointerId))track.releasePointerCapture(event.pointerId);
+    if (moved&&Math.abs(dx)>32) { suppressClick = true; go(current + (dx < 0 ? 1 : -1)); }
   }
-  function select(index: number) {
-    if (suppressClick) { suppressClick = false; return; }
+  function select(index: number,event:MouseEvent) {
+    if (suppressClick) { suppressClick = false; if(event.detail!==0)return; }
     if (index !== current) go(index);
     else onOpen(index);
   }
@@ -108,11 +113,11 @@
   {#if items.length}
     <!-- Custom carousel region supports keyboard arrows and pointer swipes alongside native buttons. -->
     <!-- svelte-ignore a11y_no_noninteractive_tabindex a11y_no_noninteractive_element_interactions -->
-    <div class="art-carousel-track" bind:this={track} class:dragging style={`--drag-x: ${dragX}px; --drag-rotation: ${dragX / 25}deg;`} on:pointerdown={startSwipe} on:pointermove={moveSwipe} on:pointerup={finishSwipe} on:pointercancel={() => { pointer = null; dragX = 0; dragging = false; }} on:keydown={keyboard} role="region" aria-roledescription="carousel" aria-label={`${title} artworks`} tabindex="0">
+    <div class="art-carousel-track" bind:this={track} class:dragging style={`--drag-x: ${dragX}px; --drag-rotation: ${dragX / 25}deg;`} on:pointerdown={startSwipe} on:pointermove={moveSwipe} on:pointerup={finishSwipe} on:pointercancel={() => { pointer = null; dragX = 0; dragging = false; suppressClick=false; }} on:keydown={keyboard} role="region" aria-roledescription="carousel" aria-label={`${title} artworks`} tabindex="0">
       {#each cards as card (card.item.src)}
         {@const item = card.item}
         {@const index = card.index}
-        <button type="button" class="art-carousel-card" class:selected={index === current} class:distant={Math.abs(card.offset) > 3} style={`--art-ratio: ${item.width / item.height}; --offset: ${Math.max(-4, Math.min(4, card.offset))}; --depth: ${Math.min(4, Math.abs(card.offset))}; z-index: ${10 - Math.abs(card.offset)};`} tabindex={Math.abs(card.offset) <= 3 ? 0 : -1} aria-hidden={Math.abs(card.offset) > 3} aria-label={`Open ${title} artwork ${index + 1} of ${items.length}`} on:click={() => select(index)}>
+        <button type="button" class="art-carousel-card" class:selected={index === current} class:distant={Math.abs(card.offset) > 3} style={`--art-ratio: ${item.width / item.height}; --offset: ${Math.max(-4, Math.min(4, card.offset))}; --depth: ${Math.min(4, Math.abs(card.offset))}; z-index: ${10 - Math.abs(card.offset)};`} tabindex={Math.abs(card.offset) <= 3 ? 0 : -1} aria-hidden={Math.abs(card.offset) > 3} aria-label={`Open ${title} artwork ${index + 1} of ${items.length}`} on:click={(event) => select(index,event)}>
           {#if Math.abs(card.offset) <= 3}<img src={item.previewSrc ?? item.src} width={item.width} height={item.height} alt={`${title} artwork ${index + 1}`} loading={Math.abs(card.offset) <= 1 ? 'eager' : 'lazy'} decoding="async" draggable="false" />{/if}
           <span class="art-carousel-open" aria-hidden="true"><Maximize2 size={15} /></span>
         </button>
@@ -134,7 +139,7 @@
   .art-carousel-header p span { margin-inline: 5px; }
   .art-carousel-count { flex-shrink: 0; font-size: var(--font-size-2xs); font-variant-numeric: tabular-nums; }
   .art-carousel-count span { color: hsl(var(--muted-foreground)); }
-  .art-carousel-track { position: relative; display: grid; place-items: center; isolation: isolate; height: clamp(340px, 64vh, 620px); overflow: visible; padding: 26px 0; border-radius: 0; touch-action: none; }
+  .art-carousel-track { position: relative; display: grid; place-items: center; isolation: isolate; height: clamp(340px, 64vh, 620px); overflow: visible; padding: 26px 0; border-radius: 0; touch-action: pan-y pinch-zoom; }
   .art-carousel-card { position: absolute; left: 50%; top: 50%; width: min(72%, calc(350px * var(--art-ratio))); max-height: 52vh; aspect-ratio: var(--art-ratio); padding: 0; border: 0; border-radius: 0; background: transparent; box-shadow: none; cursor: pointer; transform: translate(-50%, -50%) translateX(calc(var(--offset) * 82px)) translateY(calc(var(--depth) * 10px)) rotate(calc(var(--offset) * 10deg)) scale(calc(1 - var(--depth) * .045)); opacity: calc(1 - var(--depth) * .13); transition: transform 420ms cubic-bezier(.22,.8,.25,1), opacity 300ms ease; will-change: transform; }
   .art-carousel-card.distant { opacity: 0; visibility: hidden; pointer-events: none; will-change: auto; transition: none; }
   .art-carousel-card.selected { opacity: 1; transform: translate(-50%, -50%) translateX(var(--drag-x, 0px)) rotate(calc(-1deg + var(--drag-rotation, 0deg))); cursor: zoom-in; box-shadow: none; }
@@ -146,7 +151,7 @@
   .art-carousel-controls button { display: grid; place-items: center; width: 40px; height: 40px; border: 1px solid hsl(var(--border) / .6); border-radius: 50%; color: hsl(var(--foreground)); background: hsl(var(--background)); cursor: pointer; transition: background 180ms ease, transform 300ms cubic-bezier(.22,1,.36,1); }
   .art-carousel-controls button:hover { background: hsl(var(--muted)); transform: translateY(-2px); }
   .art-carousel-controls button:disabled { opacity: .25; cursor: default; transform: none; }
-  .art-carousel-controls input { width: min(120px, 30vw); height: 3px; accent-color: hsl(var(--site-blue)); cursor: pointer; }
+  .art-carousel-controls input { width: min(120px, 30vw); height: 44px; accent-color: hsl(var(--site-blue)); cursor: pointer; }
   .art-carousel-empty { font-size: var(--font-size-xs); color: hsl(var(--muted-foreground)); padding: 2rem 0; }
   @media (max-width: 600px) { .art-carousel-track { height: clamp(340px, 58vh, 500px); padding-inline: 0; } .art-carousel-card { width: min(76%, calc(280px * var(--art-ratio))); max-height: 46vh; padding: 0; transform: translate(-50%, -50%) translateX(calc(var(--offset) * 40px)) translateY(calc(var(--depth) * 8px)) rotate(calc(var(--offset) * 10deg)) scale(calc(1 - var(--depth) * .045)); } .art-carousel-card.selected { opacity: 1; transform: translate(-50%, -50%) translateX(var(--drag-x, 0px)) rotate(calc(-1deg + var(--drag-rotation, 0deg))); } }
   @media (prefers-reduced-motion: reduce) { .art-carousel-card, .art-carousel-open, .art-carousel-controls button { transition: none; } }

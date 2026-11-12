@@ -7,6 +7,8 @@
   import { Menu, X, Home, User, Palette, BookOpen, Users, Heart, MessageCircle, ClipboardList, Music } from '@lucide/svelte';
   import { navLinks } from '$lib/site';
   import ThemeToggle from './ThemeToggle.svelte';
+  import HapticsToggle from './HapticsToggle.svelte';
+  import { dragIntent } from '$lib/gesture-intent';
   import { spotifyCurrentlyPlaying, startSpotifyPolling } from '$lib/spotify/currently-playing-store';
   let open = false;
   let reducedMotion = false;
@@ -15,19 +17,26 @@
   let x = 0, y = 0, viewportWidth = 0, viewportHeight = 0;
   let panelHeight = 440;
   let panel: HTMLDivElement;
+  let trigger: HTMLButtonElement;
+  let dragFrame=0,nextX=0,nextY=0;
   let dragging = false;
   let suppressClick = false;
   let pointer: { id: number; x: number; y: number; originX: number; originY: number } | null = null;
   type DockPosition = { corner: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right' };
   let position: DockPosition = { corner: 'bottom-right' };
   const size = 54, margin = 16;
-  const clamp = (value: number, max: number) => Math.max(margin, Math.min(value, Math.max(margin, max - size - margin)));
+  let insets={top:margin,right:margin,bottom:margin,left:margin};
+  const clamp = (value: number, max: number, start=margin,end=margin) => Math.max(start, Math.min(value, Math.max(start, max - size - end)));
   function restorePosition() {
+    const styles=getComputedStyle(document.documentElement);
+    const safe=(side:string)=>Math.max(margin,(parseFloat(styles.getPropertyValue(`--safe-${side}`))||0)+8);
+    insets={top:safe('top'),right:safe('right'),bottom:safe('bottom'),left:safe('left')};
     viewportWidth = window.innerWidth;
+    if(viewportWidth>760)open=false;
     viewportHeight = window.visualViewport?.height || window.innerHeight;
-    x = position.corner.endsWith('left') ? margin : viewportWidth - size - margin;
-    y = position.corner.startsWith('top') ? margin : viewportHeight - size - margin;
-    x = clamp(x, viewportWidth); y = clamp(y, viewportHeight); positioned = true;
+    x = position.corner.endsWith('left') ? insets.left : viewportWidth - size - insets.right;
+    y = position.corner.startsWith('top') ? insets.top : viewportHeight - size - insets.bottom;
+    x = clamp(x, viewportWidth,insets.left,insets.right); y = clamp(y, viewportHeight,insets.top,insets.bottom); positioned = true;
   }
   function snapPosition() {
     position = { corner: `${y + size / 2 < viewportHeight / 2 ? 'top' : 'bottom'}-${x + size / 2 < viewportWidth / 2 ? 'left' : 'right'}` as DockPosition['corner'] }; restorePosition();
@@ -35,23 +44,48 @@
   }
   function startDrag(event: PointerEvent) {
     if (!event.isPrimary || event.button !== 0) return;
-    const target = event.currentTarget as HTMLButtonElement;
-    target.setPointerCapture(event.pointerId);
+    (event.currentTarget as HTMLButtonElement).setPointerCapture(event.pointerId);
     suppressClick = false;
     pointer = { id: event.pointerId, x: event.clientX, y: event.clientY, originX: x, originY: y };
   }
   function moveDrag(event: PointerEvent) {
     if (!pointer || pointer.id !== event.pointerId) return;
     const dx = event.clientX - pointer.x, dy = event.clientY - pointer.y;
-    if (!dragging && Math.hypot(dx, dy) < 8) return;
+    if (!dragging && dragIntent(dx,dy,event.pointerType)!=='drag') return;
     dragging = true; suppressClick = true; open = false;
-    x = clamp(pointer.originX + dx, viewportWidth); y = clamp(pointer.originY + dy, viewportHeight);
+    nextX=clamp(pointer.originX + dx,viewportWidth,insets.left,insets.right);nextY=clamp(pointer.originY + dy,viewportHeight,insets.top,insets.bottom);
+    if(!dragFrame)dragFrame=requestAnimationFrame(()=>{dragFrame=0;x=nextX;y=nextY;});
   }
   function finishDrag(event: PointerEvent) {
     if (!pointer || pointer.id !== event.pointerId) return;
     const moved = dragging;
     pointer = null; dragging = false;
+    if(dragFrame){cancelAnimationFrame(dragFrame);dragFrame=0;x=nextX;y=nextY;}
+    if(trigger?.hasPointerCapture(event.pointerId))trigger.releasePointerCapture(event.pointerId);
     if (moved) snapPosition();
+  }
+  function cancelDrag(event:PointerEvent){
+    if(!pointer||pointer.id!==event.pointerId)return;
+    pointer=null;dragging=false;suppressClick=false;
+    cancelAnimationFrame(dragFrame);dragFrame=0;
+    if(trigger?.hasPointerCapture(event.pointerId))trigger.releasePointerCapture(event.pointerId);
+    restorePosition();
+  }
+  async function toggleMenu(){
+    if(suppressClick){suppressClick=false;return;}
+    open=!open;
+    await tick();
+    if(open)panel?.querySelector<HTMLAnchorElement>('a')?.focus({preventScroll:true});else trigger?.focus({preventScroll:true});
+  }
+  function trapMenu(node:HTMLElement){
+    const trap=(event:KeyboardEvent)=>{
+      if(event.key!=='Tab')return;
+      const controls=Array.from(node.querySelectorAll<HTMLElement>('a[href],button:not(:disabled)')).filter(el=>el.getClientRects().length>0);
+      const first=controls[0],last=controls.at(-1);
+      if(event.shiftKey&&document.activeElement===first){event.preventDefault();last?.focus();}
+      else if(!event.shiftKey&&document.activeElement===last){event.preventDefault();first?.focus();}
+    };
+    node.addEventListener('keydown',trap);return{destroy(){node.removeEventListener('keydown',trap);}};
   }
   async function navigate(event: MouseEvent, href: string) {
     if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
@@ -63,9 +97,9 @@
     const observer = new ResizeObserver(() => panelHeight = node.offsetHeight);
     observer.observe(node); return { destroy: () => observer.disconnect() };
   }
-  $: panelX = Math.max(margin, Math.min(x + size - 248, viewportWidth - 248 - margin));
-  $: panelY = y > viewportHeight / 2 ? Math.max(margin, y - panelHeight - 12) : Math.min(viewportHeight - panelHeight - margin, y + size + 12);
-  function resetPosition() { position = { corner: 'bottom-right' }; restorePosition(); snapPosition(); open = false; }
+  $: panelX = Math.max(insets.left, Math.min(x + size - 248, viewportWidth - 248 - insets.right));
+  $: panelY = y > viewportHeight / 2 ? Math.max(insets.top, y - panelHeight - 12) : Math.min(viewportHeight - panelHeight - insets.bottom, y + size + 12);
+  function resetPosition() { position = { corner: 'bottom-right' }; restorePosition(); snapPosition(); open = false; trigger?.focus({preventScroll:true}); }
 
   const icons = [Home, User, Palette, BookOpen, Users, Heart, MessageCircle, ClipboardList];
   $: pathname = $page.url.pathname;
@@ -82,15 +116,15 @@
     const preference = matchMedia('(prefers-reduced-motion: reduce)');
     const update = () => reducedMotion = preference.matches;
     update(); preference.addEventListener('change', update);
-    return () => { preference.removeEventListener('change', update); window.removeEventListener('resize', restorePosition); window.visualViewport?.removeEventListener('resize', restorePosition); };
+    return () => { cancelAnimationFrame(dragFrame); preference.removeEventListener('change', update); window.removeEventListener('resize', restorePosition); window.visualViewport?.removeEventListener('resize', restorePosition); };
   });
   const active = (href: string, path: string) => href === '/' ? path === '/' : path.startsWith(href) || (href === '/journal' && /^\/(blog|diary|learning)/.test(path));
 </script>
-<svelte:window on:keydown={(event) => { if (event.key === 'Escape') open = false; }} />
+<svelte:window on:keydown={(event) => { if (event.key === 'Escape'&&open) {open = false;trigger?.focus();} }} />
 <div class="phone-navigation">
   {#if open}
-    <button class="phone-menu-backdrop" type="button" aria-label="Close navigation" on:click={() => open = false} transition:fade={{duration: reducedMotion || navigating ? 0 : 180}}></button>
-    <div class="phone-menu-panel" id="phone-menu" bind:this={panel} use:measurePanel style:left={positioned ? `${panelX}px` : undefined} style:top={positioned ? `${Math.max(margin, panelY)}px` : undefined} style:bottom={positioned ? 'auto' : undefined} style:right={positioned ? 'auto' : undefined} transition:fly={{y: 12, duration: reducedMotion || navigating ? 0 : 240, easing: cubicOut}}>
+    <button class="phone-menu-backdrop" type="button" aria-label="Close navigation" on:click={() => open = false} on:introstart={event=>(event.currentTarget as HTMLElement).inert=false} on:outrostart={event=>(event.currentTarget as HTMLElement).inert=true} transition:fade={{duration: reducedMotion || navigating ? 0 : 120}}></button>
+    <div class="phone-menu-panel" id="phone-menu" role="dialog" aria-modal="true" aria-label="Site menu" bind:this={panel} use:measurePanel use:trapMenu style:max-height={positioned?`${Math.max(80,viewportHeight-size-margin*3)}px`:undefined} style:left={positioned ? `${panelX}px` : undefined} style:top={positioned ? `${Math.max(margin, panelY)}px` : undefined} style:bottom={positioned ? 'auto' : undefined} style:right={positioned ? 'auto' : undefined} on:introstart={event=>(event.currentTarget as HTMLElement).inert=false} on:outrostart={event=>(event.currentTarget as HTMLElement).inert=true} in:fly={{y: 8, duration: reducedMotion || navigating ? 0 : 180, easing: cubicOut}} out:fade={{duration:reducedMotion||navigating?0:100}}>
       <nav aria-label="Mobile navigation">
         {#each navLinks as link, index}
           <a href={link.href} class:active={active(link.href, pathname)} aria-current={active(link.href, pathname) ? 'page' : undefined} on:click={(event) => navigate(event, link.href)}>
@@ -100,6 +134,7 @@
       </nav>
       <div class="phone-menu-footer">
         <button class="phone-reset-position" type="button" on:click={resetPosition}>reset position</button>
+        <HapticsToggle />
         <div class="phone-menu-theme"><ThemeToggle /></div>
       </div>
     </div>
@@ -111,7 +146,7 @@
       <span class="music-meter" aria-hidden="true"><i></i><i></i><i></i></span>
     </a>
   {/if}
-  <button class="phone-menu-trigger" class:open class:dragging style:left={positioned ? `${x}px` : undefined} style:top={positioned ? `${y}px` : undefined} style:bottom={positioned ? 'auto' : undefined} style:right={positioned ? 'auto' : undefined} on:pointerdown={startDrag} on:pointermove={moveDrag} on:pointerup={finishDrag} on:pointercancel={finishDrag} on:lostpointercapture={finishDrag} type="button" aria-label={open ? 'Close menu' : 'Open menu'} aria-expanded={open} aria-controls="phone-menu" on:click={() => { if (suppressClick) { suppressClick = false; return; } open = !open; }}>
+  <button class="phone-menu-trigger" bind:this={trigger} class:open class:dragging style:left={positioned ? '0px' : undefined} style:top={positioned ? '0px' : undefined} style:transform={positioned?`translate3d(${x}px,${y}px,0)`:undefined} style:bottom={positioned ? 'auto' : undefined} style:right={positioned ? 'auto' : undefined} on:pointerdown={startDrag} on:pointermove={moveDrag} on:pointerup={finishDrag} on:pointercancel={cancelDrag} on:lostpointercapture={cancelDrag} type="button" aria-label={open ? 'Close menu' : 'Open menu'} aria-expanded={open} aria-controls="phone-menu" on:click={toggleMenu}>
     <span class="phone-trigger-icon"><svelte:component this={open ? X : Menu} size={21} strokeWidth={1.8} /></span>
   </button>
 </div>
