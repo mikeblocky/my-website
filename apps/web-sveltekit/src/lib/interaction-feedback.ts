@@ -2,6 +2,9 @@ import { get, writable } from 'svelte/store';
 
 export const hapticsEnabled = writable(false);
 const preferenceKey = 'mike:touch-feedback';
+export function pulseHaptic(){
+  if(get(hapticsEnabled)&&typeof navigator.vibrate==='function'){try{navigator.vibrate(8);}catch{}}
+}
 export function setHaptics(enabled: boolean) {
   hapticsEnabled.set(enabled);
   try { localStorage.setItem(preferenceKey, String(enabled)); } catch {}
@@ -40,9 +43,7 @@ export function installInteractionFeedback() {
     clearTimeout(timers.get(node));
     node.classList.add('ui-ack');
     timers.set(node,setTimeout(()=>{node.classList.remove('ui-ack');timers.delete(node);},180));
-    if (touch && get(hapticsEnabled) && typeof navigator.vibrate === 'function') {
-      try { navigator.vibrate(8); } catch {}
-    }
+    if (touch&&!node.matches('.phone-menu-trigger'))pulseHaptic();
   }
   document.addEventListener('pointerdown',down,{capture:true,passive:true});
   document.addEventListener('pointermove',move,{capture:true,passive:true});

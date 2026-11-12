@@ -8,7 +8,8 @@
   import { navLinks } from '$lib/site';
   import ThemeToggle from './ThemeToggle.svelte';
   import HapticsToggle from './HapticsToggle.svelte';
-  import { dragIntent } from '$lib/gesture-intent';
+  import { dockDragIntent } from '$lib/gesture-intent';
+  import { pulseHaptic } from '$lib/interaction-feedback';
   import { spotifyCurrentlyPlaying, startSpotifyPolling } from '$lib/spotify/currently-playing-store';
   let open = false;
   let reducedMotion = false;
@@ -21,7 +22,8 @@
   let dragFrame=0,nextX=0,nextY=0;
   let dragging = false;
   let suppressClick = false;
-  let pointer: { id: number; x: number; y: number; originX: number; originY: number } | null = null;
+  let ignoreClickUntil=0;
+  let pointer: { id: number; x: number; y: number; originX: number; originY: number;type:string;started:number } | null = null;
   type DockPosition = { corner: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right' };
   let position: DockPosition = { corner: 'bottom-right' };
   const size = 54, margin = 16;
@@ -46,12 +48,12 @@
     if (!event.isPrimary || event.button !== 0) return;
     (event.currentTarget as HTMLButtonElement).setPointerCapture(event.pointerId);
     suppressClick = false;
-    pointer = { id: event.pointerId, x: event.clientX, y: event.clientY, originX: x, originY: y };
+    pointer = { id: event.pointerId, x: event.clientX, y: event.clientY, originX: x, originY: y,type:event.pointerType,started:performance.now() };
   }
   function moveDrag(event: PointerEvent) {
     if (!pointer || pointer.id !== event.pointerId) return;
     const dx = event.clientX - pointer.x, dy = event.clientY - pointer.y;
-    if (!dragging && dragIntent(dx,dy,event.pointerType)!=='drag') return;
+    if (!dragging && dockDragIntent(dx,dy,pointer.type,performance.now()-pointer.started)!=='drag') return;
     dragging = true; suppressClick = true; open = false;
     nextX=clamp(pointer.originX + dx,viewportWidth,insets.left,insets.right);nextY=clamp(pointer.originY + dy,viewportHeight,insets.top,insets.bottom);
     if(!dragFrame)dragFrame=requestAnimationFrame(()=>{dragFrame=0;x=nextX;y=nextY;});
@@ -59,10 +61,16 @@
   function finishDrag(event: PointerEvent) {
     if (!pointer || pointer.id !== event.pointerId) return;
     const moved = dragging;
+    const touch=pointer.type==='touch'||pointer.type==='pen';
+    const tapDistance=Math.hypot(event.clientX-pointer.x,event.clientY-pointer.y);
     pointer = null; dragging = false;
     if(dragFrame){cancelAnimationFrame(dragFrame);dragFrame=0;x=nextX;y=nextY;}
     if(trigger?.hasPointerCapture(event.pointerId))trigger.releasePointerCapture(event.pointerId);
     if (moved) snapPosition();
+    if(touch){
+      ignoreClickUntil=performance.now()+700;suppressClick=false;
+      if(!moved&&tapDistance<28){pulseHaptic();void toggleMenu();}
+    }
   }
   function cancelDrag(event:PointerEvent){
     if(!pointer||pointer.id!==event.pointerId)return;
@@ -76,6 +84,10 @@
     open=!open;
     await tick();
     if(open)panel?.querySelector<HTMLAnchorElement>('a')?.focus({preventScroll:true});else trigger?.focus({preventScroll:true});
+  }
+  function activateTrigger(){
+    if(performance.now()<ignoreClickUntil)return;
+    void toggleMenu();
   }
   function trapMenu(node:HTMLElement){
     const trap=(event:KeyboardEvent)=>{
@@ -146,7 +158,7 @@
       <span class="music-meter" aria-hidden="true"><i></i><i></i><i></i></span>
     </a>
   {/if}
-  <button class="phone-menu-trigger" bind:this={trigger} class:open class:dragging style:left={positioned ? '0px' : undefined} style:top={positioned ? '0px' : undefined} style:transform={positioned?`translate3d(${x}px,${y}px,0)`:undefined} style:bottom={positioned ? 'auto' : undefined} style:right={positioned ? 'auto' : undefined} on:pointerdown={startDrag} on:pointermove={moveDrag} on:pointerup={finishDrag} on:pointercancel={cancelDrag} on:lostpointercapture={cancelDrag} type="button" aria-label={open ? 'Close menu' : 'Open menu'} aria-expanded={open} aria-controls="phone-menu" on:click={toggleMenu}>
+  <button class="phone-menu-trigger" bind:this={trigger} class:open class:dragging style:left={positioned ? '0px' : undefined} style:top={positioned ? '0px' : undefined} style:transform={positioned?`translate3d(${x}px,${y}px,0)`:undefined} style:bottom={positioned ? 'auto' : undefined} style:right={positioned ? 'auto' : undefined} on:pointerdown={startDrag} on:pointermove={moveDrag} on:pointerup={finishDrag} on:pointercancel={cancelDrag} on:lostpointercapture={cancelDrag} type="button" aria-label={open ? 'Close menu' : 'Open menu'} aria-expanded={open} aria-controls="phone-menu" on:click={activateTrigger} on:keydown={event=>{if(event.key==='Enter'||event.key===' ')ignoreClickUntil=0;}} on:contextmenu|preventDefault>
     <span class="phone-trigger-icon"><svelte:component this={open ? X : Menu} size={21} strokeWidth={1.8} /></span>
   </button>
 </div>
